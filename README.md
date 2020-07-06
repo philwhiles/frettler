@@ -16,13 +16,13 @@ C Major Scale : C:P1 D:M2 E:M3 F:P4 G:P5 A:M6 B:M7 C:P8
    -------------------------------------------------------------
 
 
-C [C (P1),E (M3),G (P5)]
-Dm [D (P1),F (m3),A (P5)]
-Em [E (P1),G (m3),B (P5)]
-F [F (P1),A (M3),C (P5)]
-G [G (P1),B (M3),D (P5)]
-Am [A (P1),C (m3),E (P5)]
-Bdim [B (P1),D (m3),F (d5)]
+C [C (P1), E (M3), G (P5)]
+Dm [D (P1), F (m3), A (P5)]
+Em [E (P1), G (m3), B (P5)]
+F [F (P1), A (M3), C (P5)]
+G [G (P1), B (M3), D (P5)]
+Am [A (P1), C (m3), E (P5)]
+Bdim [B (P1), D (m3), F (d5)]
 
 
 
