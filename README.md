@@ -1,3 +1,5 @@
+The output of running the Main.java example:
+
 ```
 C Major Scale : C:P1 D:M2 E:M3 F:P4 G:P5 A:M6 B:M7 C:P8 
 
