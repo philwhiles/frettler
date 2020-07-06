@@ -164,7 +164,7 @@ public class Scale {
   public String toString() {
     ScaleNote currentNoteNode = head;
     StringBuilder builder = new StringBuilder();
-    builder.append(getTitle()).append(" :");
+    builder.append(getTitle()).append(" : ");
     if (head != null) {
       do {
         builder.append(currentNoteNode.getNote().getLabel()).append(":")

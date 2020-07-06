@@ -26,16 +26,23 @@ public class Main {
 
     Scale cMajorScale = new Scale(ScalePattern.MAJOR, Note.C);
     System.out.println(cMajorScale);
-
-
-//    Chord cMajorChord = new Chord(Note.D, ScalePattern.MINOR_TRIAD);
-//    System.out.println(cMajorChord);
-
     System.out.println("\n");
+
+
+    // Chord cMajorChord = new Chord(Note.D, ScalePattern.MINOR_TRIAD);
+    // System.out.println(cMajorChord);
+
     guitar.printFretboard(cMajorScale);
+    System.out.println("\n");
 
 
     List<Chord> chords = Chord.createScaleChords(cMajorScale);
+
+    for (Chord chord : chords) {
+      System.out.println(chord);
+    }
+    System.out.println("\n");
+
     for (Chord chord : chords) {
       System.out.println("\n");
       guitar.printFretboard(chord);

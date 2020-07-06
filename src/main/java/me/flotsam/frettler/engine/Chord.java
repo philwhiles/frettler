@@ -194,7 +194,7 @@ public class Chord {
 
   public String toString() {
     return getLabel() + " ["
-        + chordNotes.stream().map(n -> n.getNote().getLabel()).collect(Collectors.joining(","))
+        + chordNotes.stream().map(n -> n.getNote().getLabel() + " (" + n.getInterval().get().getLabel() + ")").collect(Collectors.joining(","))
         + "]";
   }
 
