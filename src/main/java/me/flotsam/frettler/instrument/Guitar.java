@@ -24,7 +24,7 @@ public class Guitar {
   @Getter
   List<List<Tone>> stringTones = new ArrayList<>();
 
-  public Guitar(Note... stringNotes) {
+  public Guitar(Note[] stringNotes) {
     this.stringNotes = Arrays.asList(stringNotes);
 
     for (int stringNum = 0; stringNum < stringNotes.length; stringNum++) {

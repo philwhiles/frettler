@@ -65,7 +65,7 @@ public enum ScalePattern {
       MAJOR_SEVENTH,
       PERFECT_OCTAVE
   ),
-  HARMONIC_MINOR(//  HARMONIC_MINOR = new Scale("harmonic minor", Interval.parse("w h w w h m3 h"));
+  HARMONIC_MINOR(
       "Harmonic Minor",
       PERFECT_UNISON,
       MAJOR_SECOND,
@@ -76,7 +76,7 @@ public enum ScalePattern {
       MAJOR_SEVENTH,
       PERFECT_OCTAVE
   ),
-  PENTATONIC(//  MAJOR_PENTATONIC = new Scale("major pentatonic", Interval.parse("w w m3 w m3"));
+  PENTATONIC(
       "Pentatonic",
       PERFECT_UNISON,
       MAJOR_SECOND,
@@ -138,7 +138,7 @@ public enum ScalePattern {
   
   ;
   
-  // guitar scientist can show the intervals which will be easier than thhe below
+  // guitar scientist can show the intervals which will be easier than the below
   
 //  AEOLIAN = new Scale("aeolian", Interval.parse("W h W W h W W"));
 //  ALTERED = new Scale("altered", Interval.parse("h W h W W W W"));

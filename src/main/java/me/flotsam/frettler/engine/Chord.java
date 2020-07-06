@@ -174,7 +174,9 @@ public class Chord {
   }
 
   public String getTitle() {
-    return getLabel() + " (" + chordRootNote.getNote() + " " + chordPattern + ")";
+    return getLabel() + " (" + chordRootNote.getNote() + " " + chordPattern.getLabel() + ")" + " ["
+        + chordNotes.stream().map(n -> n.getNote().getLabel()).collect(Collectors.joining(","))
+        + "]";
   }
 
   public boolean containsIntervals(ScaleInterval... intervals) {
@@ -191,9 +193,9 @@ public class Chord {
   }
 
   public String toString() {
-    return getLabel() + " ("
+    return getLabel() + " ["
         + chordNotes.stream().map(n -> n.getNote().getLabel()).collect(Collectors.joining(","))
-        + ")";
+        + "]";
   }
 
   public static List<Chord> createScaleChords(Scale scale) {

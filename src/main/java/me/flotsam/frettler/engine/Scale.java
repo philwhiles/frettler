@@ -158,7 +158,7 @@ public class Scale {
   }
 
   public String getTitle() {
-     return rootNote.getLabel() + " " + scalePattern + " Scale";
+     return rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
   }
 
   public String toString() {
