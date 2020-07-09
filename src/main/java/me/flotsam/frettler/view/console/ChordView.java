@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view;
+package me.flotsam.frettler.view.console;
 
 import static java.lang.System.out;
 import java.util.Arrays;
@@ -10,12 +10,12 @@ import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.instrument.Guitar;
 import me.flotsam.frettler.instrument.Tone;
 
-public class ChordConsole {
+public class ChordView {
 
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12);
   private Guitar guitar;
 
-  public ChordConsole(Guitar guitar) {
+  public ChordView(Guitar guitar) {
     this.guitar = guitar;
   }
 

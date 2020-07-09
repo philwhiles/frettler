@@ -6,8 +6,8 @@ import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScalePattern;
 import me.flotsam.frettler.instrument.Guitar;
-import me.flotsam.frettler.view.ChordConsole;
-import me.flotsam.frettler.view.GuitarConsole;
+import me.flotsam.frettler.view.console.ChordView;
+import me.flotsam.frettler.view.console.GuitarView;
 import static java.lang.System.out;
 
 public class Main {
@@ -26,20 +26,23 @@ public class Main {
   }
 
   public void cMajorScale(Guitar guitar) throws Exception {
-    GuitarConsole guitarView = new GuitarConsole(guitar);
-    ChordConsole chordView = new ChordConsole(guitar);
+    GuitarView guitarView = new GuitarView(guitar);
+    ChordView chordView = new ChordView(guitar);
 
     Scale cMajorScale = new Scale(ScalePattern.MAJOR, Note.C);
     out.println(cMajorScale);
-    out.println("\n");
+    out.println();
+    out.println();
 
     guitarView.showFretboard();
+    out.println();
+    out.println();
 
     Chord dMajorChord = new Chord(Note.D, ScalePattern.MAJOR_TRIAD);
     chordView.showChord(dMajorChord);
 
     guitarView.showFretboard(cMajorScale);
-    out.println("\n");
+    out.println();
 
 
     List<Chord> chords = cMajorScale.createScaleChords();
@@ -47,11 +50,13 @@ public class Main {
     for (Chord chord : chords) {
       out.println(chord);
     }
-    out.println("\n");
+    out.println();
 
+    GuitarView.Options gvOptions = guitarView.new Options(true, false);
     for (Chord chord : chords) {
-      out.println("\n");
+      out.println();
       guitarView.showFretboard(chord);
+      guitarView.showFretboard(chord, gvOptions);
     }
 
   }
