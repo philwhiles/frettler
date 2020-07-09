@@ -11,7 +11,6 @@ import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.engine.Tone;
 
 public class Guitar {
   
@@ -21,8 +20,14 @@ public class Guitar {
   List<Tone> tones = new ArrayList<>();
   @Getter
   List<Note> stringNotes;
+  
+  // remember element 0 in each inner List is the open string note
   @Getter
   List<List<Tone>> stringTones = new ArrayList<>();
+  
+  // remember element 0 in the inner list is the open string notes
+  @Getter
+  List<List<Tone>> fretTones = new ArrayList<>();
 
   public Guitar(Note[] stringNotes) {
     this.stringNotes = Arrays.asList(stringNotes);
@@ -32,7 +37,7 @@ public class Guitar {
           Scale.CHROMATIC_SCALE.findScaleNote(stringNotes[stringNum]);
       ScaleNote scaleNote = optScaleNote.get();
 
-      for (int fret = 0; fret <= FRETS; fret++) {
+      for (int fretNum = 0; fretNum <= FRETS; fretNum++) {
 
         int octave = 0; // until known from prev tone
 
@@ -44,12 +49,21 @@ public class Guitar {
           // otherwise on the prev string
           prevTone = findRelativeToneUp(stringNum - 1, scaleNote.getNote());
           if (prevTone != null) {
-            octave = prevTone.getFret() > fret ? prevTone.getOctave() : prevTone.getOctave() + 1;
+            octave = prevTone.getFret() > fretNum ? prevTone.getOctave() : prevTone.getOctave() + 1;
           }
         }
-        Tone tone = new Tone(stringNum * FRETS + fret, scaleNote.getNote(), octave,
-            stringNum, stringNotes[stringNum], fret);
+        Tone tone = new Tone(stringNum * FRETS + fretNum, scaleNote.getNote(), octave,
+            stringNum, stringNotes[stringNum], fretNum);
         tones.add(tone);
+        
+        List<Tone> currentFretsTones;
+        if (fretTones.size() == fretNum) {
+          currentFretsTones = new ArrayList<>();
+          fretTones.add(currentFretsTones);
+        }
+        currentFretsTones = fretTones.get(fretNum);
+        currentFretsTones.add(tone);
+        
         scaleNote = scaleNote.getNextScaleNote();
       }
       final int x = stringNum;
@@ -58,50 +72,7 @@ public class Guitar {
     }
   }
 
-  public void printFretboard(Chord chord) {
-    System.out.print("    ");
-    System.out.println(StringUtils.center(chord.getTitle(), 61));
-    System.out.print("\n");
-    printFretboard(chord.getChordNotes().stream().map(sn -> sn.getNote()).collect(Collectors.toList()));
-  }
 
-  public void printFretboard(Scale scale) {
-    System.out.print("    ");
-    System.out.println(StringUtils.center(scale.getTitle(), 61));
-    System.out.print("\n");
-    printFretboard(scale.getScaleNotes().stream().map(sn -> sn.getNote()).collect(Collectors.toList()));
-  }
-
-  public void printFretboard(List<Note> notes) {
-    System.out.println("   |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 | 12 |");
-    System.out.println("   -------------------------------------------------------------");
-    for (int i = stringTones.size() - 1; i >= 0; i--) {
-      List<Tone> tonesInString = stringTones.get(i);
-      StringBuilder stringBuilder = new StringBuilder();
-      for (Tone tone : tonesInString) {
-        String toneLabel = tone.getNote().getLabel();
-        if (tone.getFret() == 0) {
-          if (notes.contains(tone.getNote())) {
-            stringBuilder.append(" ").append(toneLabel).append("||");
-          } else {
-            stringBuilder.append("  ").append("||");
-          }
-        } else {
-          if (notes.contains(tone.getNote())) {
-            String toneStr = tone.getNote().toString().length() == 2 ? toneLabel
-                : String.format("-%s", toneLabel);
-            stringBuilder.append("--").append(toneStr);
-          } else {
-            stringBuilder.append("----");
-          }
-          stringBuilder.append("|");
-
-        }
-      }
-      System.out.println(stringBuilder.toString());
-    }
-    System.out.println("   -------------------------------------------------------------");
-  }
 
   private Tone findRelativeToneUpFromIndex(int stringNum, Note note, int index) {
     Tone tone = null;

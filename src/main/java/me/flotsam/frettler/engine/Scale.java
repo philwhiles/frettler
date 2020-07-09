@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.Optional;
 import com.godaddy.logging.Logger;
 import com.godaddy.logging.LoggerFactory;
+import me.flotsam.frettler.engine.Chord.ChordType;
+
+enum Position {
+  HEAD, MIDDLE, TAIL;
+}
+
 
 public class Scale {
 
@@ -38,24 +44,7 @@ public class Scale {
     }
   }
 
-  // creat arpeggion in another more suitable class - the arpeggio repeats across the fretboard wheras a Sacle is limited in length
-//  public Scale createArpeggio(ChordPattern chordPattern) {
-//    List<Note> arpeggioNotes = new ArrayList<>();
-//    ScaleNote currentNoteNode = head;
-//
-//    if (head == null) {
-//      throw new RuntimeException("This scale contains no notes");
-//    } else {
-//      do {
-//        if (currentNoteNode.getNote() == searchNote) {
-//          return true;
-//        }
-//        currentNoteNode = currentNoteNode.getNextScaleNote();
-//      } while (currentNoteNode != head);
-//      return false;
-//    }
-//  }
-  
+
   private void addScaleNote(Note note, Optional<ScaleInterval> interval) {
     ScaleNote newNoteNode = new ScaleNote(note, interval, this);
 
@@ -102,8 +91,8 @@ public class Scale {
       } while (currentNoteNode != head);
       return Optional.empty();
     }
-  } 
-  
+  }
+
   public Optional<ScaleNote> findScaleNote(ScaleInterval scaleInterval) {
     ScaleNote currentNoteNode = head;
 
@@ -124,17 +113,11 @@ public class Scale {
     return head;
   }
 
-//  private void setHead(ScaleNote head) {
-//    this.head = head;
-//  }
 
   public ScaleNote getTail() {
     return tail;
   }
 
-//  private void setTail(ScaleNote tail) {
-//    this.tail = tail;
-//  }
 
   public ScalePattern getScalePattern() {
     return scalePattern;
@@ -146,19 +129,19 @@ public class Scale {
 
   public List<ScaleNote> getScaleNotes() {
     List<ScaleNote> scaleNotes = new ArrayList<>();
-    ScaleNote note = head;
+    ScaleNote scaleNote = head;
 
-    if (note != null) {
+    if (scaleNote != null) {
       do {
-        scaleNotes.add(note);
-        note = note.getNextScaleNote();
-      } while (note != tail);
+        scaleNotes.add(scaleNote);
+        scaleNote = scaleNote.getNextScaleNote();
+      } while (scaleNote != head && scaleNote.getNote() != head.getNote());
     }
     return scaleNotes;
   }
 
   public String getTitle() {
-     return rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
+    return rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
   }
 
   public String toString() {
@@ -194,10 +177,14 @@ public class Scale {
     }
     return scaleNote;
   }
+
+  public List<Chord> createScaleChords() {
+    List<Chord> chords = new ArrayList<>();
+    for (ScaleNote scaleNote : getScaleNotes()) {
+      chords.add(new Chord(scaleNote, ChordType.STANDARD));
+    }
+    return chords;
+  }
 }
 
-
-enum Position {
-  HEAD, MIDDLE, TAIL;
-}
 

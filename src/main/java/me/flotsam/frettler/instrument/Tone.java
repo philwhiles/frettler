@@ -1,8 +1,9 @@
-package me.flotsam.frettler.engine;
+package me.flotsam.frettler.instrument;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
+import me.flotsam.frettler.engine.Note;
 
 @Data
 @AllArgsConstructor

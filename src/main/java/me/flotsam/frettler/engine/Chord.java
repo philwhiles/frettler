@@ -8,21 +8,39 @@ import lombok.Data;
 
 @Data
 public class Chord {
+  private boolean flatSecond;
+  private boolean second;
+  private boolean augmentedSecond;
+  private boolean flatThird;
+  private boolean third;
+  private boolean fourth;
+  private boolean flatFifth;
+  private boolean fifth;
+  private boolean augmentedFifth;
+  private boolean sixth;
+  private boolean flatSeventh;
+  private boolean seventh;
+  private boolean ninth;
+  private boolean eleventh;
+  private boolean majorRange;
+  private boolean minorRange;
+  private boolean suspended;
 
   public enum ChordType {
-    STANDARD(new int [] {0,2,4}),
-    EXTENDED(new int [] {0,2,4,6});
-    private int [] thirds;
-    ChordType (int [] thirds) {
-        this.thirds = thirds;
+    STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
+    private int[] thirds;
+
+    ChordType(int[] thirds) {
+      this.thirds = thirds;
     }
+
     public int[] getThirds() {
       return thirds;
     }
   }
-  
+
   private ScaleNote chordRootNote;
-  
+
   private ScalePattern chordPattern;
   private List<ScaleNote> chordNotes = new ArrayList<>();;
 
@@ -31,13 +49,15 @@ public class Chord {
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
     for (ScaleInterval interval : chordPattern.getIntervals()) {
-      chordNotes.add(chromaticScaleFromChordRoot.findScaleNote(interval).get());    
+      chordNotes.add(chromaticScaleFromChordRoot.findScaleNote(interval).get());
     }
+    analyse();
   }
-  
-  
+
+
   /**
-   * Creates a scale chord from a point in that scale 
+   * Creates a scale chord from a point in that scale
+   * 
    * @param chordRootNote the scale note tonic
    * @param chordType standard or extended - this indicates the thirds to use
    */
@@ -66,23 +86,9 @@ public class Chord {
         break;
       }
     }
+    analyse();
   }
 
-//  public String getLabel() {
-//    StringBuilder builder = new StringBuilder();
-//    builder.append(chordRootNote.getNote().getLabel());
-//    if (chordType == ChordType.SEVENTH) {
-//      if (chordPattern == ChordPattern.MAJOR) {
-//        builder.append("maj7");
-//      } else {
-//        builder.append(chordPattern.getLabel());
-//        builder.append(chordType.getLabel());
-//      }
-//    } else {
-//      builder.append(chordPattern.getLabel());
-//    }
-//    return builder.toString();
-//  }
 
 
   public String getLabel() {
@@ -90,68 +96,69 @@ public class Chord {
     String tonicName = chordRootNote.getNote().getLabel();
     builder.append(tonicName);
     int size = chordNotes.size();
-    ChordAnalyzer chordAnalyzer = new ChordAnalyzer(this);
 
 
     if (size == 3) {
-      if (chordAnalyzer.isThird() && chordAnalyzer.isFifth())
+      if (isThird() && isFifth())
         return tonicName;
-      if (chordAnalyzer.isThird() && chordAnalyzer.isAugmentedFifth())
+      if (isThird() && isAugmentedFifth())
         return tonicName + "aug";
-      if (chordAnalyzer.isFlatThird() && chordAnalyzer.isFifth())
+      if (isFlatThird() && isFifth())
         return tonicName + "m";
-      if (chordAnalyzer.isFlatThird() && chordAnalyzer.isFlatFifth())
+      if (isFlatThird() && isFlatFifth())
         return tonicName + "dim";
     } else if (size == 4) {
-      if (chordAnalyzer.isThird() && chordAnalyzer.isFifth() && chordAnalyzer.isSeventh())
+      if (isThird() && isFifth() && isSeventh())
         return tonicName + "M7";
-      if (chordAnalyzer.isFlatThird() && chordAnalyzer.isFlatFifth() && chordAnalyzer.isSixth())
+      if (isFlatThird() && isFlatFifth() && isSixth())
         return tonicName + "dim7";
-      if (chordAnalyzer.isFlatThird() && chordAnalyzer.isFlatFifth() && chordAnalyzer.isFlatSeventh())
+      if (isFlatThird() && isFlatFifth()
+          && isFlatSeventh())
         return tonicName + "m7b5";
-      if (chordAnalyzer.isFlatThird() && chordAnalyzer.isFifth() && chordAnalyzer.isSeventh())
+      if (isFlatThird() && isFifth() && isSeventh())
         return tonicName + "m maj7";
-      if (chordAnalyzer.isThird() && chordAnalyzer.isFifth() && chordAnalyzer.isFlatSeventh())
+      if (isThird() && isFifth() && isFlatSeventh())
         return tonicName + "7";
-      if (chordAnalyzer.isThird() && chordAnalyzer.isAugmentedFifth() && chordAnalyzer.isFlatSeventh())
+      if (isThird() && isAugmentedFifth()
+          && isFlatSeventh())
         return tonicName + "aug7";
-      if (chordAnalyzer.isThird() && chordAnalyzer.isAugmentedFifth() && chordAnalyzer.isSeventh())
+      if (isThird() && isAugmentedFifth() && isSeventh())
         return tonicName + "7+";
     }
 
-    if (chordAnalyzer.isMajorRange())
+    if (isMajorRange())
       builder.append("M");
-    else if (chordAnalyzer.isMinorRange())
+    else if (isMinorRange())
       builder.append("M");
-    else if (chordAnalyzer.isMinorRange())
+    else if (isMinorRange())
       builder.append("m");
-    else if (chordAnalyzer.isSuspended()) {
-      if (chordAnalyzer.isSecond())
+    else if (isSuspended()) {
+      if (isSecond())
         builder.append("sus2");
-      else if (chordAnalyzer.isFourth())
+      else if (isFourth())
         builder.append("sus4");
     }
 
-    if (chordAnalyzer.isFlatFifth() && !chordAnalyzer.isFifth())
+    if (isFlatFifth() && !isFifth())
       builder.append("b5");
-    else if (chordAnalyzer.isFlatFifth() && chordAnalyzer.isFifth())
+    else if (isFlatFifth() && isFifth())
       builder.append("#4");
 
-    if (chordAnalyzer.isAugmentedFifth() && !chordAnalyzer.isFifth())
+    if (isAugmentedFifth() && !isFifth())
       builder.append("+");
-    else if (chordAnalyzer.isFifth() && chordAnalyzer.isAugmentedFifth())
+    else if (isFifth() && isAugmentedFifth())
       builder.append("add b6");
 
-    if (chordAnalyzer.isFlatSeventh() && !chordAnalyzer.isSeventh())
+    if (isFlatSeventh() && !isSeventh())
       builder.append("7");
-    else if (chordAnalyzer.isSeventh() && !chordAnalyzer.isFlatSeventh())
+    else if (isSeventh() && !isFlatSeventh())
       builder.append("M7");
 
-    if (chordAnalyzer.isFourth())
+    if (isFourth())
       builder.append("add4");
-    if (chordAnalyzer.isNinth() || chordAnalyzer.isSecond())
+    if (isNinth() || isSecond())
       builder.append("add9");
-    if (chordAnalyzer.isSixth())
+    if (isSixth())
       builder.append("add6");
 
     return builder.toString();
@@ -194,15 +201,31 @@ public class Chord {
 
   public String toString() {
     return getLabel() + " ["
-        + chordNotes.stream().map(n -> n.getNote().getLabel() + " (" + n.getInterval().get().getLabel() + ")").collect(Collectors.joining(", "))
+        + chordNotes.stream()
+            .map(n -> n.getNote().getLabel() + " (" + n.getInterval().get().getLabel() + ")")
+            .collect(Collectors.joining(", "))
         + "]";
   }
 
-  public static List<Chord> createScaleChords(Scale scale) {
-    List<Chord> chords = new ArrayList<>();
-    for (ScaleNote scaleNote : scale.getScaleNotes()) {
-      chords.add(new Chord(scaleNote, ChordType.STANDARD));
-    }
-    return chords;
+  private void analyse() {
+    flatSecond = containsIntervals(ScaleInterval.PERFECT_UNISON);
+    second =  containsIntervals(ScaleInterval.MAJOR_SECOND);
+    flatThird =  containsIntervals(ScaleInterval.MINOR_THIRD);
+    third =  containsIntervals(ScaleInterval.MAJOR_THIRD);
+    fourth = containsIntervals(ScaleInterval.PERFECT_FOURTH);
+    flatFifth = containsIntervals(ScaleInterval.DIMINISHED_FIFTH);
+    fifth = containsIntervals(ScaleInterval.PERFECT_FIFTH);
+    augmentedFifth = containsIntervals(ScaleInterval.MINOR_SIXTH);
+    sixth = containsIntervals(ScaleInterval.MAJOR_SIXTH);
+    flatSeventh = containsIntervals(ScaleInterval.MINOR_SEVENTH);
+    seventh = containsIntervals(ScaleInterval.MAJOR_SEVENTH);
+    ninth = containsIntervals(ScaleInterval.NINTH);
+    eleventh = containsIntervals(ScaleInterval.ELEVENTH);
+
+    majorRange = (third || fifth) && !(flatThird || flatFifth);
+    minorRange = flatThird && !third;
+    suspended = (!third && !flatThird && (fourth || second));
   }
+
+
 }
