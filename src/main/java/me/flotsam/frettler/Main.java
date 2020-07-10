@@ -1,5 +1,6 @@
 package me.flotsam.frettler;
 
+import static java.lang.System.out;
 import java.util.List;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
@@ -8,7 +9,6 @@ import me.flotsam.frettler.engine.ScalePattern;
 import me.flotsam.frettler.instrument.Guitar;
 import me.flotsam.frettler.view.console.ChordView;
 import me.flotsam.frettler.view.console.GuitarView;
-import static java.lang.System.out;
 
 public class Main {
 
@@ -38,9 +38,9 @@ public class Main {
     out.println();
     out.println();
 
-    Chord dMajorChord = new Chord(Note.D, ScalePattern.MAJOR_TRIAD);
-    chordView.showChord(dMajorChord);
-
+    Chord cMajorChord = new Chord(Note.C, ScalePattern.MAJOR_TRIAD);
+    chordView.showChord(cMajorChord);
+    
     guitarView.showFretboard(cMajorScale);
     out.println();
 
@@ -52,14 +52,12 @@ public class Main {
     }
     out.println();
 
-    GuitarView.Options gvOptions = guitarView.new Options(true, false);
+    GuitarView.Options gvOptions = guitarView.new Options(true, false, true);
     for (Chord chord : chords) {
       out.println();
       guitarView.showFretboard(chord);
       guitarView.showFretboard(chord, gvOptions);
     }
-
   }
-
 }
 

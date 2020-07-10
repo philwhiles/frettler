@@ -26,6 +26,11 @@ public class Chord {
   private boolean minorRange;
   private boolean suspended;
 
+  private ScaleNote chordRootNote;
+  private ScalePattern chordPattern;
+  private List<ScaleNote> chordNotes = new ArrayList<>();;
+
+
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
     private int[] thirds;
@@ -38,12 +43,7 @@ public class Chord {
       return thirds;
     }
   }
-
-  private ScaleNote chordRootNote;
-
-  private ScalePattern chordPattern;
-  private List<ScaleNote> chordNotes = new ArrayList<>();;
-
+  
   public Chord(Note chordRootNote, ScalePattern chordPattern) {
     Scale chromaticScaleFromChordRoot = new Scale(ScalePattern.CHROMATIC, chordRootNote);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();

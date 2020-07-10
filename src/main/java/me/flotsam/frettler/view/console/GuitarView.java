@@ -15,7 +15,7 @@ import me.flotsam.frettler.instrument.Tone;
 public class GuitarView {
 
   private Guitar guitar;
-  private Options defaultOptions = new Options(false, true);
+  private Options defaultOptions = new Options(false, true, true);
 
   public GuitarView(Guitar guitar) {
     this.guitar = guitar;
@@ -31,8 +31,8 @@ public class GuitarView {
 
   public void showFretboard(Chord chord, Options options) {
     out.print("    ");
-    out.println(StringUtils.center(chord.getTitle(), 61));
-    out.print("\n");
+    out.println(StringUtils.center(chord.getTitle(), 84));
+    out.println();
     showFretboard(chord.getChordNotes(), options);
   }
 
@@ -42,12 +42,14 @@ public class GuitarView {
 
   public void showFretboard(Scale scale, Options options) {
     out.print("    ");
-    out.println(StringUtils.center(scale.getTitle(), 61));
-    out.print("\n");
+    out.println(StringUtils.center(scale.getTitle(), 84));
+    out.println();
     showFretboard(scale.getScaleNotes(), options);
   }
 
   public void showFretboard(List<ScaleNote> scaleNotes, Options options) {
+    ColourMap cm = new ColourMap();
+
     if (options.isInlays()) {
       out.println(
           "   ┏━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━━━━━━━━.━━━┓");
@@ -67,13 +69,30 @@ public class GuitarView {
         if (note.isPresent()) {
           String fretStr = options.isIntervals() ? note.get().getInterval().get().getLabel()
               : note.get().getNote().getLabel();
-          if (tone.getFret() == 0) {
-          fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
-            stringBuilder.append("").append(fretStr).append("┃┃");
+
+          if (options.isColour()) {
+            Colour col = cm.get(fretStr);
+            if (tone.getFret() == 0) {
+              fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
+              stringBuilder.append("").append(col).append(fretStr).append(Colour.RESET).append("┃┃");
+            } else {
+              if (fretStr.length() == 2) {
+                fretStr = String.format("%s%s%s", col, fretStr, Colour.RESET);
+              } else {
+                fretStr = String.format("%s%s%s┈", col, fretStr, Colour.RESET);
+              }
+              stringBuilder.append("┈┈").append(fretStr).append("┈┈┃");
+            }
           } else {
-          fretStr = fretStr.length() == 2 ? fretStr : String.format("%s┈", fretStr);
-            stringBuilder.append("┈┈").append(fretStr).append("┈┈┃");
+            if (tone.getFret() == 0) {
+              fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
+              stringBuilder.append("").append(fretStr).append("┃┃");
+            } else {
+              fretStr = fretStr.length() == 2 ? fretStr : String.format("%s┈", fretStr);
+              stringBuilder.append("┈┈").append(fretStr).append("┈┈┃");
+            }
           }
+
         } else {
           if (tone.getFret() == 0) {
             stringBuilder.append("  ").append("┃┃");
@@ -92,6 +111,8 @@ public class GuitarView {
       out.println(
           "   └━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
     }
+    out.println();
+    out.println();
   }
 
   @Data
@@ -99,6 +120,7 @@ public class GuitarView {
   public class Options {
     private boolean intervals;
     private boolean inlays;
+    private boolean colour;
   }
 }
 
