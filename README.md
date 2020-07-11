@@ -10,6 +10,6 @@ to display create standard chord diagrams, as an alternative to display each and
 
 The Main class is my scratchpad for creating scales, chords and viewing them with the console views.
 
-The shortened output of running the Main.java example currently, without colour as github markdown doesn't grok it :
+Here is an example with color taken from the Eclipse ANSI console plugin:
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler-ansi.png"/>
