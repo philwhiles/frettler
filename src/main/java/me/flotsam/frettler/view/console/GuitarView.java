@@ -15,7 +15,7 @@ import me.flotsam.frettler.instrument.Tone;
 public class GuitarView {
 
   private Guitar guitar;
-  private Options defaultOptions = new Options(false, true, true);
+  private Options defaultOptions = new Options(false, true, false);
 
   public GuitarView(Guitar guitar) {
     this.guitar = guitar;
@@ -23,6 +23,10 @@ public class GuitarView {
 
   public void showFretboard() {
     showFretboard(Scale.CHROMATIC_SCALE, defaultOptions);
+  }
+
+  public void showFretboard(Options options) {
+    showFretboard(Scale.CHROMATIC_SCALE, options);
   }
 
   public void showFretboard(Chord chord) {
@@ -67,9 +71,12 @@ public class GuitarView {
             scaleNotes.stream().filter(sn -> sn.getNote() == tone.getNote()).findFirst();
 
         if (note.isPresent()) {
-          String fretStr = options.isIntervals() ? note.get().getInterval().get().getLabel()
-              : note.get().getNote().getLabel();
-
+          String fretStr = null;
+          if (options.isIntervals()) {
+            fretStr = note.get().getInterval().isPresent() ? note.get().getInterval().get().getLabel() : note.get().getNote().getLabel();
+          } else {
+              fretStr = note.get().getNote().getLabel();
+          }
           if (options.isColour()) {
             Colour col = cm.get(fretStr);
             if (tone.getFret() == 0) {

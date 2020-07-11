@@ -27,35 +27,36 @@ public class Main {
 
   public void cMajorScale(Guitar guitar) throws Exception {
     GuitarView guitarView = new GuitarView(guitar);
+    GuitarView.Options gvOptions = guitarView.new Options(true, false, true);
+
     ChordView chordView = new ChordView(guitar);
+    ChordView.Options cvOptions = chordView.new Options(true);
 
     Scale cMajorScale = new Scale(ScalePattern.MAJOR, Note.C);
-    out.println(cMajorScale);
+//    out.println(cMajorScale);
     out.println();
     out.println();
 
-    guitarView.showFretboard();
+    guitarView.showFretboard(gvOptions);
     out.println();
     out.println();
 
     Chord cMajorChord = new Chord(Note.C, ScalePattern.MAJOR_TRIAD);
-    chordView.showChord(cMajorChord);
+    chordView.showChord(cMajorChord, cvOptions);
     
-    guitarView.showFretboard(cMajorScale);
+    guitarView.showFretboard(cMajorScale, gvOptions);
     out.println();
-
 
     List<Chord> chords = cMajorScale.createScaleChords();
 
-    for (Chord chord : chords) {
-      out.println(chord);
-    }
+//    for (Chord chord : chords) {
+//      out.println(chord);
+//    }
     out.println();
 
-    GuitarView.Options gvOptions = guitarView.new Options(true, false, true);
     for (Chord chord : chords) {
       out.println();
-      guitarView.showFretboard(chord);
+      guitarView.showFretboard(chord, gvOptions);
       guitarView.showFretboard(chord, gvOptions);
     }
   }

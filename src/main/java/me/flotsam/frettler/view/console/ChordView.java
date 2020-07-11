@@ -15,7 +15,7 @@ import me.flotsam.frettler.instrument.Tone;
 
 public class ChordView {
 
-  private Options defaultOptions = new Options(true);
+  private Options defaultOptions = new Options(false);
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12);
   private Guitar guitar;
 
