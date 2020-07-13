@@ -42,9 +42,10 @@ public class Main {
     out.println();
     out.println();
 
-    Chord cMajorChord = new Chord(Note.C, ScalePattern.MAJOR_TRIAD);
-    chordView.showChord(cMajorChord, cvOptions);
+//    Chord cMajorChord = new Chord(Note.C, ScalePattern.MAJOR_TRIAD);
+//    chordView.showChord(cMajorChord, cvOptions);
     
+//    chordView.showChord(cMajorScale, cvOptions);
     guitarView.showFretboard(cMajorScale, intervalsInlaysColor);
     out.println();
 
@@ -58,7 +59,8 @@ public class Main {
     for (Chord chord : chords) {
       out.println();
       guitarView.showFretboard(chord, notesInlaysColor);
-      guitarView.showFretboard(chord, intervalsInlaysColor);
+      chordView.showChord(chord, cvOptions);
+//      guitarView.showFretboard(chord, intervalsInlaysColor);
     }
   }
 }

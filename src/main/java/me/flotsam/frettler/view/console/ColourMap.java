@@ -9,13 +9,13 @@ public class ColourMap {
 
   private Map<Object, Colour> objColourMap = new HashMap<>();
   private List<Colour> colourList = Arrays.asList(
-      Colour.RED1,
+      Colour.DARK_ORANGE,
       Colour.GREEN3,
       Colour.SKY_BLUE1,
       Colour.LIGHT_STEEL_BLUE1,
+      Colour.RED1,
       Colour.HOT_PINK,
       Colour.GOLD1,
-      Colour.DARK_ORANGE,
       Colour.SKY_BLUE2,
       Colour.YELLOW2,
       Colour.THISTLE,

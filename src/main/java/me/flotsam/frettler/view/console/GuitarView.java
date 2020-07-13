@@ -53,7 +53,6 @@ public class GuitarView {
 
   public void showFretboard(List<ScaleNote> scaleNotes, Options options) {
     ColourMap cm = new ColourMap();
-
     if (options.isInlays()) {
       out.println(
           "   ┏━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━.━━━━━━━━━━━━━━━━━━━━.━━━┓");
@@ -84,11 +83,11 @@ public class GuitarView {
               stringBuilder.append("").append(col).append(fretStr).append(Colour.RESET).append("┃┃");
             } else {
               if (fretStr.length() == 2) {
-                fretStr = String.format("%s%s%s", col, fretStr, Colour.RESET);
+                fretStr = String.format("┈╴%s%s%s╶┈┃", col, fretStr, Colour.RESET);
               } else {
-                fretStr = String.format("%s%s%s┈", col, fretStr, Colour.RESET);
+                fretStr = String.format("┈╴%s%s%s╶┈┈┃", col, fretStr, Colour.RESET);
               }
-              stringBuilder.append("┈┈").append(fretStr).append("┈┈┃");
+              stringBuilder.append(fretStr);
             }
           } else {
             if (tone.getFret() == 0) {

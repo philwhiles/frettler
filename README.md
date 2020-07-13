@@ -10,6 +10,10 @@ to display create standard chord diagrams, as an alternative to display each and
 
 The Main class is my scratchpad for creating scales, chords and viewing them with the console views.
 
+The ChordView now calculates the open string fingering for a chord, but can still display all occurences using an alternate method.
+The open string chord diagrams are a WIP - it can handle the standard cases where the tonic is the lowest open string, but needs some
+more work - the B dim chord diagram is concocts has an unplayed middle string!
+
 Here is an example with color taken from the Eclipse ANSI console plugin:
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler-ansi.png"/>

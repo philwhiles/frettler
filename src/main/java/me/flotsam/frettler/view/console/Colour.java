@@ -3,11 +3,12 @@ package me.flotsam.frettler.view.console;
 public enum Colour {
   //Color end string, color reset
   RESET("\033[0m"),
+  BG_WHITE("\033[48;5;231m"),
 
   WHITE("\033[0;37;1m"),
   HOT_PINK("\033[38;5;206;1m"),
-  RED1("\033[38;5;196;1m"),
   DARK_ORANGE("\033[38;5;208;1m"),
+  RED1("\033[38;5;196;1m"),
   GOLD1("\033[38;5;220;1m"),
   CHARTREUSE2("\033[38;5;112;1m"),
   SKY_BLUE1("\033[38;5;117;1m"),
