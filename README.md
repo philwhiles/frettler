@@ -3,19 +3,19 @@
 ## Building
 The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar with the following
 
-{code}
+```
 
 ./mvnw clean install assembly:single
 
-{code}
+```
 
 And then run it with :
 
-{code}
+```
 
 java -jar target/frettler-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 
-{code}
+```
 
 
 ## Engine
