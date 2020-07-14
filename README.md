@@ -1,5 +1,23 @@
 # Frettler - A Java 11 musical scale and chord generator with guitar fretboard and chord rendering
 
+## Building
+The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar with the following
+
+{code}
+
+./mvnw clean install assembly:single
+
+{code}
+
+And then run it with :
+
+{code}
+
+java -jar target/frettler-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+
+{code}
+
+
 ## Engine
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
 The engine knows nothing about a guitar, it simply applies music theory to generate Java lists of the notes in scales and chords.

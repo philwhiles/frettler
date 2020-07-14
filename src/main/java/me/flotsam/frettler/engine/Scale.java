@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import com.godaddy.logging.Logger;
-import com.godaddy.logging.LoggerFactory;
 import me.flotsam.frettler.engine.Chord.ChordType;
 
 enum Position {
@@ -14,8 +12,6 @@ enum Position {
 
 
 public class Scale {
-
-  final Logger LOGGER = LoggerFactory.getLogger(Scale.class);
 
   public static final Scale CHROMATIC_SCALE = new Scale(Arrays.asList(Note.values()));
 

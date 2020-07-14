@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.console;
+package me.flotsam.frettler.view.guitar;
 
 import static java.lang.System.out;
 import java.util.List;
@@ -9,8 +9,8 @@ import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.instrument.Guitar;
-import me.flotsam.frettler.instrument.Tone;
+import me.flotsam.frettler.instrument.guitar.Guitar;
+import me.flotsam.frettler.instrument.guitar.Tone;
 
 public class GuitarView {
 

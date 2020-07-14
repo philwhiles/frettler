@@ -1,4 +1,4 @@
-package me.flotsam.frettler.instrument;
+package me.flotsam.frettler.instrument.guitar;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.console;
+package me.flotsam.frettler.view.guitar;
 
 import java.util.Arrays;
 import java.util.HashMap;

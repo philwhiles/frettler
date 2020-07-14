@@ -6,9 +6,9 @@ import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScalePattern;
-import me.flotsam.frettler.instrument.Guitar;
-import me.flotsam.frettler.view.console.ChordView;
-import me.flotsam.frettler.view.console.GuitarView;
+import me.flotsam.frettler.instrument.guitar.Guitar;
+import me.flotsam.frettler.view.guitar.ChordView;
+import me.flotsam.frettler.view.guitar.GuitarView;
 
 public class Main {
 

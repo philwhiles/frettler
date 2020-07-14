@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.console;
+package me.flotsam.frettler.view.guitar;
 
 public enum Colour {
   //Color end string, color reset
