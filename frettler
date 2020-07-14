@@ -1,0 +1,2 @@
+#!/bin/bash
+java -jar target/frettler-0.0.1-SNAPSHOT-jar-with-dependencies.jar "$@" 

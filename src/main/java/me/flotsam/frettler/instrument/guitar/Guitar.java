@@ -15,7 +15,9 @@ import me.flotsam.frettler.engine.ScaleNote;
 public class Guitar {
   
   public static final int FRETS = 12;
-  
+
+  private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
+
   @Getter
   List<Tone> tones = new ArrayList<>();
   @Getter
@@ -28,6 +30,11 @@ public class Guitar {
   // remember element 0 in the inner list is the open string notes
   @Getter
   List<List<Tone>> fretTones = new ArrayList<>();
+
+
+  public Guitar() {
+    this(DEFAULT_STRINGS);
+  }
 
   public Guitar(Note[] stringNotes) {
     this.stringNotes = Arrays.asList(stringNotes);

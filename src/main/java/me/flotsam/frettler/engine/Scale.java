@@ -21,6 +21,7 @@ public class Scale {
   private Note rootNote;
 
 
+  //TODO swap params round
   public Scale(ScalePattern scalePattern, Note rootNote) {
     this.scalePattern = scalePattern;
     this.rootNote = rootNote;

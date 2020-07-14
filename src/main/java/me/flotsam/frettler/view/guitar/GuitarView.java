@@ -15,7 +15,7 @@ import me.flotsam.frettler.instrument.guitar.Tone;
 public class GuitarView {
 
   private Guitar guitar;
-  private Options defaultOptions = new Options(false, true, false);
+  private Options defaultOptions = new Options(false, true, true);
 
   public GuitarView(Guitar guitar) {
     this.guitar = guitar;
@@ -34,6 +34,7 @@ public class GuitarView {
   }
 
   public void showFretboard(Chord chord, Options options) {
+    out.println();
     out.print("    ");
     out.println(StringUtils.center(chord.getTitle(), 84));
     out.println();
@@ -45,6 +46,7 @@ public class GuitarView {
   }
 
   public void showFretboard(Scale scale, Options options) {
+    out.println();
     out.print("    ");
     out.println(StringUtils.center(scale.getTitle(), 84));
     out.println();

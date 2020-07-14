@@ -4,19 +4,44 @@
 The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar with the following
 
 ```
-
-./mvnw clean install assembly:single
-
-```
-
-And then run it with :
+./build
 
 ```
 
-java -jar target/frettler-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+## Execution
+
+### Command Line
+Run it using the provided shell wrapper, frettler, ie :
+
+```
+./frettler GUITAR HORIZONTAL CHORD D MINOR_TRIAD
 
 ```
 
+Or: 
+
+```
+./frettler GUITAR HORIZONTAL SCALE D HARMONIC_MINOR -l INTERVALS -d MONO
+```
+
+Or:
+
+```
+./frettler GUITAR VERTICAL CHORD D MINOR_TRIAD
+```
+
+NOTE: the VERTICAL display of SCALE is TBD at this time.
+
+NOTE: the CLI arguments are handled by the Java framework, picocli, added to the codebase in the space of one evening (after actually practising guitar for 2 hours!),
+as well as the maven fat jar executable generation and the maven wrapper for building, and the bash wrappers. 
+This will all no doubt go through some further refinements soon to make it easier to use!
+
+### Programmatically
+If you want to you can write your own Main class and create a Guitar object, create a Scale or Chord object, create a Guitar and a view for that Guitar
+and then instruct the View to display your chord or object. The API is pretty straightfoward I think, and defaults safely to a standard tuning EADGBE six 
+string guitar etc
+Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the ChordView and 
+GuitarView classes, and their public methods.
 
 ## Engine
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
@@ -47,9 +72,7 @@ a third and fifth etc, but each string has multiple candidates for each note in 
 than the tonic string, can avoid duplicating the same note in the same octave as it works from the sixth string to the first etc. But I need to put that
 theory to the test with a wider set of chords and confirm my assumptions hold water.
 
-## Main
-The Main class is my scratchpad for creating scales, chords and viewing them with the console views.
-
+## Output
 
 Here is an example with color taken from the Eclipse ANSI console plugin:
 
