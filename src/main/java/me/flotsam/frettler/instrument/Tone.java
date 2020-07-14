@@ -9,10 +9,15 @@ import me.flotsam.frettler.engine.Note;
 @AllArgsConstructor
 @ToString
 public class Tone {
-  private int index;
-  private Note note;
-  private int octave;
-  private int stringNum;
-  private Note stringNote;
-  private int fret;
+  private final int index;
+  private final Note note;
+  private final int octave;
+  private final int stringNum;
+  private final Note stringNote;
+  private final int fret;
+  
+  
+  public boolean equalsTone(Tone other) {
+    return (other.note == this.note && other.octave == this.octave);
+  }
 }

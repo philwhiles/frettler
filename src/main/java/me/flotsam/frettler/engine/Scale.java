@@ -141,7 +141,13 @@ public class Scale {
   }
 
   public String getTitle() {
-    return rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
+    String title = null;
+    if (scalePattern == ScalePattern.CHROMATIC) {
+      title = scalePattern.getLabel() + " Scale";
+    } else {
+      title = rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
+    }
+    return title;
   }
 
   public String toString() {

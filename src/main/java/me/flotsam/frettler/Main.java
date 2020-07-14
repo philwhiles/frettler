@@ -27,40 +27,29 @@ public class Main {
 
   public void cMajorScale(Guitar guitar) throws Exception {
     GuitarView guitarView = new GuitarView(guitar);
-    GuitarView.Options intervalsInlaysColor = guitarView.new Options(true, false, true);
-    GuitarView.Options notesInlaysColor = guitarView.new Options(false, false, true);
+    GuitarView.Options gvOptionsintervalsInlaysColour = guitarView.new Options(true, false, true);
+    GuitarView.Options gvOptionsNotesInlaysColour = guitarView.new Options(false, false, true);
 
     ChordView chordView = new ChordView(guitar);
-    ChordView.Options cvOptions = chordView.new Options(true);
+    ChordView.Options cvOptionsNotesColour = chordView.new Options(false, true);
+    ChordView.Options cvOptionsIntervalsColour = chordView.new Options(true, true);
+
+    out.println();
+    guitarView.showFretboard(gvOptionsintervalsInlaysColour);
 
     Scale cMajorScale = new Scale(ScalePattern.MAJOR, Note.C);
-//    out.println(cMajorScale);
-    out.println();
-    out.println();
 
-    guitarView.showFretboard(intervalsInlaysColor);
-    out.println();
-    out.println();
-
-//    Chord cMajorChord = new Chord(Note.C, ScalePattern.MAJOR_TRIAD);
-//    chordView.showChord(cMajorChord, cvOptions);
-    
-//    chordView.showChord(cMajorScale, cvOptions);
-    guitarView.showFretboard(cMajorScale, intervalsInlaysColor);
+    guitarView.showFretboard(cMajorScale, gvOptionsintervalsInlaysColour);
     out.println();
 
     List<Chord> chords = cMajorScale.createScaleChords();
-
-//    for (Chord chord : chords) {
-//      out.println(chord);
-//    }
     out.println();
 
     for (Chord chord : chords) {
       out.println();
-      guitarView.showFretboard(chord, notesInlaysColor);
-      chordView.showChord(chord, cvOptions);
-//      guitarView.showFretboard(chord, intervalsInlaysColor);
+      guitarView.showFretboard(chord, gvOptionsNotesInlaysColour);
+      chordView.showChord(chord, cvOptionsNotesColour);
+      chordView.showChord(chord, cvOptionsIntervalsColour);
     }
   }
 }
