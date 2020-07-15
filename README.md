@@ -1,7 +1,13 @@
 # Frettler - A CLI for generating musical scales and chords with guitar fretboard and chord rendering
 
+## Synopsis
+This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a guitar fretboard,
+The rendering is just a bunch of System.out.prinln statements, but uses Unicode boxing characters and ANSI colour coding.
+Example output can be seen at the bottom of this page. The rendering turned out a lot better than I had hoped tbh!
+
 ## Building
-The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar with the following
+The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar that will be
+used by the included bash wrapper, with the following
 
 ```
 ./build
@@ -64,7 +70,18 @@ and easily see the patterns.
 
 The ChordView now calculates the open string fingering for a chord, but can still display all occurences using an alternate method.
 
-CAVEAT EMPTOR
+## Caveats!
+
+### General
+Prior to writing this app, my knowledge of music theory was pretty rudimentary. Probably still is if I'm being honest.
+I have been learning to play guitar for the last six months, and have been deliberately not rushing into it as I want to build up my knowledge of music
+theory at the same time. I don't want to blindly learn the fingering for various chords without understanding how the scales are constructed, how the chords 
+in that scale can be derived, and how to name those chords, and also how the chord fingering is arrived at.
+A lot of the theory behind this code is formed from my reading random resources and trying to fit it all together, so forgive me if some of the music domain
+names used are suspect, or the rules in my music theory code has some gaps or holes. I am finding this to be a great learning exercise, and I shall get there.
+I hope!
+
+### Chord fingerings
 The ChordView may still require some work - it can calculate the chord fingering for fairly standard, open string, major, minor and diminished chords
 but I am still working on it - I need to check it's handiwork for a wider variety of chords and confirm that my algorithm for selecting the correct 
 fingering works extensively. I havent found any resources online which explain how chord fingerings are derived. Yes, I know it's all about the tonic,
