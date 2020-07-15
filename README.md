@@ -99,7 +99,6 @@ theory at the same time. I don't want to blindly learn the fingering for various
 in that scale can be derived, and how to name those chords, and also how the chord fingering is arrived at.
 A lot of the theory behind this code is formed from my reading random resources and trying to fit it all together, so forgive me if some of the music domain
 names used are suspect, or the rules in my music theory code has some gaps or holes. I am finding this to be a great learning exercise, and I shall get there.
-I hope!
 
 ### Chord fingerings
 The ChordView may still require some work - it can calculate the chord fingering for fairly standard, open string, major, minor and diminished chords
