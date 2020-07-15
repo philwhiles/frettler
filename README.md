@@ -30,6 +30,7 @@ To display the scale of Dm harmonic on the horizontal fretboard, with intervals 
 
 ```
 ./frettler GUITAR HORIZONTAL SCALE D HARMONIC_MINOR -labels INTERVALS -display MONO
+
 ```
 
 To display the scale for E on the horizontal fretboard, AND display the chord diagrams for its chords: 
@@ -43,12 +44,14 @@ To display the chord diagram for Am:
 
 ```
 ./frettler GUITAR VERTICAL CHORD A MINOR_TRIAD
+
 ```
 
 To display the chord diagram for D minor, with the guitar tuning dropped down a whole step: 
 
 ```
 ./frettler GUITAR VERTICAL CHORD D MINOR_TRIAD --strings D,G,C,F,A,D
+
 ```
 
 
