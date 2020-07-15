@@ -73,7 +73,7 @@ The ChordView now calculates the open string fingering for a chord, but can stil
 ## Caveats
 
 ### General
-Prior to writing this app, my knowledge of music theory was pretty rudimentary. Probably still is if I'm being honest.
+Prior to writing this app, my knowledge of music theory was pretty rudimentary. Still is to be honest.
 I have been learning to play guitar for the last six months, and have been deliberately not rushing into it as I want to build up my knowledge of music
 theory at the same time. I don't want to blindly learn the fingering for various chords without understanding how the scales are constructed, how the chords 
 in that scale can be derived, and how to name those chords, and also how the chord fingering is arrived at.
@@ -90,17 +90,20 @@ than the tonic string, can avoid duplicating the same note in the same octave as
 theory to the test with a wider set of chords and confirm my assumptions hold water.
 
 ## TODO
+- Add some Javadoc, for my own sanity if no one elses
 - Refine the CLI argument handling to expose the generation and display of all chords in a given key
 - Extend the types of scales it understands
 - Refine the CLI argument handling to expose the ability to use non standard tuning (the current Guitar class and its two view
 classes can handle that already if you use it programmatically)
 - Add the ability to have for instance a 7 string guitar
 - Write the VERTICAL SCALE view and expose it through the CLI 
-- Verify its VERTICAL CHORD fingering output for the more esoteric chords!
+- Verify the VERTICAL CHORD fingering output for the more esoteric chords!
+- Look at specialising Guitar to allow for intro of Ukelele or Mandolin or ...
 - Maybe ... add a Keyboad instrument class and corresponding Views. Maybe.
+- Actually learn guitar!
 
 ## Output
 
-Here is an example with color taken from the Eclipse ANSI console plugin:
+Here are some colour output examples:
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
