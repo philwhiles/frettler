@@ -1,4 +1,4 @@
-# Frettler - A Java 11 musical scale and chord generator with guitar fretboard and chord rendering
+# Frettler - A CLI for generating musical scales and chords with guitar fretboard and chord rendering
 
 ## Building
 The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar with the following
@@ -71,6 +71,16 @@ fingering works extensively. I havent found any resources online which explain h
 a third and fifth etc, but each string has multiple candidates for each note in a chord. My algorithm favours the higher frets, can exclude strings lower 
 than the tonic string, can avoid duplicating the same note in the same octave as it works from the sixth string to the first etc. But I need to put that
 theory to the test with a wider set of chords and confirm my assumptions hold water.
+
+## TODO
+- Refine the CLI argument handling to expose the generation and display of all chords in a given key
+- Extend the types of scales it understands
+- Refine the CLI argument handling to expose the ability to use non standard tuning (the current Guitar class and its two view
+classes can handle that already if you use it programmatically)
+- Add the ability to have for instance a 7 string guitar
+- Write the VERTICAL SCALE view and expose it through the CLI 
+- Verify its VERTICAL CHORD fingering output for the more esoteric chords!
+- Maybe ... add a Keyboad instrument class and corresponding Views. Maybe.
 
 ## Output
 
