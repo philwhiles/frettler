@@ -90,6 +90,7 @@ and easily see the patterns.
 The ChordView now calculates the open string fingering for a chord, but can still display all occurences using an alternate method.
 
 ## Caveats
+This is a work in progress.
 
 ### Music Theory
 Prior to writing this app, my knowledge of music theory was pretty rudimentary. Still is to be honest.
@@ -118,7 +119,6 @@ theory to the test with a wider set of chords and confirm my assumptions hold wa
 - Actually learn guitar!
 
 ## Output
-
 Here are some colour output examples:
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
