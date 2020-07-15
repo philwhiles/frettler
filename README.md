@@ -1,7 +1,7 @@
 # Frettler - A CLI for generating musical scales and chords with guitar fretboard and chord rendering
 
 ## Synopsis
-This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a guitar fretboard,
+This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a guitar fretboard.
 The rendering is just a bunch of System.out.prinln statements, but uses Unicode boxing characters and ANSI colour coding.
 Example output can be seen at the bottom of this page. The rendering turned out a lot better than I had hoped tbh!
 
@@ -70,7 +70,7 @@ and easily see the patterns.
 
 The ChordView now calculates the open string fingering for a chord, but can still display all occurences using an alternate method.
 
-## Caveats!
+## Caveats
 
 ### General
 Prior to writing this app, my knowledge of music theory was pretty rudimentary. Probably still is if I'm being honest.
