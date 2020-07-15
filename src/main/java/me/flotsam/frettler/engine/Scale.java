@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import me.flotsam.frettler.engine.Chord.ChordType;
+import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 
 enum Position {
   HEAD, MIDDLE, TAIL;
@@ -17,12 +18,15 @@ public class Scale {
 
   private ScaleNote head = null;
   private ScaleNote tail = null;
-  private ScalePattern scalePattern;
+  private IntervalPattern scalePattern;
   private Note rootNote;
 
 
-  //TODO swap params round
-  public Scale(ScalePattern scalePattern, Note rootNote) {
+  public Scale(Note rootNote, IntervalPattern scalePattern) {
+    if (scalePattern.getPatternType() != PatternType.SCALE) {
+      System.err.println("Interval pattern '" + scalePattern.getLabel() + "' is not a scale pattern");
+      System.exit(-1);
+    }
     this.scalePattern = scalePattern;
     this.rootNote = rootNote;
 
@@ -34,7 +38,7 @@ public class Scale {
   }
 
   private Scale(List<Note> notes) {
-    this.scalePattern = ScalePattern.CHROMATIC;
+    this.scalePattern = IntervalPattern.CHROMATIC_SCALE;
     this.rootNote = notes.get(0);
     for (Note note : notes) {
       addScaleNote(note, Optional.empty());
@@ -116,7 +120,7 @@ public class Scale {
   }
 
 
-  public ScalePattern getScalePattern() {
+  public IntervalPattern getScalePattern() {
     return scalePattern;
   }
 
@@ -139,7 +143,7 @@ public class Scale {
 
   public String getTitle() {
     String title = null;
-    if (scalePattern == ScalePattern.CHROMATIC) {
+    if (scalePattern == IntervalPattern.CHROMATIC_SCALE) {
       title = scalePattern.getLabel() + " Scale";
     } else {
       title = rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";

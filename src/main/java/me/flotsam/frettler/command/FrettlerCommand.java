@@ -2,10 +2,15 @@ package me.flotsam.frettler.command;
 
 import lombok.Data;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.ScalePattern;
+import me.flotsam.frettler.engine.IntervalPattern;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
+/**
+ * Base class for the primary commands
+ * @author philwhiles
+ *
+ */
 @Data
 public class FrettlerCommand {
 
@@ -18,8 +23,8 @@ public class FrettlerCommand {
   @Parameters(index = "2", description="The root/tonic of the chord or scale")
   protected Note root;
   
-  @Parameters(index = "3", description="The ScalePattern to use to generate the chord or scale")
-  protected ScalePattern scalePattern;
+  @Parameters(index = "3", description="The IntervalPattern to use to generate the chord or scale")
+  protected IntervalPattern intervalPattern;
   
   @Option(names = {"-d", "--display"}, description="Display in monochrome or colour")
   protected Display display = Display.COLOUR;

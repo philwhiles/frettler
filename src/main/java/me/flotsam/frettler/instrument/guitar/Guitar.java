@@ -36,12 +36,16 @@ public class Guitar {
     this(DEFAULT_STRINGS);
   }
 
-  public Guitar(Note[] stringNotes) {
-    this.stringNotes = Arrays.asList(stringNotes);
+  public Guitar(Note[] strings) {
+    if (strings.length > 0) {
+      this.stringNotes = Arrays.asList(strings);
+    } else {
+      this.stringNotes = Arrays.asList(DEFAULT_STRINGS);
+    }
 
-    for (int stringNum = 0; stringNum < stringNotes.length; stringNum++) {
+    for (int stringNum = 0; stringNum < stringNotes.size(); stringNum++) {
       Optional<ScaleNote> optScaleNote =
-          Scale.CHROMATIC_SCALE.findScaleNote(stringNotes[stringNum]);
+          Scale.CHROMATIC_SCALE.findScaleNote(stringNotes.get(stringNum));
       ScaleNote scaleNote = optScaleNote.get();
 
       for (int fretNum = 0; fretNum <= FRETS; fretNum++) {
@@ -60,7 +64,7 @@ public class Guitar {
           }
         }
         Tone tone = new Tone(stringNum * FRETS + fretNum, scaleNote.getNote(), octave,
-            stringNum, stringNotes[stringNum], fretNum);
+            stringNum, stringNotes.get(stringNum), fretNum);
         tones.add(tone);
         
         List<Tone> currentFretsTones;

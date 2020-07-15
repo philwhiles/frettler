@@ -2,14 +2,16 @@ package me.flotsam.frettler.engine;
 
 
 public enum ScaleInterval {
+// not sure if i will need these so leaving for time being
 //  DIMINISHED_SECOND("d2", 0, false),
 //  AUGMENTED_UNISON("A1", 1, false),
 //  DIMINISH£D_THIRD("d3", 2, false),
 //  AUGMENTED_SECOND("A2", 3, false),
 //  DIMINISH£D_FOURTH("d4", 4, false),
 //  AUGMENTED_THIRD("A3", 5, false),
-  DIMINISHED_FIFTH("d5", 6, false),
 //  AUGMENTED_FOURTH("A4", 6, false),
+//  DIMINISHED_FIFTH("d5", 6, false),
+//  FLATTENED_FIFTH("b5", 6, false),
 //  DIMINISH£D_SIXTH("d6", 7, false),
 //  AUGMENTED_FIFTH("A5", 8, false),
 //  DIMINISH£D_SEVENTH("d7", 9, false),
@@ -23,6 +25,9 @@ public enum ScaleInterval {
   MINOR_THIRD("m3", 3, true),
   MAJOR_THIRD("M3", 4, true),
   PERFECT_FOURTH("P4", 5, true),
+
+  DIMINISHED_FIFTH("d5", 6, false),
+
   PERFECT_FIFTH("P5", 7, true),
   MINOR_SIXTH("m6", 8, true),
   MAJOR_SIXTH("M6", 9, true),
@@ -30,8 +35,6 @@ public enum ScaleInterval {
   MAJOR_SEVENTH("M7", 11, true),
   PERFECT_OCTAVE("P8", 12, true),
   
-  
-//  FLATTENED_FIFTH("b5", 6, false),
   NINTH("9", 13, false),
   MINOR_TENTH("m10", 15, false),
   TENTH("10", 16, false),

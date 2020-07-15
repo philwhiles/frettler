@@ -34,6 +34,8 @@ public class ChordView {
 
   public void showChord(Chord chord, Options options) {
     List<ChordTone> tones = new ArrayList<>();
+
+    out.println();
     out.println(StringUtils.center(chord.getTitle(), 32));
     out.println();
 
@@ -125,6 +127,8 @@ public class ChordView {
 
   public void showChordOccurence(Chord chord, Options options) {
     List<ChordTone> tones = new ArrayList<>();
+
+    out.println();
     out.println(StringUtils.center(chord.getTitle(), 32));
     out.println();
 
@@ -193,7 +197,7 @@ public class ChordView {
         stringNum++;
       }
       out.println(inlay);
-      if (fretNum == lowestFret + 2) {
+      if (fretNum >= 5 && fretNum >= lowestFret + 1 ) {
         break;
       }
       if (fretNum == 0) {

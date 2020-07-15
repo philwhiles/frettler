@@ -19,22 +19,38 @@ used by the included bash wrapper, with the following
 ### Command Line
 Run it using the provided shell wrapper, frettler, ie :
 
+To display the chord Dm on the horizontal fretboard: 
+
 ```
 ./frettler GUITAR HORIZONTAL CHORD D MINOR_TRIAD
 
 ```
 
-Or: 
+To display the scale of Dm harmonic on the horizontal fretboard, with intervals and not notes, without colour: 
 
 ```
-./frettler GUITAR HORIZONTAL SCALE D HARMONIC_MINOR -l INTERVALS -d MONO
+./frettler GUITAR HORIZONTAL SCALE D HARMONIC_MINOR -labels INTERVALS -display MONO
 ```
 
-Or:
+To display the scale for E on the horizontal fretboard, AND display the chord diagrams for its chords: 
 
 ```
-./frettler GUITAR VERTICAL CHORD D MINOR_TRIAD
+./frettler GUITAR HORIZONTAL CHORD MAJOR_SCALE --chords
+
 ```
+
+To display the chord diagram for Am: 
+
+```
+./frettler GUITAR VERTICAL CHORD A MINOR_TRIAD
+```
+
+To display the chord diagram for D minor, with the guitar tuning dropped down a whole step: 
+
+```
+./frettler GUITAR VERTICAL CHORD D MINOR_TRIAD --strings D,G,C,F,A,D
+```
+
 
 NOTE: the VERTICAL display of SCALE is TBD at this time.
 
@@ -72,7 +88,7 @@ The ChordView now calculates the open string fingering for a chord, but can stil
 
 ## Caveats
 
-### General
+### Music Theory
 Prior to writing this app, my knowledge of music theory was pretty rudimentary. Still is to be honest.
 I have been learning to play guitar for the last six months, and have been deliberately not rushing into it as I want to build up my knowledge of music
 theory at the same time. I don't want to blindly learn the fingering for various chords without understanding how the scales are constructed, how the chords 
@@ -91,15 +107,11 @@ theory to the test with a wider set of chords and confirm my assumptions hold wa
 
 ## TODO
 - Add some Javadoc, for my own sanity if no one elses
-- Refine the CLI argument handling to expose the generation and display of all chords in a given key
 - Extend the types of scales it understands
-- Refine the CLI argument handling to expose the ability to use non standard tuning (the current Guitar class and its two view
-classes can handle that already if you use it programmatically)
 - Add the ability to have for instance a 7 string guitar
 - Write the VERTICAL SCALE view and expose it through the CLI 
 - Verify the VERTICAL CHORD fingering output for the more esoteric chords!
-- Look at specialising Guitar to allow for intro of Ukelele or Mandolin or ...
-- Maybe ... add a Keyboad instrument class and corresponding Views. Maybe.
+- Look at specialising Guitar to allow for intro of Ukelele or Mandolin or Banjo ...
 - Actually learn guitar!
 
 ## Output

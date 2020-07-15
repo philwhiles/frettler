@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Data;
+import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 
 @Data
 public class Chord {
@@ -27,7 +28,7 @@ public class Chord {
   private boolean suspended;
 
   private ScaleNote chordRootNote;
-  private ScalePattern chordPattern;
+  private IntervalPattern chordPattern;
   private List<ScaleNote> chordNotes = new ArrayList<>();;
 
 
@@ -44,8 +45,17 @@ public class Chord {
     }
   }
   
-  public Chord(Note chordRootNote, ScalePattern chordPattern) {
-    Scale chromaticScaleFromChordRoot = new Scale(ScalePattern.CHROMATIC, chordRootNote);
+  /**
+   * Used to create a Chord from a root note when we know what the chords scale pattern should be
+   * @param chordRootNote the tonic for the chord
+   * @param chordPattern the scale pattern ie MAJOR, HARMONIC_MINOR
+   */
+  public Chord(Note chordRootNote, IntervalPattern chordPattern) {
+    if (chordPattern.getPatternType() != PatternType.CHORD) {
+      System.err.println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
+      System.exit(-1);
+    }
+    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.CHROMATIC_SCALE);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
     for (ScaleInterval interval : chordPattern.getIntervals()) {
@@ -56,15 +66,21 @@ public class Chord {
 
 
   /**
-   * Creates a scale chord from a point in that scale
+   * Creates a chord from a given note in a scale. Used to create a standard triad or quadriad chord from the tonic/root - in the
+   * scale that the chordRootNote was taken. ie the chordRootNote may be 'D' sitting within say the scale of A Minor,
+   * and will sit with that scales notes either side of it.
+   * The chordType indicates the thirds to pick out of the root notes scale.
    * 
-   * @param chordRootNote the scale note tonic
+   * It gets the chromatic scale starting at the root note, then finds each of the derived chord notes relative to the tonic in the 
+   * chromatic scale in order to work out the interval of each chord note.
+   * 
+   * @param chordRootNote the scale note tonic 
    * @param chordType standard or extended - this indicates the thirds to use
    */
   public Chord(ScaleNote chordRootNote, ChordType chordType) {
     this.chordRootNote = chordRootNote;
 
-    Scale chromaticScaleFromChordRoot = new Scale(ScalePattern.CHROMATIC, chordRootNote.getNote());
+    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote.getNote(), IntervalPattern.CHROMATIC_SCALE);
 
     for (int third : chordType.getThirds()) {
       ScaleNote chordNote = Scale.getThirdNote(chordRootNote, third);
@@ -72,7 +88,7 @@ public class Chord {
           chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
       chordNotes.add(noteInRootScale.get());
     }
-    for (ScalePattern chordPattern : ScalePattern.values()) {
+    for (IntervalPattern chordPattern : IntervalPattern.values()) {
       int matches = 0;
       for (ScaleInterval chordsScaleInterval : chordPattern.getIntervals()) {
         for (ScaleNote chordNote : chordNotes) {
@@ -164,21 +180,6 @@ public class Chord {
     return builder.toString();
   }
 
-  /**
-   * Return true if the chord contains a note that is a major third from the tonic, false otherwise.
-   * Note that chord lacking a third are neither major nor minor.
-   */
-  public boolean isMajor() {
-    return containsIntervals(ScaleInterval.MAJOR_THIRD);
-  }
-
-  /**
-   * Return true if the chord contains a note that is a minor third from the tonic, false otherwise.
-   * Note that chords lacking a third are neither major nor minor.
-   */
-  public boolean isMinor() {
-    return containsIntervals(ScaleInterval.MINOR_THIRD);
-  }
 
   public String getTitle() {
     return getLabel() + " (" + chordRootNote.getNote() + " " + chordPattern.getLabel() + ")" + " ["

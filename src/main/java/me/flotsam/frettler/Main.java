@@ -8,7 +8,7 @@ import me.flotsam.frettler.command.GuitarCommand;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
-import me.flotsam.frettler.engine.ScalePattern;
+import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.instrument.guitar.Guitar;
 import me.flotsam.frettler.view.guitar.ChordView;
 import me.flotsam.frettler.view.guitar.GuitarView;
@@ -24,9 +24,10 @@ import picocli.CommandLine.Command;
 )
 public class Main implements Callable<Integer> {
 
-  public static void main(String... args) {
+  public static void main(String... args) throws Exception {
     int exitCode = new CommandLine(new Main()).execute(args);
-    System.out.println(exitCode);
+//    Guitar guitar = new Guitar();
+//    scratchPad(guitar);
   }
 
   @Override
@@ -35,18 +36,12 @@ public class Main implements Callable<Integer> {
       return 0;
   }
   
-  
-  //  public static void main(String[] args) throws Exception {
-//    // Main main = new Main();
-//    // Note[] strings = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
-//    // Guitar guitar = new Guitar(strings);
-//    // main.cMajorScale(guitar);
-//
-//  }
-  
-  
-  
-  public void cMajorScale(Guitar guitar) throws Exception {
+  /**
+   * Left here for time being to act as API reminder for self
+   * @param guitar the guitar to use
+   * @throws Exception oops
+   */
+  private static void scratchPad(Guitar guitar) throws Exception {
     GuitarView guitarView = new GuitarView(guitar);
     GuitarView.Options gvOptionsintervalsInlaysColour = guitarView.new Options(true, false, true);
     GuitarView.Options gvOptionsNotesInlaysColour = guitarView.new Options(false, false, true);
@@ -55,12 +50,12 @@ public class Main implements Callable<Integer> {
     ChordView.Options cvOptionsNotesColour = chordView.new Options(false, true);
     ChordView.Options cvOptionsIntervalsColour = chordView.new Options(true, true);
 
-    out.println();
-    guitarView.showFretboard(gvOptionsintervalsInlaysColour);
+//    out.println();
+//    guitarView.showFretboard(gvOptionsintervalsInlaysColour);
+    
+    Scale cMajorScale = new Scale(Note.C, IntervalPattern.MAJOR_SCALE);
 
-    Scale cMajorScale = new Scale(ScalePattern.MAJOR, Note.C);
-
-    guitarView.showFretboard(cMajorScale, gvOptionsintervalsInlaysColour);
+//    guitarView.showFretboard(cMajorScale, gvOptionsintervalsInlaysColour);
     out.println();
 
     List<Chord> chords = cMajorScale.createScaleChords();
@@ -68,9 +63,9 @@ public class Main implements Callable<Integer> {
 
     for (Chord chord : chords) {
       out.println();
-      guitarView.showFretboard(chord, gvOptionsNotesInlaysColour);
+//      guitarView.showFretboard(chord, gvOptionsNotesInlaysColour);
       chordView.showChord(chord, cvOptionsNotesColour);
-      chordView.showChord(chord, cvOptionsIntervalsColour);
+//      chordView.showChord(chord, cvOptionsIntervalsColour);
     }
   }
 }
