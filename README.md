@@ -92,7 +92,7 @@ The ChordView now calculates the open string fingering for a chord, but can stil
 ## Caveats
 This is a work in progress.
 
-### Music theory
+### Music theory
 Prior to writing this app, my knowledge of music theory was pretty rudimentary. Still is to be honest.
 I have been learning to play guitar for the last six months, and have been deliberately not rushing into it as I want to build up my knowledge of music
 theory at the same time. I don't want to blindly learn the fingering for various chords without understanding how the scales are constructed, how the chords 
