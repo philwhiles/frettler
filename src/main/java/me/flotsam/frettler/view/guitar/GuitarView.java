@@ -10,7 +10,7 @@ import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.guitar.Guitar;
-import me.flotsam.frettler.instrument.guitar.Tone;
+import me.flotsam.frettler.instrument.guitar.Fret;
 
 public class GuitarView {
 
@@ -64,10 +64,10 @@ public class GuitarView {
     }
 
 
-    for (int i = guitar.getStringTones().size() - 1; i >= 0; i--) {
-      List<Tone> tonesInString = guitar.getStringTones().get(i);
+    for (int i = guitar.getStringFrets().size() - 1; i >= 0; i--) {
+      List<Fret> tonesInString = guitar.getStringFrets().get(i);
       StringBuilder stringBuilder = new StringBuilder();
-      for (Tone tone : tonesInString) {
+      for (Fret tone : tonesInString) {
         Optional<ScaleNote> note =
             scaleNotes.stream().filter(sn -> sn.getNote() == tone.getNote()).findFirst();
 

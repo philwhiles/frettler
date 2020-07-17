@@ -8,7 +8,7 @@ import me.flotsam.frettler.engine.Note;
 @Data
 @AllArgsConstructor
 @ToString
-public class Tone {
+public class Fret {
   private final int index;
   private final Note note;
   private final int octave;
@@ -17,7 +17,7 @@ public class Tone {
   private final int fret;
   
   
-  public boolean equalsTone(Tone other) {
+  public boolean equalsTone(Fret other) {
     return (other.note == this.note && other.octave == this.octave);
   }
 }

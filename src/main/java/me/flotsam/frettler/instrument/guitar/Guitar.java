@@ -19,17 +19,17 @@ public class Guitar {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
 
   @Getter
-  List<Tone> tones = new ArrayList<>();
+  List<Fret> allFrets = new ArrayList<>();
   @Getter
   List<Note> stringNotes;
   
   // remember element 0 in each inner List is the open string note
   @Getter
-  List<List<Tone>> stringTones = new ArrayList<>();
+  List<List<Fret>> stringFrets = new ArrayList<>();
   
   // remember element 0 in the inner list is the open string notes
   @Getter
-  List<List<Tone>> fretTones = new ArrayList<>();
+  List<List<Fret>> fretFrets = new ArrayList<>();
 
 
   public Guitar() {
@@ -50,54 +50,54 @@ public class Guitar {
 
       for (int fretNum = 0; fretNum <= FRETS; fretNum++) {
 
-        int octave = 0; // until known from prev tone
+        int octave = 0; // until known from prev fret
 
-        // first look for relative tone on current string
-        Tone prevTone = findRelativeToneUp(stringNum, scaleNote.getNote());
-        if (prevTone != null) {
-          octave = prevTone.getOctave() + 1;
+        // first look for relative fret note on current string
+        Fret prevFret = findRelativeFretUp(stringNum, scaleNote.getNote());
+        if (prevFret != null) {
+          octave = prevFret.getOctave() + 1;
         } else {
           // otherwise on the prev string
-          prevTone = findRelativeToneUp(stringNum - 1, scaleNote.getNote());
-          if (prevTone != null) {
-            octave = prevTone.getFret() > fretNum ? prevTone.getOctave() : prevTone.getOctave() + 1;
+          prevFret = findRelativeFretUp(stringNum - 1, scaleNote.getNote());
+          if (prevFret != null) {
+            octave = prevFret.getFret() > fretNum ? prevFret.getOctave() : prevFret.getOctave() + 1;
           }
         }
-        Tone tone = new Tone(stringNum * FRETS + fretNum, scaleNote.getNote(), octave,
+        Fret fret = new Fret(stringNum * FRETS + fretNum, scaleNote.getNote(), octave,
             stringNum, stringNotes.get(stringNum), fretNum);
-        tones.add(tone);
+        allFrets.add(fret);
         
-        List<Tone> currentFretsTones;
-        if (fretTones.size() == fretNum) {
-          currentFretsTones = new ArrayList<>();
-          fretTones.add(currentFretsTones);
+        List<Fret> currentFretsFrets;
+        if (fretFrets.size() == fretNum) {
+          currentFretsFrets = new ArrayList<>();
+          fretFrets.add(currentFretsFrets);
         }
-        currentFretsTones = fretTones.get(fretNum);
-        currentFretsTones.add(tone);
+        currentFretsFrets = fretFrets.get(fretNum);
+        currentFretsFrets.add(fret);
         
         scaleNote = scaleNote.getNextScaleNote();
       }
       final int x = stringNum;
-      stringTones
-          .add(tones.stream().filter(t -> t.getStringNum() == x).collect(Collectors.toList()));
+      stringFrets
+          .add(allFrets.stream().filter(t -> t.getStringNum() == x).collect(Collectors.toList()));
     }
   }
 
 
 
-  private Tone findRelativeToneUpFromIndex(int stringNum, Note note, int index) {
-    Tone tone = null;
+  private Fret findRelativeFretUpFromIndex(int stringNum, Note note, int index) {
+    Fret fret = null;
     for (int idx = index; idx-- > 0;) {
-      Tone aTone = tones.get(idx);
-      if (aTone.getNote() == note && aTone.getStringNum() == stringNum) {
-        tone = tones.get(idx);
+      Fret aFret = allFrets.get(idx);
+      if (aFret.getNote() == note && aFret.getStringNum() == stringNum) {
+        fret = allFrets.get(idx);
         break;
       }
     }
-    return tone;
+    return fret;
   }
 
-  private Tone findRelativeToneUp(int stringNum, Note note) {
-    return findRelativeToneUpFromIndex(stringNum, note, tones.size());
+  private Fret findRelativeFretUp(int stringNum, Note note) {
+    return findRelativeFretUpFromIndex(stringNum, note, allFrets.size());
   }
 }

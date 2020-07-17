@@ -74,7 +74,7 @@ The engine knows nothing about a guitar, it simply applies music theory to gener
 
 ## Instrument
 Yeah - just guitar. The Guitar class understands the fretboard layout of a guitar having any number of strings with any given tuning.
-It also contains a Tone class which represents an individual fret position on that guitar.
+It also contains a Fret class which represents an individual fret position on that particular guitar.
 
 ## View
 Currently only console views, each constructed with a Guitar, which take the scale and chord constructs from the engine, and render them
