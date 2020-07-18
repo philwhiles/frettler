@@ -6,16 +6,14 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
-import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.instrument.guitar.Guitar;
 import me.flotsam.frettler.instrument.guitar.Fret;
+import me.flotsam.frettler.instrument.guitar.Guitar;
 
 public class ChordView {
 
@@ -33,22 +31,23 @@ public class ChordView {
   }
 
   public void showChord(Chord chord, Options options) {
-    List<ChordTone> tones = new ArrayList<>();
+    List<ChordFret> tones = new ArrayList<>();
 
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 32));
     out.println();
 
-    List<List<Fret>> strings = guitar.getStringFrets();
+    List<List<Fret>> strings = guitar.getFretsByString();
 
     Fret tonic = null;
-    List<List<ChordTone>> stringCandidates = new ArrayList<>();
-    // work thru the notes in the chord
+    List<List<ChordFret>> stringCandidates = new ArrayList<>();
+
+    // work thru the notes in the chord and find candidates on each string
     for (ScaleNote chordScaleNote : chord.getChordNotes()) {
       int stringNum = 0;
       // go through all strings looking for the chord note candidate in each
-      for (List<Fret> stringTones : strings) {
-        List<ChordTone> stringsCandidates = null;
+      for (List<Fret> stringFrets : strings) {
+        List<ChordFret> stringsCandidates = null;
         // first chord note thru we won;t have created the strings candidates list
         if (stringNum >= stringCandidates.size()) {
           stringsCandidates = new ArrayList<>();
@@ -57,22 +56,22 @@ public class ChordView {
           stringsCandidates = stringCandidates.get(stringNum);
         }
         // go down the string looking for chord note candidates
-        for (Fret fretTone : stringTones) {
+        for (Fret fret : stringFrets) {
           // once the first note in the chord has been done, we don't want subsequent chord note
           // candidates on strings lower than the tonic string
-          if (tonic != null && fretTone.getStringNum() < tonic.getStringNum()) {
+          if (tonic != null && fret.getStringNum() < tonic.getStringNum()) {
             break;
           }
           // only creating fingerings a human can play in first 4 frets!
-          if (fretTone.getFret() > 4) {
+          if (fret.getFretNum() > 4) {
             break;
           }
           // found a candidate 
-          if (chordScaleNote.getNote() == fretTone.getNote()) {
-            stringsCandidates.add(new ChordTone(fretTone, chordScaleNote.getInterval().get()));
+          if (chordScaleNote.getNote() == fret.getNote()) {
+            stringsCandidates.add(new ChordFret(fret, chordScaleNote.getInterval().get()));
             // tonic by default the first note in chord
             if (tonic == null) {
-              tonic = fretTone;
+              tonic = fret;
             }
             break;
           }
@@ -81,26 +80,29 @@ public class ChordView {
       }
     }
     
+    
     // sort the candidates by fret num - they were recorded in chord order ie C first, then G...
-    for (List<ChordTone> toneList : stringCandidates) {
-      toneList.sort(Comparator.comparing(ct -> ct.getTone().getFret()));
+    for (List<ChordFret> toneList : stringCandidates) {
+      toneList.sort(Comparator.comparing(cf -> cf.getFret().getFretNum()));
     }
+
+    // now we have the fret sorted string candidates
 
     // for each string
     for (int stringNum = 0; stringNum < stringCandidates.size(); stringNum++) {
-      List<ChordTone> stringsCandidates = stringCandidates.get(stringNum);
+      List<ChordFret> stringsCandidates = stringCandidates.get(stringNum);
       // find the chosen candidate from the last string at the end of the tone list
-      ChordTone prevTone = null;
+      ChordFret prevTone = null;
       if (tones.size() > 0) {
         prevTone = tones.get(tones.size() - 1);
       }
-      ChordTone tone = null;
+      ChordFret tone = null;
       // now go thru this strings candidates
-      for (ChordTone thisChordTone : stringsCandidates) {
+      for (ChordFret thisChordTone : stringsCandidates) {
         if (prevTone != null) {
           // was the prev string chosen tone identical to this one? don't want repeats
           // if same note and occtave move on to next string candidate
-          if (!prevTone.getTone().equalsTone(thisChordTone.getTone())) {
+          if (!prevTone.getFret().equalsTonally(thisChordTone.getFret())) {
             tone = thisChordTone;
             break;
           }
@@ -115,7 +117,7 @@ public class ChordView {
       if (tone != null) {
         tones.add(tone);
       } else {
-        tones.add(new ChordTone(new Fret(-1, null, -1, stringNum, null, 0), null));
+        tones.add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), null));
       }
     }
     showTones(tones, options);
@@ -126,20 +128,20 @@ public class ChordView {
   }
 
   public void showChordOccurence(Chord chord, Options options) {
-    List<ChordTone> tones = new ArrayList<>();
+    List<ChordFret> tones = new ArrayList<>();
 
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 32));
     out.println();
 
-    List<List<Fret>> fretboardTones = guitar.getFretFrets();
+    List<List<Fret>> fretboardFrets = guitar.getFretsByFret();
 
-    for (List<Fret> fretTones : fretboardTones) {
-      for (Fret fretTone : fretTones) {
-        Optional<ScaleNote> chordScaleNoteForTone = chord.getChordNotes().stream().filter(cn -> fretTone.getNote().equals(cn.getNote()))
+    for (List<Fret> fretFrets : fretboardFrets) {
+      for (Fret fret : fretFrets) {
+        Optional<ScaleNote> chordScaleNoteForTone = chord.getChordNotes().stream().filter(cn -> fret.getNote().equals(cn.getNote()))
             .findAny();
         if (chordScaleNoteForTone.isPresent()) {
-          tones.add(new ChordTone(fretTone, chordScaleNoteForTone.get().getInterval().get()));
+          tones.add(new ChordFret(fret, chordScaleNoteForTone.get().getInterval().get()));
         }
       }
     }
@@ -147,21 +149,21 @@ public class ChordView {
   }
 
 
-  private void showTones(List<ChordTone> chordTones, Options options) {
+  private void showTones(List<ChordFret> chordTones, Options options) {
     ColourMap colourMap = new ColourMap();
-    List<List<Fret>> fretboardTones = guitar.getFretFrets();
+    List<List<Fret>> fretboardFrets = guitar.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
     int lowestFret = chordTones.stream().max(Comparator.comparingInt(ct -> 
-    Integer.valueOf(ct.getTone().getFret()))).get().getTone().getFret();
+    Integer.valueOf(ct.getFret().getFretNum()))).get().getFret().getFretNum();
         
-    for (ChordTone chordTone : chordTones) {
-      if (chordTone.getTone().getNote() == null) {
-        deadStrings.add(chordTone.getTone().getStringNum());
+    for (ChordFret chordFret : chordTones) {
+      if (chordFret.getFret().getNote() == null) {
+        deadStrings.add(chordFret.getFret().getStringNum());
       }
     }
 
     int fretNum = 0;
-    for (List<Fret> fretTones : fretboardTones) {
+    for (List<Fret> fretTones : fretboardFrets) {
       String inlay = inlays.contains(fretNum) ? String.format(" %-2s ", fretNum) : "    ";
       out.print(inlay);
       String sep = (fretNum == 0) ? "" : "┃";
@@ -169,7 +171,7 @@ public class ChordView {
       for (Fret fretTone : fretTones) {
         String ldr = (stringNum == 0 && fretNum != 0) ? "┃" : (fretNum == 0 ? " " : "");
 
-        Optional<ChordTone> chordTone = chordTones.stream().filter(ct -> fretTone == ct.getTone())
+        Optional<ChordFret> chordTone = chordTones.stream().filter(ct -> fretTone == ct.getFret())
             .findAny();
         
         if (chordTone.isPresent()) {
@@ -177,7 +179,7 @@ public class ChordView {
           if (options.isIntervals()) {
             fretStr = chordTone.get().getInterval().getLabel();
           } else {
-            fretStr = chordTone.get().getTone().getNote().getLabel();
+            fretStr = chordTone.get().getFret().getNote().getLabel();
           }
           if (options.isColour()) {
             Colour col = colourMap.get(fretTone.getNote());
@@ -201,15 +203,30 @@ public class ChordView {
         break;
       }
       if (fretNum == 0) {
-        out.println("    ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓");
+        out.println(createFretLine("┏", "┳", "┓"));
       } else if (fretNum < 12) {
-        out.println("    ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫");
+        out.println(createFretLine("┣", "╋", "┫"));
       }
       fretNum++;
     }
-    out.println("    ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛");
+    out.println(createFretLine("┗", "┻", "┛"));
     out.println();
     out.println();
+  }
+  
+  private String createFretLine(String begin, String mid, String end) {
+   int strings = guitar.getStringCount();
+   StringBuilder sb = new StringBuilder("    "); 
+   sb.append(begin);   
+   for (int n=0;n < strings; n++) {
+     sb.append("━━━");
+     if (n < strings - 1) {
+       sb.append(mid);
+     } else {
+       sb.append(end);
+     }
+   }
+   return sb.toString();
   }
 
   @Data
@@ -222,8 +239,8 @@ public class ChordView {
   
   @Data
   @AllArgsConstructor
-  class ChordTone {
-    private final Fret tone;
+  class ChordFret {
+    private final Fret fret;
     private final ScaleInterval interval;
   }
 

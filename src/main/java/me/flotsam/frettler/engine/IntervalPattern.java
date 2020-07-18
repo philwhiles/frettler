@@ -43,8 +43,7 @@ public enum IntervalPattern {
       PERFECT_FOURTH, 
       PERFECT_FIFTH, 
       MAJOR_SIXTH, 
-      MAJOR_SEVENTH,
-      PERFECT_UNISON
+      MAJOR_SEVENTH
   ),
   NATURAL_MINOR_SCALE(
       PatternType.SCALE,
@@ -55,8 +54,7 @@ public enum IntervalPattern {
       PERFECT_FOURTH,
       PERFECT_FIFTH,
       MINOR_SIXTH,
-      MINOR_SEVENTH,
-      PERFECT_UNISON
+      MINOR_SEVENTH
   ),
   MELODIC_MINOR_SCALE(
       PatternType.SCALE,
@@ -66,8 +64,7 @@ public enum IntervalPattern {
       PERFECT_FOURTH,
       PERFECT_FIFTH,
       MAJOR_SIXTH,
-      MAJOR_SEVENTH,
-      PERFECT_UNISON
+      MAJOR_SEVENTH
   ),
   HARMONIC_MINOR_SCALE(
       PatternType.SCALE,
@@ -78,8 +75,7 @@ public enum IntervalPattern {
       PERFECT_FOURTH,
       PERFECT_FIFTH,
       MINOR_SIXTH,
-      MAJOR_SEVENTH,
-      PERFECT_UNISON
+      MAJOR_SEVENTH
   ),
   PENTATONIC_SCALE(
       PatternType.SCALE,
@@ -88,8 +84,7 @@ public enum IntervalPattern {
       MAJOR_SECOND,
       MAJOR_THIRD, 
       PERFECT_FIFTH,
-      MAJOR_SIXTH,
-      PERFECT_UNISON
+      MAJOR_SIXTH
   ),
   
   // TRIADS FOR CHORD GENERATION

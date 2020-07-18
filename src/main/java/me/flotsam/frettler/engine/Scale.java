@@ -167,20 +167,16 @@ public class Scale {
   }
 
   public static ScaleNote getScaleNote(ScaleNote rootScaleNote, ScaleInterval interval) {
-    ScaleNote scaleNote = rootScaleNote;
-    for (int i = 0; i < interval.getValue(); i++) {
-      scaleNote = scaleNote.getNextScaleNote();
-    }
-    return scaleNote;
+    return getScaleNote(rootScaleNote, interval.getSemiTones());
   }
-
-  public static ScaleNote getThirdNote(ScaleNote rootScaleNote, int third) {
+  
+  public static ScaleNote getScaleNote(ScaleNote rootScaleNote, int semiTones) {
     ScaleNote scaleNote = rootScaleNote;
-    for (int i = 0; i < third; i++) {
+    for (int i = 0; i < semiTones; i++) {
       scaleNote = scaleNote.getNextScaleNote();
-      if (scaleNote.getPosition() == Position.TAIL) {
-        scaleNote = scaleNote.getNextScaleNote();
-      }
+//      if (scaleNote.getPosition() == Position.TAIL) {
+//        scaleNote = scaleNote.getNextScaleNote();
+//      }
     }
     return scaleNote;
   }

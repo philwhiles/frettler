@@ -25,11 +25,11 @@ public class Guitar {
   
   // remember element 0 in each inner List is the open string note
   @Getter
-  List<List<Fret>> stringFrets = new ArrayList<>();
+  List<List<Fret>> fretsByString = new ArrayList<>();
   
   // remember element 0 in the inner list is the open string notes
   @Getter
-  List<List<Fret>> fretFrets = new ArrayList<>();
+  List<List<Fret>> fretsByFret = new ArrayList<>();
 
 
   public Guitar() {
@@ -60,7 +60,7 @@ public class Guitar {
           // otherwise on the prev string
           prevFret = findRelativeFretUp(stringNum - 1, scaleNote.getNote());
           if (prevFret != null) {
-            octave = prevFret.getFret() > fretNum ? prevFret.getOctave() : prevFret.getOctave() + 1;
+            octave = prevFret.getFretNum() > fretNum ? prevFret.getOctave() : prevFret.getOctave() + 1;
           }
         }
         Fret fret = new Fret(stringNum * FRETS + fretNum, scaleNote.getNote(), octave,
@@ -68,22 +68,24 @@ public class Guitar {
         allFrets.add(fret);
         
         List<Fret> currentFretsFrets;
-        if (fretFrets.size() == fretNum) {
+        if (fretsByFret.size() == fretNum) {
           currentFretsFrets = new ArrayList<>();
-          fretFrets.add(currentFretsFrets);
+          fretsByFret.add(currentFretsFrets);
         }
-        currentFretsFrets = fretFrets.get(fretNum);
+        currentFretsFrets = fretsByFret.get(fretNum);
         currentFretsFrets.add(fret);
         
         scaleNote = scaleNote.getNextScaleNote();
       }
       final int x = stringNum;
-      stringFrets
+      fretsByString
           .add(allFrets.stream().filter(t -> t.getStringNum() == x).collect(Collectors.toList()));
     }
   }
 
-
+  public int getStringCount() {
+    return fretsByString.size();
+  }
 
   private Fret findRelativeFretUpFromIndex(int stringNum, Note note, int index) {
     Fret fret = null;

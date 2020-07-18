@@ -64,8 +64,8 @@ public class GuitarView {
     }
 
 
-    for (int i = guitar.getStringFrets().size() - 1; i >= 0; i--) {
-      List<Fret> tonesInString = guitar.getStringFrets().get(i);
+    for (int i = guitar.getFretsByString().size() - 1; i >= 0; i--) {
+      List<Fret> tonesInString = guitar.getFretsByString().get(i);
       StringBuilder stringBuilder = new StringBuilder();
       for (Fret tone : tonesInString) {
         Optional<ScaleNote> note =
@@ -80,7 +80,7 @@ public class GuitarView {
           }
           if (options.isColour()) {
             Colour col = cm.get(fretStr);
-            if (tone.getFret() == 0) {
+            if (tone.getFretNum() == 0) {
               fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
               stringBuilder.append("").append(col).append(fretStr).append(Colour.RESET).append("┃┃");
             } else {
@@ -92,7 +92,7 @@ public class GuitarView {
               stringBuilder.append(fretStr);
             }
           } else {
-            if (tone.getFret() == 0) {
+            if (tone.getFretNum() == 0) {
               fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
               stringBuilder.append("").append(fretStr).append("┃┃");
             } else {
@@ -102,7 +102,7 @@ public class GuitarView {
           }
 
         } else {
-          if (tone.getFret() == 0) {
+          if (tone.getFretNum() == 0) {
             stringBuilder.append("  ").append("┃┃");
           } else {
             stringBuilder.append("┈┈┈┈┈┈┃");

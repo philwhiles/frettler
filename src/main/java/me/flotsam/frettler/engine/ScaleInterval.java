@@ -45,17 +45,17 @@ public enum ScaleInterval {
   FIFTEENTH("15", 24, false); 
 
   private boolean perfect;
-  private int value;
+  private int semiTones;
   private String label;
 
-  private ScaleInterval(String label, int value, boolean perfect) {
+  private ScaleInterval(String label, int semiTones, boolean perfect) {
     this.label = label;
-    this.value = value;
+    this.semiTones = semiTones;
     this.perfect = perfect;
   }
 
-  public int getValue() {
-    return value;
+  public int getSemiTones() {
+    return semiTones;
   }
   
   public String getLabel() {

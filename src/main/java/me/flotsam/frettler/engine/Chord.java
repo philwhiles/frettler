@@ -83,7 +83,7 @@ public class Chord {
     Scale chromaticScaleFromChordRoot = new Scale(chordRootNote.getNote(), IntervalPattern.CHROMATIC_SCALE);
 
     for (int third : chordType.getThirds()) {
-      ScaleNote chordNote = Scale.getThirdNote(chordRootNote, third);
+      ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
       Optional<ScaleNote> noteInRootScale =
           chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
       chordNotes.add(noteInRootScale.get());

@@ -14,10 +14,10 @@ public class Fret {
   private final int octave;
   private final int stringNum;
   private final Note stringNote;
-  private final int fret;
+  private final int fretNum;
   
   
-  public boolean equalsTone(Fret other) {
+  public boolean equalsTonally(Fret other) {
     return (other.note == this.note && other.octave == this.octave);
   }
 }
