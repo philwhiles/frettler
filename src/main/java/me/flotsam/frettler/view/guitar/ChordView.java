@@ -4,12 +4,18 @@ import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.guitar.Fret;
@@ -87,9 +93,28 @@ public class ChordView {
     }
 
     // now we have the fret sorted string candidates
+    
+    
+//    List<Integer> stringCandidateCounts = stringCandidates.stream().map(sl -> sl.size()).collect(Collectors.toList());
+//    System.err.println("string candidate counts : " + stringCandidateCounts);
+//
+////    Map<Note, Long> noteCandidateCounts = stringCandidates.stream().flatMap(Collection::stream).collect(Collectors.groupingBy(e -> ((ChordFret)e).getFret().getNote(), Collectors.counting()));
+//    Map<Note, List<ChordFret>> noteCandidates = new HashMap<>();
+//    for (ChordFret chordFret : stringCandidates.stream().flatMap(List::stream).collect(Collectors.toList())) {
+//      List<ChordFret> notesChordFrets = noteCandidates.get(chordFret.getFret().getNote());
+//      if (notesChordFrets == null) {
+//        notesChordFrets = new ArrayList<>();
+//        noteCandidates.put(chordFret.getFret().getNote(), notesChordFrets);
+//      }
+//      notesChordFrets.add(chordFret);
+//    }
+//    System.err.println("noteCandidates: " + noteCandidates);
+    
 
     // for each string
     for (int stringNum = 0; stringNum < stringCandidates.size(); stringNum++) {
+      System.err.println("Candidates: " + stringCandidates.get(stringNum));
+
       List<ChordFret> stringsCandidates = stringCandidates.get(stringNum);
       // find the chosen candidate from the last string at the end of the tone list
       ChordFret prevTone = null;
@@ -113,11 +138,17 @@ public class ChordView {
           break;
         }
       }
+      
+      
+      
+      
+      
+      
       // after process of elimination did we find a suitable tone?
       if (tone != null) {
         tones.add(tone);
       } else {
-        tones.add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), null));
+        tones.add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), ScaleInterval.PERFECT_UNISON));
       }
     }
     showTones(tones, options);
@@ -238,10 +269,16 @@ public class ChordView {
   
   
   @Data
-  @AllArgsConstructor
+  @RequiredArgsConstructor
   class ChordFret {
+
+    @NonNull
     private final Fret fret;
+    
+    @NonNull
     private final ScaleInterval interval;
+
+    private int weighting;
   }
 
 }
