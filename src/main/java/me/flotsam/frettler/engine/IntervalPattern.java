@@ -11,7 +11,6 @@ import static me.flotsam.frettler.engine.ScaleInterval.MINOR_SIXTH;
 import static me.flotsam.frettler.engine.ScaleInterval.MINOR_THIRD;
 import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_FIFTH;
 import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_FOURTH;
-import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_OCTAVE;
 import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_UNISON;
 import java.util.Arrays;
 import java.util.List;

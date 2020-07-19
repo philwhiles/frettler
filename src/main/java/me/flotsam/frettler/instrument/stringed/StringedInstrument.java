@@ -1,22 +1,16 @@
-package me.flotsam.frettler.instrument.guitar;
+package me.flotsam.frettler.instrument.stringed;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.apache.commons.lang3.StringUtils;
 import lombok.Getter;
-import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 
-public class Guitar {
-  
-  public static final int FRETS = 12;
-
-  private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
+public abstract class StringedInstrument {
 
   @Getter
   List<Fret> allFrets = new ArrayList<>();
@@ -31,24 +25,24 @@ public class Guitar {
   @Getter
   List<List<Fret>> fretsByFret = new ArrayList<>();
 
+  @Getter
+  private int frets;
+  
+  @Getter
+  private String label;
 
-  public Guitar() {
-    this(DEFAULT_STRINGS);
-  }
 
-  public Guitar(Note[] strings) {
-    if (strings.length > 0) {
-      this.stringNotes = Arrays.asList(strings);
-    } else {
-      this.stringNotes = Arrays.asList(DEFAULT_STRINGS);
-    }
+  public StringedInstrument(String label, int frets, Note[] strings) {
+    this.label = label;
+    this.frets = frets;
+    this.stringNotes = Arrays.asList(strings);
 
     for (int stringNum = 0; stringNum < stringNotes.size(); stringNum++) {
       Optional<ScaleNote> optScaleNote =
           Scale.CHROMATIC_SCALE.findScaleNote(stringNotes.get(stringNum));
       ScaleNote scaleNote = optScaleNote.get();
 
-      for (int fretNum = 0; fretNum <= FRETS; fretNum++) {
+      for (int fretNum = 0; fretNum <= frets; fretNum++) {
 
         int octave = 0; // until known from prev fret
 
@@ -63,7 +57,7 @@ public class Guitar {
             octave = prevFret.getFretNum() > fretNum ? prevFret.getOctave() : prevFret.getOctave() + 1;
           }
         }
-        Fret fret = new Fret(stringNum * FRETS + fretNum, scaleNote.getNote(), octave,
+        Fret fret = new Fret(stringNum * frets + fretNum, scaleNote.getNote(), octave,
             stringNum, stringNotes.get(stringNum), fretNum);
         allFrets.add(fret);
         

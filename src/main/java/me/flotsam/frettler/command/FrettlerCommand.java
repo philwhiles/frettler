@@ -14,7 +14,7 @@ import picocli.CommandLine.Parameters;
 @Data
 public class FrettlerCommand {
 
-  @Parameters(index = "0", description="The guitar view to use")
+  @Parameters(index = "0", description="The view to use")
   protected View view;
   
   @Parameters(index = "1", description="The type to display")

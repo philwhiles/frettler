@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.guitar;
+package me.flotsam.frettler.view.stringed;
 
 import static java.lang.System.out;
 import java.util.List;
@@ -9,16 +9,16 @@ import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.instrument.guitar.Guitar;
-import me.flotsam.frettler.instrument.guitar.Fret;
+import me.flotsam.frettler.instrument.stringed.Fret;
+import me.flotsam.frettler.instrument.stringed.StringedInstrument;
 
-public class GuitarView {
+public class FretboardView {
 
-  private Guitar guitar;
+  private StringedInstrument instrument;
   private Options defaultOptions = new Options(false, true, true);
 
-  public GuitarView(Guitar guitar) {
-    this.guitar = guitar;
+  public FretboardView(StringedInstrument instrument) {
+    this.instrument = instrument;
   }
 
   public void showFretboard() {
@@ -36,7 +36,7 @@ public class GuitarView {
   public void showFretboard(Chord chord, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(chord.getTitle(), 84));
+    out.println(StringUtils.center(instrument.getLabel() + " ~ " + chord.getTitle(), 84));
     out.println();
     showFretboard(chord.getChordNotes(), options);
   }
@@ -48,7 +48,7 @@ public class GuitarView {
   public void showFretboard(Scale scale, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(scale.getTitle(), 84));
+    out.println(StringUtils.center(instrument.getLabel() + " ~ " + scale.getTitle(), 84));
     out.println();
     showFretboard(scale.getScaleNotes(), options);
   }
@@ -64,8 +64,8 @@ public class GuitarView {
     }
 
 
-    for (int i = guitar.getFretsByString().size() - 1; i >= 0; i--) {
-      List<Fret> tonesInString = guitar.getFretsByString().get(i);
+    for (int i = instrument.getFretsByString().size() - 1; i >= 0; i--) {
+      List<Fret> tonesInString = instrument.getFretsByString().get(i);
       StringBuilder stringBuilder = new StringBuilder();
       for (Fret tone : tonesInString) {
         Optional<ScaleNote> note =
@@ -122,6 +122,7 @@ public class GuitarView {
     out.println();
     out.println();
   }
+  
 
   @Data
   @AllArgsConstructor

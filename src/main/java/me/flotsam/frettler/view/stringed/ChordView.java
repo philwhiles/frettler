@@ -1,34 +1,30 @@
-package me.flotsam.frettler.view.guitar;
+package me.flotsam.frettler.view.stringed;
 
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
-import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.instrument.guitar.Fret;
-import me.flotsam.frettler.instrument.guitar.Guitar;
+import me.flotsam.frettler.instrument.stringed.Fret;
+import me.flotsam.frettler.instrument.stringed.StringedInstrument;
 
 public class ChordView {
 
   private Options defaultOptions = new Options(false, true);
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12);
-  private Guitar guitar;
+  private StringedInstrument instrument;
 
-  public ChordView(Guitar guitar) {
-    this.guitar = guitar;
+  public ChordView(StringedInstrument instrument) {
+    this.instrument = instrument;
   }
 
 
@@ -43,7 +39,7 @@ public class ChordView {
     out.println(StringUtils.center(chord.getTitle(), 32));
     out.println();
 
-    List<List<Fret>> strings = guitar.getFretsByString();
+    List<List<Fret>> strings = instrument.getFretsByString();
 
     Fret tonic = null;
     List<List<ChordFret>> stringCandidates = new ArrayList<>();
@@ -113,7 +109,7 @@ public class ChordView {
 
     // for each string
     for (int stringNum = 0; stringNum < stringCandidates.size(); stringNum++) {
-      System.err.println("Candidates: " + stringCandidates.get(stringNum));
+//      System.err.println("Candidates: " + stringCandidates.get(stringNum));
 
       List<ChordFret> stringsCandidates = stringCandidates.get(stringNum);
       // find the chosen candidate from the last string at the end of the tone list
@@ -165,7 +161,7 @@ public class ChordView {
     out.println(StringUtils.center(chord.getTitle(), 32));
     out.println();
 
-    List<List<Fret>> fretboardFrets = guitar.getFretsByFret();
+    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
 
     for (List<Fret> fretFrets : fretboardFrets) {
       for (Fret fret : fretFrets) {
@@ -182,7 +178,7 @@ public class ChordView {
 
   private void showTones(List<ChordFret> chordTones, Options options) {
     ColourMap colourMap = new ColourMap();
-    List<List<Fret>> fretboardFrets = guitar.getFretsByFret();
+    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
     int lowestFret = chordTones.stream().max(Comparator.comparingInt(ct -> 
     Integer.valueOf(ct.getFret().getFretNum()))).get().getFret().getFretNum();
@@ -246,7 +242,7 @@ public class ChordView {
   }
   
   private String createFretLine(String begin, String mid, String end) {
-   int strings = guitar.getStringCount();
+   int strings = instrument.getStringCount();
    StringBuilder sb = new StringBuilder("    "); 
    sb.append(begin);   
    for (int n=0;n < strings; n++) {
