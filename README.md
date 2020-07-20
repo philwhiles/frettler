@@ -1,7 +1,7 @@
-# Frettler - A CLI for generating musical scales and chords with guitar fretboard and chord rendering
+# Frettler - A CLI for generating musical scales and chords with fretboard and chord rendering for a variety of fretted instruments
 
 ## Synopsis
-This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a guitar fretboard.
+This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a fretboard.
 The rendering is just a bunch of System.out.prinln statements, but uses Unicode boxing characters and ANSI colour coding.
 Example output can be seen at the bottom of this page. The rendering turned out a lot better than I had hoped tbh!
 
@@ -19,40 +19,36 @@ used by the included bash wrapper, with the following
 ### Command Line
 Run it using the provided shell wrapper, frettler, ie :
 
-To display the chord Dm on the horizontal fretboard: 
 
 ```
-./frettler GUITAR HORIZONTAL CHORD D MINOR_TRIAD
-
-```
-
-To display the scale of Dm harmonic on the horizontal fretboard, with intervals and not notes, without colour: 
-
-```
-./frettler GUITAR HORIZONTAL SCALE D HARMONIC_MINOR -labels INTERVALS -display MONO
+./frettler GUITAR HORIZONTAL SCALE C MAJOR_SCALE
 
 ```
 
-To display the scale for E on the horizontal fretboard, AND display the chord diagrams for its chords: 
+Need to use drop D tuning? just use the optional strings argument '-s D,A,D,G,B,E'
 
-```
-./frettler GUITAR HORIZONTAL CHORD MAJOR_SCALE --chords
+Add the optional chords argument '-c' and frettler will calculate the chords in that key and display each using the VERTICAL chord view.
 
-```
+You can use the strings argument to use any number of strings and using any tuning. 
+To make that easier for say ukelele players, frettler has several alternative instruments, which are
+simply conveniences to avoid having to keep on using the strings argument. ie in the examples shown above you could use one of the following instruments :
 
-To display the chord diagram for Am: 
+- GUITAR
+- BASSGUITAR
+- UKELELE
+- MANDOLIN
+- BANJO
 
-```
-./frettler GUITAR VERTICAL CHORD A MINOR_TRIAD
+Yeah, about that last one - frettler assumes every banjo has equal length strings. The shortened fifth string on most standard banjos is somethng I need to work
+out how to handle. Watch this space.
 
-```
+THe chord calculation used in the VERTICAL view is definately a work in progress. It appears to work for standard six string guitar, open string chords, but for anything else,
+take the chord fingerings calculated with a pinch of salt. I already know its calculation for C Major with a seven string guitar is a bit out of whack, 
+and that is probably an indication that it will fall short elsewhere.
 
-To display the chord diagram for D minor, with the guitar tuning dropped down a whole step: 
+Here are some examples :
 
-```
-./frettler GUITAR VERTICAL CHORD D MINOR_TRIAD --strings D,G,C,F,A,D
-
-```
+<img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
 
 NOTE: the VERTICAL display of SCALE is TBD at this time.
@@ -101,7 +97,7 @@ A lot of the theory behind this code is formed from my reading random resources 
 names used are suspect, or the rules in my music theory code has some gaps or holes. I am finding this to be a great learning exercise, and I shall get there.
 
 ### Chord fingerings
-The ChordView may still require some work - it can calculate the chord fingering for fairly standard, open string, major, minor and diminished chords
+The ChordView still requires some work - it can calculate the chord fingering for fairly standard, open string, major, minor and diminished chords
 but I am still working on it - I need to check it's handiwork for a wider variety of chords and confirm that my algorithm for selecting the correct 
 fingering works extensively. I havent found any resources online which explain how chord fingerings are derived. Yes, I know it's all about the tonic,
 a third and fifth etc, but each string has multiple candidates for each note in a chord. My algorithm favours the higher frets, can exclude strings lower 
@@ -111,13 +107,8 @@ theory to the test with a wider set of chords and confirm my assumptions hold wa
 ## TODO
 - Add some Javadoc, for my own sanity if no one elses
 - Extend the types of scales it understands
-- Add the ability to have for instance a 7 string guitar
 - Write the VERTICAL SCALE view and expose it through the CLI 
 - Verify the VERTICAL CHORD fingering output for the more esoteric chords!
-- Look at specialising Guitar to allow for intro of Ukelele or Mandolin or Banjo ...
 - Actually learn guitar!
 
-## Output
-Here are some colour output examples:
 
-<img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>

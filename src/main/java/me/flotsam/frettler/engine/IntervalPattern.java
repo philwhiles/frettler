@@ -76,16 +76,24 @@ public enum IntervalPattern {
       MINOR_SIXTH,
       MAJOR_SEVENTH
   ),
-  PENTATONIC_SCALE(
+  MAJOR_PENTATONIC_SCALE(
       PatternType.SCALE,
-      "Pentatonic",
+      "Major Pentatonic",
       PERFECT_UNISON,
       MAJOR_SECOND,
       MAJOR_THIRD, 
       PERFECT_FIFTH,
       MAJOR_SIXTH
   ),
-  
+  MINOR_PENTATONIC_SCALE(
+      PatternType.SCALE,
+      "Minor Pentatonic",
+      PERFECT_UNISON,
+      MINOR_THIRD, 
+      PERFECT_FOURTH,
+      PERFECT_FIFTH,
+      MINOR_SEVENTH
+  ), 
   // TRIADS FOR CHORD GENERATION
   MAJOR_TRIAD(
       PatternType.CHORD,
