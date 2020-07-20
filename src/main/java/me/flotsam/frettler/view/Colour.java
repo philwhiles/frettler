@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.stringed;
+package me.flotsam.frettler.view;
 
 public enum Colour {
   //Color end string, color reset

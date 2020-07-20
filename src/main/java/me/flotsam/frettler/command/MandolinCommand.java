@@ -1,6 +1,6 @@
 package me.flotsam.frettler.command;
 
-import me.flotsam.frettler.instrument.stringed.Mandolin;
+import me.flotsam.frettler.instrument.Mandolin;
 import picocli.CommandLine.Command;
 
 /**
@@ -9,7 +9,7 @@ import picocli.CommandLine.Command;
  *
  */
 @Command(name = "MANDOLIN", description = "Generates mandolin scales and chords")
-public class MandolinCommand extends StringedInstrumentCommand implements Runnable {
+public class MandolinCommand extends FrettedInstrumentCommand implements Runnable {
 
   
   @Override

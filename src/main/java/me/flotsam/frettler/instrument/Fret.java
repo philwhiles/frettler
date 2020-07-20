@@ -1,4 +1,4 @@
-package me.flotsam.frettler.instrument.stringed;
+package me.flotsam.frettler.instrument;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

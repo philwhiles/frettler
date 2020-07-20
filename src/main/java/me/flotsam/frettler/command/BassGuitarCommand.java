@@ -1,6 +1,6 @@
 package me.flotsam.frettler.command;
 
-import me.flotsam.frettler.instrument.stringed.BassGuitar;
+import me.flotsam.frettler.instrument.BassGuitar;
 import picocli.CommandLine.Command;
 
 /**
@@ -9,7 +9,7 @@ import picocli.CommandLine.Command;
  *
  */
 @Command(name = "BASSGUITAR", description = "Generates bass guitar scales (and chords?!)")
-public class BassGuitarCommand extends StringedInstrumentCommand implements Runnable {
+public class BassGuitarCommand extends FrettedInstrumentCommand implements Runnable {
 
   
   @Override

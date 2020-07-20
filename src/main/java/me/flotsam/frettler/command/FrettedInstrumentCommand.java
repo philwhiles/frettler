@@ -4,9 +4,9 @@ import java.util.List;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
-import me.flotsam.frettler.instrument.stringed.StringedInstrument;
-import me.flotsam.frettler.view.stringed.ChordView;
-import me.flotsam.frettler.view.stringed.FretboardView;
+import me.flotsam.frettler.instrument.FrettedInstrument;
+import me.flotsam.frettler.view.ChordView;
+import me.flotsam.frettler.view.FretboardView;
 import picocli.CommandLine.Option;
 
 /**
@@ -14,7 +14,7 @@ import picocli.CommandLine.Option;
  * @author philwhiles
  *
  */
-public abstract class StringedInstrumentCommand extends FrettlerCommand {
+public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
   @Option(names = {"-c", "--chords"})
   boolean allChords = false;
@@ -22,7 +22,7 @@ public abstract class StringedInstrumentCommand extends FrettlerCommand {
   @Option(names = {"-s", "--strings"}, split = ",")
   Note[] strings = new Note[] {};
   
-  public void exec(StringedInstrument instrument) {
+  public void exec(FrettedInstrument instrument) {
     
     if (this.view == View.HORIZONTAL) {
       FretboardView instrumentView = new FretboardView(instrument);

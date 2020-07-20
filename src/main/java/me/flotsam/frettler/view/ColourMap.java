@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.stringed;
+package me.flotsam.frettler.view;
 
 import java.util.Arrays;
 import java.util.HashMap;

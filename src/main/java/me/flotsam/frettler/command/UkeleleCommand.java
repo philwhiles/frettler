@@ -1,6 +1,6 @@
 package me.flotsam.frettler.command;
 
-import me.flotsam.frettler.instrument.stringed.Ukelele;
+import me.flotsam.frettler.instrument.Ukelele;
 import picocli.CommandLine.Command;
 
 /**
@@ -9,7 +9,7 @@ import picocli.CommandLine.Command;
  *
  */
 @Command(name = "UKELELE", description = "Generates ukelele scales and chords")
-public class UkeleleCommand extends StringedInstrumentCommand implements Runnable {
+public class UkeleleCommand extends FrettedInstrumentCommand implements Runnable {
 
   
   @Override

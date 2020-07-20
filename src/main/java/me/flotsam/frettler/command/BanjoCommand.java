@@ -1,6 +1,6 @@
 package me.flotsam.frettler.command;
 
-import me.flotsam.frettler.instrument.stringed.Banjo;
+import me.flotsam.frettler.instrument.Banjo;
 import picocli.CommandLine.Command;
 
 /**
@@ -9,7 +9,7 @@ import picocli.CommandLine.Command;
  *
  */
 @Command(name = "BANJO", description = "Generates banjo scales and chords")
-public class BanjoCommand extends StringedInstrumentCommand implements Runnable {
+public class BanjoCommand extends FrettedInstrumentCommand implements Runnable {
 
   
   @Override

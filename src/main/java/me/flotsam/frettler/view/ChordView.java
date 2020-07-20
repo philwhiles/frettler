@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.stringed;
+package me.flotsam.frettler.view;
 
 import static java.lang.System.out;
 import java.util.ArrayList;
@@ -14,16 +14,16 @@ import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.instrument.stringed.Fret;
-import me.flotsam.frettler.instrument.stringed.StringedInstrument;
+import me.flotsam.frettler.instrument.Fret;
+import me.flotsam.frettler.instrument.FrettedInstrument;
 
 public class ChordView {
 
   private Options defaultOptions = new Options(false, true);
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12);
-  private StringedInstrument instrument;
+  private FrettedInstrument instrument;
 
-  public ChordView(StringedInstrument instrument) {
+  public ChordView(FrettedInstrument instrument) {
     this.instrument = instrument;
   }
 

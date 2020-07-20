@@ -1,8 +1,8 @@
-package me.flotsam.frettler.instrument.stringed;
+package me.flotsam.frettler.instrument;
 
 import me.flotsam.frettler.engine.Note;
 
-public class Guitar extends StringedInstrument {
+public class Guitar extends FrettedInstrument {
   
   public static final int FRETS = 12;
 

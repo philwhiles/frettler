@@ -1,4 +1,4 @@
-package me.flotsam.frettler.instrument.stringed;
+package me.flotsam.frettler.instrument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 
-public abstract class StringedInstrument {
+public abstract class FrettedInstrument {
 
   @Getter
   List<Fret> allFrets = new ArrayList<>();
@@ -32,7 +32,7 @@ public abstract class StringedInstrument {
   private String label;
 
 
-  public StringedInstrument(String label, int frets, Note[] strings) {
+  public FrettedInstrument(String label, int frets, Note[] strings) {
     this.label = label;
     this.frets = frets;
     this.stringNotes = Arrays.asList(strings);

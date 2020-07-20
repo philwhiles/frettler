@@ -42,7 +42,7 @@ simply conveniences to avoid having to keep on using the strings argument. ie in
 Yeah, about that last one - frettler assumes every banjo has equal length strings. The shortened fifth string on most standard banjos is somethng I need to work
 out how to handle. Watch this space.
 
-THe chord calculation used in the VERTICAL view is definately a work in progress. It appears to work for standard six string guitar, open string chords, but for anything else,
+The chord calculation used in the VERTICAL view is definately a work in progress. It appears to work for standard six string guitar, open string chords, but for anything else,
 take the chord fingerings calculated with a pinch of salt. I already know its calculation for C Major with a seven string guitar is a bit out of whack, 
 and that is probably an indication that it will fall short elsewhere.
 
@@ -68,9 +68,6 @@ GuitarView classes, and their public methods.
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
 The engine knows nothing about a guitar, it simply applies music theory to generate Java lists of the notes in scales and chords.
 
-## Instrument
-Yeah - just guitar. The Guitar class understands the fretboard layout of a guitar having any number of strings with any given tuning.
-It also contains a Fret class which represents an individual fret position on that particular guitar.
 
 ## View
 Currently only console views, each constructed with a Guitar, which take the scale and chord constructs from the engine, and render them

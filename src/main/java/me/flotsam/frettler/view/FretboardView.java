@@ -1,4 +1,4 @@
-package me.flotsam.frettler.view.stringed;
+package me.flotsam.frettler.view;
 
 import static java.lang.System.out;
 import java.util.List;
@@ -9,15 +9,15 @@ import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.instrument.stringed.Fret;
-import me.flotsam.frettler.instrument.stringed.StringedInstrument;
+import me.flotsam.frettler.instrument.Fret;
+import me.flotsam.frettler.instrument.FrettedInstrument;
 
 public class FretboardView {
 
-  private StringedInstrument instrument;
+  private FrettedInstrument instrument;
   private Options defaultOptions = new Options(false, true, true);
 
-  public FretboardView(StringedInstrument instrument) {
+  public FretboardView(FrettedInstrument instrument) {
     this.instrument = instrument;
   }
 
