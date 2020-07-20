@@ -1,2 +1,31 @@
 #!/bin/bash
+
+if [ $1 == "completion" ]; then
+cat <<- "EOF"
+#/usr/bin/env bash
+_frettler_completions()
+{
+    local appopts
+    appopts="rh cc fs"
+    local envopts
+    envopts="testing dev whitelodge blacklodge preprod prod performance performance-ext loadgen"
+    case $COMP_CWORD in
+        1)
+            COMPREPLY=( $(compgen -W "${appopts}" -- "${COMP_WORDS[COMP_CWORD]}") )
+            ;;
+        2)
+            COMPREPLY=( $(compgen -W "${envopts}" -- "${COMP_WORDS[COMP_CWORD]}") )
+            ;;
+    esac
+    return 0
+}
+complete -F _gcp_completions gcp
+EOF
+exit 0
+fi
+
+
+
+
+
 java -jar target/frettler-0.0.1-SNAPSHOT-jar-with-dependencies.jar "$@" 

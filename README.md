@@ -57,6 +57,13 @@ NOTE: the CLI arguments are handled by the Java framework, picocli, added to the
 as well as the maven fat jar executable generation and the maven wrapper for building, and the bash wrappers. 
 This will all no doubt go through some further refinements soon to make it easier to use!
 
+### Tab Completion
+If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
+
+```
+source <(./frettler COMPLETIONS)
+```
+
 ### Programmatically
 If you want to you can write your own Main class and create a Guitar object, create a Scale or Chord object, create a Guitar and a view for that Guitar
 and then instruct the View to display your chord or object. The API is pretty straightfoward I think, and defaults safely to a standard tuning EADGBE six 
