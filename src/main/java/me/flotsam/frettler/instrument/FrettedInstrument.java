@@ -16,18 +16,18 @@ public abstract class FrettedInstrument {
   List<Fret> allFrets = new ArrayList<>();
   @Getter
   List<Note> stringNotes;
-  
+
   // remember element 0 in each inner List is the open string note
   @Getter
   List<List<Fret>> fretsByString = new ArrayList<>();
-  
+
   // remember element 0 in the inner list is the open string notes
   @Getter
   List<List<Fret>> fretsByFret = new ArrayList<>();
 
   @Getter
   private int frets;
-  
+
   @Getter
   private String label;
 
@@ -45,22 +45,31 @@ public abstract class FrettedInstrument {
       for (int fretNum = 0; fretNum <= frets; fretNum++) {
 
         int octave = 0; // until known from prev fret
+        Fret fret = null;
 
-        // first look for relative fret note on current string
-        Fret prevFret = findRelativeFretUp(stringNum, scaleNote.getNote());
-        if (prevFret != null) {
-          octave = prevFret.getOctave() + 1;
+        if (stringNum == 0 && (fretNum > 0 && fretNum < 6) && isBanjo()) {
+          fret = new Fret(stringNum * frets + fretNum, null, octave, stringNum,
+              stringNotes.get(stringNum), fretNum);
         } else {
-          // otherwise on the prev string
-          prevFret = findRelativeFretUp(stringNum - 1, scaleNote.getNote());
+          // first look for relative fret note on current string
+          Fret prevFret = findRelativeFretUp(stringNum, scaleNote.getNote());
           if (prevFret != null) {
-            octave = prevFret.getFretNum() > fretNum ? prevFret.getOctave() : prevFret.getOctave() + 1;
+            octave = prevFret.getOctave() + 1;
+          } else {
+            // otherwise on the prev string
+            prevFret = findRelativeFretUp(stringNum - 1, scaleNote.getNote());
+            if (prevFret != null) {
+              octave =
+                  prevFret.getFretNum() > fretNum ? prevFret.getOctave() : prevFret.getOctave() + 1;
+            }
           }
+          fret = new Fret(stringNum * frets + fretNum, scaleNote.getNote(), octave, stringNum,
+              stringNotes.get(stringNum), fretNum);
+
+          scaleNote = scaleNote.getNextScaleNote();
         }
-        Fret fret = new Fret(stringNum * frets + fretNum, scaleNote.getNote(), octave,
-            stringNum, stringNotes.get(stringNum), fretNum);
         allFrets.add(fret);
-        
+
         List<Fret> currentFretsFrets;
         if (fretsByFret.size() == fretNum) {
           currentFretsFrets = new ArrayList<>();
@@ -68,13 +77,15 @@ public abstract class FrettedInstrument {
         }
         currentFretsFrets = fretsByFret.get(fretNum);
         currentFretsFrets.add(fret);
-        
-        scaleNote = scaleNote.getNextScaleNote();
       }
       final int x = stringNum;
       fretsByString
           .add(allFrets.stream().filter(t -> t.getStringNum() == x).collect(Collectors.toList()));
     }
+  }
+
+  public boolean isBanjo() {
+    return false;
   }
 
   public int getStringCount() {

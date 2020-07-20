@@ -15,4 +15,8 @@ public class Banjo extends FrettedInstrument {
   public Banjo(Note[] strings) {
     super("Banjo", FRETS, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
+  
+  public boolean isBanjo() {
+    return true;
+  }
 }

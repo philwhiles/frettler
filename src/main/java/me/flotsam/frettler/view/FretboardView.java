@@ -105,7 +105,11 @@ public class FretboardView {
           if (tone.getFretNum() == 0) {
             stringBuilder.append("  ").append("┃┃");
           } else {
-            stringBuilder.append("┈┈┈┈┈┈┃");
+            if (instrument.isBanjo() && (tone.getFretNum() > 0 && tone.getFretNum() < 6) && tone.getStringNum() == 0) {
+              stringBuilder.append("      ┃");
+            } else {
+              stringBuilder.append("┈┈┈┈┈┈┃");
+            }
           }
         }
       }
