@@ -25,9 +25,8 @@ Run it using the provided shell wrapper, frettler, ie :
 
 ```
 
-Need to use drop D tuning? just use the optional strings argument '-s D,A,D,G,B,E'
-
-Add the optional chords argument '-c' and frettler will calculate the chords in that key and display each using the VERTICAL chord view.
+- Need to use drop D tuning? just use the optional '--strings/-s' argument '-s D,A,D,G,B,E'
+- Add the optional chords argument '--chords/-c' and frettler will calculate the chords in that key and display each using the VERTICAL chord view.
 
 You can use the strings argument to use any number of strings and using any tuning. 
 To make that easier for say ukelele players, frettler has several alternative instruments, which are
@@ -39,12 +38,14 @@ simply conveniences to avoid having to keep on using the strings argument. ie in
 - MANDOLIN
 - BANJO
 
-Yeah, about that last one - frettler assumes every banjo has equal length strings. The shortened fifth string on most standard banjos is somethng I need to work
-out how to handle. Watch this space.
+(The default BANJO will assume the fifth string starts at the sixth fret - if you want the display for a banjo having all strings full length,
+use the GUITAR with --strings A,B,C,etc. The various instruments, banjo excepted, are just conveniences to avoid using GUITAR with --strings each time.
+To frettler, a fretted instrument is a fretted instrument at the end of the day.)
 
 The chord calculation used in the VERTICAL view is definately a work in progress. It appears to work for standard six string guitar, open string chords, but for anything else,
 take the chord fingerings calculated with a pinch of salt. I already know its calculation for C Major with a seven string guitar is a bit out of whack, 
-and that is probably an indication that it will fall short elsewhere.
+and that is probably an indication that it will fall short elsewhere. Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
+I think it needs to consider the chord interval progression to the higher string when selecting each strings fret candidate? 
 
 Here are some examples :
 
@@ -53,9 +54,6 @@ Here are some examples :
 
 NOTE: the VERTICAL display of SCALE is TBD at this time.
 
-NOTE: the CLI arguments are handled by the Java framework, picocli, added to the codebase in the space of one evening (after actually practising guitar for 2 hours!),
-as well as the maven fat jar executable generation and the maven wrapper for building, and the bash wrappers. 
-This will all no doubt go through some further refinements soon to make it easier to use!
 
 ### Tab Completion
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
@@ -65,22 +63,22 @@ source <(./frettler COMPLETIONS)
 ```
 
 ### Programmatically
-If you want to you can write your own Main class and create a Guitar object, create a Scale or Chord object, create a Guitar and a view for that Guitar
-and then instruct the View to display your chord or object. The API is pretty straightfoward I think, and defaults safely to a standard tuning EADGBE six 
-string guitar etc
+If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
+and then instruct the view to display your chord or object. The API is pretty straightfoward I think, and defaults standard tuning for each type of instrument.
+
 Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the ChordView and 
-GuitarView classes, and their public methods.
+FretboardView classes, and their public methods.
 
 ## Engine
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
-The engine knows nothing about a guitar, it simply applies music theory to generate Java lists of the notes in scales and chords.
+The engine knows nothing about an instrument, it simply applies music theory to generate Java lists of the notes in scales and chords.
 
 
 ## View
-Currently only console views, each constructed with a Guitar, which take the scale and chord constructs from the engine, and render them
-on that guitars fretboard, up to the 12th fret.
+Currently only console views, each constructed with a FrettedInstrument, which take the scale and chord constructs from the engine, and render them
+on that instruments fretboard, up to the 12th fret.
 
-Both the GuitarView and the ChordView can display the notes or intervals with unique ANSI colours, if you are
+Both the views can display the notes or intervals with unique ANSI colours, if you are
 either running from the command line and using an ANSI colour friendly terminal, or in Eclipse using an ANSI Console
 plugin (goto to Eclipse Marketplace and search for 'ANSI console').
 
@@ -90,7 +88,7 @@ and easily see the patterns.
 The ChordView now calculates the open string fingering for a chord, but can still display all occurences using an alternate method.
 
 ## Caveats
-This is a work in progress.
+This is a work in progress!
 
 ### Music theory
 Prior to writing this app, my knowledge of music theory was pretty rudimentary. Still is to be honest.
