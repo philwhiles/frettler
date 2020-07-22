@@ -35,7 +35,7 @@ Run it using the built executable shell command, frettler, ie :
 - -c or --chords as an option when using SCALE and frettler will calculate the chords in that key and display each using the VERTICAL chord view.
 
 ### Instruments
-A fretboard is a fretboard, and as frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
+A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
 The default BANJO will assume the fifth string starts at the sixth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than BANJO with --strings A,B,C,etc.
