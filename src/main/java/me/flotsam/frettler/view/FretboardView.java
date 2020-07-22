@@ -3,10 +3,12 @@ package me.flotsam.frettler.view;
 import static java.lang.System.out;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Fret;
@@ -36,7 +38,7 @@ public class FretboardView {
   public void showFretboard(Chord chord, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(instrument.getLabel() + " ~ " + chord.getTitle(), 84));
+    out.println(StringUtils.center(chord.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
     showFretboard(chord.getChordNotes(), options);
   }
@@ -48,7 +50,7 @@ public class FretboardView {
   public void showFretboard(Scale scale, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(instrument.getLabel() + " ~ " + scale.getTitle(), 84));
+    out.println(StringUtils.center(scale.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
     showFretboard(scale.getScaleNotes(), options);
   }

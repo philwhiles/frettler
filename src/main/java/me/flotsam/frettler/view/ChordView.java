@@ -6,12 +6,15 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Fret;
@@ -29,14 +32,15 @@ public class ChordView {
 
 
   public void showChord(Chord chord) {
-    showChordOccurence(chord, defaultOptions);
+    showChord(chord, defaultOptions);
   }
 
   public void showChord(Chord chord, Options options) {
     List<ChordFret> tones = new ArrayList<>();
 
     out.println();
-    out.println(StringUtils.center(chord.getTitle(), 32));
+    out.println(StringUtils.center(chord.getTitle(), 30));
+    out.println(StringUtils.center("(" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "])" , 30));
     out.println();
 
     List<List<Fret>> strings = instrument.getFretsByString();
@@ -147,69 +151,97 @@ public class ChordView {
         tones.add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), ScaleInterval.PERFECT_UNISON));
       }
     }
-    showTones(tones, options);
+    display(tones, options);
   }
 
-  public void showChordOccurence(Chord chord) {
-    showChordOccurence(chord, defaultOptions);
-  }
+//  public void showChordOccurence(Chord chord) {
+//    showChordOccurence(chord, defaultOptions);
+//  }
+//
+//  public void showChordOccurence(Chord chord, Options options) {
+//    List<ChordFret> chordFret = new ArrayList<>();
+//
+//    out.println();
+//    out.println(StringUtils.center(chord.getTitle(), 32));
+//    out.println();
+//
+//    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
+//
+//    for (List<Fret> fretFrets : fretboardFrets) {
+//      for (Fret fret : fretFrets) {
+//        Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream().filter(cn -> fret.getNote().equals(cn.getNote()))
+//            .findAny();
+//        if (chordScaleNoteForFret.isPresent()) {
+//          chordFret.add(new ChordFret(fret, chordScaleNoteForFret.get().getInterval().get()));
+//        }
+//      }
+//    }
+//    display(chordFret, defaultOptions);
+//  }
 
-  public void showChordOccurence(Chord chord, Options options) {
+  public void showScale(Scale scale) {
+    showScale(scale, defaultOptions);
+  }
+  
+  public void showScale(Scale scale, Options options) {
     List<ChordFret> tones = new ArrayList<>();
 
     out.println();
-    out.println(StringUtils.center(chord.getTitle(), 32));
+    out.println(StringUtils.center(scale.getTitle(), 30));
+    out.println(StringUtils.center("(" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "])" , 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
 
     for (List<Fret> fretFrets : fretboardFrets) {
       for (Fret fret : fretFrets) {
-        Optional<ScaleNote> chordScaleNoteForTone = chord.getChordNotes().stream().filter(cn -> fret.getNote().equals(cn.getNote()))
+        if (fret.getNote() == null) {
+          continue; // must be fret 1-5 of the 5th string on banjo
+        }
+        Optional<ScaleNote> scaleNoteForFret = scale.getScaleNotes().stream().filter(sn -> fret.getNote().equals(sn.getNote()))
             .findAny();
-        if (chordScaleNoteForTone.isPresent()) {
-          tones.add(new ChordFret(fret, chordScaleNoteForTone.get().getInterval().get()));
+        if (scaleNoteForFret.isPresent()) {
+          tones.add(new ChordFret(fret, scaleNoteForFret.get().getInterval().get()));
         }
       }
     }
-    showTones(tones, defaultOptions);
+    display(tones, defaultOptions);
   }
 
-
-  private void showTones(List<ChordFret> chordTones, Options options) {
+  private void display(List<ChordFret> chordFrets, Options options) {
     ColourMap colourMap = new ColourMap();
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
-    int lowestFret = chordTones.stream().max(Comparator.comparingInt(ct -> 
+    int lowestFret = chordFrets.stream().max(Comparator.comparingInt(ct -> 
     Integer.valueOf(ct.getFret().getFretNum()))).get().getFret().getFretNum();
         
-    for (ChordFret chordFret : chordTones) {
+    for (ChordFret chordFret : chordFrets) {
       if (chordFret.getFret().getNote() == null) {
         deadStrings.add(chordFret.getFret().getStringNum());
       }
     }
 
     int fretNum = 0;
-    for (List<Fret> fretTones : fretboardFrets) {
+    for (List<Fret> frets : fretboardFrets) {
       String inlay = inlays.contains(fretNum) ? String.format(" %-2s ", fretNum) : "    ";
       out.print(inlay);
       String sep = (fretNum == 0) ? "" : "┃";
       int stringNum = 0;
-      for (Fret fretTone : fretTones) {
+      for (Fret fret : frets) {
         String ldr = (stringNum == 0 && fretNum != 0) ? "┃" : (fretNum == 0 ? " " : "");
 
-        Optional<ChordFret> chordTone = chordTones.stream().filter(ct -> fretTone == ct.getFret())
+        Optional<ChordFret> chordFret = chordFrets.stream().filter(ct -> fret == ct.getFret())
             .findAny();
         
-        if (chordTone.isPresent()) {
+        if (chordFret.isPresent()) {
           String fretStr = null;
           if (options.isIntervals()) {
-            fretStr = chordTone.get().getInterval().getLabel();
+            fretStr = chordFret.get().getInterval().getLabel();
           } else {
-            fretStr = chordTone.get().getFret().getNote().getLabel();
+            fretStr = chordFret.get().getFret().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = colourMap.get(fretTone.getNote());
+            Colour col = colourMap.get(fret.getNote());
             out.print(String.format("%s %s%-2s%s%s", ldr, col, fretStr,
                 Colour.RESET, sep));
 

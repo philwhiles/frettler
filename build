@@ -1,2 +1,4 @@
 #!/bin/bash
 ./mvnw clean install assembly:single
+(echo '#!/bin/sh' && echo 'exec java -jar $0 "$@"' && cat target/frettler-0.0.1-SNAPSHOT-jar-with-dependencies.jar) > frettler
+chmod +x frettler

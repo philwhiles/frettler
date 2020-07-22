@@ -17,6 +17,7 @@ import java.util.List;
 
 public enum IntervalPattern {
 
+  // SCALES
   CHROMATIC_SCALE(
       PatternType.SCALE,
       "Chromatic",
@@ -94,6 +95,18 @@ public enum IntervalPattern {
       PERFECT_FIFTH,
       MINOR_SEVENTH
   ), 
+  BLUES_SCALE(
+      PatternType.SCALE,
+      "Blues",
+      PERFECT_UNISON,
+      MINOR_THIRD, 
+      PERFECT_FOURTH,
+      DIMINISHED_FIFTH,
+      PERFECT_FIFTH,
+      MINOR_SEVENTH
+  ), 
+  
+  
   // TRIADS FOR CHORD GENERATION
   MAJOR_TRIAD(
       PatternType.CHORD,

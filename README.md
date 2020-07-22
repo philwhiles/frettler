@@ -6,18 +6,16 @@ The rendering is just a bunch of System.out.prinln statements, but uses Unicode 
 Example output can be seen at the bottom of this page. The rendering turned out a lot better than I had hoped tbh!
 
 ## Building
-The application is built using maven, but you don't need to have maven pre-installed - you can build an executable jar that will be
-used by the included bash wrapper, with the following
-
-```
-./build
-
-```
+The application is built using maven, but you don't need to have maven pre-installed. Just run './build', which will:
+- download its own maven
+- compile the code
+- build an executable fat jar
+- create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie copy frettler to your favourite bin directory
 
 ## Execution
 
 ### Command Line
-Run it using the provided shell wrapper, frettler, ie :
+Run it using the build executable shell command, frettler, ie :
 
 
 ```
@@ -25,23 +23,45 @@ Run it using the provided shell wrapper, frettler, ie :
 
 ```
 
-- Need to use drop D tuning? just use the optional '--strings/-s' argument '-s D,A,D,G,B,E'
-- Add the optional chords argument '--chords/-c' and frettler will calculate the chords in that key and display each using the VERTICAL chord view.
+- 
 
-You can use the strings argument to use any number of strings and using any tuning. 
-To make that easier for say ukelele players, frettler has several alternative instruments, which are
-simply conveniences to avoid having to keep on using the strings argument. ie in the examples shown above you could use one of the following instruments :
+### Required Arguments
+- #1 GUITAR or BANJO or MANDOLIN or BASSGUITAR or UKELELE
+- #2 HORIZONTAL (fretboard view) or VERTICAL (vertical chord diagram which can also display scales)
+- #3 SCALE or CHORD
+- #4 root note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
+- #5 the identifier for the scale or chord ie MAJOR_SCALE or MINOR_TRIAD
 
-- GUITAR
-- BASSGUITAR
-- UKELELE
-- MANDOLIN
-- BANJO
+### Optional Arguments
+- -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'
+- -c or --chords as an option when using SCALE and frettler will calculate the chords in that key and display each using the VERTICAL chord view.
 
-(The default BANJO will assume the fifth string starts at the sixth fret - if you want the display for a banjo having all strings full length,
-use the GUITAR with --strings A,B,C,etc. The various instruments, banjo excepted, are just conveniences to avoid using GUITAR with --strings each time.
-To frettler, a fretted instrument is a fretted instrument at the end of the day.)
+### Instruments
+A fretboard is a fretboard, and as frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
+The default BANJO will assume the fifth string starts at the sixth fret - if you want the display for a banjo having all strings full length,
+just use any instrument other than BANJO with --strings A,B,C,etc.
+
+### Scales
+- CHROMATIC_SCALE
+- MAJOR_SCALE
+- NATURAL_MINOR_SCALE
+- MELODIC_MINOR_SCALE
+- HARMONIC_MINOR_SCALE
+- MAJOR_PENTATONIC_SCALE
+- MINOR_PENTATONIC_SCALE
+- BLUES_SCALE
+
+### Chords
+- MAJOR_TRIAD
+- MINOR_TRIAD
+- DIMINISHED_TRIAD
+- MAJOR_QUADRIAD
+- MINOR_QUADRIAD
+- DIMINISHED_QUADRIAD
+- MINOR_MAJOR_QUADRIAD
+
+### Chord Fingering Calculation
 The chord calculation used in the VERTICAL view is definately a work in progress. It appears to work for standard six string guitar, open string chords, but for anything else,
 take the chord fingerings calculated with a pinch of salt. I already know its calculation for C Major with a seven string guitar is a bit out of whack, 
 and that is probably an indication that it will fall short elsewhere. Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
@@ -108,8 +128,9 @@ theory to the test with a wider set of chords and confirm my assumptions hold wa
 
 ## TODO
 - Add some Javadoc, for my own sanity if no one elses
-- Extend the types of scales it understands
-- Write the VERTICAL SCALE view and expose it through the CLI 
+- Arpeggios
+- Modes
+- Extend the types of scales it understands?
 - Verify the VERTICAL CHORD fingering output for the more esoteric chords!
 - Actually learn guitar!
 

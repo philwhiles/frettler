@@ -182,7 +182,7 @@ public class Chord {
 
 
   public String getTitle() {
-    return getLabel() + " (" + chordRootNote.getNote() + " " + chordPattern.getLabel() + ")" + " ["
+    return getLabel() + " (" + chordRootNote.getNote().getLabel() + " " + chordPattern.getLabel() + ")" + " ["
         + chordNotes.stream().map(n -> n.getNote().getLabel()).collect(Collectors.joining(","))
         + "]";
   }
