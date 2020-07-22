@@ -23,14 +23,12 @@ Run it using the build executable shell command, frettler, ie :
 
 ```
 
-- 
-
 ### Required Arguments
-- #1 GUITAR or BANJO or MANDOLIN or BASSGUITAR or UKELELE
-- #2 HORIZONTAL (fretboard view) or VERTICAL (vertical chord diagram which can also display scales)
-- #3 SCALE or CHORD
-- #4 root note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
-- #5 the identifier for the scale or chord ie MAJOR_SCALE or MINOR_TRIAD
+- GUITAR or BANJO or MANDOLIN or BASSGUITAR or UKELELE
+- HORIZONTAL (fretboard view) or VERTICAL (vertical chord diagram which can also display scales)
+- SCALE or CHORD
+- root note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
+- the identifier for the scale or chord ie MAJOR_SCALE or MINOR_TRIAD
 
 ### Optional Arguments
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'
@@ -70,10 +68,6 @@ I think it needs to consider the chord interval progression to the higher string
 Here are some examples :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
-
-
-NOTE: the VERTICAL display of SCALE is TBD at this time.
-
 
 ### Tab Completion
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
