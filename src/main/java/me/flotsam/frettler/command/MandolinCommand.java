@@ -8,7 +8,7 @@ import picocli.CommandLine.Command;
  * @author philwhiles
  *
  */
-@Command(name = "MANDOLIN", description = "Generates mandolin scales and chords")
+@Command(name = "mandolin", description = "Generates mandolin scales and chords")
 public class MandolinCommand extends FrettedInstrumentCommand implements Runnable {
 
   

@@ -29,7 +29,7 @@ public class FrettlerCommand {
   @Option(names = {"-d", "--display"}, description="Display in monochrome or colour")
   protected Display display = Display.COLOUR;
   
-  @Option(names = {"-l", "--labels"}, description="Show note ot interval labels")
+  @Option(names = {"-l", "--labels"}, description="Show note or interval labels")
   protected Labels labels = Labels.NOTES;
 
   public FrettlerCommand() {

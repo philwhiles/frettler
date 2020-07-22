@@ -8,7 +8,7 @@ import picocli.CommandLine.Command;
  * @author philwhiles
  *
  */
-@Command(name = "BASSGUITAR", description = "Generates bass guitar scales (and chords?!)")
+@Command(name = "bassguitar", description = "Generates bass guitar scales (and chords?!)")
 public class BassGuitarCommand extends FrettedInstrumentCommand implements Runnable {
 
   

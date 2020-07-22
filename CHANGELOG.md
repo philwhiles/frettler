@@ -1,5 +1,8 @@
 
-#23rd Jul 2020
+# 23rd Jul 2020
+- lower case param handling
+
+# 23rd Jul 2020
 - titles now include instrument details
 - more refactoring to correctly name some variables
 - BLUES_SCALE added

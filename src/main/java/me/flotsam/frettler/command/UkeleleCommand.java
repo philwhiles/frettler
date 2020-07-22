@@ -8,7 +8,7 @@ import picocli.CommandLine.Command;
  * @author philwhiles
  *
  */
-@Command(name = "UKELELE", description = "Generates ukelele scales and chords")
+@Command(name = "ukelele", description = "Generates ukelele scales and chords")
 public class UkeleleCommand extends FrettedInstrumentCommand implements Runnable {
 
   

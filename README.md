@@ -19,9 +19,12 @@ Run it using the built executable shell command, frettler, ie :
 
 
 ```
-./frettler GUITAR HORIZONTAL SCALE C MAJOR_SCALE
+./frettler guitar horizontal scale c major_scale
 
 ```
+## Arguments
+All of the arguments can be understood by frettler in upper or lower case. Until I had worked out how to make picocli map lower case params to upper case enums (it turned out to be easy), 
+they were all uppper case, and that was reflected in these instructions. Now it can handle lower case as well ... I decided to leave the references to params here in upper case to call them out.
 
 ### Required Arguments
 - GUITAR or BANJO or MANDOLIN or BASSGUITAR or UKELELE
@@ -41,7 +44,6 @@ The default BANJO will assume the fifth string starts at the sixth fret - if you
 just use any instrument other than BANJO with --strings A,B,C,etc.
 
 ### Scales
-- CHROMATIC_SCALE
 - MAJOR_SCALE
 - NATURAL_MINOR_SCALE
 - MELODIC_MINOR_SCALE

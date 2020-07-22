@@ -26,7 +26,7 @@ import picocli.CommandLine.Command;
 public class Main implements Callable<Integer> {
 
   public static void main(String... args) throws Exception {
-    new CommandLine(new Main()).execute(args);
+    new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true).execute(args);
   }
 
   @Override
