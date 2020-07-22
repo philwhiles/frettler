@@ -15,7 +15,7 @@ The application is built using maven, but you don't need to have maven pre-insta
 ## Execution
 
 ### Command Line
-Run it using the build executable shell command, frettler, ie :
+Run it using the built executable shell command, frettler, ie :
 
 
 ```
