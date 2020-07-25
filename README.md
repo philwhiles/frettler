@@ -2,8 +2,11 @@
 
 ## Synopsis
 This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a fretboard.
-The rendering is just a bunch of System.out.prinln statements, but uses Unicode boxing characters and ANSI colour coding.
-Example output can be seen at the bottom of this page. The rendering turned out a lot better than I had hoped tbh!
+The rendering is performed with System.out.prinln statements, using Unicode boxing characters and ANSI colour coding.
+
+Here is an example of its output :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
 ## Building
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
@@ -108,9 +111,7 @@ The chord calculation used in the 'vertical' view is still a work in progress. I
 take the chord fingerings calculated with a pinch of salt. For instance the chord calculation for C Major with a seven string guitar is a bit out of whack, 
 and that is probably an indication that it will fall short elsewhere. Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
 
-Here are some examples :
 
-<img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
 ### Tab Completion
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
