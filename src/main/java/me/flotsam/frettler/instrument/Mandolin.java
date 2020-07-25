@@ -9,10 +9,10 @@ public class Mandolin extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.D, Note.A, Note.E};
 
   public Mandolin() {
-    this(DEFAULT_STRINGS);
+    this(DEFAULT_STRINGS, FRETS);
   }
 
-  public Mandolin(Note[] strings) {
-    super("Mandolin", FRETS, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public Mandolin(Note[] strings, Integer frets) {
+    super("Mandolin", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

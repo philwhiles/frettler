@@ -9,10 +9,10 @@ public class BassGuitar extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G};
 
   public BassGuitar() {
-    this(DEFAULT_STRINGS);
+    this(DEFAULT_STRINGS, FRETS);
   }
 
-  public BassGuitar(Note[] strings) {
-    super("Bass Guitar", FRETS, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public BassGuitar(Note[] strings, Integer frets) {
+    super("Bass Guitar", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

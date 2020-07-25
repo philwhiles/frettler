@@ -12,6 +12,13 @@ enum Position {
 }
 
 
+/**
+ * Is a type of cyclic linked list. Represents a scale, and created from a root note and a scale
+ * pattern containing intervals.
+ * 
+ * @author philwhiles
+ *
+ */
 public class Scale {
 
   public static final Scale CHROMATIC_SCALE = new Scale(Arrays.asList(Note.values()));
@@ -23,16 +30,17 @@ public class Scale {
 
 
   public Scale(Note rootNote, IntervalPattern scalePattern) {
-    if (scalePattern.getPatternType() != PatternType.SCALE) {
-      System.err.println("Interval pattern '" + scalePattern.getLabel() + "' is not a scale pattern");
+    if (scalePattern.getPatternType() == PatternType.CHORD) {
+      System.err.println(
+          "Interval pattern '" + scalePattern.getLabel() + "' is not a scale/mode pattern");
       System.exit(-1);
     }
     this.scalePattern = scalePattern;
     this.rootNote = rootNote;
 
-    Optional<ScaleNote> westernScaleRoot = CHROMATIC_SCALE.findScaleNote(rootNote);
+    Optional<ScaleNote> rootScaleNote = CHROMATIC_SCALE.findScaleNote(rootNote);
     for (ScaleInterval interval : scalePattern.getIntervals()) {
-      ScaleNote scaleNote = Scale.getScaleNote(westernScaleRoot.get(), interval);
+      ScaleNote scaleNote = Scale.getScaleNote(rootScaleNote.get(), interval);
       addScaleNote(scaleNote.getNote(), Optional.of(interval));
     }
   }
@@ -169,22 +177,34 @@ public class Scale {
   public static ScaleNote getScaleNote(ScaleNote rootScaleNote, ScaleInterval interval) {
     return getScaleNote(rootScaleNote, interval.getSemiTones());
   }
-  
+
   public static ScaleNote getScaleNote(ScaleNote rootScaleNote, int semiTones) {
     ScaleNote scaleNote = rootScaleNote;
     for (int i = 0; i < semiTones; i++) {
       scaleNote = scaleNote.getNextScaleNote();
-//      if (scaleNote.getPosition() == Position.TAIL) {
-//        scaleNote = scaleNote.getNextScaleNote();
-//      }
     }
     return scaleNote;
   }
 
   public List<Chord> createScaleChords() {
     List<Chord> chords = new ArrayList<>();
-    for (ScaleNote scaleNote : getScaleNotes()) {
-      chords.add(new Chord(scaleNote, ChordType.STANDARD));
+    List<ScaleNote> scaleNotesToUse = null;
+    List<ScaleNote> scaleNotes = null;
+
+    if (!scalePattern.isScaleChordGenerationSupported()) {
+      System.err.println("Chord generation from this scale is currently not supported");
+    } else {
+      if (scalePattern.getParentPattern() == null) {
+        scaleNotesToUse = getScaleNotes();
+      } else {
+        scaleNotes = getScaleNotes();
+        scaleNotesToUse = new Scale(rootNote, scalePattern.getParentPattern()).getScaleNotes();
+      }
+      for (ScaleNote scaleNote : scaleNotesToUse) {
+        if (scaleNotes == null || scaleNotes.stream().anyMatch(sn -> sn.equalsTonally(scaleNote))) {
+          chords.add(new Chord(scaleNote, ChordType.STANDARD));
+        }
+      }
     }
     return chords;
   }

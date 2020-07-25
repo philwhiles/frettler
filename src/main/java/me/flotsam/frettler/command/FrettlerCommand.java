@@ -3,6 +3,7 @@ package me.flotsam.frettler.command;
 import lombok.Data;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.IntervalPattern;
+import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
@@ -14,39 +15,30 @@ import picocli.CommandLine.Parameters;
 @Data
 public class FrettlerCommand {
 
-  @Parameters(index = "0", description="The view to use")
+  @Parameters(index = "0", defaultValue="HORIZONTAL", description="The view to use")
   protected View view;
   
-  @Parameters(index = "1", description="The type to display")
-  protected Type type;
-
-  @Parameters(index = "2", description="The root/tonic of the chord or scale")
+  @Parameters(index = "1", defaultValue="C", description="The root/tonic of the chord or scale")
   protected Note root;
   
-  @Parameters(index = "3", description="The IntervalPattern to use to generate the chord or scale")
+  @Parameters(index = "2", defaultValue="MAJOR_SCALE", description="The IntervalPattern to use to generate the scale or arpeggio")
   protected IntervalPattern intervalPattern;
   
-  @Option(names = {"-d", "--display"}, description="Display in monochrome or colour")
-  protected Display display = Display.COLOUR;
+  @Option(names = {"-m", "--mono"}, description="Display in 'monochrome'")
+  protected boolean mono;
   
-  @Option(names = {"-l", "--labels"}, description="Show note or interval labels")
-  protected Labels labels = Labels.NOTES;
-
-  public FrettlerCommand() {
-    // TODO Auto-generated constructor stub
-  }
+  @Option(names = {"-i", "--intervals"}, description="Show interval labels instead of notes")
+  protected boolean intervals;
 
   public enum View {
-    HORIZONTAL, VERTICAL
-  }
-  public enum Type {
-    SCALE, CHORD
-  }
-  public enum Display {
-    COLOUR, MONO
-  }
-  public enum Labels {
-    NOTES, INTERVALS
+    HORIZONTAL(true), H(true), VERTICAL(false), V(false);
+    private boolean horizontal;
+    View(boolean horizontal) {
+     this.horizontal = horizontal;
+    }
+    public boolean isHorizontal() {
+      return horizontal;
+    }
   }
 }
 

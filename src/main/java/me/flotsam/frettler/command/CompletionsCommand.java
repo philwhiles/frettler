@@ -9,7 +9,7 @@ import picocli.CommandLine.Command;
  * @author philwhiles
  *
  */
-@Command(name = "COMPLETIONS", description = "Generates bsh tab completion script")
+@Command(name = "completions", description = "Generates bash tab completion script. Try 'source <(./frettler completions)'")
 public class CompletionsCommand implements Runnable {
 
   
@@ -20,13 +20,10 @@ public class CompletionsCommand implements Runnable {
     sb.append("_frettler_completions()\n"); 
     sb.append("{\n"); 
     sb.append("    local instr_opts\n"); 
-    sb.append("    instr_opts=\"GUITAR BASSGUITAR UKELELE MANDOLIN BANJO\"\n"); 
+    sb.append("    instr_opts=\"guitar bassguitar ukelele mandolin banjo\"\n"); 
 
     sb.append("    local view_opts\n"); 
-    sb.append("    view_opts=\"HORIZONTAL VERTICAL\"\n"); 
-    
-    sb.append("    local type_opts\n"); 
-    sb.append("    type_opts=\"SCALE CHORD\"\n"); 
+    sb.append("    view_opts=\"horizontal vertical\"\n"); 
     
     sb.append("    local note_opts\n"); 
     sb.append("    note_opts=\"");
@@ -39,7 +36,7 @@ public class CompletionsCommand implements Runnable {
     sb.append("    local pattern_opts\n"); 
     sb.append("    pattern_opts=\"");
     for (IntervalPattern pattern:IntervalPattern.values()) {
-      sb.append(pattern.name()).append(" ");
+      sb.append(pattern.name().toLowerCase()).append(" ");
     }
     sb.replace(sb.length()-1, sb.length(), "");
     sb.append("\"\n"); 
@@ -53,12 +50,9 @@ public class CompletionsCommand implements Runnable {
     sb.append("            COMPREPLY=( $(compgen -W \"${view_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
     sb.append("            ;;\n");
     sb.append("        3)\n");
-    sb.append("            COMPREPLY=( $(compgen -W \"${type_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
-    sb.append("            ;;\n");
-    sb.append("        4)\n");
     sb.append("            COMPREPLY=( $(compgen -W \"${note_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
     sb.append("            ;;\n");
-    sb.append("        5)\n");
+    sb.append("        4)\n");
     sb.append("            COMPREPLY=( $(compgen -W \"${pattern_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
     sb.append("            ;;\n");
     sb.append("    esac\n");

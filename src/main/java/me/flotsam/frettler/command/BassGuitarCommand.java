@@ -14,6 +14,6 @@ public class BassGuitarCommand extends FrettedInstrumentCommand implements Runna
   
   @Override
   public void run() {
-   exec(new BassGuitar(strings));
+   exec(new BassGuitar(strings, frets));
   }
 }

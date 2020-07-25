@@ -1,0 +1,38 @@
+#!/bin/bash
+
+
+example() {
+  echo "------------------------------------------------------------------------------------------------------------------------------"
+  echo ""
+  echo "$3) $2"
+  echo ""
+  echo "> $1"
+  eval $1
+}
+
+declare -a cmds=(
+"./frettler guitar horizontal C major_scale=Standard guitar, fretboard view of C Major scale"
+"./frettler guitar vertical C major_triad=Standard guitar, vertical view of C Major arpeggio "
+"./frettler guitar vertical C major_triad --chord=Standard guitar, vertical view of C Major chord "
+"./frettler bassguitar horizontal C major_pentatonic_scale=Bass guitar, fretboard view of C Major Pentatonic scale"
+"./frettler guitar horizontal A minor_pentatonic_scale -s B,E,A,D,G,B,E=Am Pentatonic scale on a 7 string guitar"
+"./frettler ukelele horizontal A harmonic_minor_scale=Ukelele, fretboard view of Am Harmonic scale "
+"./frettler guitar horizontal C major_scale --intervals=Standard guitar, fretboard view of C Major Scale with intervals"
+"./frettler guitar horizontal C major_scale -i=Again but with abbrev. intervals option"
+"./frettler guitar horizontal C major_scale -im=Standard guitar, fretboard view of C Major Scale with intervals, in 'monochrome'"
+"./frettler guitar horizontal C major_triad=Standard guitar, fretboard view of C Arpeggio"
+"./frettler bassguitar horizontal C major_pentatonic_scale=Bass guitar, fretboard view of C Major Pentatonic scale"
+"./frettler bassguitar horizontal C major_pentatonic_scale --intervals --frets 17=Bass guitar, fretboard view to 17th fret of C Major Pentatonic Scale, with intervals"
+"./frettler banjo horizontal C blues_scale=Banjo, fretboard view of C Blues scale"
+"./frettler guitar vertical G major_triad=Guitar, vertical view of G Major arpeggio"
+"./frettler guitar vertical G major_triad -c=Guitar, vertical view of G Major chord fingering"
+"./frettler guitar horizontal C major_scale -c=Grand finale! Standard guitar, fretboard view of C Major Scale accompanied by chord diagrams of its diatonic chords"
+)
+
+let n=1
+for i in "${cmds[@]}"; do
+  cmd=${i%=*}
+  comment=${i#*=}
+  example "$cmd" "$comment" "$n"
+  ((n=n+1))
+done

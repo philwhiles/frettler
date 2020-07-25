@@ -9,10 +9,10 @@ public class Guitar extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
 
   public Guitar() {
-    this(DEFAULT_STRINGS);
+    this(DEFAULT_STRINGS, FRETS);
   }
 
-  public Guitar(Note[] strings) {
-    super("Guitar", FRETS, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public Guitar(Note[] strings, Integer frets) {
+    super("Guitar", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

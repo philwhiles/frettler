@@ -19,6 +19,7 @@ public enum IntervalPattern {
 
   // SCALES
   CHROMATIC_SCALE(
+      false,
       PatternType.SCALE,
       "Chromatic",
       PERFECT_UNISON, 
@@ -35,6 +36,7 @@ public enum IntervalPattern {
       MAJOR_SEVENTH 
   ),
   MAJOR_SCALE(
+      true,
       PatternType.SCALE,
       "Major",
       PERFECT_UNISON, 
@@ -45,18 +47,8 @@ public enum IntervalPattern {
       MAJOR_SIXTH, 
       MAJOR_SEVENTH
   ),
-  NATURAL_MINOR_SCALE(
-      PatternType.SCALE,
-      "Natural Minor",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MINOR_THIRD,
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MINOR_SIXTH,
-      MINOR_SEVENTH
-  ),
   MELODIC_MINOR_SCALE(
+      true,
       PatternType.SCALE,
       "Melodic Minor",
       PERFECT_UNISON,
@@ -67,6 +59,7 @@ public enum IntervalPattern {
       MAJOR_SEVENTH
   ),
   HARMONIC_MINOR_SCALE(
+      true,
       PatternType.SCALE,
       "Harmonic Minor",
       PERFECT_UNISON,
@@ -78,6 +71,8 @@ public enum IntervalPattern {
       MAJOR_SEVENTH
   ),
   MAJOR_PENTATONIC_SCALE(
+      true,
+      MAJOR_SCALE,
       PatternType.SCALE,
       "Major Pentatonic",
       PERFECT_UNISON,
@@ -86,7 +81,27 @@ public enum IntervalPattern {
       PERFECT_FIFTH,
       MAJOR_SIXTH
   ),
+  AEOLIAN_MODE(
+      true,
+      PatternType.MODE,
+      "Aeolian",
+      PERFECT_UNISON,
+      MAJOR_SECOND,
+      MINOR_THIRD,
+      PERFECT_FOURTH,
+      PERFECT_FIFTH,
+      MINOR_SIXTH,
+      MINOR_SEVENTH
+  ),
+  MINOR_SCALE(
+      true,
+      AEOLIAN_MODE,
+      PatternType.SCALE,
+      "Minor Scale"
+  ),
   MINOR_PENTATONIC_SCALE(
+      true,
+      MINOR_SCALE,
       PatternType.SCALE,
       "Minor Pentatonic",
       PERFECT_UNISON,
@@ -96,6 +111,7 @@ public enum IntervalPattern {
       MINOR_SEVENTH
   ), 
   BLUES_SCALE(
+      false,
       PatternType.SCALE,
       "Blues",
       PERFECT_UNISON,
@@ -104,11 +120,66 @@ public enum IntervalPattern {
       DIMINISHED_FIFTH,
       PERFECT_FIFTH,
       MINOR_SEVENTH
+  ),
+  DORIAN_MODE(
+      true,
+      PatternType.MODE,
+      "Dorian",
+      PERFECT_UNISON,
+      MAJOR_SECOND,
+      MINOR_THIRD, 
+      PERFECT_FOURTH,
+      PERFECT_FIFTH,
+      MAJOR_SIXTH,
+      MINOR_SEVENTH
   ), 
+  MIXOLYDIAN_MODE(
+      true,
+      PatternType.MODE,
+      "Mixolydian",
+      PERFECT_UNISON,
+      MAJOR_SECOND,
+      MAJOR_THIRD, 
+      PERFECT_FOURTH,
+      PERFECT_FIFTH,
+      MAJOR_SIXTH,
+      MINOR_SEVENTH
+  ), 
+  LYDIAN_MODE(
+      true,
+      PatternType.MODE,
+      "Lydian",
+      PERFECT_UNISON,
+      MAJOR_SECOND,
+      MAJOR_THIRD, 
+      DIMINISHED_FIFTH,
+      PERFECT_FIFTH,
+      MAJOR_SIXTH,
+      MAJOR_SEVENTH
+  ), 
+  IONIAN_MODE(
+      true,
+      MAJOR_SCALE,
+      PatternType.MODE,
+      "Ionian"
+  ), 
+  LOCRIAN_MODE(
+      true,
+      PatternType.MODE,
+      "Aeolian",
+      PERFECT_UNISON,
+      MINOR_SECOND,
+      MINOR_THIRD,
+      PERFECT_FOURTH,
+      DIMINISHED_FIFTH,
+      MINOR_SIXTH,
+      MINOR_SEVENTH
+  ),
   
   
   // TRIADS FOR CHORD GENERATION
   MAJOR_TRIAD(
+      true,
       PatternType.CHORD,
       "Major Triad",
       PERFECT_UNISON, 
@@ -116,6 +187,7 @@ public enum IntervalPattern {
       PERFECT_FIFTH 
   ),
   MINOR_TRIAD(
+      true,
       PatternType.CHORD,
       "Minor Triad",
       PERFECT_UNISON, 
@@ -123,6 +195,7 @@ public enum IntervalPattern {
       PERFECT_FIFTH 
   ),
   DIMINISHED_TRIAD(
+      true,
       PatternType.CHORD,
       "Diminished Triad",
       PERFECT_UNISON, 
@@ -132,6 +205,7 @@ public enum IntervalPattern {
 
   // QUADRIADS FOR CHORD GENERATION  
   MAJOR_QUADRIAD(
+      true,
       PatternType.CHORD,
       "Major Quadriad (7th)",
       PERFECT_UNISON, 
@@ -140,6 +214,7 @@ public enum IntervalPattern {
       MAJOR_SEVENTH
   ),
   MINOR_QUADRIAD(
+      true,
       PatternType.CHORD,
       "Minor Quadriad  (7th)",
       PERFECT_UNISON, 
@@ -148,6 +223,7 @@ public enum IntervalPattern {
       MINOR_SEVENTH
   ),
   DIMINISHED_QUADRIAD(
+      true,
       PatternType.CHORD,
       "Diminished Quadriad (7th)",
       PERFECT_UNISON, 
@@ -156,6 +232,7 @@ public enum IntervalPattern {
       MINOR_SEVENTH
   ),
   MINOR_MAJOR_QUADRIAD(
+      true,
       PatternType.CHORD,
       "MinorMajor Quadriad (7th)",
       PERFECT_UNISON, 
@@ -169,8 +246,28 @@ public enum IntervalPattern {
   private String label;
   private List<ScaleInterval> intervals;
   private PatternType patternType;
+  private IntervalPattern parentPattern;
+  private boolean scaleChordGenerationSupported;
 
-  private IntervalPattern(PatternType patternType, String label, ScaleInterval ... intervals) {
+  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern aliasPattern, PatternType patternType,String label) {
+    this.scaleChordGenerationSupported = scaleChordGenerationSupported;
+    this.patternType = patternType;
+    this.label = label;
+    this.intervals = aliasPattern.intervals;
+  }
+  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern aliasPattern, String label) {
+    this.scaleChordGenerationSupported = scaleChordGenerationSupported;
+    this.patternType = aliasPattern.patternType;
+    this.label = label;
+    this.intervals = aliasPattern.intervals;
+   
+  }
+  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern parentPattern, PatternType patternType, String label, ScaleInterval ... intervals) {
+    this(scaleChordGenerationSupported, patternType, label, intervals);
+    this.parentPattern = parentPattern;
+  }
+  private IntervalPattern(boolean scaleChordGenerationSupported, PatternType patternType, String label, ScaleInterval ... intervals) {
+    this.scaleChordGenerationSupported = scaleChordGenerationSupported;
     this.patternType = patternType;
     this.label = label;
     this.intervals = Arrays.asList(intervals);
@@ -179,14 +276,20 @@ public enum IntervalPattern {
   public PatternType getPatternType() {
     return patternType;
   }
+  public IntervalPattern getParentPattern() {
+    return parentPattern;
+  }
   public List<ScaleInterval> getIntervals() {
     return intervals;
   }
   public String getLabel() {
     return label;
   }
+  public boolean isScaleChordGenerationSupported() {
+    return scaleChordGenerationSupported;
+  }
   
   public enum PatternType {
-    CHORD, SCALE
+    CHORD, SCALE, MODE
   }
 }

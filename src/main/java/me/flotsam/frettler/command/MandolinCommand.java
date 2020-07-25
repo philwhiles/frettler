@@ -14,6 +14,6 @@ public class MandolinCommand extends FrettedInstrumentCommand implements Runnabl
   
   @Override
   public void run() {
-   exec(new Mandolin(strings));
+   exec(new Mandolin(strings, frets));
   }
 }

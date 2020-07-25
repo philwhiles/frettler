@@ -88,17 +88,18 @@ public class Chord {
           chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
       chordNotes.add(noteInRootScale.get());
     }
-    for (IntervalPattern chordPattern : IntervalPattern.values()) {
+    this.chordPattern = IntervalPattern.CHROMATIC_SCALE;
+    for (IntervalPattern pattern : IntervalPattern.values()) {
       int matches = 0;
-      for (ScaleInterval chordsScaleInterval : chordPattern.getIntervals()) {
+      for (ScaleInterval chordsScaleInterval : pattern.getIntervals()) {
         for (ScaleNote chordNote : chordNotes) {
           if (chordNote.getInterval().get() == chordsScaleInterval) {
             matches++;
           }
         }
       }
-      if (matches == chordPattern.getIntervals().size()) {
-        this.chordPattern = chordPattern;
+      if (matches == pattern.getIntervals().size()) {
+        this.chordPattern = pattern;
         break;
       }
     }

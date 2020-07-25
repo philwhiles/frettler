@@ -20,13 +20,13 @@ import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Fret;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 
-public class ChordView {
+public class VerticalView {
 
   private Options defaultOptions = new Options(false, true);
-  private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12);
+  private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
   private FrettedInstrument instrument;
 
-  public ChordView(FrettedInstrument instrument) {
+  public VerticalView(FrettedInstrument instrument) {
     this.instrument = instrument;
   }
 
@@ -140,10 +140,6 @@ public class ChordView {
       }
       
       
-      
-      
-      
-      
       // after process of elimination did we find a suitable tone?
       if (tone != null) {
         tones.add(tone);
@@ -154,30 +150,31 @@ public class ChordView {
     display(tones, options);
   }
 
-//  public void showChordOccurence(Chord chord) {
-//    showChordOccurence(chord, defaultOptions);
-//  }
-//
-//  public void showChordOccurence(Chord chord, Options options) {
-//    List<ChordFret> chordFret = new ArrayList<>();
-//
-//    out.println();
-//    out.println(StringUtils.center(chord.getTitle(), 32));
-//    out.println();
-//
-//    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
-//
-//    for (List<Fret> fretFrets : fretboardFrets) {
-//      for (Fret fret : fretFrets) {
-//        Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream().filter(cn -> fret.getNote().equals(cn.getNote()))
-//            .findAny();
-//        if (chordScaleNoteForFret.isPresent()) {
-//          chordFret.add(new ChordFret(fret, chordScaleNoteForFret.get().getInterval().get()));
-//        }
-//      }
-//    }
-//    display(chordFret, defaultOptions);
-//  }
+  public void showArpeggio(Chord chord) {
+    showArpeggio(chord, defaultOptions);
+  }
+
+  public void showArpeggio(Chord chord, Options options) {
+    List<ChordFret> chordFret = new ArrayList<>();
+
+    out.println();
+    out.println(StringUtils.center(chord.getTitle(), 30));
+    out.println(StringUtils.center("(" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "])" , 30));
+    out.println();
+
+    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
+
+    for (List<Fret> fretFrets : fretboardFrets) {
+      for (Fret fret : fretFrets) {
+        Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream().filter(cn -> fret.getNote().equals(cn.getNote()))
+            .findAny();
+        if (chordScaleNoteForFret.isPresent()) {
+          chordFret.add(new ChordFret(fret, chordScaleNoteForFret.get().getInterval().get()));
+        }
+      }
+    }
+    display(chordFret, options);
+  }
 
   public void showScale(Scale scale) {
     showScale(scale, defaultOptions);
@@ -205,7 +202,7 @@ public class ChordView {
         }
       }
     }
-    display(tones, defaultOptions);
+    display(tones, options);
   }
 
   private void display(List<ChordFret> chordFrets, Options options) {
@@ -263,7 +260,7 @@ public class ChordView {
       }
       if (fretNum == 0) {
         out.println(createFretLine("┏", "┳", "┓"));
-      } else if (fretNum < 12) {
+      } else if (fretNum < instrument.getFrets()) {
         out.println(createFretLine("┣", "╋", "┫"));
       }
       fretNum++;

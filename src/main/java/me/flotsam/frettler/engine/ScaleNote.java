@@ -31,4 +31,8 @@ public class ScaleNote {
   public String toString() {
     return note.getLabel() + " " + interval.toString();
   }
+
+  public boolean equalsTonally(ScaleNote other) {
+    return (other.note == this.note);
+  }
 }

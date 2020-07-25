@@ -14,6 +14,6 @@ public class GuitarCommand extends FrettedInstrumentCommand implements Runnable 
   
   @Override
   public void run() {
-   exec(new Guitar(strings));
+   exec(new Guitar(strings, frets));
   }
 }

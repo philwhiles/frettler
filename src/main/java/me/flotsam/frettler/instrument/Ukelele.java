@@ -9,10 +9,10 @@ public class Ukelele extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.C, Note.E, Note.A};
 
   public Ukelele() {
-    this(DEFAULT_STRINGS);
+    this(DEFAULT_STRINGS, FRETS);
   }
 
-  public Ukelele(Note[] strings) {
-    super("Ukelele", FRETS, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public Ukelele(Note[] strings, Integer frets) {
+    super("Ukelele", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

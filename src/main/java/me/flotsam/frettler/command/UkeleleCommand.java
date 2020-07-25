@@ -14,6 +14,6 @@ public class UkeleleCommand extends FrettedInstrumentCommand implements Runnable
   
   @Override
   public void run() {
-   exec(new Ukelele(strings));
+   exec(new Ukelele(strings, frets));
   }
 }
