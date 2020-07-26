@@ -8,7 +8,7 @@ Here is an example of its output :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
-## Building
+## Building - command line
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
 Linux/macOS/UNIX. If you use Windows, take the mvn command from the build script to build the fat jar in the target folder. Then run frettler
 with :
@@ -25,6 +25,9 @@ The application is built using maven, but you don't need to have maven pre-insta
 - compile the code
 - build an executable fat jar
 - create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy frettler to your favourite bin directory
+
+## Building - IDE
+If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from https://projectlombok.org
 
 ## Execution
 Frettler has a demo script that you can run to show the variety of arguments that you can use and the diagrams produced from them. It is probably the easiest way to understand how to
