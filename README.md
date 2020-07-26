@@ -13,11 +13,11 @@ Frettlers build script is a bash script, and the trickery it perfoms after the m
 Linux/macOS/UNIX. If you use Windows, take the mvn command from the build script to build the fat jar in the target folder. Then run frettler
 with :
 
-{code}
+```
 
 java -jar target/frettler-0.1.0-jar-with-dependencies.jar YOUR FRETTLER ARGS HERE
 
-{code}
+```
 
 
 The application is built using maven, but you don't need to have maven pre-installed. Just run './build', which will:
@@ -65,18 +65,18 @@ In this order:
 - -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
 
 (*) The interval labels use the following convention :
-"P1" - perfect_unison/root
-"m2" - minor_second
-"M2" - major_second
-"m3" - minor_third
-"M3" - major_third
-"P4" - perfect_fourth
-"d5" - diminished_fifth
-"P5" - perfect_fifth
-"m6" - minor_sixth
-"M6" - major_sixth
-"m7" - minor_seventh
-"M7" - major_seventh
+- P1 - perfect_unison/root
+- m2 - minor_second
+- M2 - major_second
+- m3 - minor_third
+- M3 - major_third
+- P4 - perfect_fourth
+- d5 - diminished_fifth
+- P5 - perfect_fifth
+- m6 - minor_sixth
+- M6 - major_sixth
+- m7 - minor_seventh
+- M7 - major_seventh
 
 ### Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
