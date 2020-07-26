@@ -1,4 +1,7 @@
 
+# 26th Jul 2020
+- chord analysis completely refactored to make it more extensible
+
 # 25th Jul 2020
 - CLI command structure re-organised - scale|chord was unnecessary
 - added some modes for scale display

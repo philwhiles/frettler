@@ -1,36 +1,72 @@
 package me.flotsam.frettler.engine;
 
+import static me.flotsam.frettler.engine.ScaleInterval.M11;
+import static me.flotsam.frettler.engine.ScaleInterval.M2;
+import static me.flotsam.frettler.engine.ScaleInterval.M3;
+import static me.flotsam.frettler.engine.ScaleInterval.M6;
+import static me.flotsam.frettler.engine.ScaleInterval.M7;
+import static me.flotsam.frettler.engine.ScaleInterval.M9;
+import static me.flotsam.frettler.engine.ScaleInterval.P1;
+import static me.flotsam.frettler.engine.ScaleInterval.P4;
+import static me.flotsam.frettler.engine.ScaleInterval.P5;
+import static me.flotsam.frettler.engine.ScaleInterval.d5;
+import static me.flotsam.frettler.engine.ScaleInterval.m10;
+import static me.flotsam.frettler.engine.ScaleInterval.m3;
+import static me.flotsam.frettler.engine.ScaleInterval.m6;
+import static me.flotsam.frettler.engine.ScaleInterval.m7;
+import static me.flotsam.frettler.engine.ScaleInterval.m9;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.Data;
+import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 
-@Data
 public class Chord {
-  private boolean flatSecond;
-  private boolean second;
-  private boolean augmentedSecond;
-  private boolean flatThird;
-  private boolean third;
-  private boolean fourth;
-  private boolean flatFifth;
-  private boolean fifth;
-  private boolean augmentedFifth;
-  private boolean sixth;
-  private boolean flatSeventh;
-  private boolean seventh;
-  private boolean ninth;
-  private boolean eleventh;
-  private boolean majorRange;
-  private boolean minorRange;
-  private boolean suspended;
+  //@formatter:off
+  private static List<ChordPattern> patternBank = Arrays.asList(new ChordPattern[] {
+      new ChordPattern("min11", P1, m3, P5, m7, M9, M11),
+      new ChordPattern("dom11", P1, M3, P5, m7, M9, M11),
+      new ChordPattern("9b5", P1, M3, P5, m7, M9),
+      new ChordPattern("M7add9", P1, M3, P5, M7, M9),
+      new ChordPattern("7#9", P1, M3, P5, m7, m10),
+      new ChordPattern("7b9", P1, M3, P5, m7, m9),
+      new ChordPattern("dom9", P1, M3, P5, m7, M9),
+      new ChordPattern("maj6/9", P1, M3, P5, M6, M9),
+      new ChordPattern("maj9", P1, M3, P5, M7, M9),
+      new ChordPattern("min9", P1, m3, P5, m7, M9),
+      new ChordPattern("dim7", P1, m3, d5, M6),
+      new ChordPattern("7#5", P1, M3, m6, m7),
+      new ChordPattern("7b5", P1, M3, d5, m7),
+      new ChordPattern("min7", P1, m3, P5, m7),
+      new ChordPattern("aug7", P1, M3, d5, m7),
+      new ChordPattern("maj7", P1, M3, P5, M7),
+      new ChordPattern("dom7", P1, M3, P5, m7),
+      new ChordPattern("min6", P1, m3, P5, M6),
+      new ChordPattern("maj6", P1, M3, P5, M6),
+      new ChordPattern("m maj7", P1, m3, P5, M7),
+      new ChordPattern("m7b5", P1, m3, d5, m7),
+      new ChordPattern("7+", P1, M3, d5, M7),
+      new ChordPattern("7sus4", P1, P4, P5, m7),
+      new ChordPattern("add9", P1, M3, P5, M9),
+      new ChordPattern("add11", P1, M3, P5, M11),
+      new ChordPattern("aug", P1, M3, m6),
+      new ChordPattern("dim", P1, m3, d5),
+      new ChordPattern("m", P1, m3, P5),
+      new ChordPattern("sus2", P1, M2, P5),
+      new ChordPattern("sus4", P1, P4, P5),
+      new ChordPattern("", P1, M3, P5)});
+  //@formatter:on
 
+  @Getter
   private ScaleNote chordRootNote;
+  @Getter
   private IntervalPattern chordPattern;
+  @Getter
   private List<ScaleNote> chordNotes = new ArrayList<>();;
-
+  @Getter
+  private ChordMetadata metaData;
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
@@ -44,15 +80,17 @@ public class Chord {
       return thirds;
     }
   }
-  
+
   /**
    * Used to create a Chord from a root note when we know what the chords scale pattern should be
+   * 
    * @param chordRootNote the tonic for the chord
    * @param chordPattern the scale pattern ie MAJOR, HARMONIC_MINOR
    */
   public Chord(Note chordRootNote, IntervalPattern chordPattern) {
     if (chordPattern.getPatternType() != PatternType.CHORD) {
-      System.err.println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
+      System.err
+          .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
       System.exit(-1);
     }
     Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.CHROMATIC_SCALE);
@@ -61,26 +99,28 @@ public class Chord {
     for (ScaleInterval interval : chordPattern.getIntervals()) {
       chordNotes.add(chromaticScaleFromChordRoot.findScaleNote(interval).get());
     }
-    analyse();
+    metaData = analyse();
   }
 
 
   /**
-   * Creates a chord from a given note in a scale. Used to create a standard triad or quadriad chord from the tonic/root - in the
-   * scale that the chordRootNote was taken. ie the chordRootNote may be 'D' sitting within say the scale of A Minor,
-   * and will sit with that scales notes either side of it.
-   * The chordType indicates the thirds to pick out of the root notes scale.
+   * Creates a chord from a given note in a scale. Used to create a standard triad or quadriad chord
+   * from the tonic/root - in the scale that the chordRootNote was taken. ie the chordRootNote may
+   * be 'D' sitting within say the scale of A Minor, and will sit with that scales notes either side
+   * of it. The chordType indicates the thirds to pick out of the root notes scale.
    * 
-   * It gets the chromatic scale starting at the root note, then finds each of the derived chord notes relative to the tonic in the 
-   * chromatic scale in order to work out the interval of each chord note.
+   * It gets the chromatic scale starting at the root note, then finds each of the derived chord
+   * notes relative to the tonic in the chromatic scale in order to work out the interval of each
+   * chord note.
    * 
-   * @param chordRootNote the scale note tonic 
+   * @param chordRootNote the scale note tonic
    * @param chordType standard or extended - this indicates the thirds to use
    */
   public Chord(ScaleNote chordRootNote, ChordType chordType) {
     this.chordRootNote = chordRootNote;
 
-    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote.getNote(), IntervalPattern.CHROMATIC_SCALE);
+    Scale chromaticScaleFromChordRoot =
+        new Scale(chordRootNote.getNote(), IntervalPattern.CHROMATIC_SCALE);
 
     for (int third : chordType.getThirds()) {
       ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
@@ -103,88 +143,25 @@ public class Chord {
         break;
       }
     }
-    analyse();
+    metaData = analyse();
   }
-
-
 
   public String getLabel() {
-    StringBuilder builder = new StringBuilder();
-    String tonicName = chordRootNote.getNote().getLabel();
-    builder.append(tonicName);
-    int size = chordNotes.size();
-
-
-    if (size == 3) {
-      if (isThird() && isFifth())
-        return tonicName;
-      if (isThird() && isAugmentedFifth())
-        return tonicName + "aug";
-      if (isFlatThird() && isFifth())
-        return tonicName + "m";
-      if (isFlatThird() && isFlatFifth())
-        return tonicName + "dim";
-    } else if (size == 4) {
-      if (isThird() && isFifth() && isSeventh())
-        return tonicName + "M7";
-      if (isFlatThird() && isFlatFifth() && isSixth())
-        return tonicName + "dim7";
-      if (isFlatThird() && isFlatFifth()
-          && isFlatSeventh())
-        return tonicName + "m7b5";
-      if (isFlatThird() && isFifth() && isSeventh())
-        return tonicName + "m maj7";
-      if (isThird() && isFifth() && isFlatSeventh())
-        return tonicName + "7";
-      if (isThird() && isAugmentedFifth()
-          && isFlatSeventh())
-        return tonicName + "aug7";
-      if (isThird() && isAugmentedFifth() && isSeventh())
-        return tonicName + "7+";
-    }
-
-    if (isMajorRange())
-      builder.append("M");
-    else if (isMinorRange())
-      builder.append("M");
-    else if (isMinorRange())
-      builder.append("m");
-    else if (isSuspended()) {
-      if (isSecond())
-        builder.append("sus2");
-      else if (isFourth())
-        builder.append("sus4");
-    }
-
-    if (isFlatFifth() && !isFifth())
-      builder.append("b5");
-    else if (isFlatFifth() && isFifth())
-      builder.append("#4");
-
-    if (isAugmentedFifth() && !isFifth())
-      builder.append("+");
-    else if (isFifth() && isAugmentedFifth())
-      builder.append("add b6");
-
-    if (isFlatSeventh() && !isSeventh())
-      builder.append("7");
-    else if (isSeventh() && !isFlatSeventh())
-      builder.append("M7");
-
-    if (isFourth())
-      builder.append("add4");
-    if (isNinth() || isSecond())
-      builder.append("add9");
-    if (isSixth())
-      builder.append("add6");
-
-    return builder.toString();
+    return chordRootNote.getNote().getLabel() + metaData.label;
   }
 
-
   public String getTitle() {
-    return getLabel() + " (" + chordRootNote.getNote().getLabel() + " " + chordPattern.getLabel() + ")" + " ["
+    return getLabel() + " (" + chordRootNote.getNote().getLabel() + " " + chordPattern.getLabel()
+        + ")" + " ["
         + chordNotes.stream().map(n -> n.getNote().getLabel()).collect(Collectors.joining(","))
+        + "]";
+  }
+
+  public String toString() {
+    return getLabel() + " ["
+        + chordNotes.stream()
+            .map(n -> n.getNote().getLabel() + " (" + n.getInterval().get().getLabel() + ")")
+            .collect(Collectors.joining(", "))
         + "]";
   }
 
@@ -201,33 +178,71 @@ public class Chord {
     return cnt == intervals.length;
   }
 
-  public String toString() {
-    return getLabel() + " ["
-        + chordNotes.stream()
-            .map(n -> n.getNote().getLabel() + " (" + n.getInterval().get().getLabel() + ")")
-            .collect(Collectors.joining(", "))
-        + "]";
+
+  public ChordMetadata analyse() {
+    ChordMetadata meta = new ChordMetadata();
+    for (ScaleNote note : chordNotes) {
+      Optional<ScaleInterval> interval = note.getInterval();
+      if (interval.isPresent()) {
+        switch (interval.get()) {
+          case m2:
+            meta.minorSecond = true;
+            break;
+          case M2:
+            meta.majorSecond = true;
+            break;
+          case m3:
+            meta.minorThird = true;
+            break;
+          case M3:
+            meta.majorThird = true;
+            break;
+          case P4:
+            meta.perfectFourth = true;
+            break;
+          case d5:
+            meta.diminishedFifth = true;
+            break;
+          case P5:
+            meta.perfectFifth = true;
+            break;
+          case m6:
+            meta.minorSixth = true;
+            break;
+          case M6:
+            meta.majorSixth = true;
+            break;
+          case m7:
+            meta.minorSeventh = true;
+            break;
+          case M7:
+            meta.majorSeventh = true;
+            break;
+          case M9:
+            meta.majorNinth = true;
+            break;
+          case M11:
+            meta.majorEleventh = true;
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    meta.majorRange =
+        (meta.majorThird || meta.perfectFifth) && !(meta.minorThird || meta.diminishedFifth);
+    meta.minorRange = meta.minorThird && !meta.majorThird;
+    meta.suspended =
+        (!meta.majorThird && !meta.minorThird && (meta.perfectFourth || meta.majorSecond));
+
+    meta.label = "UNCLASSIFIED";
+    for (ChordPattern pattern : patternBank) {
+      if (containsIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
+        meta.label = pattern.getLabel();
+        break;
+      }
+    }
+
+    return meta;
   }
-
-  private void analyse() {
-    flatSecond = containsIntervals(ScaleInterval.PERFECT_UNISON);
-    second =  containsIntervals(ScaleInterval.MAJOR_SECOND);
-    flatThird =  containsIntervals(ScaleInterval.MINOR_THIRD);
-    third =  containsIntervals(ScaleInterval.MAJOR_THIRD);
-    fourth = containsIntervals(ScaleInterval.PERFECT_FOURTH);
-    flatFifth = containsIntervals(ScaleInterval.DIMINISHED_FIFTH);
-    fifth = containsIntervals(ScaleInterval.PERFECT_FIFTH);
-    augmentedFifth = containsIntervals(ScaleInterval.MINOR_SIXTH);
-    sixth = containsIntervals(ScaleInterval.MAJOR_SIXTH);
-    flatSeventh = containsIntervals(ScaleInterval.MINOR_SEVENTH);
-    seventh = containsIntervals(ScaleInterval.MAJOR_SEVENTH);
-    ninth = containsIntervals(ScaleInterval.NINTH);
-    eleventh = containsIntervals(ScaleInterval.ELEVENTH);
-
-    majorRange = (third || fifth) && !(flatThird || flatFifth);
-    minorRange = flatThird && !third;
-    suspended = (!third && !flatThird && (fourth || second));
-  }
-
-
 }

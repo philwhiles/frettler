@@ -28,10 +28,10 @@ The application is built using maven, but you don't need to have maven pre-insta
 
 ## Execution
 Frettler has a demo script that you can run to show the variety of arguments that you can use and the diagrams produced from them. It is probably the easiest way to understand how to
-use Frettler.
+use Frettler. Run it and compare each example with the instructions below.
 
 ### Command Line
-Run it using the built executable shell command, frettler, ie :
+Run Frettler using the built executable shell command, frettler, ie :
 
 
 ```
@@ -40,12 +40,14 @@ Run it using the built executable shell command, frettler, ie :
 ```
 ## Arguments
 Frettler has two ways of viewing scales,chords and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
-the vertical view which looks more like the classic chord diagram you get. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
+the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
 The two views use the --chords optional argument to do different things:
 
-- horizontal view : using 'scale' - frettler will calculate the chords in that key and display each using the 'vertical' chord view.
+- horizontal view : frettler will calculate the chords in that key and display each using the 'vertical' chord view.
+- vertcial view : frettler will calculate the chord and rather than show it as an arpeggio down the 12 frets, will try and work out the open string fingering and show you
+a classic chord diagram
 
 ### Required Arguments
 In this order:
@@ -59,8 +61,8 @@ In this order:
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
 - -c or --chords an optional flag, with slightly different meanings to each view, see above.
-- -l or --labels followed by one of 'notes' or 'intervals'. Instead of the default note label being displayed, frettler will instead display the interval(*) of each note.
-- -d or --display followed by one of 'colour' or 'mono'. Instead of the default coloured display of notes (or intervals!) frettler can display its diagrams sans colour.
+- -i or --intervals an optional flad which makes Frettler display the note intervals(*) instead of the default note name. 
+- -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
 
 (*) The interval labels use the following convention :
 "P1" - perfect_unison/root
@@ -167,6 +169,10 @@ The View argument can only be abbreviated to 'h' or 'v'.
 All the arguments except for the instrument, have default values. This means you can incrementally drop the arguments from right to left, but cannot drop one in the middle.
 So './frettler guitar' or even './frettler g', would do the same as './frettler guitar horiontal C major_scale'. 
 And './frettler g v', would do the same as './frettler guitar vertical C major_scale'. 
+
+## Todo
+- chord and note labelling currently only uses sharps - I need to work out how to decide whether each should be labelled as sharp or flat
+- blues scale does not support chord generation...
 
 
 

@@ -144,7 +144,7 @@ public class VerticalView {
       if (tone != null) {
         tones.add(tone);
       } else {
-        tones.add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), ScaleInterval.PERFECT_UNISON));
+        tones.add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), ScaleInterval.P1));
       }
     }
     display(tones, options);

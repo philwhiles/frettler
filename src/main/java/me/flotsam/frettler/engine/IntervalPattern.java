@@ -1,17 +1,17 @@
 package me.flotsam.frettler.engine;
 
-import static me.flotsam.frettler.engine.ScaleInterval.DIMINISHED_FIFTH;
-import static me.flotsam.frettler.engine.ScaleInterval.MAJOR_SECOND;
-import static me.flotsam.frettler.engine.ScaleInterval.MAJOR_SEVENTH;
-import static me.flotsam.frettler.engine.ScaleInterval.MAJOR_SIXTH;
-import static me.flotsam.frettler.engine.ScaleInterval.MAJOR_THIRD;
-import static me.flotsam.frettler.engine.ScaleInterval.MINOR_SECOND;
-import static me.flotsam.frettler.engine.ScaleInterval.MINOR_SEVENTH;
-import static me.flotsam.frettler.engine.ScaleInterval.MINOR_SIXTH;
-import static me.flotsam.frettler.engine.ScaleInterval.MINOR_THIRD;
-import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_FIFTH;
-import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_FOURTH;
-import static me.flotsam.frettler.engine.ScaleInterval.PERFECT_UNISON;
+import static me.flotsam.frettler.engine.ScaleInterval.d5;
+import static me.flotsam.frettler.engine.ScaleInterval.M2;
+import static me.flotsam.frettler.engine.ScaleInterval.M7;
+import static me.flotsam.frettler.engine.ScaleInterval.M6;
+import static me.flotsam.frettler.engine.ScaleInterval.M3;
+import static me.flotsam.frettler.engine.ScaleInterval.m2;
+import static me.flotsam.frettler.engine.ScaleInterval.m7;
+import static me.flotsam.frettler.engine.ScaleInterval.m6;
+import static me.flotsam.frettler.engine.ScaleInterval.m3;
+import static me.flotsam.frettler.engine.ScaleInterval.P5;
+import static me.flotsam.frettler.engine.ScaleInterval.P4;
+import static me.flotsam.frettler.engine.ScaleInterval.P1;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,76 +22,76 @@ public enum IntervalPattern {
       false,
       PatternType.SCALE,
       "Chromatic",
-      PERFECT_UNISON, 
-      MINOR_SECOND,
-      MAJOR_SECOND,
-      MINOR_THIRD,
-      MAJOR_THIRD, 
-      PERFECT_FOURTH, 
-      DIMINISHED_FIFTH,
-      PERFECT_FIFTH, 
-      MINOR_SIXTH,
-      MAJOR_SIXTH, 
-      MINOR_SEVENTH,
-      MAJOR_SEVENTH 
+      P1, 
+      m2,
+      M2,
+      m3,
+      M3, 
+      P4, 
+      d5,
+      P5, 
+      m6,
+      M6, 
+      m7,
+      M7 
   ),
   MAJOR_SCALE(
       true,
       PatternType.SCALE,
       "Major",
-      PERFECT_UNISON, 
-      MAJOR_SECOND,
-      MAJOR_THIRD, 
-      PERFECT_FOURTH, 
-      PERFECT_FIFTH, 
-      MAJOR_SIXTH, 
-      MAJOR_SEVENTH
+      P1, 
+      M2,
+      M3, 
+      P4, 
+      P5, 
+      M6, 
+      M7
   ),
   MELODIC_MINOR_SCALE(
       true,
       PatternType.SCALE,
       "Melodic Minor",
-      PERFECT_UNISON,
-      MINOR_THIRD,
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MAJOR_SIXTH,
-      MAJOR_SEVENTH
+      P1,
+      m3,
+      P4,
+      P5,
+      M6,
+      M7
   ),
   HARMONIC_MINOR_SCALE(
       true,
       PatternType.SCALE,
       "Harmonic Minor",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MINOR_THIRD,
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MINOR_SIXTH,
-      MAJOR_SEVENTH
+      P1,
+      M2,
+      m3,
+      P4,
+      P5,
+      m6,
+      M7
   ),
   MAJOR_PENTATONIC_SCALE(
       true,
       MAJOR_SCALE,
       PatternType.SCALE,
       "Major Pentatonic",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MAJOR_THIRD, 
-      PERFECT_FIFTH,
-      MAJOR_SIXTH
+      P1,
+      M2,
+      M3, 
+      P5,
+      M6
   ),
   AEOLIAN_MODE(
       true,
       PatternType.MODE,
       "Aeolian",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MINOR_THIRD,
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MINOR_SIXTH,
-      MINOR_SEVENTH
+      P1,
+      M2,
+      m3,
+      P4,
+      P5,
+      m6,
+      m7
   ),
   MINOR_SCALE(
       true,
@@ -104,58 +104,58 @@ public enum IntervalPattern {
       MINOR_SCALE,
       PatternType.SCALE,
       "Minor Pentatonic",
-      PERFECT_UNISON,
-      MINOR_THIRD, 
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MINOR_SEVENTH
+      P1,
+      m3, 
+      P4,
+      P5,
+      m7
   ), 
   BLUES_SCALE(
       false,
       PatternType.SCALE,
       "Blues",
-      PERFECT_UNISON,
-      MINOR_THIRD, 
-      PERFECT_FOURTH,
-      DIMINISHED_FIFTH,
-      PERFECT_FIFTH,
-      MINOR_SEVENTH
+      P1,
+      m3, 
+      P4,
+      d5,
+      P5,
+      m7
   ),
   DORIAN_MODE(
       true,
       PatternType.MODE,
       "Dorian",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MINOR_THIRD, 
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MAJOR_SIXTH,
-      MINOR_SEVENTH
+      P1,
+      M2,
+      m3, 
+      P4,
+      P5,
+      M6,
+      m7
   ), 
   MIXOLYDIAN_MODE(
       true,
       PatternType.MODE,
       "Mixolydian",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MAJOR_THIRD, 
-      PERFECT_FOURTH,
-      PERFECT_FIFTH,
-      MAJOR_SIXTH,
-      MINOR_SEVENTH
+      P1,
+      M2,
+      M3, 
+      P4,
+      P5,
+      M6,
+      m7
   ), 
   LYDIAN_MODE(
       true,
       PatternType.MODE,
       "Lydian",
-      PERFECT_UNISON,
-      MAJOR_SECOND,
-      MAJOR_THIRD, 
-      DIMINISHED_FIFTH,
-      PERFECT_FIFTH,
-      MAJOR_SIXTH,
-      MAJOR_SEVENTH
+      P1,
+      M2,
+      M3, 
+      d5,
+      P5,
+      M6,
+      M7
   ), 
   IONIAN_MODE(
       true,
@@ -167,13 +167,13 @@ public enum IntervalPattern {
       true,
       PatternType.MODE,
       "Aeolian",
-      PERFECT_UNISON,
-      MINOR_SECOND,
-      MINOR_THIRD,
-      PERFECT_FOURTH,
-      DIMINISHED_FIFTH,
-      MINOR_SIXTH,
-      MINOR_SEVENTH
+      P1,
+      m2,
+      m3,
+      P4,
+      d5,
+      m6,
+      m7
   ),
   
   
@@ -182,25 +182,25 @@ public enum IntervalPattern {
       true,
       PatternType.CHORD,
       "Major Triad",
-      PERFECT_UNISON, 
-      MAJOR_THIRD, 
-      PERFECT_FIFTH 
+      P1, 
+      M3, 
+      P5 
   ),
   MINOR_TRIAD(
       true,
       PatternType.CHORD,
       "Minor Triad",
-      PERFECT_UNISON, 
-      MINOR_THIRD, 
-      PERFECT_FIFTH 
+      P1, 
+      m3, 
+      P5 
   ),
   DIMINISHED_TRIAD(
       true,
       PatternType.CHORD,
       "Diminished Triad",
-      PERFECT_UNISON, 
-      MINOR_THIRD, 
-      DIMINISHED_FIFTH 
+      P1, 
+      m3, 
+      d5 
   ),
 
   // QUADRIADS FOR CHORD GENERATION  
@@ -208,37 +208,37 @@ public enum IntervalPattern {
       true,
       PatternType.CHORD,
       "Major Quadriad (7th)",
-      PERFECT_UNISON, 
-      MAJOR_THIRD, 
-      PERFECT_FIFTH, 
-      MAJOR_SEVENTH
+      P1, 
+      M3, 
+      P5, 
+      M7
   ),
   MINOR_QUADRIAD(
       true,
       PatternType.CHORD,
       "Minor Quadriad  (7th)",
-      PERFECT_UNISON, 
-      MINOR_THIRD, 
-      PERFECT_FIFTH,
-      MINOR_SEVENTH
+      P1, 
+      m3, 
+      P5,
+      m7
   ),
   DIMINISHED_QUADRIAD(
       true,
       PatternType.CHORD,
       "Diminished Quadriad (7th)",
-      PERFECT_UNISON, 
-      MINOR_THIRD, 
-      DIMINISHED_FIFTH, 
-      MINOR_SEVENTH
+      P1, 
+      m3, 
+      d5, 
+      m7
   ),
   MINOR_MAJOR_QUADRIAD(
       true,
       PatternType.CHORD,
       "MinorMajor Quadriad (7th)",
-      PERFECT_UNISON, 
-      MINOR_THIRD, 
-      PERFECT_FIFTH,
-      MAJOR_SEVENTH 
+      P1, 
+      m3, 
+      P5,
+      M7 
   );
   
 
