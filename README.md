@@ -39,9 +39,9 @@ Run Frettler using the built executable shell command.
 
 ```
 ./frettler guitar horizontal scale c major_scale
+```
 
 #### Windows
-
 ```
 frettler.bat guitar horizontal scale c major_scale
 
