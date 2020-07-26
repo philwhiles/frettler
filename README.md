@@ -26,7 +26,7 @@ The windows 'build.bat' will run the maven build, the only prerequisite, as for 
 Once Frettler has built the build.bat creates the wrapper cmd file to launch Frettler, 'frettler.cmd'.
 
 ### Building - IDE
-If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from https://projectlombok.org
+If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from [Lombok](https://projectlombok.org)
 
 ## Execution
 Frettler has a demo script that you can run to show the variety of arguments that you can use and the diagrams produced from them. It is probably the easiest way to understand how to
@@ -35,17 +35,20 @@ use Frettler. Run it and compare each example with the instructions below.
 ### Command Line
 Run Frettler using the built executable shell command.
 
-On Linux/macOS:
+#### Linux/macOS
 
 ```
 ./frettler guitar horizontal scale c major_scale
 
-Or on windows :
+#### Windows
 
 ```
 frettler.bat guitar horizontal scale c major_scale
 
 ```
+The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you really want the colourised output, you will have
+to install an alternative terminal program such as [ConEmu](https://conemu.github.io).
+
 ## Arguments
 Frettler has two ways of viewing scales,chords and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
