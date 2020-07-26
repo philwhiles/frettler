@@ -1,3 +1,20 @@
+/*
+    Copyright (C) 2020  Philip Whiles
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package me.flotsam.frettler.engine;
 
 import static me.flotsam.frettler.engine.ScaleInterval.M11;
@@ -70,14 +87,10 @@ public class Chord {
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
-    private int[] thirds;
+    @Getter private int[] thirds;
 
     ChordType(int[] thirds) {
       this.thirds = thirds;
-    }
-
-    public int[] getThirds() {
-      return thirds;
     }
   }
 
@@ -179,7 +192,7 @@ public class Chord {
   }
 
 
-  public ChordMetadata analyse() {
+  private ChordMetadata analyse() {
     ChordMetadata meta = new ChordMetadata();
     for (ScaleNote note : chordNotes) {
       Optional<ScaleInterval> interval = note.getInterval();

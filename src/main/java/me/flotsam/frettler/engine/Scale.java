@@ -1,9 +1,27 @@
+/*
+    Copyright (C) 2020  Philip Whiles
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package me.flotsam.frettler.engine;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import lombok.Getter;
 import me.flotsam.frettler.engine.Chord.ChordType;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 
@@ -23,9 +41,13 @@ public class Scale {
 
   public static final Scale CHROMATIC_SCALE = new Scale(Arrays.asList(Note.values()));
 
+  @Getter
   private ScaleNote head = null;
+  @Getter
   private ScaleNote tail = null;
+  @Getter
   private IntervalPattern scalePattern;
+  @Getter
   private Note rootNote;
 
 
@@ -118,24 +140,6 @@ public class Scale {
     }
   }
 
-  public ScaleNote getHead() {
-    return head;
-  }
-
-
-  public ScaleNote getTail() {
-    return tail;
-  }
-
-
-  public IntervalPattern getScalePattern() {
-    return scalePattern;
-  }
-
-  public Note getRootNote() {
-    return rootNote;
-  }
-
   public List<ScaleNote> getScaleNotes() {
     List<ScaleNote> scaleNotes = new ArrayList<>();
     ScaleNote scaleNote = head;
@@ -157,21 +161,6 @@ public class Scale {
       title = rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
     }
     return title;
-  }
-
-  public String toString() {
-    ScaleNote currentNoteNode = head;
-    StringBuilder builder = new StringBuilder();
-    builder.append(getTitle()).append(" : ");
-    if (head != null) {
-      do {
-        builder.append(currentNoteNode.getNote().getLabel()).append(":")
-            .append(currentNoteNode.getInterval().get().getLabel()).append(" ");
-        currentNoteNode = currentNoteNode.getNextScaleNote();
-      } while (currentNoteNode != head);
-    }
-    builder.append("\n");
-    return builder.toString();
   }
 
   public static ScaleNote getScaleNote(ScaleNote rootScaleNote, ScaleInterval interval) {
@@ -207,6 +196,21 @@ public class Scale {
       }
     }
     return chords;
+  }
+
+  public String toString() {
+    ScaleNote currentNoteNode = head;
+    StringBuilder builder = new StringBuilder();
+    builder.append(getTitle()).append(" : ");
+    if (head != null) {
+      do {
+        builder.append(currentNoteNode.getNote().getLabel()).append(":")
+            .append(currentNoteNode.getInterval().get().getLabel()).append(" ");
+        currentNoteNode = currentNoteNode.getNextScaleNote();
+      } while (currentNoteNode != head);
+    }
+    builder.append("\n");
+    return builder.toString();
   }
 }
 

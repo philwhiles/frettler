@@ -1,3 +1,20 @@
+/*
+    Copyright (C) 2020  Philip Whiles
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package me.flotsam.frettler;
 
 import java.util.concurrent.Callable;
@@ -13,7 +30,7 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.HelpCommand;
 
 @Command(name = "frettler",
-    description = "Generates scalei/nodes, chords and arpeggios for fretted instruments",
+    description = "Generates scales/arpeggios, chords and arpeggios for fretted instruments",
     subcommands = {HelpCommand.class, CompletionsCommand.class, GuitarCommand.class,
         BassGuitarCommand.class, BanjoCommand.class, MandolinCommand.class, UkeleleCommand.class})
 public class Main implements Callable<Integer> {

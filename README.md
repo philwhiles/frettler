@@ -47,7 +47,7 @@ frettler.bat guitar horizontal scale c major_scale
 
 ```
 The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you really want the colourised output, you will have
-to install an alternative terminal program such as [ConEmu](https://conemu.github.io).
+to install an alternative terminal program such as [ConEmu](https://conemu.github.io) or [Cmder](https://cmder.net/).
 
 ## Arguments
 Frettler has two ways of viewing scales,chords and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
@@ -133,27 +133,32 @@ If you use bash as your shell, frettler can output a tab completion script to us
 source <(./frettler completions)
 ```
 
+Tab completion in bash helps greatly with Frettler - bash will complete all of the args for you and show you the possible completions, handy with the Frettler interval pattern names.
+
 ## Programmatically
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
 and then instruct the view to display your chord or object. The API is pretty straightfoward I think, and defaults standard tuning for each type of instrument.
 
-Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the ChordView and 
-FretboardView classes, and their public methods.
+Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the VerticalView and 
+HorizontalView classes, and their public methods.
 
 ### Engine
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
 The engine knows nothing about an instrument, it simply applies music theory to generate Java lists of the notes in scales and chords.
 
+### Instrument
+As mentioned, a fretted instrument is largely the same as another, and the classes in this package exist mainly so that Frettler can easily generate views for each 
+instrument from the command line, without you having to specify the default strings and their tunings each time.
 
 ### View
 Currently only console views, each constructed with a FrettedInstrument, which take the scale and chord constructs from the engine, and render them
 on that instruments fretboard, up to the 12th fret.
 
 Both the views can display the notes or intervals with unique ANSI colours, if you are
-either running from the command line and using an ANSI colour friendly terminal, or in Eclipse using an ANSI Console
+either running from the command line and using an ANSI colour friendly terminal, or in an IDE such as Eclipse using an ANSI Console
 plugin (goto to Eclipse Marketplace and search for 'ANSI console').
 
-The colours look best when Frettler is run in a terminal with a new black background.
+The colours look best when Frettler is run in a terminal with a near black background.
 
 
 ## Caveats
@@ -182,8 +187,10 @@ So './frettler guitar' or even './frettler g', would do the same as './frettler 
 And './frettler g v', would do the same as './frettler guitar vertical C major_scale'. 
 
 ## Todo
+- change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi)
 - chord and note labelling currently only uses sharps - I need to work out how to decide whether each should be labelled as sharp or flat
 - blues scale does not support chord generation...
+- write some unit tests!
 
 
 

@@ -1,6 +1,9 @@
 
 # 26th Jul 2020
 - chord analysis completely refactored to make it more extensible
+- windows build and run scripts
+- minor refactoring
+- melodic_minor_scale fixed
 
 # 25th Jul 2020
 - CLI command structure re-organised - scale|chord was unnecessary
