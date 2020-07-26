@@ -9,6 +9,7 @@ Here is an example of its output :
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
 ## Building
+Easily build Frettler from the command line or open in your favourite IDE.
 
 ### Building - command line
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
