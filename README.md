@@ -52,17 +52,17 @@ a classic chord diagram
 ### Required Arguments
 In this order:
 
-- Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
-- View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
-- Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
-- Pattern - for the scale or chord ie 'major_scale' or 'minor_triad'
+1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
+1. View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
+1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
+1. Pattern - for the scale or chord ie 'major_scale' or 'minor_triad'
 
 ### Optional Arguments
-1. -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
-1. -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-1. -c or --chords an optional flag, with slightly different meanings to each view, see above.
-1. -i or --intervals an optional flad which makes Frettler display the note intervals(*) instead of the default note name. 
-1. -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
+- -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
+- -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
+- -c or --chords an optional flag, with slightly different meanings to each view, see above.
+- -i or --intervals an optional flad which makes Frettler display the note intervals(*) instead of the default note name. 
+- -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
 
 (*) The interval labels use the following convention :
 - P1 - perfect_unison/root
