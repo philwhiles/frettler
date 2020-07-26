@@ -8,7 +8,9 @@ Here is an example of its output :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
-## Building - command line
+## Building
+
+### Building - command line
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
 Linux/macOS/UNIX. If you use Windows, take the mvn command from the build script to build the fat jar in the target folder. Then run frettler
 with :
@@ -26,7 +28,7 @@ The application is built using maven, but you don't need to have maven pre-insta
 - build an executable fat jar
 - create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy frettler to your favourite bin directory
 
-## Building - IDE
+### Building - IDE
 If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from https://projectlombok.org
 
 ## Execution
@@ -125,19 +127,19 @@ If you use bash as your shell, frettler can output a tab completion script to us
 source <(./frettler completions)
 ```
 
-### Programmatically
+## Programmatically
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
 and then instruct the view to display your chord or object. The API is pretty straightfoward I think, and defaults standard tuning for each type of instrument.
 
 Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the ChordView and 
 FretboardView classes, and their public methods.
 
-## Engine
+### Engine
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
 The engine knows nothing about an instrument, it simply applies music theory to generate Java lists of the notes in scales and chords.
 
 
-## View
+### View
 Currently only console views, each constructed with a FrettedInstrument, which take the scale and chord constructs from the engine, and render them
 on that instruments fretboard, up to the 12th fret.
 
