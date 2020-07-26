@@ -1,7 +1,7 @@
 # Frettler - A CLI for generating musical scales and chords with fretboard and chord rendering for a variety of fretted instruments
 
 ## Synopsis
-This is a CLI program, written in Java 11, that exposes the results of it's own music theory API through console rendering of a fretboard.
+This is a CLI program, written in Java 11, that exposes the results of its own music theory API through console rendering of a fretboard.
 The rendering is performed with System.out.prinln statements, using Unicode boxing characters and ANSI colour coding.
 
 Here is an example of its output :
@@ -9,16 +9,11 @@ Here is an example of its output :
 <img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
 
 ## Building
+Easily build Frettler from the command line or open in your favourite IDE.
+
+### Linux/macOS 
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
-Linux/macOS/UNIX. If you use Windows, take the mvn command from the build script to build the fat jar in the target folder. Then run frettler
-with :
-
-{code}
-
-java -jar target/frettler-0.1.0-jar-with-dependencies.jar YOUR FRETTLER ARGS HERE
-
-{code}
-
+Linux/macOS/UNIX. 
 
 The application is built using maven, but you don't need to have maven pre-installed. Just run './build', which will:
 - download its own maven
@@ -26,18 +21,34 @@ The application is built using maven, but you don't need to have maven pre-insta
 - build an executable fat jar
 - create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy frettler to your favourite bin directory
 
+### MS Windows 
+The windows 'build.bat' will run the maven build, the only prerequisite, as for Linux/macOS, is to have Java 11 installed.
+Once Frettler has built the build.bat creates the wrapper cmd file to launch Frettler, 'frettler.cmd'.
+
+### IDE
+If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from [Lombok](https://projectlombok.org)
+
 ## Execution
 Frettler has a demo script that you can run to show the variety of arguments that you can use and the diagrams produced from them. It is probably the easiest way to understand how to
 use Frettler. Run it and compare each example with the instructions below.
 
 ### Command Line
-Run Frettler using the built executable shell command, frettler, ie :
+Run Frettler using the built executable shell command.
 
+#### Linux/macOS
 
 ```
 ./frettler guitar horizontal scale c major_scale
+```
+
+#### Windows
+```
+frettler.bat guitar horizontal scale c major_scale
 
 ```
+The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you really want the colourised output, you will have
+to install an alternative terminal program such as [ConEmu](https://conemu.github.io).
+
 ## Arguments
 Frettler has two ways of viewing scales,chords and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
@@ -52,10 +63,10 @@ a classic chord diagram
 ### Required Arguments
 In this order:
 
-- Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
-- View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
-- Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
-- Pattern - for the scale or chord ie 'major_scale' or 'minor_triad'
+1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
+1. View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
+1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
+1. Pattern - for the scale or chord ie 'major_scale' or 'minor_triad'
 
 ### Optional Arguments
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
@@ -65,18 +76,18 @@ In this order:
 - -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
 
 (*) The interval labels use the following convention :
-"P1" - perfect_unison/root
-"m2" - minor_second
-"M2" - major_second
-"m3" - minor_third
-"M3" - major_third
-"P4" - perfect_fourth
-"d5" - diminished_fifth
-"P5" - perfect_fifth
-"m6" - minor_sixth
-"M6" - major_sixth
-"m7" - minor_seventh
-"M7" - major_seventh
+- P1 - perfect_unison/root
+- m2 - minor_second
+- M2 - major_second
+- m3 - minor_third
+- M3 - major_third
+- P4 - perfect_fourth
+- d5 - diminished_fifth
+- P5 - perfect_fifth
+- m6 - minor_sixth
+- M6 - major_sixth
+- m7 - minor_seventh
+- M7 - major_seventh
 
 ### Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
@@ -122,19 +133,19 @@ If you use bash as your shell, frettler can output a tab completion script to us
 source <(./frettler completions)
 ```
 
-### Programmatically
+## Programmatically
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
 and then instruct the view to display your chord or object. The API is pretty straightfoward I think, and defaults standard tuning for each type of instrument.
 
 Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the ChordView and 
 FretboardView classes, and their public methods.
 
-## Engine
+### Engine
 The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
 The engine knows nothing about an instrument, it simply applies music theory to generate Java lists of the notes in scales and chords.
 
 
-## View
+### View
 Currently only console views, each constructed with a FrettedInstrument, which take the scale and chord constructs from the engine, and render them
 on that instruments fretboard, up to the 12th fret.
 
