@@ -92,7 +92,7 @@ In this order:
 ### Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
-The instrument 'banjo' will assume the fifth string starts at the sixth fret - if you want the display for a banjo having all strings full length,
+The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with --strings A,B,C,etc.
 
 ### Scales/Modes
