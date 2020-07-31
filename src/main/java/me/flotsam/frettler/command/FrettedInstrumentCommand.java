@@ -1,19 +1,17 @@
 /*
-    Copyright (C) 2020  Philip Whiles
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2020 Philip Whiles
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this program.
+ * If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package me.flotsam.frettler.command;
 
@@ -38,13 +36,15 @@ import picocli.CommandLine.Option;
 @Command
 public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
-//  @Option(names = {"-c", "--chord"}, description="chord mode (view dependant)")
-//  boolean chordMode = false;
+  @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
+  boolean chordMode = false;
 
-  @Option(names = {"-s", "--strings"}, split = ",", paramLabel="note", description="comma separated list of string tunings ie E,A,D,G,B,E")
+  @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
+      description = "comma separated list of string tunings ie E,A,D,G,B,E")
   Note[] strings = new Note[] {};
 
-  @Option(names = {"-f", "--frets"}, paramLabel="num", description="overrides the default 12 frets displayed")
+  @Option(names = {"-f", "--frets"}, paramLabel = "num",
+      description = "overrides the default 12 frets displayed")
   Integer frets = 12;
 
   public void exec(FrettedInstrument instrument) {
@@ -57,21 +57,18 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       scale = new Scale(this.root, this.intervalPattern);
     }
 
-
     if (this.view.isHorizontal()) {
       HorizontalView instrumentView = new HorizontalView(instrument);
-      HorizontalView.Options instrumentViewOptions = instrumentView.new Options(intervals, true, !mono);
+      HorizontalView.Options instrumentViewOptions =
+          instrumentView.new Options(intervals, true, !mono);
 
       if (scale != null) {
         instrumentView.showScale(scale, instrumentViewOptions);
-
-//        if (chordMode) {
-//          VerticalView chordView = new VerticalView(instrument);
-//          VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
+        if (chordMode) {
           List<Chord> chords = scale.createScaleChords();
           for (Chord aChord : chords) {
-
-//            chordView.showChord(aChord, chordViewOptions);
+            out.println(aChord.getTitle());
+            out.println();
           }
         }
       } else {
@@ -79,17 +76,20 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
         instrumentView.showChord(chord, instrumentViewOptions);
       }
     } else {
-      VerticalView chordView = new VerticalView(instrument);
-      VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
+      VerticalView verticalView = new VerticalView(instrument);
+      VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !mono);
 
       if (scale != null) {
-        chordView.showScale(scale, chordViewOptions);
+        verticalView.showScale(scale, verticalViewOptions);
+        if (chordMode) {
+          List<Chord> chords = scale.createScaleChords();
+          for (Chord aChord : chords) {
+            out.println(aChord.getTitle());
+            out.println();
+          }
+        }
       } else {
-//        if (chordMode) {
-//          chordView.showChord(chord, chordViewOptions);
-//        } else {
-          chordView.showArpeggio(chord, chordViewOptions);
-//        }
+        verticalView.showArpeggio(chord, verticalViewOptions);
       }
     }
   }

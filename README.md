@@ -1,8 +1,10 @@
 # Frettler - A CLI for generating musical scales and chords with fretboard and chord rendering for a variety of fretted instruments
 
 ## Synopsis
-This is a CLI program, written in Java 11, that exposes the results of its own music theory API through console rendering of a fretboard.
-The rendering is performed with System.out.prinln statements, using Unicode boxing characters and ANSI colour coding.
+This is a CLI program, written in Java 11, that calculates scales, modes and chords and displays them on fretboard representations.
+The rendering uses Unicode boxing characters and ANSI colour coding, the latter of which does not work in a standard Windows command prompt,
+so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
+color support.
 
 Here is an example of its output :
 
@@ -38,27 +40,21 @@ Run Frettler using the built executable shell command.
 #### Linux/macOS
 
 ```
-./frettler guitar horizontal scale c major_scale
+./frettler guitar horizontal scale c scale_major
 ```
 
 #### Windows
 ```
-frettler.bat guitar horizontal scale c major_scale
+frettler.bat guitar horizontal scale c scale_major
 
 ```
 The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you really want the colourised output, you will have
 to install an alternative terminal program such as [ConEmu](https://conemu.github.io) or [Cmder](https://cmder.net/).
 
 ## Arguments
-Frettler has two ways of viewing scales,chords and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
+Frettler has two ways of viewing scales/modes and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
-
-The two views use the --chords optional argument to do different things:
-
-- horizontal view : frettler will calculate the chords in that key and display each using the 'vertical' chord view.
-- vertcial view : frettler will calculate the chord and rather than show it as an arpeggio down the 12 frets, will try and work out the open string fingering and show you
-a classic chord diagram
 
 ### Required Arguments
 In this order:
@@ -66,28 +62,28 @@ In this order:
 1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
 1. View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
 1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
-1. Pattern - for the scale or chord ie 'major_scale' or 'minor_triad'
+1. Pattern - for the scale or chord ie 'scale_major' or 'chord_min9'
 
 ### Optional Arguments
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-- -c or --chords an optional flag, with slightly different meanings to each view, see above.
 - -i or --intervals an optional flad which makes Frettler display the note intervals(*) instead of the default note name. 
 - -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
+- -c or --chords will calculate and display the diatonic chords in the scale
 
 (*) The interval labels use the following convention :
-- P1 - perfect_unison/root
-- m2 - minor_second
-- M2 - major_second
-- m3 - minor_third
-- M3 - major_third
-- P4 - perfect_fourth
-- d5 - diminished_fifth
-- P5 - perfect_fifth
-- m6 - minor_sixth
-- M6 - major_sixth
-- m7 - minor_seventh
-- M7 - major_seventh
+- P1 - perfect unison/root
+- m2 - minor second
+- M2 - major second
+- m3 - minor third
+- M3 - major third
+- P4 - perfect fourth
+- d5 - diminished fifth
+- P5 - perfect fifth
+- m6 - minor sixth
+- M6 - major sixth
+- m7 - minor seventh
+- M7 - major seventh
 
 ### Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
@@ -95,35 +91,64 @@ A fretboard is a fretboard, and frettler can handle any number of strings with a
 The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with --strings A,B,C,etc.
 
-### Scales/Modes
-- major_scale
-- minor_scale
-- melodic_minor_scale
-- harmonic_minor_scale
-- major_pentatonic_scale
-- minor_pentatonic_scale
-- blues_scale
-- dorian_mode
-- mixolydian_mode
-- lydian_mode
-- ionian_mode
-- aeolian_mode 
-- locrian_mode
+### Scales/Modes/Chords
+Frettler maps the scale or chord name provided to an internal representation of its interval pattern. Whichever is provided will determine how Frettler deals with it and displays it.
+To aid the bash tab completion, and to make scales stand out from chords, each is prefixed with 'scale_', 'mode_' or 'chord_'. ie if you enter the Frettler command as far as 'scale' then
+hit tab, it can show you only the scales.
 
-### Chords
-- major_triad
-- minor_triad
-- diminished_triad
-- major_quadriad
-- minor_quadriad
-- diminished_quadriad
-- minor_major_quadriad
+- scale_chromatic
+- scale_major
+- scale_melodic_minor
+- scale_harmonic_minor
+- scale_major_pentatonic
+- scale_minor
+- scale_minor_pentatonic
+- scale_blues
+- mode_aeolian
+- mode_dorian_
+- mode_mixolydian
+- mode_lydian
+- mode_ionian
+- mode_locrian
+- chord_min11
+- chord_dom11
+- chord_9flat5
+- chord_m7add9
+- chord_7sharp9
+- chord_7flat9
+- chord_dom9
+- chord_maj69
+- chord_maj9
+- chord_min9
+- chord_dim7
+- chord_7sharp5
+- chord_7flat5
+- chord_min7
+- chord_aug7
+- chord_maj7
+- chord_dom7
+- chord_min6
+- chord_maj6
+- chord_minmaj7
+- chord_min7flat5
+- chord_7plus
+- chord_7sus4
+- chord_add9
+- chord_add11
+- chord_aug
+- chord_dim
+- chord_min
+- chord_sus2
+- chord_sus4
+- chord_maj
 
-### Chord Fingering Calculation
-The chord calculation used in the 'vertical' view is still a work in progress. It appears to work for standard six string guitar, open string chords, but for anything else,
-take the chord fingerings calculated with a pinch of salt. For instance the chord calculation for C Major with a seven string guitar is a bit out of whack, 
-and that is probably an indication that it will fall short elsewhere. Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
+### Chord fingerings
+I am working on a version of the vertical view which can display fingering for a given chord. It appears to work for standard six string guitar, open string chords, but for anything else,
+it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and am debating abandoning this feature or possibly taking a different
+approach, and rather than try to analyse the possible note candidates and choose the appropriate fingering, instead use a database of common chord fingerings and apply them with some 
+fretbaord shifting to the chord in question.
 
+Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
 
 
 ### Tab Completion
@@ -152,7 +177,7 @@ instrument from the command line, without you having to specify the default stri
 
 ### View
 Currently only console views, each constructed with a FrettedInstrument, which take the scale and chord constructs from the engine, and render them
-on that instruments fretboard, up to the 12th fret.
+on that instruments fretboard, up to the 12th fret, by default.
 
 Both the views can display the notes or intervals with unique ANSI colours, if you are
 either running from the command line and using an ANSI colour friendly terminal, or in an IDE such as Eclipse using an ANSI Console
@@ -167,13 +192,6 @@ This is a work in progress, pretty much like the authors understanding of music 
 ### Music theory
 Contributions and advice are welcomed. Frettler was initially created as an exercise in learning music theory and the author still has a long way to go.
 
-### Chord fingerings
-The ChordView still requires some work - it can calculate the chord fingering for fairly standard, open string, major, minor and diminished chords
-but further work is needed. 
-The chord mode of the horizontal view calculates the chord diagrams by favouring the higher frets, can exclude strings lower 
-than the tonic string, can avoid duplicating the same note in the same octave as it works from the sixth string to the first etc.
-This algorithm is probably the area requiring the most testing and further refinement.
-
 ## Tips
 Left to the end to avoid confusion and detracting from the understanding of the arguments required.
 
@@ -183,10 +201,11 @@ The View argument can only be abbreviated to 'h' or 'v'.
 
 #### Defaults
 All the arguments except for the instrument, have default values. This means you can incrementally drop the arguments from right to left, but cannot drop one in the middle.
-So './frettler guitar' or even './frettler g', would do the same as './frettler guitar horiontal C major_scale'. 
-And './frettler g v', would do the same as './frettler guitar vertical C major_scale'. 
+So './frettler guitar' or even './frettler g', would do the same as './frettler guitar horiontal C scale_major'. 
+And './frettler g v', would do the same as './frettler guitar vertical C scale_major'. 
 
 ## Todo
+- add an additional command ie './frettler chord C,E,G' and then use its interval knowledge to name the chord for you.
 - change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi)
 - chord and note labelling currently only uses sharps - I need to work out how to decide whether each should be labelled as sharp or flat
 - blues scale does not support chord generation...

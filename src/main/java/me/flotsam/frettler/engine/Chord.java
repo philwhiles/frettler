@@ -41,40 +41,6 @@ import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 
 public class Chord {
-  //@formatter:off
-  private static List<ChordPattern> patternBank = Arrays.asList(new ChordPattern[] {
-      new ChordPattern("min11", P1, m3, P5, m7, M9, M11),
-      new ChordPattern("dom11", P1, M3, P5, m7, M9, M11),
-      new ChordPattern("9b5", P1, M3, P5, m7, M9),
-      new ChordPattern("M7add9", P1, M3, P5, M7, M9),
-      new ChordPattern("7#9", P1, M3, P5, m7, m10),
-      new ChordPattern("7b9", P1, M3, P5, m7, m9),
-      new ChordPattern("dom9", P1, M3, P5, m7, M9),
-      new ChordPattern("maj6/9", P1, M3, P5, M6, M9),
-      new ChordPattern("maj9", P1, M3, P5, M7, M9),
-      new ChordPattern("min9", P1, m3, P5, m7, M9),
-      new ChordPattern("dim7", P1, m3, d5, M6),
-      new ChordPattern("7#5", P1, M3, m6, m7),
-      new ChordPattern("7b5", P1, M3, d5, m7),
-      new ChordPattern("min7", P1, m3, P5, m7),
-      new ChordPattern("aug7", P1, M3, d5, m7),
-      new ChordPattern("maj7", P1, M3, P5, M7),
-      new ChordPattern("dom7", P1, M3, P5, m7),
-      new ChordPattern("min6", P1, m3, P5, M6),
-      new ChordPattern("maj6", P1, M3, P5, M6),
-      new ChordPattern("m maj7", P1, m3, P5, M7),
-      new ChordPattern("m7b5", P1, m3, d5, m7),
-      new ChordPattern("7+", P1, M3, d5, M7),
-      new ChordPattern("7sus4", P1, P4, P5, m7),
-      new ChordPattern("add9", P1, M3, P5, M9),
-      new ChordPattern("add11", P1, M3, P5, M11),
-      new ChordPattern("aug", P1, M3, m6),
-      new ChordPattern("dim", P1, m3, d5),
-      new ChordPattern("m", P1, m3, P5),
-      new ChordPattern("sus2", P1, M2, P5),
-      new ChordPattern("sus4", P1, P4, P5),
-      new ChordPattern("", P1, M3, P5)});
-  //@formatter:on
 
   @Getter
   private ScaleNote chordRootNote;
@@ -249,7 +215,10 @@ public class Chord {
         (!meta.majorThird && !meta.minorThird && (meta.perfectFourth || meta.majorSecond));
 
     meta.label = "UNCLASSIFIED";
-    for (ChordPattern pattern : patternBank) {
+    for (IntervalPattern pattern : IntervalPattern.values()) {
+      if (pattern.getPatternType() != PatternType.CHORD) {
+        continue;
+      }
       if (containsIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
         meta.label = pattern.getLabel();
         break;

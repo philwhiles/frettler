@@ -159,7 +159,7 @@ public class Scale {
     if (scalePattern == IntervalPattern.SCALE_CHROMATIC) {
       title = scalePattern.getLabel() + " Scale";
     } else {
-      title = rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";
+      title = rootNote.getLabel() + " " + scalePattern.getLabel();
     }
     return title;
   }

@@ -250,7 +250,7 @@ public enum IntervalPattern {
   CHORD_MINMAJ7(
       true,
       PatternType.CHORD,
-      "m maj7",
+      "min maj7",
       P1, m3, P5, M7
   ),
   CHORD_MIN7FLAT5(
@@ -298,7 +298,7 @@ public enum IntervalPattern {
   CHORD_MIN(
       true,
       PatternType.CHORD,
-      "m",
+      "min",
       P1, m3, P5
   ),
   CHORD_SUS2(
@@ -316,7 +316,7 @@ public enum IntervalPattern {
   CHORD_MAJ(
       true,
       PatternType.CHORD,
-      "",
+      "maj",
       P1, M3, P5
   ),
   
