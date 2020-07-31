@@ -17,6 +17,7 @@
 
 package me.flotsam.frettler.command;
 
+import static java.lang.System.out;
 import java.util.List;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
@@ -37,8 +38,8 @@ import picocli.CommandLine.Option;
 @Command
 public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
-  @Option(names = {"-c", "--chord"}, description="chord mode (view dependant)")
-  boolean chordMode = false;
+//  @Option(names = {"-c", "--chord"}, description="chord mode (view dependant)")
+//  boolean chordMode = false;
 
   @Option(names = {"-s", "--strings"}, split = ",", paramLabel="note", description="comma separated list of string tunings ie E,A,D,G,B,E")
   Note[] strings = new Note[] {};
@@ -64,12 +65,13 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       if (scale != null) {
         instrumentView.showScale(scale, instrumentViewOptions);
 
-        if (chordMode) {
-          VerticalView chordView = new VerticalView(instrument);
-          VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
+//        if (chordMode) {
+//          VerticalView chordView = new VerticalView(instrument);
+//          VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
           List<Chord> chords = scale.createScaleChords();
           for (Chord aChord : chords) {
-            chordView.showChord(aChord, chordViewOptions);
+
+//            chordView.showChord(aChord, chordViewOptions);
           }
         }
       } else {
@@ -83,11 +85,11 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       if (scale != null) {
         chordView.showScale(scale, chordViewOptions);
       } else {
-        if (chordMode) {
-          chordView.showChord(chord, chordViewOptions);
-        } else {
+//        if (chordMode) {
+//          chordView.showChord(chord, chordViewOptions);
+//        } else {
           chordView.showArpeggio(chord, chordViewOptions);
-        }
+//        }
       }
     }
   }

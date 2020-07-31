@@ -40,7 +40,7 @@ public class FrettlerCommand {
   @Getter
   protected Note root;
 
-  @Parameters(index = "2", defaultValue = "MAJOR_SCALE",
+  @Parameters(index = "2", defaultValue = "SCALE_MAJOR",
       description = "The interval pattern to use to generate the scale or arpeggio")
   @Getter
   protected IntervalPattern intervalPattern;

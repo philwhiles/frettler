@@ -67,8 +67,9 @@ public class Scale {
     }
   }
 
+  
   private Scale(List<Note> notes) {
-    this.scalePattern = IntervalPattern.CHROMATIC_SCALE;
+    this.scalePattern = IntervalPattern.SCALE_CHROMATIC;
     this.rootNote = notes.get(0);
     for (Note note : notes) {
       addScaleNote(note, Optional.empty());
@@ -91,7 +92,7 @@ public class Scale {
     tail.setPosition(Position.TAIL);
     tail.setNextScaleNote(head);
   }
-
+  
   public boolean containsNote(Note note) {
     ScaleNote currentNoteNode = head;
 
@@ -155,7 +156,7 @@ public class Scale {
 
   public String getTitle() {
     String title = null;
-    if (scalePattern == IntervalPattern.CHROMATIC_SCALE) {
+    if (scalePattern == IntervalPattern.SCALE_CHROMATIC) {
       title = scalePattern.getLabel() + " Scale";
     } else {
       title = rootNote.getLabel() + " " + scalePattern.getLabel() + " Scale";

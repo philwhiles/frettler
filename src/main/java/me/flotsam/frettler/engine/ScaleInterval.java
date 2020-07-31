@@ -37,16 +37,12 @@ public enum ScaleInterval {
   M7("M7", 11, true),
   P8("P8", 12, true),
   
-  m9("m9", 14, false),
+  m9("m9", 13, false),
   M9("M9", 14, false),
-  m10("m10", 16, false),
-  M10("M10", 17, false),
-  M11("M11", 18, false),
-  m12("m12", 20, false), 
-  M12("M12", 20, false), 
-  M13("M13", 22, false), 
-  M14("M14", 24, false), 
-  M15("M15", 25, false); 
+  m10("m10", 15, false),
+  M10("M10", 16, false),
+  m11("M11", 18, false),
+  M11("M11", 18, false);
   //@formatter:on
 
   @Getter

@@ -21,6 +21,13 @@ import static me.flotsam.frettler.engine.ScaleInterval.M2;
 import static me.flotsam.frettler.engine.ScaleInterval.M3;
 import static me.flotsam.frettler.engine.ScaleInterval.M6;
 import static me.flotsam.frettler.engine.ScaleInterval.M7;
+import static me.flotsam.frettler.engine.ScaleInterval.M9;
+import static me.flotsam.frettler.engine.ScaleInterval.m9;
+import static me.flotsam.frettler.engine.ScaleInterval.m10;
+import static me.flotsam.frettler.engine.ScaleInterval.M10;
+import static me.flotsam.frettler.engine.ScaleInterval.m11;
+import static me.flotsam.frettler.engine.ScaleInterval.M11;
+import static me.flotsam.frettler.engine.ScaleInterval.P8;
 import static me.flotsam.frettler.engine.ScaleInterval.P1;
 import static me.flotsam.frettler.engine.ScaleInterval.P4;
 import static me.flotsam.frettler.engine.ScaleInterval.P5;
@@ -36,230 +43,288 @@ import lombok.Getter;
 public enum IntervalPattern {
 
   //@formatter:off
-  // SCALES
-  CHROMATIC_SCALE(
+  // SCALES AND MODES
+  SCALE_CHROMATIC(
       false,
       PatternType.SCALE,
       "Chromatic",
-      P1, 
-      m2,
-      M2,
-      m3,
-      M3, 
-      P4, 
-      d5,
-      P5, 
-      m6,
-      M6, 
-      m7,
-      M7 
+      P1, m2, M2, m3, M3, P4, d5, P5, m6, M6, m7, M7, P8, m9, M9, m10, M10, m11, M11 
   ),
-  MAJOR_SCALE(
+  SCALE_MAJOR(
       true,
       PatternType.SCALE,
       "Major",
-      P1, 
-      M2,
-      M3, 
-      P4, 
-      P5, 
-      M6, 
-      M7
+      P1, M2, M3, P4, P5, M6, M7
   ),
-  MELODIC_MINOR_SCALE(
+  SCALE_MELODIC_MINOR(
       true,
       PatternType.SCALE,
       "Melodic Minor",
-      P1,
-      M2,
-      m3,
-      P4,
-      P5,
-      M6,
-      M7
+      P1, M2, m3, P4, P5, M6, M7
   ),
-  HARMONIC_MINOR_SCALE(
+  SCALE_HARMONIC_MINOR(
       true,
       PatternType.SCALE,
       "Harmonic Minor",
-      P1,
-      M2,
-      m3,
-      P4,
-      P5,
-      m6,
-      M7
+      P1, M2, m3, P4, P5, m6, M7
   ),
-  MAJOR_PENTATONIC_SCALE(
+  SCALE_MAJOR_PENTATONIC(
       true,
-      MAJOR_SCALE,
+      SCALE_MAJOR,
       PatternType.SCALE,
       "Major Pentatonic",
-      P1,
-      M2,
-      M3, 
-      P5,
-      M6
+      P1, M2, M3, P5, M6
   ),
-  AEOLIAN_MODE(
+  MODE_AEOLIAN(
       true,
       PatternType.MODE,
       "Aeolian",
-      P1,
-      M2,
-      m3,
-      P4,
-      P5,
-      m6,
-      m7
+      P1, M2, m3, P4, P5, m6, m7
   ),
-  MINOR_SCALE(
+  SCALE_MINOR(
       true,
-      AEOLIAN_MODE,
+      MODE_AEOLIAN,
       PatternType.SCALE,
       "Minor Scale"
   ),
-  MINOR_PENTATONIC_SCALE(
+  SCALE_MINOR_PENTATONIC(
       true,
-      MINOR_SCALE,
+      SCALE_MINOR,
       PatternType.SCALE,
       "Minor Pentatonic",
-      P1,
-      m3, 
-      P4,
-      P5,
-      m7
+      P1, m3, P4, P5, m7
   ), 
-  BLUES_SCALE(
+  SCALE_BLUES(
       false,
       PatternType.SCALE,
       "Blues",
-      P1,
-      m3, 
-      P4,
-      d5,
-      P5,
-      m7
+      P1, m3, P4, d5, P5, m7
   ),
-  DORIAN_MODE(
+  MODE_DORIAN_(
       true,
       PatternType.MODE,
       "Dorian",
-      P1,
-      M2,
-      m3, 
-      P4,
-      P5,
-      M6,
-      m7
+      P1, M2, m3, P4, P5, M6, m7
   ), 
-  MIXOLYDIAN_MODE(
+  MODE_MIXOLYDIAN(
       true,
       PatternType.MODE,
       "Mixolydian",
-      P1,
-      M2,
-      M3, 
-      P4,
-      P5,
-      M6,
-      m7
+      P1, M2, M3, P4, P5, M6, m7
   ), 
-  LYDIAN_MODE(
+  MODE_LYDIAN(
       true,
       PatternType.MODE,
       "Lydian",
-      P1,
-      M2,
-      M3, 
-      d5,
-      P5,
-      M6,
-      M7
+      P1, M2, M3, d5, P5, M6, M7
   ), 
-  IONIAN_MODE(
+  MODE_IONIAN(
       true,
-      MAJOR_SCALE,
+      SCALE_MAJOR,
       PatternType.MODE,
       "Ionian"
   ), 
-  LOCRIAN_MODE(
+  MODE_LOCRIAN(
       true,
       PatternType.MODE,
       "Aeolian",
-      P1,
-      m2,
-      m3,
-      P4,
-      d5,
-      m6,
-      m7
+      P1, m2, m3, P4, d5, m6, m7
   ),
   
   
-  // TRIADS FOR CHORD GENERATION
-  MAJOR_TRIAD(
+  // PATTERNS FOR CHORD GENERATION
+  CHORD_MIN11(
       true,
       PatternType.CHORD,
-      "Major Triad",
-      P1, 
-      M3, 
-      P5 
+      "min11",
+      P1, m3, P5, m7, M9, M11
   ),
-  MINOR_TRIAD(
+  CHORD_DOM11(
       true,
       PatternType.CHORD,
-      "Minor Triad",
-      P1, 
-      m3, 
-      P5 
+      "dom11",
+      P1, M3, P5, m7, M9, M11
   ),
-  DIMINISHED_TRIAD(
+  CHORD_9FLAT5(
       true,
       PatternType.CHORD,
-      "Diminished Triad",
-      P1, 
-      m3, 
-      d5 
+      "9b5",
+      P1, M3, P5, m7, M9
   ),
-
-  // QUADRIADS FOR CHORD GENERATION  
-  MAJOR_QUADRIAD(
+  CHORD_M7ADD9(
       true,
       PatternType.CHORD,
-      "Major Quadriad (7th)",
-      P1, 
-      M3, 
-      P5, 
-      M7
+      "M7add9",
+      P1, M3, P5, M7, M9
   ),
-  MINOR_QUADRIAD(
+  CHORD_7SHARP9(
       true,
       PatternType.CHORD,
-      "Minor Quadriad  (7th)",
-      P1, 
-      m3, 
-      P5,
-      m7
+      "7#9",
+      P1, M3, P5, m7, m10
   ),
-  DIMINISHED_QUADRIAD(
+  CHORD_7FLAT9(
       true,
       PatternType.CHORD,
-      "Diminished Quadriad (7th)",
-      P1, 
-      m3, 
-      d5, 
-      m7
+      "7b9",
+      P1, M3, P5, m7, m9
   ),
-  MINOR_MAJOR_QUADRIAD(
+  CHORD_DOM9(
       true,
       PatternType.CHORD,
-      "MinorMajor Quadriad (7th)",
-      P1, 
-      m3, 
-      P5,
-      M7 
-  );
+      "dom9",
+      P1, M3, P5, m7, M9
+  ),
+  CHORD_MAJ69(
+      true,
+      PatternType.CHORD,
+      "maj6/9",
+      P1, M3, P5, M6, M9
+  ),
+  CHORD_MAJ9(
+      true,
+      PatternType.CHORD,
+      "maj9",
+      P1, M3, P5, M7, M9
+  ),
+  CHORD_MIN9(
+      true,
+      PatternType.CHORD,
+      "min9",
+      P1, m3, P5, m7, M9
+  ),
+  CHORD_DIM7(
+      true,
+      PatternType.CHORD,
+      "dim7",
+      P1, m3, d5, M6
+  ),
+  CHORD_7SHARP5(
+      true,
+      PatternType.CHORD,
+      "7#5",
+      P1, M3, m6, m7
+  ),
+  CHORD_7FLAT5(
+      true,
+      PatternType.CHORD,
+      "7b5",
+      P1, M3, d5, m7
+  ),
+  CHORD_MIN7(
+      true,
+      PatternType.CHORD,
+      "min7",
+      P1, m3, P5, m7
+  ),
+  CHORD_AUG7(
+      true,
+      PatternType.CHORD,
+      "aug7",
+      P1, M3, d5, m7
+  ),
+  CHORD_MAJ7(
+      true,
+      PatternType.CHORD,
+      "maj7",
+      P1, M3, P5, M7
+  ),
+  CHORD_DOM7(
+      true,
+      PatternType.CHORD,
+      "dom7",
+      P1, M3, P5, m7
+  ),
+  CHORD_MIN6(
+      true,
+      PatternType.CHORD,
+      "min6",
+      P1, m3, P5, M6
+  ),
+  CHORD_MAJ6(
+      true,
+      PatternType.CHORD,
+      "maj6",
+      P1, M3, P5, M6
+  ),
+  CHORD_MINMAJ7(
+      true,
+      PatternType.CHORD,
+      "m maj7",
+      P1, m3, P5, M7
+  ),
+  CHORD_MIN7FLAT5(
+      true,
+      PatternType.CHORD,
+      "m7b5",
+      P1, m3, d5, m7
+  ),
+  CHORD_7PLUS(
+      true,
+      PatternType.CHORD,
+      "7+",
+      P1, M3, d5, M7
+  ),
+  CHORD_7SUS4(
+      true,
+      PatternType.CHORD,
+      "7sus4",
+      P1, P4, P5, m7
+  ),
+  CHORD_ADD9(
+      true,
+      PatternType.CHORD,
+      "add9",
+      P1, M3, P5, M9
+  ),
+  CHORD_ADD11(
+      true,
+      PatternType.CHORD,
+      "add11",
+      P1, M3, P5, M11
+  ),
+  CHORD_AUG(
+      true,
+      PatternType.CHORD,
+      "aug",
+      P1, M3, m6
+  ),
+  CHORD_DIM(
+      true,
+      PatternType.CHORD,
+      "dim",
+      P1, m3, d5
+  ),
+  CHORD_MIN(
+      true,
+      PatternType.CHORD,
+      "m",
+      P1, m3, P5
+  ),
+  CHORD_SUS2(
+      true,
+      PatternType.CHORD,
+      "sus2",
+      P1, M2, P5
+  ),
+  CHORD_SUS4(
+      true,
+      PatternType.CHORD,
+      "sus4",
+      P1, P4, P5
+  ),
+  CHORD_MAJ(
+      true,
+      PatternType.CHORD,
+      "",
+      P1, M3, P5
+  ),
+  
+  
+  
+  
+  
+  ;
   //@formatter:on
   
 

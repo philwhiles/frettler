@@ -106,7 +106,7 @@ public class Chord {
           .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
       System.exit(-1);
     }
-    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.CHROMATIC_SCALE);
+    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
     for (ScaleInterval interval : chordPattern.getIntervals()) {
@@ -133,7 +133,7 @@ public class Chord {
     this.chordRootNote = chordRootNote;
 
     Scale chromaticScaleFromChordRoot =
-        new Scale(chordRootNote.getNote(), IntervalPattern.CHROMATIC_SCALE);
+        new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
 
     for (int third : chordType.getThirds()) {
       ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
@@ -141,7 +141,7 @@ public class Chord {
           chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
       chordNotes.add(noteInRootScale.get());
     }
-    this.chordPattern = IntervalPattern.CHROMATIC_SCALE;
+    this.chordPattern = IntervalPattern.SCALE_CHROMATIC;
     for (IntervalPattern pattern : IntervalPattern.values()) {
       int matches = 0;
       for (ScaleInterval chordsScaleInterval : pattern.getIntervals()) {
