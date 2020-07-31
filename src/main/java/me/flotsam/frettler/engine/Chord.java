@@ -17,23 +17,7 @@
 
 package me.flotsam.frettler.engine;
 
-import static me.flotsam.frettler.engine.ScaleInterval.M11;
-import static me.flotsam.frettler.engine.ScaleInterval.M2;
-import static me.flotsam.frettler.engine.ScaleInterval.M3;
-import static me.flotsam.frettler.engine.ScaleInterval.M6;
-import static me.flotsam.frettler.engine.ScaleInterval.M7;
-import static me.flotsam.frettler.engine.ScaleInterval.M9;
-import static me.flotsam.frettler.engine.ScaleInterval.P1;
-import static me.flotsam.frettler.engine.ScaleInterval.P4;
-import static me.flotsam.frettler.engine.ScaleInterval.P5;
-import static me.flotsam.frettler.engine.ScaleInterval.d5;
-import static me.flotsam.frettler.engine.ScaleInterval.m10;
-import static me.flotsam.frettler.engine.ScaleInterval.m3;
-import static me.flotsam.frettler.engine.ScaleInterval.m6;
-import static me.flotsam.frettler.engine.ScaleInterval.m7;
-import static me.flotsam.frettler.engine.ScaleInterval.m9;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,6 +42,18 @@ public class Chord {
     ChordType(int[] thirds) {
       this.thirds = thirds;
     }
+  }
+
+  public Chord (List<Note> notes) {
+    Scale chromaticScaleFromChordRoot = new Scale(notes.get(0), IntervalPattern.SCALE_CHROMATIC);
+    this.chordRootNote = chromaticScaleFromChordRoot.getHead();
+    chordNotes.add(new ScaleNote(notes.get(0), Optional.of(ScaleInterval.P1), chromaticScaleFromChordRoot));
+    for (int i=1;i<notes.size();i++) {
+      Optional<ScaleNote> scaleNote = chromaticScaleFromChordRoot.findScaleNote(notes.get(i));
+      chordNotes.add(scaleNote.get());
+    }
+    metaData = analyse();
+    this.chordPattern = metaData.chordPattern;
   }
 
   /**
@@ -221,6 +217,7 @@ public class Chord {
       }
       if (containsIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
         meta.label = pattern.getLabel();
+        meta.chordPattern = pattern;
         break;
       }
     }

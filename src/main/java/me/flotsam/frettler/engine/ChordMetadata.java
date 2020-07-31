@@ -58,6 +58,8 @@ public class ChordMetadata {
   @Getter
   boolean suspended;
   
+  @Getter
+  IntervalPattern chordPattern;
   
   public enum Quality {
     MAJOR, MINOR, AUGMENTED, DIMINISHED, DOMINANT
