@@ -67,9 +67,9 @@ In this order:
 ### Optional Arguments
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-- -i or --intervals an optional flad which makes Frettler display the note intervals(*) instead of the default note name. 
-- -m or --mono an optional flag which will make Frettler display its diagrams sans colour.
-- -c or --chords will calculate and display the diatonic chords in the scale
+- -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name. 
+- -m or --mono an optional flag which will make Frettler display its diagrams without colour.
+- -c or --chords will calculate and list the diatonic chords in the scale (Chord name and notes)
 
 (*) The interval labels use the following convention :
 - P1 - perfect unison/root
@@ -146,7 +146,7 @@ hit tab, it can show you only the scales.
 I am working on a version of the vertical view which can display fingering for a given chord. It appears to work for standard six string guitar, open string chords, but for anything else,
 it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and am debating abandoning this feature or possibly taking a different
 approach, and rather than try to analyse the possible note candidates and choose the appropriate fingering, instead use a database of common chord fingerings and apply them with some 
-fretbaord shifting to the chord in question.
+fretboard shifting to the chord in question.
 
 Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
 
@@ -159,6 +159,7 @@ source <(./frettler completions)
 ```
 
 Tab completion in bash helps greatly with Frettler - bash will complete all of the args for you and show you the possible completions, handy with the Frettler interval pattern names.
+The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
 
 ## Programmatically
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
@@ -205,8 +206,9 @@ So './frettler guitar' or even './frettler g', would do the same as './frettler 
 And './frettler g v', would do the same as './frettler guitar vertical C scale_major'. 
 
 ## Todo
-- add an additional command ie './frettler chord C,E,G' and then use its interval knowledge to name the chord for you.
-- change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi)
+- add an additional command ie './frettler chord C,E,G' and then use its interval knowledge to name the chord for you. Prototype code has been written, and Frettler can easily work
+out for instance that C,E,G is Cmaj, but I am wondering how to handle major ninths for instance.
+- change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi). If I hear of enough Windows users wanting this...
 - chord and note labelling currently only uses sharps - I need to work out how to decide whether each should be labelled as sharp or flat
 - blues scale does not support chord generation...
 - write some unit tests!
