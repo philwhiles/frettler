@@ -8,7 +8,8 @@ color support.
 
 Here is an example of its output :
 
-<img src="https://github.com/philwhiles/frettler/blob/master/frettler.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/demo1.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/demo2.png"/>
 
 ## Building
 Easily build Frettler from the command line or open in your favourite IDE.
