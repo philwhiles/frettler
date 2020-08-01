@@ -104,12 +104,14 @@ hit tab, it can show you only the scales.
 - scale_minor
 - scale_minor_pentatonic
 - scale_blues
+
 - mode_aeolian
 - mode_dorian_
 - mode_mixolydian
 - mode_lydian
 - mode_ionian
 - mode_locrian
+
 - chord_min11
 - chord_dom11
 - chord_9flat5
