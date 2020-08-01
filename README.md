@@ -213,5 +213,10 @@ out for instance that C,E,G is Cmaj, but I am wondering how to handle major nint
 - blues scale does not support chord generation...
 - write some unit tests!
 
+## Contact
+If you have any issues with running Frettler, questions or can help providing input or even code, do please get in touch.
+
+email: <phil.whiles@gmail.com>
+
 
 

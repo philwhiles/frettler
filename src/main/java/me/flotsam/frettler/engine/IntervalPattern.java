@@ -319,6 +319,12 @@ public enum IntervalPattern {
       "maj",
       P1, M3, P5
   ),
+  CHORD_5(
+      true,
+      PatternType.CHORD,
+      "5",
+      P1, P5
+  ),
   
   
   
