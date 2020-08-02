@@ -150,10 +150,10 @@ public class Chord {
         }
       }
     }
-    return cnt == chordNotes.size();
+    return cnt == chordNotes.size() && cnt == notes.length;
   }
 
-  public boolean containsIntervals(ScaleInterval... intervals) {
+  public boolean containsOnlyIntervals(ScaleInterval... intervals) {
     int cnt = 0;
     for (ScaleInterval interval : intervals) {
       for (ScaleNote note : chordNotes) {
@@ -163,7 +163,7 @@ public class Chord {
         }
       }
     }
-    return cnt == intervals.length;
+    return cnt == chordNotes.size() && cnt == intervals.length;
   }
 
 
@@ -228,7 +228,7 @@ public class Chord {
       if (pattern.getPatternType() != PatternType.CHORD) {
         continue;
       }
-      if (containsIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
+      if (containsOnlyIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
         meta.label = pattern.getLabel();
         meta.chordPattern = pattern;
         break;

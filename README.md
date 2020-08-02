@@ -57,8 +57,8 @@ Frettler has two ways of viewing scales/modes and arpeggios. The first is the ho
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
-### Required Arguments
-In this order:
+### Required Arguments - Instrument commands
+When you want Frettler to display a scale or chord on a fretboard, in this order:
 
 1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
 1. View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
@@ -85,6 +85,16 @@ In this order:
 - M6 - major sixth
 - m7 - minor seventh
 - M7 - major seventh
+
+### Required Arguments - Chord reverse lookup
+Frettler also has a 'chord' command, and expects it to be followed by a series of notes, (using its notation for sharps, not flats) :
+
+```
+./frettler chord As,D,F
+A#maj (A# maj) [A#,D,F]
+```
+
+It will attempt to identify the chord using it's own understanding of each chords interval - the root note for the chord MUST be the first in the list you give it.
 
 ### Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
