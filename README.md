@@ -14,9 +14,9 @@ Here is an example of its output :
 ## Building
 Easily build Frettler from the command line or open in your favourite IDE.
 
-### Linux/macOS 
+### Linux/macOS
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
-Linux/macOS/UNIX. 
+Linux/macOS/UNIX.
 
 The application is built using maven, but you don't need to have maven pre-installed. Just run './build', which will:
 - download its own maven
@@ -24,7 +24,7 @@ The application is built using maven, but you don't need to have maven pre-insta
 - build an executable fat jar
 - create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy frettler to your favourite bin directory
 
-### MS Windows 
+### MS Windows
 The windows 'build.bat' will run the maven build, the only prerequisite, as for Linux/macOS, is to have Java 11 installed.
 Once Frettler has built the build.bat creates the wrapper cmd file to launch Frettler, 'frettler.cmd'.
 
@@ -41,12 +41,12 @@ Run Frettler using the built executable shell command.
 #### Linux/macOS
 
 ```
-./frettler guitar horizontal scale c scale_major
+./frettler guitar horizontal c scale_major
 ```
 
 #### Windows
 ```
-frettler.bat guitar horizontal scale c scale_major
+frettler.bat guitar horizontal c scale_major
 
 ```
 The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you really want the colourised output, you will have
@@ -68,7 +68,7 @@ In this order:
 ### Optional Arguments
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-- -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name. 
+- -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
 - -m or --mono an optional flag which will make Frettler display its diagrams without colour.
 - -c or --chords will calculate and list the diatonic chords in the scale (Chord name and notes)
 
@@ -146,7 +146,7 @@ hit tab, it can show you only the scales.
 ### Chord fingerings
 I am working on a version of the vertical view which can display fingering for a given chord. It appears to work for standard six string guitar, open string chords, but for anything else,
 it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and am debating abandoning this feature or possibly taking a different
-approach, and rather than try to analyse the possible note candidates and choose the appropriate fingering, instead use a database of common chord fingerings and apply them with some 
+approach, and rather than try to analyse the possible note candidates and choose the appropriate fingering, instead use a database of common chord fingerings and apply them with some
 fretboard shifting to the chord in question.
 
 Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
@@ -166,7 +166,7 @@ The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' 
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
 and then instruct the view to display your chord or object. The API is pretty straightfoward I think, and defaults standard tuning for each type of instrument.
 
-Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the VerticalView and 
+Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the VerticalView and
 HorizontalView classes, and their public methods.
 
 ### Engine
@@ -174,7 +174,7 @@ The engine can generate Lists of notes that represent given scales, and can calc
 The engine knows nothing about an instrument, it simply applies music theory to generate Java lists of the notes in scales and chords.
 
 ### Instrument
-As mentioned, a fretted instrument is largely the same as another, and the classes in this package exist mainly so that Frettler can easily generate views for each 
+As mentioned, a fretted instrument is largely the same as another, and the classes in this package exist mainly so that Frettler can easily generate views for each
 instrument from the command line, without you having to specify the default strings and their tunings each time.
 
 ### View
@@ -203,8 +203,8 @@ The View argument can only be abbreviated to 'h' or 'v'.
 
 #### Defaults
 All the arguments except for the instrument, have default values. This means you can incrementally drop the arguments from right to left, but cannot drop one in the middle.
-So './frettler guitar' or even './frettler g', would do the same as './frettler guitar horiontal C scale_major'. 
-And './frettler g v', would do the same as './frettler guitar vertical C scale_major'. 
+So './frettler guitar' or even './frettler g', would do the same as './frettler guitar horiontal C scale_major'.
+And './frettler g v', would do the same as './frettler guitar vertical C scale_major'.
 
 ## Todo
 - add an additional command ie './frettler chord C,E,G' and then use its interval knowledge to name the chord for you. Prototype code has been written, and Frettler can easily work
@@ -218,6 +218,3 @@ out for instance that C,E,G is Cmaj, but I am wondering how to handle major nint
 If you have any issues with running Frettler, questions or can help providing input or even code, do please get in touch.
 
 email: <phil.whiles@gmail.com>
-
-
-
