@@ -20,6 +20,8 @@ package me.flotsam.frettler.command;
 import static java.lang.System.out;
 import java.util.Arrays;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.IntervalPattern;
+import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 import me.flotsam.frettler.engine.Note;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -38,7 +40,15 @@ public class ChordCommand implements Runnable {
   
   @Override
   public void run() {
-    Chord chord = new Chord(Arrays.asList(notes));
-    out.println(chord.getTitle());
+    for (IntervalPattern pattern : IntervalPattern.values()) {
+      if (pattern.getPatternType() != PatternType.CHORD) {
+        continue;
+      }
+      Chord candidate = new Chord(notes[0], pattern);
+      if (candidate.containsOnlyNotes(notes)) {
+        out.println(candidate.getTitle());
+        break;
+      }
+    }
   }
 }

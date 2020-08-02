@@ -140,6 +140,19 @@ public class Chord {
         + "]";
   }
 
+  public boolean containsOnlyNotes(Note... notes) {
+    int cnt = 0;
+    for (Note note : notes) {
+      for (ScaleNote scaleNote : chordNotes) {
+        if (scaleNote.getNote() == note) {
+          cnt++;
+          break;
+        }
+      }
+    }
+    return cnt == chordNotes.size();
+  }
+
   public boolean containsIntervals(ScaleInterval... intervals) {
     int cnt = 0;
     for (ScaleInterval interval : intervals) {
