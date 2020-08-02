@@ -221,7 +221,7 @@ public enum IntervalPattern {
       true,
       PatternType.CHORD,
       "aug7",
-      P1, M3, d5, m7
+      P1, M3, m6, m7
   ),
   CHORD_MAJ7(
       true,
