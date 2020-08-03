@@ -16,9 +16,11 @@
 package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
-
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
@@ -41,10 +43,17 @@ public class ChordCommand implements Runnable {
 
   @Override
   public void run() {
-    findChords(notes).forEach(c->out.println(c.getTitle()));
+//    findChords(notes).forEach(c->out.println(c.getTitle()));
+    List<Chord> chords = findChords(notes);
+    out.println(chords.get(0).getTitle());
   }
   
   public static List<Chord> findChords (Note ...notes) {
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
+    if (notes.length != chordSet.size()) {
+      out.println("Ooops - spotted a dupicate note there!");
+      System.exit(-1);
+    }
     List<Chord> chords = new ArrayList<>();
     for (Note note : notes) {
       for (IntervalPattern pattern : IntervalPattern.values()) {

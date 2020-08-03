@@ -103,9 +103,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
         VerticalView chordView = new VerticalView(instrument);
         VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
         List<Chord> chords = ChordCommand.findChords(notes);
-        for (Chord candidate : chords) {
-          chordView.showArpeggio(candidate, chordViewOptions);
-        }
+        chordView.showArpeggio(chords.get(0), chordViewOptions);
         break;
 
       default:

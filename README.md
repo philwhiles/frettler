@@ -100,7 +100,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 
 ### Required Arguments - Reverse Chord Lookup
 Frettler also has a 'chord' command. In fact it has two...
-#### Print chord name(s) found
+#### Print chord name found
 The simplest takes the form :
 
 
@@ -113,16 +113,19 @@ A#maj (A# maj) [A#,D,F]
 - The notes in this simple form follow the 'chord' keyword immediately.
 - The output is simply the printing of the chord found as shown above.
 
-The order of the notes is not critical as Frettler will generate all possible chords with the root being each of the notes in turn, and look to see if the notes in the chord match the notes
-provided. It only looks for perfect matches currently. 
-#### View the chords found
+The order of the notes is critical as Frettler will assume that the first note in the list is the tonic. An additional option will be added soon to
+display all matching chords, regardless of the tonic.
+If you are wondering about the significance of the tonic, consider Cm7b5 (C m7b5) [C,D#,F#,A#] and D#min6 (D# min6) [D#,F#,A#,C].
+
+#### View the chord found
 The second way of getting Frettler to do a reverse chord lookup is to use 'chord' as the keyword immediately following your instrument, as follows :
 
 ```
 ./frettler guitar chord -n As,D,f
 ```
 
-With this form, frettler will display the chord(s) found using its Vertical view.
+With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles --strings and --frets).
+Again, remember, tonic first.
 
 
 ## Instruments

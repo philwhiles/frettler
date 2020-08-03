@@ -44,18 +44,6 @@ public class Chord {
     }
   }
 
-  public Chord (List<Note> notes) {
-    Scale chromaticScaleFromChordRoot = new Scale(notes.get(0), IntervalPattern.SCALE_CHROMATIC);
-    this.chordRootNote = chromaticScaleFromChordRoot.getHead();
-    chordNotes.add(new ScaleNote(notes.get(0), Optional.of(ScaleInterval.P1), chromaticScaleFromChordRoot));
-    for (int i=1;i<notes.size();i++) {
-      Optional<ScaleNote> scaleNote = chromaticScaleFromChordRoot.findScaleNote(notes.get(i));
-      chordNotes.add(scaleNote.get());
-    }
-    metaData = analyse();
-    this.chordPattern = metaData.chordPattern;
-  }
-
   /**
    * Used to create a Chord from a root note when we know what the chords scale pattern should be
    * 
