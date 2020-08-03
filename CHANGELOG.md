@@ -1,4 +1,6 @@
-
+# 3rd Aug 2020
+- aug7 chord corrected
+- chord analysis now tighter as it requires all intervals to match all those in the chord
 # 26th Jul 2020
 - chord analysis completely refactored to make it more extensible
 - windows build and run scripts

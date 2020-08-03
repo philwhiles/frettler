@@ -99,17 +99,33 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 - M7 - major seventh
 
 ### Required Arguments - Reverse Chord Lookup
-Frettler also has a 'chord' command, and expects it to be followed by a series of notes, (using its notation for sharps, not flats) :
+Frettler also has a 'chord' command. In fact it has two...
+#### Print chord name(s) found
+The simplest takes the form :
+
 
 ```
 ./frettler chord As,D,F
 A#maj (A# maj) [A#,D,F]
 ```
 
+- It expects it to be followed by a series of notes, (using its notation for sharps, not flats)
+- The notes in this simple form follow the 'chord' keyword immediately.
+- The output is simply the printing of the chord found as shown above.
+
 The order of the notes is not critical as Frettler will generate all possible chords with the root being each of the notes in turn, and look to see if the notes in the chord match the notes
 provided. It only looks for perfect matches currently. 
+#### View the chords found
+The second way of getting Frettler to do a reverse chord lookup is to use 'chord' as the keyword immediately following your instrument, as follows :
 
-### Instruments
+```
+./frettler guitar chord -n As,D,f
+```
+
+With this form, frettler will display the chord(s) found using its Vertical view.
+
+
+## Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
 The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,

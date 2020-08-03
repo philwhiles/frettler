@@ -16,7 +16,9 @@
 package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
-import java.util.Arrays;
+
+import java.util.ArrayList;
+import java.util.List;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
@@ -39,6 +41,11 @@ public class ChordCommand implements Runnable {
 
   @Override
   public void run() {
+    findChords(notes).forEach(c->out.println(c.getTitle()));
+  }
+  
+  public static List<Chord> findChords (Note ...notes) {
+    List<Chord> chords = new ArrayList<>();
     for (Note note : notes) {
       for (IntervalPattern pattern : IntervalPattern.values()) {
         if (pattern.getPatternType() != PatternType.CHORD) {
@@ -46,9 +53,10 @@ public class ChordCommand implements Runnable {
         }
         Chord candidate = new Chord(note, pattern);
         if (candidate.containsOnlyNotes(notes)) {
-          out.println(candidate.getTitle());
+          chords.add(candidate);
         }
       }
     }
+    return chords;
   }
 }
