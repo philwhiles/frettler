@@ -57,7 +57,19 @@ Frettler has two ways of viewing scales/modes and arpeggios. The first is the ho
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
-### Required Arguments - Instrument commands
+### Required Arguments
+The first argument to frettler must be one of the following:
+- guitar
+- bassguitar
+- ukelele
+- mandolin
+- banjo
+- completions
+- chord
+
+The arguments which follow (or don't in the case of completions!) are as follows.
+
+### Required Arguments - Instrument Commands
 When you want Frettler to display a scale or chord on a fretboard, in this order:
 
 1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
@@ -65,7 +77,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
 1. Pattern - for the scale or chord ie 'scale_major' or 'chord_min9'
 
-### Optional Arguments
+### Optional Arguments - Instrument Commands
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
 - -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
@@ -86,7 +98,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 - m7 - minor seventh
 - M7 - major seventh
 
-### Required Arguments - Chord reverse lookup
+### Required Arguments - Reverse Chord Lookup
 Frettler also has a 'chord' command, and expects it to be followed by a series of notes, (using its notation for sharps, not flats) :
 
 ```
@@ -94,7 +106,8 @@ Frettler also has a 'chord' command, and expects it to be followed by a series o
 A#maj (A# maj) [A#,D,F]
 ```
 
-It will attempt to identify the chord using it's own understanding of each chords interval - the root note for the chord MUST be the first in the list you give it.
+The order of the notes is not critical as Frettler will generate all possible chords with the root being each of the notes in turn, and look to see if the notes in the chord match the notes
+provided. It only looks for perfect matches currently. 
 
 ### Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
