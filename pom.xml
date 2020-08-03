@@ -63,7 +63,6 @@
             <compilerArgs>
               <arg>-Aproject=${project.groupId}/${project.artifactId}</arg>
             </compilerArgs>
-            <release>11</release>
           </configuration>
         </plugin>
 

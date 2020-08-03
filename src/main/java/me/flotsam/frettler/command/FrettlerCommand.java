@@ -54,12 +54,15 @@ public class FrettlerCommand {
   protected boolean intervals;
 
   public enum View {
-    HORIZONTAL(true), H(true), VERTICAL(false), V(false);
+    HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), CHORD, C(CHORD);
     @Getter
-    private boolean horizontal;
+    private View type;
 
-    View(boolean horizontal) {
-      this.horizontal = horizontal;
+    View(View alias) {
+      this.type = alias;
+    }
+    View() {
+      type = this;
     }
   }
 }

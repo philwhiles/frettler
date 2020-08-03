@@ -22,8 +22,8 @@ import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.instrument.FrettedInstrument;
-import me.flotsam.frettler.view.VerticalView;
 import me.flotsam.frettler.view.HorizontalView;
+import me.flotsam.frettler.view.VerticalView;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
@@ -35,6 +35,9 @@ import picocli.CommandLine.Option;
  */
 @Command
 public abstract class FrettedInstrumentCommand extends FrettlerCommand {
+
+  @Option(names = {"-n", "--notes"}, description = "The chord notes to analyse", split = ",")
+  Note[] notes = new Note[] {};
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
@@ -57,40 +60,54 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       scale = new Scale(this.root, this.intervalPattern);
     }
 
-    if (this.view.isHorizontal()) {
-      HorizontalView instrumentView = new HorizontalView(instrument);
-      HorizontalView.Options instrumentViewOptions =
-          instrumentView.new Options(intervals, true, !mono);
+    switch (this.view.getType()) {
+      case HORIZONTAL:
+        HorizontalView instrumentView = new HorizontalView(instrument);
+        HorizontalView.Options instrumentViewOptions =
+            instrumentView.new Options(intervals, true, !mono);
 
-      if (scale != null) {
-        instrumentView.showScale(scale, instrumentViewOptions);
-        if (chordMode) {
-          List<Chord> chords = scale.createScaleChords();
-          for (Chord aChord : chords) {
-            out.println(aChord.getTitle());
-            out.println();
+        if (scale != null) {
+          instrumentView.showScale(scale, instrumentViewOptions);
+          if (chordMode) {
+            List<Chord> chords = scale.createScaleChords();
+            for (Chord aChord : chords) {
+              out.println(aChord.getTitle());
+              out.println();
+            }
           }
+        } else {
+          chord = new Chord(this.root, this.intervalPattern);
+          instrumentView.showChord(chord, instrumentViewOptions);
         }
-      } else {
-        chord = new Chord(this.root, this.intervalPattern);
-        instrumentView.showChord(chord, instrumentViewOptions);
-      }
-    } else {
-      VerticalView verticalView = new VerticalView(instrument);
-      VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !mono);
+        break;
 
-      if (scale != null) {
-        verticalView.showScale(scale, verticalViewOptions);
-        if (chordMode) {
-          List<Chord> chords = scale.createScaleChords();
-          for (Chord aChord : chords) {
-            out.println(aChord.getTitle());
-            out.println();
+      case VERTICAL:
+        VerticalView verticalView = new VerticalView(instrument);
+        VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !mono);
+
+        if (scale != null) {
+          verticalView.showScale(scale, verticalViewOptions);
+          if (chordMode) {
+            List<Chord> chords = scale.createScaleChords();
+            for (Chord aChord : chords) {
+              out.println(aChord.getTitle());
+              out.println();
+            }
           }
+        } else {
+          verticalView.showArpeggio(chord, verticalViewOptions);
         }
-      } else {
-        verticalView.showArpeggio(chord, verticalViewOptions);
-      }
+        break;
+
+      case CHORD:
+        VerticalView chordView = new VerticalView(instrument);
+        VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
+        List<Chord> chords = ChordCommand.findChords(notes);
+        chordView.showArpeggio(chords.get(0), chordViewOptions);
+        break;
+
+      default:
+        break;
     }
   }
 }
