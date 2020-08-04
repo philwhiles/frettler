@@ -277,8 +277,6 @@ So './frettler guitar' or even './frettler g', would do the same as './frettler 
 And './frettler g v', would do the same as './frettler guitar vertical C scale_major'.
 
 ## Todo
-- add an additional command ie './frettler chord C,E,G' and then use its interval knowledge to name the chord for you. Prototype code has been written, and Frettler can easily work
-out for instance that C,E,G is Cmaj, but I am wondering how to handle major ninths for instance.
 - change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi). If I hear of enough Windows users wanting this...
 - chord and note labelling currently only uses sharps - I need to work out how to decide whether each should be labelled as sharp or flat
 - blues scale does not support chord generation...
