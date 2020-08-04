@@ -25,9 +25,9 @@ for /L %%i in (0 1 14) do (
         echo:
         echo %%i. %%b
         echo:
-        echo %%a -m
-        call %%a -m
+        echo %%a
+        call %%a
     ) 
 )
 
-echo Windows does not support ANSI encoding by default and should be run with the --mono [-m] flag!
+echo Windows does not support ANSI colour encoding by default - see the README for alternative colour capable consoles
