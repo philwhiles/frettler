@@ -79,6 +79,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 
 ### Optional Arguments - Instrument Commands
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
+(If you regularly want to a non default string setup, see below)
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
 - -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
 - -m or --mono an optional flag which will make Frettler display its diagrams without colour.
@@ -97,6 +98,34 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 - M6 - major sixth
 - m7 - minor seventh
 - M7 - major seventh
+
+### Customising your Frettler script
+The 'frettler' scripts created by the build, simply pass all arguments to the java program, and if you find yourself regularly using Frettler with say a strings argument
+you can make you life easier by creating your own frettler script. Say you want to use drop D tuning all the time :
+
+Create a file in the top frettler directory, and call it 'dropd', with the following content:
+
+#### Linux/macOS
+```
+#!/bin/bash
+java -jar target/frettler-0.1.0-jar-with-dependencies.jar $@ --strings D,A,D,G,B,E
+```
+
+Save your dropd file, then back at your terminal prompt, execute :
+
+```
+chmod +x dropd
+```
+
+#### Windows
+```
+@echo off
+chcp 65001 ^> nul
+java -Dfile.encoding=UTF8 -jar ./target/frettler-0.1.0-jar-with-dependencies.jar %%\* --strings D,A,D,G,B,E
+```
+
+
+Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
 
 ### Required Arguments - Reverse Chord Lookup
 Frettler also has a 'chord' command. In fact it has two...
@@ -187,9 +216,9 @@ hit tab, it can show you only the scales.
 
 ### Chord fingerings
 I am working on a version of the vertical view which can display fingering for a given chord. It appears to work for standard six string guitar, open string chords, but for anything else,
-it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and am debating abandoning this feature or possibly taking a different
-approach, and rather than try to analyse the possible note candidates and choose the appropriate fingering, instead use a database of common chord fingerings and apply them with some
-fretboard shifting to the chord in question.
+it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and using a database containing recognised chord fingerings is not an option
+when you consider that Frettlers flexibility around the number of strings and their tunings. ie a fingering for Am on a six string guitar would not translate to a 5 string banjo with different
+tuning.
 
 Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
 
