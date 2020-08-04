@@ -25,6 +25,7 @@ for /L %%i in (0 1 14) do (
         echo:
         echo %%i. %%b
         echo:
+        echo %%a
         call %%a -m
     ) 
 )
