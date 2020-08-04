@@ -12,7 +12,7 @@ SET cmds[5]=frettler ukelele horizontal A harmonic_minor_scale=Ukelele, fretboar
 SET cmds[6]=frettler guitar horizontal C major_scale --intervals=Standard guitar, fretboard view of C Major Scale with intervals
 SET cmds[7]=frettler guitar horizontal C major_scale -i=Again but with abbrev. intervals option
 SET cmds[8]=frettler guitar horizontal C major_triad=Standard guitar, fretboard view of C Arpeggio
-SET cmds[9]=frettler bassguitar horizontal C major_pentatonic_scale=Bass guitar, fretboard view of C Major Pentatonic scale
+SET cmds[9]=frettler bassguitar horizontal C major_pentatonic_scale=Bass guitar, fretboard view of C Major Pentatonic scale -m
 SET cmds[10]=frettler bassguitar horizontal C major_pentatonic_scale --intervals --frets 17=Bass guitar, fretboard view to 17th fret of C Major Pentatonic Scale, with intervals
 SET cmds[11]=frettler banjo horizontal C blues_scale=Banjo, fretboard view of C Blues scale
 SET cmds[12]=frettler guitar vertical G major_triad=Guitar, vertical view of G Major arpeggio
@@ -25,7 +25,9 @@ for /L %%i in (0 1 14) do (
         echo:
         echo %%i. %%b
         echo:
-        echo %%a
+        echo %%a -m
         call %%a -m
     ) 
 )
+
+echo Windows does not support ANSI encoding by default and should be run with the --mono [-m] flag!
