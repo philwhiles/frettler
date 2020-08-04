@@ -18,7 +18,7 @@ SET cmds[11]=frettler bassguitar horizontal C scale_major_pentatonic --intervals
 SET cmds[12]=frettler banjo horizontal C scale_blues=Banjo, fretboard view of C Blues scale
 SET cmds[13]=frettler guitar vertical G chord_maj=Guitar, vertical view of G Major arpeggio
 
-for /L %%i in (0 1 14) do (
+for /L %%i in (0 1 13) do (
     for /F "tokens=1,2 delims==" %%a in ("!cmds[%%i]!") do (
         echo -------------------------------------------------------------------------------------------------------------------
         echo:
