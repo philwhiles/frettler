@@ -17,23 +17,7 @@
 
 package me.flotsam.frettler.engine;
 
-import static me.flotsam.frettler.engine.ScaleInterval.M11;
-import static me.flotsam.frettler.engine.ScaleInterval.M2;
-import static me.flotsam.frettler.engine.ScaleInterval.M3;
-import static me.flotsam.frettler.engine.ScaleInterval.M6;
-import static me.flotsam.frettler.engine.ScaleInterval.M7;
-import static me.flotsam.frettler.engine.ScaleInterval.M9;
-import static me.flotsam.frettler.engine.ScaleInterval.P1;
-import static me.flotsam.frettler.engine.ScaleInterval.P4;
-import static me.flotsam.frettler.engine.ScaleInterval.P5;
-import static me.flotsam.frettler.engine.ScaleInterval.d5;
-import static me.flotsam.frettler.engine.ScaleInterval.m10;
-import static me.flotsam.frettler.engine.ScaleInterval.m3;
-import static me.flotsam.frettler.engine.ScaleInterval.m6;
-import static me.flotsam.frettler.engine.ScaleInterval.m7;
-import static me.flotsam.frettler.engine.ScaleInterval.m9;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -144,6 +128,19 @@ public class Chord {
         + "]";
   }
 
+  public boolean containsOnlyNotes(Note... notes) {
+    int cnt = 0;
+    for (Note note : notes) {
+      for (ScaleNote scaleNote : chordNotes) {
+        if (scaleNote.getNote() == note) {
+          cnt++;
+          break;
+        }
+      }
+    }
+    return cnt == chordNotes.size() && cnt == notes.length;
+  }
+
   public boolean containsOnlyIntervals(ScaleInterval... intervals) {
     int cnt = 0;
     for (ScaleInterval interval : intervals) {
@@ -154,7 +151,7 @@ public class Chord {
         }
       }
     }
-    return cnt == intervals.length && cnt == chordNotes.size();
+    return cnt == chordNotes.size() && cnt == intervals.length;
   }
 
 
@@ -221,6 +218,7 @@ public class Chord {
       }
       if (containsOnlyIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
         meta.label = pattern.getLabel();
+        meta.chordPattern = pattern;
         break;
       }
     }

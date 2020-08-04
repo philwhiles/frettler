@@ -1,4 +1,5 @@
 # 3rd Aug 2020
+- added reverse chord lookup
 - aug7 chord corrected
 - chord analysis now tighter as it requires all intervals to match all those in the chord
 # 26th Jul 2020

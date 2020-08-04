@@ -58,14 +58,26 @@ the vertical view which looks more like the classic chord diagram you see widely
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
 ### Required Arguments
-In this order:
+The first argument to frettler must be one of the following:
+- guitar
+- bassguitar
+- ukelele
+- mandolin
+- banjo
+- completions
+- chord
+
+The arguments which follow (or don't in the case of completions!) are as follows.
+
+### Required Arguments - Instrument Commands
+When you want Frettler to display a scale or chord on a fretboard, in this order:
 
 1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
 1. View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
 1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
 1. Pattern - for the scale or chord ie 'scale_major' or 'chord_min9'
 
-### Optional Arguments
+### Optional Arguments - Instrument Commands
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
 - -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
@@ -86,7 +98,37 @@ In this order:
 - m7 - minor seventh
 - M7 - major seventh
 
-### Instruments
+### Required Arguments - Reverse Chord Lookup
+Frettler also has a 'chord' command. In fact it has two...
+#### Print chord name found
+The simplest takes the form :
+
+
+```
+./frettler chord As,D,F
+A#maj (A# maj) [A#,D,F]
+```
+
+- It expects it to be followed by a series of notes, (using its notation for sharps, not flats)
+- The notes in this simple form follow the 'chord' keyword immediately.
+- The output is simply the printing of the chord found as shown above.
+
+The order of the notes is critical as Frettler will assume that the first note in the list is the tonic. An additional option will be added soon to
+display all matching chords, regardless of the tonic.
+If you are wondering about the significance of the tonic, consider Cm7b5 (C m7b5) [C,D#,F#,A#] and D#min6 (D# min6) [D#,F#,A#,C].
+
+#### View the chord found
+The second way of getting Frettler to do a reverse chord lookup is to use 'chord' as the keyword immediately following your instrument, as follows :
+
+```
+./frettler guitar chord -n As,D,f
+```
+
+With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles --strings and --frets).
+Again, remember, tonic first.
+
+
+## Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
 The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,

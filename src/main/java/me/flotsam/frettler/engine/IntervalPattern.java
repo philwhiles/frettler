@@ -151,11 +151,11 @@ public enum IntervalPattern {
       "9b5",
       P1, M3, P5, m7, M9
   ),
-  CHORD_M7ADD9(
+  CHORD_DOM9(
       true,
       PatternType.CHORD,
-      "M7add9",
-      P1, M3, P5, M7, M9
+      "dom9",
+      P1, M3, P5, m7, M9
   ),
   CHORD_7SHARP9(
       true,
@@ -168,12 +168,6 @@ public enum IntervalPattern {
       PatternType.CHORD,
       "7b9",
       P1, M3, P5, m7, m9
-  ),
-  CHORD_DOM9(
-      true,
-      PatternType.CHORD,
-      "dom9",
-      P1, M3, P5, m7, M9
   ),
   CHORD_MAJ69(
       true,

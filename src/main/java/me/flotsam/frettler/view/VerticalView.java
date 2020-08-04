@@ -149,9 +149,9 @@ public class VerticalView {
           }
           if (options.isColour()) {
             Colour col = colourMap.get(fret.getNote());
-            out.print(String.format("%s %s%-2s%s%s", ldr, col, fretStr, Colour.RESET, sep));
+            out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '), Colour.RESET, sep));
           } else {
-            out.print(String.format("%s %-2s%s", ldr, fretStr, sep));
+            out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));
           }
         } else {
           String mark = " ";
