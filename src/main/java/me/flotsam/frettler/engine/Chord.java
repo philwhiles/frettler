@@ -1,22 +1,23 @@
+/*
+    Copyright (C) 2020  Philip Whiles
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 package me.flotsam.frettler.engine;
 
-import static me.flotsam.frettler.engine.ScaleInterval.M11;
-import static me.flotsam.frettler.engine.ScaleInterval.M2;
-import static me.flotsam.frettler.engine.ScaleInterval.M3;
-import static me.flotsam.frettler.engine.ScaleInterval.M6;
-import static me.flotsam.frettler.engine.ScaleInterval.M7;
-import static me.flotsam.frettler.engine.ScaleInterval.M9;
-import static me.flotsam.frettler.engine.ScaleInterval.P1;
-import static me.flotsam.frettler.engine.ScaleInterval.P4;
-import static me.flotsam.frettler.engine.ScaleInterval.P5;
-import static me.flotsam.frettler.engine.ScaleInterval.d5;
-import static me.flotsam.frettler.engine.ScaleInterval.m10;
-import static me.flotsam.frettler.engine.ScaleInterval.m3;
-import static me.flotsam.frettler.engine.ScaleInterval.m6;
-import static me.flotsam.frettler.engine.ScaleInterval.m7;
-import static me.flotsam.frettler.engine.ScaleInterval.m9;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,40 +25,6 @@ import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 
 public class Chord {
-  //@formatter:off
-  private static List<ChordPattern> patternBank = Arrays.asList(new ChordPattern[] {
-      new ChordPattern("min11", P1, m3, P5, m7, M9, M11),
-      new ChordPattern("dom11", P1, M3, P5, m7, M9, M11),
-      new ChordPattern("9b5", P1, M3, P5, m7, M9),
-      new ChordPattern("M7add9", P1, M3, P5, M7, M9),
-      new ChordPattern("7#9", P1, M3, P5, m7, m10),
-      new ChordPattern("7b9", P1, M3, P5, m7, m9),
-      new ChordPattern("dom9", P1, M3, P5, m7, M9),
-      new ChordPattern("maj6/9", P1, M3, P5, M6, M9),
-      new ChordPattern("maj9", P1, M3, P5, M7, M9),
-      new ChordPattern("min9", P1, m3, P5, m7, M9),
-      new ChordPattern("dim7", P1, m3, d5, M6),
-      new ChordPattern("7#5", P1, M3, m6, m7),
-      new ChordPattern("7b5", P1, M3, d5, m7),
-      new ChordPattern("min7", P1, m3, P5, m7),
-      new ChordPattern("aug7", P1, M3, d5, m7),
-      new ChordPattern("maj7", P1, M3, P5, M7),
-      new ChordPattern("dom7", P1, M3, P5, m7),
-      new ChordPattern("min6", P1, m3, P5, M6),
-      new ChordPattern("maj6", P1, M3, P5, M6),
-      new ChordPattern("m maj7", P1, m3, P5, M7),
-      new ChordPattern("m7b5", P1, m3, d5, m7),
-      new ChordPattern("7+", P1, M3, d5, M7),
-      new ChordPattern("7sus4", P1, P4, P5, m7),
-      new ChordPattern("add9", P1, M3, P5, M9),
-      new ChordPattern("add11", P1, M3, P5, M11),
-      new ChordPattern("aug", P1, M3, m6),
-      new ChordPattern("dim", P1, m3, d5),
-      new ChordPattern("m", P1, m3, P5),
-      new ChordPattern("sus2", P1, M2, P5),
-      new ChordPattern("sus4", P1, P4, P5),
-      new ChordPattern("", P1, M3, P5)});
-  //@formatter:on
 
   @Getter
   private ScaleNote chordRootNote;
@@ -70,14 +37,10 @@ public class Chord {
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
-    private int[] thirds;
+    @Getter private int[] thirds;
 
     ChordType(int[] thirds) {
       this.thirds = thirds;
-    }
-
-    public int[] getThirds() {
-      return thirds;
     }
   }
 
@@ -93,7 +56,7 @@ public class Chord {
           .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
       System.exit(-1);
     }
-    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.CHROMATIC_SCALE);
+    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
     for (ScaleInterval interval : chordPattern.getIntervals()) {
@@ -120,7 +83,7 @@ public class Chord {
     this.chordRootNote = chordRootNote;
 
     Scale chromaticScaleFromChordRoot =
-        new Scale(chordRootNote.getNote(), IntervalPattern.CHROMATIC_SCALE);
+        new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
 
     for (int third : chordType.getThirds()) {
       ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
@@ -128,7 +91,7 @@ public class Chord {
           chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
       chordNotes.add(noteInRootScale.get());
     }
-    this.chordPattern = IntervalPattern.CHROMATIC_SCALE;
+    this.chordPattern = IntervalPattern.SCALE_CHROMATIC;
     for (IntervalPattern pattern : IntervalPattern.values()) {
       int matches = 0;
       for (ScaleInterval chordsScaleInterval : pattern.getIntervals()) {
@@ -165,7 +128,20 @@ public class Chord {
         + "]";
   }
 
-  public boolean containsIntervals(ScaleInterval... intervals) {
+  public boolean containsOnlyNotes(Note... notes) {
+    int cnt = 0;
+    for (Note note : notes) {
+      for (ScaleNote scaleNote : chordNotes) {
+        if (scaleNote.getNote() == note) {
+          cnt++;
+          break;
+        }
+      }
+    }
+    return cnt == chordNotes.size() && cnt == notes.length;
+  }
+
+  public boolean containsOnlyIntervals(ScaleInterval... intervals) {
     int cnt = 0;
     for (ScaleInterval interval : intervals) {
       for (ScaleNote note : chordNotes) {
@@ -175,11 +151,11 @@ public class Chord {
         }
       }
     }
-    return cnt == intervals.length;
+    return cnt == chordNotes.size() && cnt == intervals.length;
   }
 
 
-  public ChordMetadata analyse() {
+  private ChordMetadata analyse() {
     ChordMetadata meta = new ChordMetadata();
     for (ScaleNote note : chordNotes) {
       Optional<ScaleInterval> interval = note.getInterval();
@@ -236,9 +212,13 @@ public class Chord {
         (!meta.majorThird && !meta.minorThird && (meta.perfectFourth || meta.majorSecond));
 
     meta.label = "UNCLASSIFIED";
-    for (ChordPattern pattern : patternBank) {
-      if (containsIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
+    for (IntervalPattern pattern : IntervalPattern.values()) {
+      if (pattern.getPatternType() != PatternType.CHORD) {
+        continue;
+      }
+      if (containsOnlyIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
         meta.label = pattern.getLabel();
+        meta.chordPattern = pattern;
         break;
       }
     }

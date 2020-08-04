@@ -1,6 +1,12 @@
-
+# 3rd Aug 2020
+- added reverse chord lookup
+- aug7 chord corrected
+- chord analysis now tighter as it requires all intervals to match all those in the chord
 # 26th Jul 2020
 - chord analysis completely refactored to make it more extensible
+- windows build and run scripts
+- minor refactoring
+- melodic_minor_scale fixed
 
 # 25th Jul 2020
 - CLI command structure re-organised - scale|chord was unnecessary
