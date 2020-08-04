@@ -185,7 +185,6 @@ hit tab, it can show you only the scales.
 - chord_min11
 - chord_dom11
 - chord_9flat5
-- chord_m7add9
 - chord_7sharp9
 - chord_7flat9
 - chord_dom9
