@@ -49,8 +49,9 @@ Run Frettler using the built executable shell command.
 frettler.bat guitar horizontal c scale_major
 
 ```
-The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you really want the colourised output, you will have
-to install an alternative terminal program such as [ConEmu](https://conemu.github.io) or [Cmder](https://cmder.net/).
+The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the '--mono' output instead. If you want the colourised output, you will have
+to install an alternative terminal program such as [ConEmu](https://conemu.github.io) or [Cmder](https://cmder.net/). If you install an ANSI capable console, edit the build.bat and remove
+the --mono, then rebuild Frettler.
 
 ## Arguments
 Frettler has two ways of viewing scales/modes and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
