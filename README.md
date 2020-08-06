@@ -103,7 +103,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 
 #### Verbose mode
 It's all well and good that Frettler can work out the scales and chords for you, but if you want to understand what choices it makes that leads to the notes displayed
-and how it identifies the chords, and want to undertand its application of music theory, you may like to use the verbose mode occasionally.
+and how it identifies the chords, ie its application of music theory, you may like to use the verbose mode occasionally.
 With verbose mode on, Frettler will print out a bit of background info to help explain what it is doing.
 
 For example:
