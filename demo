@@ -2,7 +2,7 @@
 
 
 example() {
-  echo "------------------------------------------------------------------------------------------------------------------------------"
+  echo "=============================================================================================================================="
   echo ""
   echo "$3) $2"
   echo ""
@@ -12,6 +12,7 @@ example() {
 
 declare -a cmds=(
 "./frettler guitar horizontal C scale_major=Standard guitar, fretboard view of C Major scale"
+"./frettler guitar horizontal C scale_major --verbose=Standard guitar, fretboard view of C Major scale, verbose mode"
 "./frettler guitar vertical A scale_minor --chords=Standard guitar, vertical view of A Minor chord, with diatonic chords"
 "./frettler guitar vertical C chord_maj=Standard guitar, vertical view of C Major arpeggio "
 "./frettler guitar vertical A scale_minor -c=Standard guitar, vertical view of A Minor scale, with diatonic chords"

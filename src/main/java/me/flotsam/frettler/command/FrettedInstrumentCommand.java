@@ -16,12 +16,17 @@
 package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
+import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.FrettedInstrument;
+import me.flotsam.frettler.view.Colour;
+import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
 import me.flotsam.frettler.view.VerticalView;
 import picocli.CommandLine.Command;
@@ -50,64 +55,126 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       description = "overrides the default 12 frets displayed")
   Integer frets = 12;
 
+  @Option(names = {"-v", "--verbose"},
+      description = "use if you want some background to Frettlers application of music theory")
+  boolean verbose = false;
+
   public void exec(FrettedInstrument instrument) {
 
     Scale scale = null;
     Chord chord = null;
-    if (this.intervalPattern.getPatternType() == IntervalPattern.PatternType.CHORD) {
-      chord = new Chord(this.root, this.intervalPattern);
-    } else {
-      scale = new Scale(this.root, this.intervalPattern);
-    }
 
     switch (this.view.getType()) {
       case HORIZONTAL:
-        HorizontalView instrumentView = new HorizontalView(instrument);
-        HorizontalView.Options instrumentViewOptions =
-            instrumentView.new Options(intervals, true, !mono);
+        HorizontalView horizontalView = new HorizontalView(instrument);
+        HorizontalView.Options horizontalViewOptions =
+            horizontalView.new Options(intervals, true, !isMono());
 
-        if (scale != null) {
-          instrumentView.showScale(scale, instrumentViewOptions);
+        if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+          scale = new Scale(this.root, this.intervalPattern);
+          horizontalView.showScale(scale, horizontalViewOptions);
+          List<Chord> chords = new ArrayList<>();
           if (chordMode) {
-            List<Chord> chords = scale.createScaleChords();
+            chords = scale.createScaleChords();
+          }
+          if (verbose) {
+            explain(scale, chords);
+          } else {
             for (Chord aChord : chords) {
-              out.println(aChord.getTitle());
-              out.println();
+              out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
+                  Colour.RESET));
             }
           }
         } else {
           chord = new Chord(this.root, this.intervalPattern);
-          instrumentView.showChord(chord, instrumentViewOptions);
+          horizontalView.showChord(chord, horizontalViewOptions);
+          if (verbose) {
+            out.println(chord.describe(isMono()));
+          }
         }
         break;
 
       case VERTICAL:
         VerticalView verticalView = new VerticalView(instrument);
-        VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !mono);
+        VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !isMono());
 
-        if (scale != null) {
+        if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+          scale = new Scale(this.root, this.intervalPattern);
           verticalView.showScale(scale, verticalViewOptions);
+          List<Chord> chords = new ArrayList<>();
           if (chordMode) {
-            List<Chord> chords = scale.createScaleChords();
+            chords = scale.createScaleChords();
+          }
+          if (verbose) {
+            explain(scale, chords);
+          } else {
             for (Chord aChord : chords) {
-              out.println(aChord.getTitle());
-              out.println();
+              out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
+                  Colour.RESET));
             }
           }
         } else {
+          chord = new Chord(this.root, this.intervalPattern);
           verticalView.showArpeggio(chord, verticalViewOptions);
+          if (verbose) {
+            out.println(chord.describe(isMono()));
+          }
         }
         break;
 
       case CHORD:
         VerticalView chordView = new VerticalView(instrument);
-        VerticalView.Options chordViewOptions = chordView.new Options(intervals, !mono);
-        List<Chord> chords = ChordCommand.findChords(notes);
+        VerticalView.Options chordViewOptions = chordView.new Options(intervals, !isMono());
+        List<Chord> chords = Chord.findChords(notes);
         chordView.showArpeggio(chords.get(0), chordViewOptions);
+        if (verbose) {
+          out.println(chords.get(0).describe(isMono()));
+        }
         break;
 
       default:
         break;
     }
+  }
+
+  private void explain(Scale scale, List<Chord> chords) {
+    out.println("The scale is :");
+    out.println(scale.describe(isMono()));
+    out.println(
+        "\n┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈\n");
+    for (Chord aChord : chords) {
+      StringBuilder sb = new StringBuilder("Take " + colourNote(aChord.getChordRootNote().getNote())
+          + " and the following 2 alternate notes from the source scale:\n\n          ");
+      Note[] chordNotes = aChord.getChordNotes().stream().map(sn -> sn.getNote())
+          .collect(Collectors.toList()).toArray(new Note[] {});
+      List<ScaleNote> scaleNotesTwice = new ArrayList<>();
+      scaleNotesTwice.addAll(scale.getScaleNotes());
+      scaleNotesTwice.addAll(scale.getScaleNotes());
+      int chordNoteIdx = 0;
+
+      for (ScaleNote scaleNote : scaleNotesTwice) {
+        boolean isChordNote = false;
+        if (chordNoteIdx < chordNotes.length) {
+          isChordNote = chordNotes[chordNoteIdx] == scaleNote.getNote();
+          if (isChordNote) {
+            chordNoteIdx++;
+          }
+        }
+        sb.append(isChordNote ? colourNote(scaleNote.getNote()) : scaleNote.getNote().getLabel()).append("    ");
+      }
+      out.println(sb.toString());
+      out.println("\nFind those notes in the chromatic scale relative to " + colourNote(aChord.getChordRootNote().getNote()));
+      out.println(aChord.describe(isMono()));
+      out.print("Those intervals identify the chord as : ");
+      out.println(
+          String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(), (isMono() ? "" : Colour.RESET)));
+      out.println(
+          "\n┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈");
+      out.println();
+    }
+  }
+  
+  private String colourNote(Note note) {
+    return  "" + (isMono() ? "" : ColourMap.get(note)) + note.getLabel() + (isMono() ? "" : Colour.RESET);
   }
 }

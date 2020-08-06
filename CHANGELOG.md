@@ -1,4 +1,9 @@
+# 6th Aug 2020
+- added verbose mode to explain Frettlers decision making
+# 4th Aug 2020
+- windows demo script added
 # 3rd Aug 2020
+- display of M10,M11 etc improved in the vertical view
 - added reverse chord lookup
 - aug7 chord corrected
 - chord analysis now tighter as it requires all intervals to match all those in the chord

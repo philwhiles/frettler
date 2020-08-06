@@ -1,19 +1,17 @@
 /*
-    Copyright (C) 2020  Philip Whiles
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2020 Philip Whiles
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this program.
+ * If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package me.flotsam.frettler.engine;
 
@@ -24,6 +22,8 @@ import java.util.Optional;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord.ChordType;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
+import me.flotsam.frettler.view.Colour;
+import me.flotsam.frettler.view.ColourMap;
 
 enum Position {
   HEAD, MIDDLE, TAIL;
@@ -67,7 +67,7 @@ public class Scale {
     }
   }
 
-  
+
   private Scale(List<Note> notes) {
     this.scalePattern = IntervalPattern.SCALE_CHROMATIC;
     this.rootNote = notes.get(0);
@@ -92,7 +92,9 @@ public class Scale {
     tail.setPosition(Position.TAIL);
     tail.setNextScaleNote(head);
   }
-  
+
+
+
   public boolean containsNote(Note note) {
     ScaleNote currentNoteNode = head;
 
@@ -200,18 +202,50 @@ public class Scale {
   }
 
   public String toString() {
-    ScaleNote currentNoteNode = head;
-    StringBuilder builder = new StringBuilder();
-    builder.append(getTitle()).append(" : ");
-    if (head != null) {
-      do {
-        builder.append(currentNoteNode.getNote().getLabel()).append(":")
-            .append(currentNoteNode.getInterval().get().getLabel()).append(" ");
-        currentNoteNode = currentNoteNode.getNextScaleNote();
-      } while (currentNoteNode != head);
+    return describe(false);
+  }
+
+
+  public String describe(boolean mono) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("\n          ");
+    Optional<ScaleNote> chromaticScaleNote = CHROMATIC_SCALE.findScaleNote(rootNote);
+    ScaleNote scaleNote = head;
+    List<Note> notes = new ArrayList<>();
+    List<ScaleInterval> intervals = new ArrayList<>();
+    List<Note> chromaticScaleNotes = new ArrayList<>();
+
+    do {
+      Note note = chromaticScaleNote.get().getNote();
+      chromaticScaleNotes.add(note);
+      if (note == scaleNote.getNote()) {
+        notes.add(note);
+        intervals.add(scaleNote.getInterval().get());
+        scaleNote = scaleNote.getNextScaleNote();
+      } else {
+        notes.add(null);
+        intervals.add(null);
+      }
+      chromaticScaleNote = Optional.of(chromaticScaleNote.get().getNextScaleNote());
+    } while (chromaticScaleNote.get().getNote() != head.getNote());
+
+    for (Note note : chromaticScaleNotes) {
+      sb.append(String.format("%s%-2s    %s",
+          notes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "", note.getLabel(),
+          (mono ? "" : Colour.RESET)));
     }
-    builder.append("\n");
-    return builder.toString();
+    sb.append("\n          ");
+    for (int n = 0; n < intervals.size(); n++) {
+      ScaleInterval interval = intervals.get(n);
+      if (interval == null) {
+        sb.append(String.format("      "));
+      } else
+        sb.append(String.format("%s%-2s    %s",
+            notes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n))) : "", interval,
+            (mono ? "" : Colour.RESET)));
+    }
+    sb.append("\n\n");
+    return sb.toString();
   }
 }
 

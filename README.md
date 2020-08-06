@@ -80,11 +80,12 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 
 ### Optional Arguments - Instrument Commands
 - -s or --strings followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use '-s D,A,D,G,B,E'.
-(If you regularly want to a non default string setup, see below)
+(If you regularly want to use a non default string setup, see below)
 - -f or --frets N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
 - -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
 - -m or --mono an optional flag which will make Frettler display its diagrams without colour.
-- -c or --chords will calculate and list the diatonic chords in the scale (Chord name and notes)
+- -c or --chords will calculate and list the diatonic chords in the scale (Chord name and notes).
+- -v or --verbose will print out some explantory info about Frettlers decision making, see below.
 
 (*) The interval labels use the following convention :
 - P1 - perfect unison/root
@@ -99,6 +100,21 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 - M6 - major sixth
 - m7 - minor seventh
 - M7 - major seventh
+
+#### Verbose mode
+It's all well and good that Frettler can work out the scales and chords for you, but if you want to understand what choices it makes that leads to the notes displayed
+and how it identifies the chords, and want to undertand its application of music theory, you may like to use the verbose mode occasionally.
+With verbose mode on, Frettler will print out a bit of background info to help explain what it is doing.
+
+For example:
+
+```
+./frettler guitar horizontal e scale_major --chords --verbose
+```
+
+Produces (truncated output here) :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
 ### Customising your Frettler script
 The 'frettler' scripts created by the build, simply pass all arguments to the java program, and if you find yourself regularly using Frettler with say a strings argument

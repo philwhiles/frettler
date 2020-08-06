@@ -30,8 +30,8 @@ import java.util.Map;
  */
 public class ColourMap {
 
-  private Map<Object, Colour> objColourMap = new HashMap<>();
-  private List<Colour> colourList = Arrays.asList(
+  private static Map<Object, Colour> objColourMap = new HashMap<>();
+  private static List<Colour> colourList = Arrays.asList(
       Colour.DARK_ORANGE,
       Colour.GREEN3,
       Colour.SKY_BLUE1,
@@ -46,9 +46,9 @@ public class ColourMap {
       Colour.MAGENTA2
  ) ;
 
-  private int colourNum = -1;
+  private static int colourNum = -1;
 
-  public Colour get(Object obj) {
+  public static Colour get(Object obj) {
     Colour colour = objColourMap.get(obj);
     if (colour == null) {
       if (++colourNum == colourList.size()) {
@@ -59,5 +59,7 @@ public class ColourMap {
     }
     return colour;
   }
+  
+  private ColourMap() {}
 
 }

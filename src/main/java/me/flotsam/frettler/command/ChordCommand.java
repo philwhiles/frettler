@@ -16,16 +16,12 @@
 package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
-import me.flotsam.frettler.engine.IntervalPattern;
-import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 import me.flotsam.frettler.engine.Note;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 /**
@@ -41,31 +37,17 @@ public class ChordCommand implements Runnable {
   @Parameters(index = "0", description = "The chord notes to analyse", split = ",")
   Note[] notes = new Note[] {};
 
+  @Option(names = {"-v", "--verbose"}, description = "true if you want some background to Frettlers application of music theory")
+  boolean verbose = false;
+
+  @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
+  @Getter
+  protected boolean mono;
+
   @Override
   public void run() {
 //    findChords(notes).forEach(c->out.println(c.getTitle()));
-    List<Chord> chords = findChords(notes);
+    List<Chord> chords = Chord.findChords(notes);
     out.println(chords.get(0).getTitle());
-  }
-  
-  public static List<Chord> findChords (Note ...notes) {
-    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
-    if (notes.length != chordSet.size()) {
-      out.println("Ooops - spotted a dupicate note there!");
-      System.exit(-1);
-    }
-    List<Chord> chords = new ArrayList<>();
-    for (Note note : notes) {
-      for (IntervalPattern pattern : IntervalPattern.values()) {
-        if (pattern.getPatternType() != PatternType.CHORD) {
-          continue;
-        }
-        Chord candidate = new Chord(note, pattern);
-        if (candidate.containsOnlyNotes(notes)) {
-          chords.add(candidate);
-        }
-      }
-    }
-    return chords;
   }
 }

@@ -1,28 +1,32 @@
 /*
-    Copyright (C) 2020  Philip Whiles
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2020 Philip Whiles
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this program.
+ * If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package me.flotsam.frettler.engine;
 
+import static java.lang.System.out;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
+import me.flotsam.frettler.view.Colour;
+import me.flotsam.frettler.view.ColourMap;
 
 public class Chord {
 
@@ -37,7 +41,8 @@ public class Chord {
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
-    @Getter private int[] thirds;
+    @Getter
+    private int[] thirds;
 
     ChordType(int[] thirds) {
       this.thirds = thirds;
@@ -56,9 +61,11 @@ public class Chord {
           .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
       System.exit(-1);
     }
-    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
+    Scale chromaticScaleFromChordRoot =
+        new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
+
     for (ScaleInterval interval : chordPattern.getIntervals()) {
       chordNotes.add(chromaticScaleFromChordRoot.findScaleNote(interval).get());
     }
@@ -107,6 +114,30 @@ public class Chord {
       }
     }
     metaData = analyse();
+
+
+
+  }
+
+  public static List<Chord> findChords(Note... notes) {
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
+    if (notes.length != chordSet.size()) {
+      out.println("Ooops - spotted a dupicate note there!");
+      System.exit(-1);
+    }
+    List<Chord> chords = new ArrayList<>();
+    for (Note note : notes) {
+      for (IntervalPattern pattern : IntervalPattern.values()) {
+        if (pattern.getPatternType() != PatternType.CHORD) {
+          continue;
+        }
+        Chord candidate = new Chord(note, pattern);
+        if (candidate.containsOnlyNotes(notes)) {
+          chords.add(candidate);
+        }
+      }
+    }
+    return chords;
   }
 
   public String getLabel() {
@@ -114,18 +145,53 @@ public class Chord {
   }
 
   public String getTitle() {
-    return getLabel() + " (" + chordRootNote.getNote().getLabel() + " " + chordPattern.getLabel()
-        + ")" + " ["
-        + chordNotes.stream().map(n -> n.getNote().getLabel()).collect(Collectors.joining(","))
+    return getLabel() + "   (" + chordRootNote.getNote().name().toLowerCase() + " " + chordPattern.name().toLowerCase()
+        + ")" + "   ["
+        + chordNotes.stream().map(n -> n.getNote().getLabel() + "(" + n.getInterval().get()+ ")").collect(Collectors.joining(", "))
         + "]";
   }
 
   public String toString() {
-    return getLabel() + " ["
-        + chordNotes.stream()
-            .map(n -> n.getNote().getLabel() + " (" + n.getInterval().get().getLabel() + ")")
-            .collect(Collectors.joining(", "))
-        + "]";
+    return describe(false);
+  }
+
+  public String describe(boolean mono) {
+    StringBuilder sb = new StringBuilder();
+    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
+    sb.append("\n          ");
+    ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(chordRootNote.getNote()).get();
+
+    List<Note> notes = new ArrayList<>();
+    List<ScaleInterval> intervals = new ArrayList<>();
+    List<Note> chordsNotes = new ArrayList<>();
+
+    do {
+      Note note = scaleNote.getNote();
+      notes.add(note);
+      Optional<ScaleNote> chordNote =
+          chordNotes.stream().filter(sn -> sn.getNote() == note).findAny();
+      intervals.add(scaleNote.getInterval().get());
+      if (chordNote.isPresent()) {
+        chordsNotes.add(chordNote.get().getNote());
+      }
+      scaleNote = scaleNote.getNextScaleNote();
+    } while (scaleNote.getNote() != chordRootNote.getNote());
+
+
+    for (Note note : notes) {
+      sb.append(String.format("%s%-2s    %s",
+          chordsNotes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "",
+          note.getLabel(), (mono ? "" : Colour.RESET)));
+    }
+    sb.append("\n          ");
+    for (int n = 0;n < intervals.size();n++) {
+      ScaleInterval interval = intervals.get(n);
+      sb.append(String.format("%s%-2s    %s",
+          chordsNotes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n))) : "",
+          interval, (mono ? "" : Colour.RESET)));
+    }
+    sb.append("\n\n");
+    return sb.toString();
   }
 
   public boolean containsOnlyNotes(Note... notes) {

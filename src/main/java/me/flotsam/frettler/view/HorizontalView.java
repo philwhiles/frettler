@@ -83,7 +83,6 @@ public class HorizontalView {
   }
 
   public void display(List<ScaleNote> scaleNotes, Options options) {
-    ColourMap cm = new ColourMap();
     out.println(createFretboardSide(true, options));
 
     for (int i = instrument.getFretsByString().size() - 1; i >= 0; i--) {
@@ -101,7 +100,7 @@ public class HorizontalView {
             fretStr = note.get().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = cm.get(fretStr);
+            Colour col = ColourMap.get(note.get().getNote());
             if (tone.getFretNum() == 0) {
               fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
               stringBuilder.append("").append(col).append(fretStr).append(Colour.RESET).append("┃┃");

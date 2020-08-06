@@ -115,7 +115,6 @@ public class VerticalView {
   }
 
   private void display(List<ChordFret> chordFrets, Options options) {
-    ColourMap colourMap = new ColourMap();
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
     int lowestFret = chordFrets.stream()
@@ -148,7 +147,7 @@ public class VerticalView {
             fretStr = chordFret.get().getFret().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = colourMap.get(fret.getNote());
+            Colour col = ColourMap.get(fret.getNote());
             out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '), Colour.RESET, sep));
           } else {
             out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));

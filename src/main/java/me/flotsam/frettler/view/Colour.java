@@ -34,7 +34,8 @@ public enum Colour {
   SKY_BLUE2("\033[38;5;111;1m"),
   YELLOW2("\033[38;5;190;1m"),
   YELLOW3("\033[38;5;148;1m"),
-  MAGENTA2("\033[38;5;165;1m");
+  MAGENTA2("\033[38;5;165;1m"),
+  GREEN("\033[38;5;112;1m");
 
   private final String code;
 
