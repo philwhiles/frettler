@@ -102,20 +102,15 @@ public class HorizontalView {
           if (options.isColour()) {
             Colour col = ColourMap.get(note.get().getNote());
             if (tone.getFretNum() == 0) {
-              fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
-              stringBuilder.append("").append(col).append(fretStr).append(Colour.RESET).append("┃┃");
+              stringBuilder.append(col).append(String.format("%3s",fretStr)).append(Colour.RESET).append("┃┃");
             } else {
-              if (fretStr.length() == 2) {
-                fretStr = String.format("┈╴%s%s%s╶┈┃", col, fretStr, Colour.RESET);
-              } else {
-                fretStr = String.format("┈╴%s%s%s╶┈┈┃", col, fretStr, Colour.RESET);
-              }
+              fretStr = String.format("┈╴%s%s%s╶%s┃", col, fretStr, Colour.RESET, StringUtils.repeat("┈",3-fretStr.length()));
               stringBuilder.append(fretStr);
             }
           } else {
             if (tone.getFretNum() == 0) {
-              fretStr = fretStr.length() == 2 ? fretStr : String.format("%2s", fretStr);
-              stringBuilder.append("").append(fretStr).append("┃┃");
+              fretStr = fretStr.length() == 2 ? fretStr : String.format("%3s", fretStr);
+              stringBuilder.append(fretStr).append("┃┃");
             } else {
               fretStr = fretStr.length() == 2 ? fretStr : String.format("%s┈", fretStr);
               stringBuilder.append("┈┈").append(fretStr).append("┈┈┃");
@@ -124,7 +119,7 @@ public class HorizontalView {
 
         } else {
           if (tone.getFretNum() == 0) {
-            stringBuilder.append("  ").append("┃┃");
+            stringBuilder.append("   ").append("┃┃");
           } else {
             if (instrument.isBanjo() && (tone.getFretNum() > 0 && tone.getFretNum() < 6) && tone.getStringNum() == 0) {
               stringBuilder.append("      ┃");
@@ -143,9 +138,9 @@ public class HorizontalView {
   }
   
   private String createFretboardSide(boolean upper, Options options) {
-   String lowerTop = "┗";
+   String lowerTop = "╹┗";
    String lowerBottom = "┛";
-   String upperTop = "┏";
+   String upperTop = "╻┏";
    String upperBottom = "┓";
    String side = "━";
    String inlay = ".";
