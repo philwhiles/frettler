@@ -61,8 +61,7 @@ public class Chord {
           .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
       System.exit(-1);
     }
-    Scale chromaticScaleFromChordRoot =
-        new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
+    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
 
@@ -119,6 +118,71 @@ public class Chord {
 
   }
 
+  /**
+   * Will search all possible chords having the first note as the tonic, and containing
+   * all the other notes exclusively
+   * @param notes the notes to use in the chord search
+   * @return optionally! the matching chord
+   */
+  public static Optional<Chord> findChord(Note... notes) {
+    Optional<Chord> result = Optional.empty();
+
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
+    if (notes.length != chordSet.size()) {
+      out.println("Ooops - spotted a dupicate note there!");
+      System.exit(-1);
+    }
+    for (Note note : notes) {
+      if (result.isPresent()) {
+        break;
+      }
+      for (IntervalPattern pattern : IntervalPattern.values()) {
+        if (pattern.getPatternType() != PatternType.CHORD) {
+          continue;
+        }
+        Chord candidate = new Chord(note, pattern);
+        if (candidate.containsOnlyNotes(notes)) {
+          result = Optional.of(candidate);
+          break;
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Will search all possible chords with all possible tonics (even if not in the notes provided)
+   * having all the provided notes in, but not exclusively
+   * @param notes the notes to use in the chord search
+   * @return the matching chords
+   */
+  public static List<Chord> findAllChords(Note... notes) {
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
+    if (notes.length != chordSet.size()) {
+      out.println("Ooops - spotted a dupicate note there!");
+      System.exit(-1);
+    }
+    List<Chord> chords = new ArrayList<>();
+    for (Note note : Note.values()) {
+      for (IntervalPattern pattern : IntervalPattern.values()) {
+        if (pattern.getPatternType() != PatternType.CHORD) {
+          continue;
+        }
+        Chord candidate = new Chord(note, pattern);
+        if (candidate.containsNotes(notes)) {
+          chords.add(candidate);
+        }
+      }
+    }
+    return chords;
+  }
+
+  /**
+   * Will search all possible chords having the first note as the tonic, and containing
+   * all the other notes, but not exclusively
+   * @param notes the notes to use in the chord search
+   * @return the matching chords
+   */
   public static List<Chord> findChords(Note... notes) {
     Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
     if (notes.length != chordSet.size()) {
@@ -126,15 +190,13 @@ public class Chord {
       System.exit(-1);
     }
     List<Chord> chords = new ArrayList<>();
-    for (Note note : notes) {
-      for (IntervalPattern pattern : IntervalPattern.values()) {
-        if (pattern.getPatternType() != PatternType.CHORD) {
-          continue;
-        }
-        Chord candidate = new Chord(note, pattern);
-        if (candidate.containsOnlyNotes(notes)) {
-          chords.add(candidate);
-        }
+    for (IntervalPattern pattern : IntervalPattern.values()) {
+      if (pattern.getPatternType() != PatternType.CHORD) {
+        continue;
+      }
+      Chord candidate = new Chord(notes[0], pattern);
+      if (candidate.containsNotes(notes)) {
+        chords.add(candidate);
       }
     }
     return chords;
@@ -145,9 +207,10 @@ public class Chord {
   }
 
   public String getTitle() {
-    return getLabel() + "   (" + chordRootNote.getNote().name().toLowerCase() + " " + chordPattern.name().toLowerCase()
-        + ")" + "   ["
-        + chordNotes.stream().map(n -> n.getNote().getLabel() + "(" + n.getInterval().get()+ ")").collect(Collectors.joining(", "))
+    return getLabel() + "   (" + chordRootNote.getNote().name().toLowerCase() + " "
+        + chordPattern.name().toLowerCase() + ")" + "   ["
+        + chordNotes.stream().map(n -> n.getNote().getLabel() + "(" + n.getInterval().get() + ")")
+            .collect(Collectors.joining(", "))
         + "]";
   }
 
@@ -157,7 +220,8 @@ public class Chord {
 
   public String describe(boolean mono) {
     StringBuilder sb = new StringBuilder();
-    Scale chromaticScaleFromChordRoot = new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
+    Scale chromaticScaleFromChordRoot =
+        new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
     sb.append("\n          ");
     ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(chordRootNote.getNote()).get();
 
@@ -180,11 +244,11 @@ public class Chord {
 
     for (Note note : notes) {
       sb.append(String.format("%s%-2s    %s",
-          chordsNotes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "",
-          note.getLabel(), (mono ? "" : Colour.RESET)));
+          chordsNotes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "", note.getLabel(),
+          (mono ? "" : Colour.RESET)));
     }
     sb.append("\n          ");
-    for (int n = 0;n < intervals.size();n++) {
+    for (int n = 0; n < intervals.size(); n++) {
       ScaleInterval interval = intervals.get(n);
       sb.append(String.format("%s%-2s    %s",
           chordsNotes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n))) : "",
@@ -205,6 +269,19 @@ public class Chord {
       }
     }
     return cnt == chordNotes.size() && cnt == notes.length;
+  }
+
+  public boolean containsNotes(Note... notes) {
+    int cnt = 0;
+    for (Note note : notes) {
+      for (ScaleNote scaleNote : chordNotes) {
+        if (scaleNote.getNote() == note) {
+          cnt++;
+          break;
+        }
+      }
+    }
+    return cnt == notes.length;
   }
 
   public boolean containsOnlyIntervals(ScaleInterval... intervals) {

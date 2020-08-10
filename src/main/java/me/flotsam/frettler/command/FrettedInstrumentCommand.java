@@ -18,6 +18,7 @@ package me.flotsam.frettler.command;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
@@ -125,10 +126,14 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       case CHORD:
         VerticalView chordView = new VerticalView(instrument);
         VerticalView.Options chordViewOptions = chordView.new Options(intervals, !isMono());
-        List<Chord> chords = Chord.findChords(notes);
-        chordView.showArpeggio(chords.get(0), chordViewOptions);
-        if (verbose) {
-          out.println(chords.get(0).describe(isMono()));
+        Optional<Chord> chordOpt = Chord.findChord(notes);
+        if (chordOpt.isPresent()) {
+          chordView.showArpeggio(chordOpt.get(), chordViewOptions);
+          if (verbose) {
+            out.println(chordOpt.get().describe(isMono()));
+          }
+        } else {
+            out.println("Could not find matching chord");
         }
         break;
 
@@ -160,21 +165,24 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
             chordNoteIdx++;
           }
         }
-        sb.append(isChordNote ? colourNote(scaleNote.getNote()) : scaleNote.getNote().getLabel()).append("    ");
+        sb.append(isChordNote ? colourNote(scaleNote.getNote()) : scaleNote.getNote().getLabel())
+            .append("    ");
       }
       out.println(sb.toString());
-      out.println("\nFind those notes in the chromatic scale relative to " + colourNote(aChord.getChordRootNote().getNote()));
+      out.println("\nFind those notes in the chromatic scale relative to "
+          + colourNote(aChord.getChordRootNote().getNote()));
       out.println(aChord.describe(isMono()));
       out.print("Those intervals identify the chord as : ");
-      out.println(
-          String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(), (isMono() ? "" : Colour.RESET)));
+      out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
+          (isMono() ? "" : Colour.RESET)));
       out.println(
           "\n┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈");
       out.println();
     }
   }
-  
+
   private String colourNote(Note note) {
-    return  "" + (isMono() ? "" : ColourMap.get(note)) + note.getLabel() + (isMono() ? "" : Colour.RESET);
+    return "" + (isMono() ? "" : ColourMap.get(note)) + note.getLabel()
+        + (isMono() ? "" : Colour.RESET);
   }
 }

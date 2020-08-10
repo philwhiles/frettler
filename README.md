@@ -53,6 +53,10 @@ The default windows command terminal does not support ANSI colour encoding, so F
 to install an alternative terminal program such as [ConEmu](https://conemu.github.io) or [Cmder](https://cmder.net/). If you install an ANSI capable console, edit the build.bat and remove
 the --mono, then rebuild Frettler.
 
+## Demo
+Do read the details below to get an understanding of how to drive Frettler, but perhaps first, after building it, try one of the provided demo scripts ('demo' for linux/macOS, 'demo.bat' for windows).
+The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
+
 ## Arguments
 Frettler has two ways of viewing scales/modes and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
@@ -118,7 +122,7 @@ Produces (truncated output here) :
 
 ### Customising your Frettler script
 The 'frettler' scripts created by the build, simply pass all arguments to the java program, and if you find yourself regularly using Frettler with say a strings argument
-you can make you life easier by creating your own frettler script. Say you want to use drop D tuning all the time :
+you can make your life easier by creating your own frettler script. Say you want to use drop D tuning all the time :
 
 Create a file in the top frettler directory, and call it 'dropd', with the following content:
 
@@ -159,9 +163,39 @@ A#maj (A# maj) [A#,D,F]
 - The notes in this simple form follow the 'chord' keyword immediately.
 - The output is simply the printing of the chord found as shown above.
 
-The order of the notes is critical as Frettler will assume that the first note in the list is the tonic. An additional option will be added soon to
-display all matching chords, regardless of the tonic.
+The chord matching can follow one of three rules, using the '--rules [strict,relaxed,loose]' optional param :
+
+- strict
+This is the default rule, in which the first note is assumed to be the tonic, and only the chord having all the notes and only the notes will be listed.
 If you are wondering about the significance of the tonic, consider Cm7b5 (C m7b5) [C,D#,F#,A#] and D#min6 (D# min6) [D#,F#,A#,C].
+```
+> ./frettler chord c,e,g
+Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
+```
+
+- relaxed
+The first note is again considered to be the tonic, the listed chords will contain all the provided notes, but not exclusively ie the chords may include other notes.
+```
+> ./frettler chord c,g -r relaxed
+Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
+Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
+  etc
+Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
+C5   (c chord_5)   [C(P1), G(P5)]```
+
+- loose
+None of the notes is considered the sole tonic, and all chords, with any tonic, even those not provided, will be included in the list. This will be a long list if
+all you provide is one note.
+```
+> ./frettler chord c,g -r loose
+Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
+Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
+  etc
+  etc
+  etc
+Am7b5   (a chord_min7flat5)   [A(P1), C(m3), D#(d5), G(m7)]
+A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
+
 
 #### View the chord found
 The second way of getting Frettler to do a reverse chord lookup is to use 'chord' as the keyword immediately following your instrument, as follows :
@@ -171,7 +205,7 @@ The second way of getting Frettler to do a reverse chord lookup is to use 'chord
 ```
 
 With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles --strings and --frets).
-Again, remember, tonic first.
+With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
 
 
 ## Instruments

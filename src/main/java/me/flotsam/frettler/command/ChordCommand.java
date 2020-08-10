@@ -17,6 +17,7 @@ package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
 import java.util.List;
+import java.util.Optional;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
@@ -37,17 +38,37 @@ public class ChordCommand implements Runnable {
   @Parameters(index = "0", description = "The chord notes to analyse", split = ",")
   Note[] notes = new Note[] {};
 
-  @Option(names = {"-v", "--verbose"}, description = "true if you want some background to Frettlers application of music theory")
+  @Option(names = {"-v", "--verbose"},
+      description = "if you want some background to Frettlers application of music theory")
   boolean verbose = false;
 
   @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
   @Getter
   protected boolean mono;
 
+  @Option(names = {"-r", "--rule"}, defaultValue="STRICT", description = "Chord lookup can be strict, relaxed or loose")
+  @Getter
+  protected Rule rule;
+
   @Override
   public void run() {
-//    findChords(notes).forEach(c->out.println(c.getTitle()));
-    List<Chord> chords = Chord.findChords(notes);
-    out.println(chords.get(0).getTitle());
+    switch (rule) {
+      case STRICT:
+        Optional<Chord> chord = Chord.findChord(notes);
+        out.println(chord.isPresent() ? chord.get().getTitle() : "Could not find matching chord");
+        break;
+      case RELAXED:
+        List<Chord> relaxedChords = Chord.findChords(notes);
+        relaxedChords.forEach(c -> out.println(c.getTitle()));
+        break;
+      case LOOSE:
+        List<Chord> looseChords = Chord.findAllChords(notes);
+        looseChords.forEach(c -> out.println(c.getTitle()));
+        break;
+    }
+  }
+
+  public enum Rule {
+    STRICT, RELAXED, LOOSE;
   }
 }
