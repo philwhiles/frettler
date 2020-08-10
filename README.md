@@ -148,7 +148,7 @@ java -Dfile.encoding=UTF8 -jar ./target/frettler-0.1.0-jar-with-dependencies.jar
 
 Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
 
-### Required Arguments - Reverse Chord Lookup
+## Reverse Chord Lookup
 Frettler also has a 'chord' command. In fact it has two...
 #### Print chord name found
 The simplest takes the form :
@@ -209,6 +209,22 @@ The second way of getting Frettler to do a reverse chord lookup is to use 'chord
 With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles --strings and --frets).
 With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
 
+
+## Patterns Command
+Frettler understands three types of interval patterns - scales, modes and chords. At times it will expect you to provide it one type and not the other. The framework it uses for
+parsing the various commands will help you by suggesting the possible type at times, and bash tab completion can help you a lot - if you had typed 'scale' then hit tab, it would list 
+only the possible scales you can use (that's why the patterns are prefixed with their type). But if you don't use bash and Frettlers provided tab completion, it might help you to list
+the possible patterns occassionally.  This is where the patterns command comes in. Simply use :
+```
+./frettler patterns
+```
+and you will get a list of the pattern superset.
+
+Want to just see the list of Frettler understood chords?
+```
+./frettler patterns -type chord
+```
+Or 'scale'. Or 'mode'. You get the idea.
 
 ## Instruments
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.

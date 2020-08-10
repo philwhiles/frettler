@@ -359,6 +359,9 @@ public enum IntervalPattern {
     this.intervals = Arrays.asList(intervals);
   }
 
+  public String getTitle() {
+    return this.name().toLowerCase() + " (" + this.label + ") " + this.intervals; 
+  }
   public boolean isScaleChordGenerationSupported() {
     return scaleChordGenerationSupported;
   }

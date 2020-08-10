@@ -1,4 +1,7 @@
 # 10th Aug 2020
+- on a roll, added the patterns command
+
+# 10th Aug 2020
 - added --rule to the chord command with strict(default), relaxed and loose
 
 # 6th Aug 2020
