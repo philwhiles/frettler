@@ -232,56 +232,6 @@ A fretboard is a fretboard, and frettler can handle any number of strings with a
 The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with --strings A,B,C,etc.
 
-### Scales/Modes/Chords
-Frettler maps the scale or chord name provided to an internal representation of its interval pattern. Whichever is provided will determine how Frettler deals with it and displays it.
-To aid the bash tab completion, and to make scales stand out from chords, each is prefixed with 'scale_', 'mode_' or 'chord_'. ie if you enter the Frettler command as far as 'scale' then
-hit tab, it can show you only the scales.
-
-- scale_chromatic
-- scale_major
-- scale_melodic_minor
-- scale_harmonic_minor
-- scale_major_pentatonic
-- scale_minor
-- scale_minor_pentatonic
-- scale_blues
-- mode_aeolian
-- mode_dorian_
-- mode_mixolydian
-- mode_lydian
-- mode_ionian
-- mode_locrian
-- chord_min11
-- chord_dom11
-- chord_9flat5
-- chord_7sharp9
-- chord_7flat9
-- chord_dom9
-- chord_maj69
-- chord_maj9
-- chord_min9
-- chord_dim7
-- chord_7sharp5
-- chord_7flat5
-- chord_min7
-- chord_aug7
-- chord_maj7
-- chord_dom7
-- chord_min6
-- chord_maj6
-- chord_minmaj7
-- chord_min7flat5
-- chord_7plus
-- chord_7sus4
-- chord_add9
-- chord_add11
-- chord_aug
-- chord_dim
-- chord_min
-- chord_sus2
-- chord_sus4
-- chord_maj
-
 ### Chord fingerings
 I am working on a version of the vertical view which can display fingering for a given chord. It appears to work for standard six string guitar, open string chords, but for anything else,
 it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and using a database containing recognised chord fingerings is not an option
