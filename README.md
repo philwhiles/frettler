@@ -182,6 +182,7 @@ Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
   etc
 Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
 C5   (c chord_5)   [C(P1), G(P5)]```
+```
 
 - loose
 None of the notes is considered the sole tonic, and all chords, with any tonic, even those not provided, will be included in the list. This will be a long list if
@@ -195,6 +196,7 @@ Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
   etc
 Am7b5   (a chord_min7flat5)   [A(P1), C(m3), D#(d5), G(m7)]
 A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
+```
 
 
 #### View the chord found
