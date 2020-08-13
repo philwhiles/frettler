@@ -34,17 +34,17 @@ public class ColourMap {
   private static List<Colour> colourList = Arrays.asList(
       Colour.DARK_ORANGE,
       Colour.GREEN3,
-      Colour.SKY_BLUE1,
-      Colour.LIGHT_STEEL_BLUE1,
+      Colour.DARKISH_BLUE,
       Colour.RED1,
       Colour.HOT_PINK,
-      Colour.GOLD1,
-      Colour.SKY_BLUE2,
+//      Colour.GOLD1,
       Colour.YELLOW2,
-      Colour.THISTLE,
+//      Colour.THISTLE,
+      Colour.SKY_BLUE1,
       Colour.YELLOW3,
-      Colour.MAGENTA2
- ) ;
+      Colour.MAGENTA2,
+      Colour.MURKY_GREEN
+ );
 
   private static int colourNum = -1;
 

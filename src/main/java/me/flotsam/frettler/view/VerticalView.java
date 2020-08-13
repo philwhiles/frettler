@@ -46,7 +46,7 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
  */
 public class VerticalView {
 
-  private Options defaultOptions = new Options(false, true);
+  private Options defaultOptions = new Options(false, true, false);
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
   private FrettedInstrument instrument;
 
@@ -147,7 +147,7 @@ public class VerticalView {
             fretStr = chordFret.get().getFret().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = ColourMap.get(fret.getNote());
+            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(fret.getNote());
             out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '), Colour.RESET, sep));
           } else {
             out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));
@@ -197,6 +197,7 @@ public class VerticalView {
   public class Options {
     private final boolean intervals;
     private final boolean colour;
+    private final boolean octaves;
   }
 
 

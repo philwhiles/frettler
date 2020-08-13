@@ -71,8 +71,10 @@ public class Scale {
   private Scale(List<Note> notes) {
     this.scalePattern = IntervalPattern.SCALE_CHROMATIC;
     this.rootNote = notes.get(0);
+    ScaleInterval [] intervals = ScaleInterval.values(); 
+    int interval = 0;
     for (Note note : notes) {
-      addScaleNote(note, Optional.empty());
+      addScaleNote(note, Optional.of(intervals[interval++]));
     }
   }
 

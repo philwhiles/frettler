@@ -53,7 +53,9 @@ public class CompletionsCommand implements Runnable {
     sb.append("    local pattern_opts\n"); 
     sb.append("    pattern_opts=\"");
     for (IntervalPattern pattern:IntervalPattern.values()) {
-      sb.append(pattern.name().toLowerCase()).append(" ");
+      if (pattern != IntervalPattern.SCALE_CHROMATIC) {
+        sb.append(pattern.name().toLowerCase()).append(" ");
+      }
     }
     sb.replace(sb.length()-1, sb.length(), "");
     sb.append("\"\n"); 

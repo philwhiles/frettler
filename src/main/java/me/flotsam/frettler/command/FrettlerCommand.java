@@ -49,6 +49,10 @@ public class FrettlerCommand {
   @Getter
   protected boolean mono;
 
+  @Option(names = {"-o", "--octaves"}, description = "Colourize octaves instead of notes/intervals")
+  @Getter
+  protected boolean octaves;
+
   @Option(names = {"-i", "--intervals"}, description = "Show interval labels instead of notes")
   @Getter
   protected boolean intervals;

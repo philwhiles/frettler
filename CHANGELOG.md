@@ -1,3 +1,6 @@
+# 11th Aug 2020
+- added --octaves option
+
 # 10th Aug 2020
 - on a roll, added the patterns command
 

@@ -44,7 +44,7 @@ public class HorizontalView {
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
 
   private FrettedInstrument instrument;
-  private Options defaultOptions = new Options(false, true, true);
+  private Options defaultOptions = new Options(false, true, true, false);
 
   public HorizontalView(FrettedInstrument instrument) {
     this.instrument = instrument;
@@ -85,13 +85,21 @@ public class HorizontalView {
   public void display(List<ScaleNote> scaleNotes, Options options) {
     out.println(createFretboardSide(true, options));
 
+    int octave = 0; 
+    boolean octaveToggle = false;
     for (int i = instrument.getFretsByString().size() - 1; i >= 0; i--) {
       List<Fret> tonesInString = instrument.getFretsByString().get(i);
       StringBuilder stringBuilder = new StringBuilder();
-      for (Fret tone : tonesInString) {
+      for (Fret fret : tonesInString) {
         Optional<ScaleNote> note =
-            scaleNotes.stream().filter(sn -> sn.getNote() == tone.getNote()).findFirst();
-
+            scaleNotes.stream().filter(sn -> sn.getNote() == fret.getNote()).findFirst();
+        
+        if (octave != fret.getOctave()) {
+          octave = fret.getOctave();
+          octaveToggle = !octaveToggle;
+        }
+        String stringChar = "┈";
+        
         if (note.isPresent()) {
           String fretStr = null;
           if (options.isIntervals()) {
@@ -100,31 +108,31 @@ public class HorizontalView {
             fretStr = note.get().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = ColourMap.get(note.get().getNote());
-            if (tone.getFretNum() == 0) {
+            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getNote());
+            if (fret.getFretNum() == 0) {
               stringBuilder.append(col).append(String.format("%3s",fretStr)).append(Colour.RESET).append("┃┃");
             } else {
-              fretStr = String.format("┈╴%s%s%s╶%s┃", col, fretStr, Colour.RESET, StringUtils.repeat("┈",3-fretStr.length()));
+              fretStr = String.format("%s╴%s%s%s╶%s┃", stringChar, col, fretStr, Colour.RESET, StringUtils.repeat(stringChar, 3-fretStr.length()));
               stringBuilder.append(fretStr);
             }
           } else {
-            if (tone.getFretNum() == 0) {
+            if (fret.getFretNum() == 0) {
               fretStr = fretStr.length() == 2 ? fretStr : String.format("%3s", fretStr);
               stringBuilder.append(fretStr).append("┃┃");
             } else {
-              fretStr = fretStr.length() == 2 ? fretStr : String.format("%s┈", fretStr);
-              stringBuilder.append("┈┈").append(fretStr).append("┈┈┃");
+              fretStr = fretStr.length() == 2 ? fretStr : String.format("%s%s", fretStr, stringChar);
+              stringBuilder.append(StringUtils.repeat(stringChar, 2)).append(fretStr).append(StringUtils.repeat(stringChar, 2)).append("┃");
             }
           }
 
         } else {
-          if (tone.getFretNum() == 0) {
+          if (fret.getFretNum() == 0) {
             stringBuilder.append("   ").append("┃┃");
           } else {
-            if (instrument.isBanjo() && (tone.getFretNum() > 0 && tone.getFretNum() < 6) && tone.getStringNum() == 0) {
+            if (instrument.isBanjo() && (fret.getFretNum() > 0 && fret.getFretNum() < 6) && fret.getStringNum() == 0) {
               stringBuilder.append("      ┃");
             } else {
-              stringBuilder.append("┈┈┈┈┈┈┃");
+              stringBuilder.append(StringUtils.repeat(stringChar, 6)).append("┃");
             }
           }
         }
@@ -162,6 +170,7 @@ public class HorizontalView {
     private boolean intervals;
     private boolean inlays;
     private boolean colour;
+    private boolean octaves;
   }
 }
 

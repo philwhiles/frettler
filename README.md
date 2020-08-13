@@ -89,7 +89,8 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 - -i or --intervals an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
 - -m or --mono an optional flag which will make Frettler display its diagrams without colour.
 - -c or --chords will calculate and list the diatonic chords in the scale (Chord name and notes).
-- -v or --verbose will print out some explantory info about Frettlers decision making, see below.
+- -v or --verbose will print out some explanatory info about Frettlers decision making, see below.
+- -o or --octaves will colourize the notes or intervals according to the relative octave (**)
 
 (*) The interval labels use the following convention :
 - P1 - perfect unison/root
@@ -104,6 +105,8 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 - M6 - major sixth
 - m7 - minor seventh
 - M7 - major seventh
+
+(**) The octave colouring is based on the frets octave, relative to the other frets on the fretboard, and not relative to piano octaves.
 
 #### Verbose mode
 It's all well and good that Frettler can work out the scales and chords for you, but if you want to understand what choices it makes that leads to the notes displayed

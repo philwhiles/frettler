@@ -25,6 +25,7 @@ import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
+import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
@@ -64,12 +65,17 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
     Scale scale = null;
     Chord chord = null;
+    
+    if (instrument instanceof Banjo && isOctaves()) {
+      out.println("Sorry - haven't worked out how to handle that 5th string in octave calculation - yet");
+      return;
+    }
 
     switch (this.view.getType()) {
       case HORIZONTAL:
         HorizontalView horizontalView = new HorizontalView(instrument);
         HorizontalView.Options horizontalViewOptions =
-            horizontalView.new Options(intervals, true, !isMono());
+            horizontalView.new Options(intervals, true, !isMono(), isOctaves());
 
         if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
           scale = new Scale(this.root, this.intervalPattern);
@@ -97,7 +103,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
       case VERTICAL:
         VerticalView verticalView = new VerticalView(instrument);
-        VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !isMono());
+        VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !isMono(), isOctaves());
 
         if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
           scale = new Scale(this.root, this.intervalPattern);
@@ -125,7 +131,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
       case CHORD:
         VerticalView chordView = new VerticalView(instrument);
-        VerticalView.Options chordViewOptions = chordView.new Options(intervals, !isMono());
+        VerticalView.Options chordViewOptions = chordView.new Options(intervals, !isMono(), isOctaves());
         Optional<Chord> chordOpt = Chord.findChord(notes);
         if (chordOpt.isPresent()) {
           chordView.showArpeggio(chordOpt.get(), chordViewOptions);
