@@ -22,7 +22,6 @@ declare -a cmds=(
 "./frettler guitar chord -n c,e,g =Standard guitar, lookup chord and display vertically"
 "./frettler guitar vertical A scale_minor --chords=Standard guitar, vertical view of A Minor chord, with diatonic chords"
 "./frettler guitar vertical C chord_maj=Standard guitar, vertical view of C Major arpeggio "
-"./frettler guitar vertical A scale_minor -c=Standard guitar, vertical view of A Minor scale, with diatonic chords"
 "./frettler bassguitar horizontal C scale_major_pentatonic=Bass guitar, fretboard view of C Major Pentatonic scale"
 "./frettler guitar horizontal A scale_minor_pentatonic -s B,E,A,D,G,B,E=Am Pentatonic scale on a 7 string guitar"
 "./frettler ukelele horizontal A scale_harmonic_minor=Ukelele, fretboard view of Am Harmonic scale "

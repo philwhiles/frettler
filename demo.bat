@@ -14,7 +14,6 @@ SET cmds[7]=frettler chord c,e --rule loose=No instrument, just loose reverse ch
 SET cmds[8]=frettler guitar chord -n c,e,g =Standard guitar, lookup chord and display vertically
 SET cmds[9]=frettler guitar vertical A scale_minor --chords=Standard guitar, vertical view of A Minor chord, with diatonic chords
 SET cmds[10]=frettler guitar vertical C chord_maj=Standard guitar, vertical view of C Major arpeggio 
-SET cmds[11]=frettler guitar vertical A scale_minor -c=Standard guitar, vertical view of A Minor scale, with diatonic chords
 SET cmds[12]=frettler bassguitar horizontal C scale_major_pentatonic=Bass guitar, fretboard view of C Major Pentatonic scale
 SET cmds[13]=frettler guitar horizontal A scale_minor_pentatonic -s B,E,A,D,G,B,E=Am Pentatonic scale on a 7 string guitar
 SET cmds[14]=frettler ukelele horizontal A scale_harmonic_minor=Ukelele, fretboard view of Am Harmonic scale 
