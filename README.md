@@ -58,12 +58,17 @@ Do read the details below to get an understanding of how to drive Frettler, but 
 The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
 
 ## Arguments
-Frettler has two ways of viewing scales/modes and arpeggios. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
+Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
 the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
-### Required Arguments
-The first argument to frettler must be one of the following:
+Frettlers first argument can either be an instrument, in which case the following commands must follow the instrument conventions below, or it can be one of its secondary, ancilliary, arguments,
+such as 'patterns' or 'chord', each of which have expectations for the subsequent arguments.
+
+
+### Primary Argument - Instrument Commands
+The following instruments are supported:
+
 - guitar
 - bassguitar
 - ukelele
@@ -72,7 +77,10 @@ The first argument to frettler must be one of the following:
 - completions
 - chord
 
-The arguments which follow (or don't in the case of completions!) are as follows.
+A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
+
+The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
+just use any instrument other than banjo with --strings A,B,C,etc.
 
 ### Required Arguments - Instrument Commands
 When you want Frettler to display a scale or chord on a fretboard, in this order:
@@ -123,35 +131,7 @@ Produces (truncated output here) :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
-### Customising your Frettler script
-The 'frettler' scripts created by the build, simply pass all arguments to the java program, and if you find yourself regularly using Frettler with say a strings argument
-you can make your life easier by creating your own frettler script. Say you want to use drop D tuning all the time :
-
-Create a file in the top frettler directory, and call it 'dropd', with the following content:
-
-#### Linux/macOS
-```
-#!/bin/bash
-java -jar target/frettler-0.1.0-jar-with-dependencies.jar $@ --strings D,A,D,G,B,E
-```
-
-Save your dropd file, then back at your terminal prompt, execute :
-
-```
-chmod +x dropd
-```
-
-#### Windows
-```
-@echo off
-chcp 65001 ^> nul
-java -Dfile.encoding=UTF8 -jar ./target/frettler-0.1.0-jar-with-dependencies.jar %%\* --strings D,A,D,G,B,E
-```
-
-
-Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
-
-## Reverse Chord Lookup
+### Primary Argument - Reverse Chord Lookup
 Frettler also has a 'chord' command. In fact it has two...
 #### Print chord name found
 The simplest takes the form :
@@ -190,7 +170,7 @@ C5   (c chord_5)   [C(P1), G(P5)]```
 - loose
 None of the notes is considered the sole tonic, and all chords, with any tonic, even those not provided, will be included in the list. This will be a long list if
 all you provide is one note.
-```
+``
 > ./frettler chord c,g -r loose
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
 Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
@@ -213,7 +193,7 @@ With this form, frettler will display the chord found using its Vertical view on
 With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
 
 
-## Patterns Command
+### Primary Argument - Patterns Command
 Frettler understands three types of interval patterns - scales, modes and chords. At times it will expect you to provide it one type and not the other. The framework it uses for
 parsing the various commands will help you by suggesting the possible type at times, and bash tab completion can help you a lot - if you had typed 'scale' then hit tab, it would list 
 only the possible scales you can use (that's why the patterns are prefixed with their type). But if you don't use bash and Frettlers provided tab completion, it might help you to list
@@ -229,22 +209,7 @@ Want to just see the list of Frettler understood chords?
 ```
 Or 'scale'. Or 'mode'. You get the idea.
 
-## Instruments
-A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
-
-The instrument 'banjo' will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
-just use any instrument other than banjo with --strings A,B,C,etc.
-
-### Chord fingerings
-I am working on a version of the vertical view which can display fingering for a given chord. It appears to work for standard six string guitar, open string chords, but for anything else,
-it currently gets it wrong. I am finding it difficult to write the code that can make the right decisions, and using a database containing recognised chord fingerings is not an option
-when you consider that Frettlers flexibility around the number of strings and their tunings. ie a fingering for Am on a six string guitar would not translate to a 5 string banjo with different
-tuning.
-
-Any and all contributions to the rules needed to select the appropriate frets for a chord are welcomed.
-
-
-### Tab Completion
+### Primary Argument - Tab Completion Command
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
 
 ```
@@ -253,6 +218,35 @@ source <(./frettler completions)
 
 Tab completion in bash helps greatly with Frettler - bash will complete all of the args for you and show you the possible completions, handy with the Frettler interval pattern names.
 The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
+
+## Customising your Frettler script
+The 'frettler' scripts created by the build, simply pass all arguments to the java program, and if you find yourself regularly using Frettler with say a strings argument
+you can make your life easier by creating your own frettler script. Say you want to use drop D tuning all the time :
+
+Create a file in the top frettler directory, and call it 'dropd', with the following content:
+
+### Linux/macOS
+```
+#!/bin/bash
+java -jar target/frettler-0.1.0-jar-with-dependencies.jar $@ --strings D,A,D,G,B,E
+```
+
+Save your dropd file, then back at your terminal prompt, execute :
+
+```
+chmod +x dropd
+```
+
+### Windows
+```
+@echo off
+chcp 65001 ^> nul
+java -Dfile.encoding=UTF8 -jar ./target/frettler-0.1.0-jar-with-dependencies.jar %%\* --strings D,A,D,G,B,E
+```
+
+
+Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
+
 
 ## Programmatically
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
