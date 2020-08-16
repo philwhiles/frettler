@@ -149,6 +149,7 @@ The chord matching can follow one of three rules, using the '--rules [strict,rel
 - strict
 This is the default rule, in which the first note is assumed to be the tonic, and only the chord having all the notes and only the notes will be listed.
 If you are wondering about the significance of the tonic, consider Cm7b5 (C m7b5) [C,D#,F#,A#] and D#min6 (D# min6) [D#,F#,A#,C].
+
 ```
 > ./frettler chord c,e,g
 Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
@@ -156,6 +157,7 @@ Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
 
 - relaxed
 The first note is again considered to be the tonic, the listed chords will contain all the provided notes, but not exclusively ie the chords may include other notes.
+
 ```
 > ./frettler chord c,g -r relaxed
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
@@ -168,6 +170,7 @@ C5   (c chord_5)   [C(P1), G(P5)]```
 - loose
 None of the notes is considered the sole tonic, and all chords, with any tonic, even those not provided, will be included in the list. This will be a long list if
 all you provide is one note.
+
 ```
 > ./frettler chord c,g -r loose
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
