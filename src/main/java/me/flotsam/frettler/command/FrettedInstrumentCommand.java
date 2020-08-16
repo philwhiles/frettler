@@ -17,6 +17,7 @@ package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -129,6 +130,15 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
         }
         break;
 
+      case FIND:
+        HorizontalView finderView = new HorizontalView(instrument);
+        HorizontalView.Options finderViewOptions =
+            finderView.new Options(false, true, !isMono(), isOctaves());
+        Scale arbitraryScale = new Scale(Arrays.asList(notes));
+        out.println();
+        finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions);
+        break;
+        
       case CHORD:
         VerticalView chordView = new VerticalView(instrument);
         VerticalView.Options chordViewOptions = chordView.new Options(intervals, !isMono(), isOctaves());

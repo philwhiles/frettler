@@ -131,7 +131,15 @@ Produces (truncated output here) :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
-### Primary Argument - Reverse Chord Lookup
+### Primary Argument - Find Notes
+Frettler can display all occurences of arbitrary notes on the fretboard for you with the 'find' command. ie to see all occurences of the notes
+c and g, try:
+
+```
+./frettler guitar find --notes c,g
+```
+
+### Primary Argument - Chord Reverse Lookup
 Frettler also has a 'chord' command. In fact it has two...
 #### Print chord name found
 The simplest takes the form :
@@ -189,7 +197,7 @@ A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
 The second way of getting Frettler to do a reverse chord lookup is to use 'chord' as the keyword immediately following your instrument, as follows :
 
 ```
-./frettler guitar chord -n As,D,f
+./frettler guitar chord --notes As,D,f
 ```
 
 With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles --strings and --frets).

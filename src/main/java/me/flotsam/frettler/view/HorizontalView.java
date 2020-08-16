@@ -117,8 +117,7 @@ public class HorizontalView {
             }
           } else {
             if (fret.getFretNum() == 0) {
-              fretStr = fretStr.length() == 2 ? fretStr : String.format("%3s", fretStr);
-              stringBuilder.append(fretStr).append("┃┃");
+              stringBuilder.append(String.format("%3s", fretStr)).append("┃┃");
             } else {
               fretStr = fretStr.length() == 2 ? fretStr : String.format("%s%s", fretStr, stringChar);
               stringBuilder.append(StringUtils.repeat(stringChar, 2)).append(fretStr).append(StringUtils.repeat(stringChar, 2)).append("┃");

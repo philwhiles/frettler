@@ -58,7 +58,7 @@ public class FrettlerCommand {
   protected boolean intervals;
   
   public enum View {
-    HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), CHORD, C(CHORD);
+    HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), CHORD, C(CHORD), FIND, F(FIND);
     @Getter
     private View type;
 

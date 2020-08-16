@@ -13,9 +13,10 @@ example() {
 declare -a cmds=(
 "./frettler guitar horizontal C scale_major=Standard guitar, fretboard view of C Major scale"
 "./frettler guitar horizontal C scale_major --intervals=Standard guitar, fretboard view of C Major scale, intervals instead of notes"
-#"./frettler guitar horizontal C scale_major --octaves=Standard guitar, fretboard view of C Major scale, colourizing the fretboard relative octaves"
+"./frettler guitar horizontal C scale_major --octaves=Standard guitar, fretboard view of C Major scale, colourizing the fretboard relative octaves"
 "./frettler guitar horizontal C scale_major --verbose=Standard guitar, fretboard view of C Major scale, verbose mode"
 "./frettler guitar horizontal C scale_major --chords --verbose=Standard guitar, fretboard view of C Major scale, derive diatonic chords, verbose mode"
+"./frettler guitar find --notes c=Standard guitar, just show all occurences of note 'C'"
 "./frettler chord c,e,g=No instrument, just exact reverse chord lookup"
 "./frettler chord c,e --rule relaxed=No instrument, just relaxed reverse chord lookup"
 "./frettler chord c,e --rule loose=No instrument, just loose reverse chord lookup"
