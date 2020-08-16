@@ -68,7 +68,7 @@ public class Scale {
   }
 
 
-  public Scale(List<Note> notes) {
+  private Scale(List<Note> notes) {
     this.scalePattern = IntervalPattern.SCALE_CHROMATIC;
     this.rootNote = notes.get(0);
     ScaleInterval [] intervals = ScaleInterval.values(); 

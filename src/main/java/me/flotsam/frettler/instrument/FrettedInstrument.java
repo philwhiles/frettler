@@ -59,7 +59,7 @@ public abstract class FrettedInstrument {
     this.frets = frets;
     this.stringNotes = Arrays.asList(strings);
 
-    Scale referenceScale = new Scale(Arrays.asList(Note.values()));
+    Scale referenceScale = Scale.CHROMATIC_SCALE;
     int accumulativeDistance = 0;
     ScaleNote prevStringNote = referenceScale.getHead();
 

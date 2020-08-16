@@ -168,7 +168,7 @@ C5   (c chord_5)   [C(P1), G(P5)]```
 - loose
 None of the notes is considered the sole tonic, and all chords, with any tonic, even those not provided, will be included in the list. This will be a long list if
 all you provide is one note.
-``
+```
 > ./frettler chord c,g -r loose
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
 Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
