@@ -1,3 +1,11 @@
+# 16th Aug 2020
+- octaves working again
+- find command added
+- fixed mono display with intervals
+
+# 15th Aug 2020
+- oops. broke it all with --octaves! Fixed but octaves temporarily disabled. I really must write some unit tests.
+
 # 11th Aug 2020
 - added --octaves option
 
