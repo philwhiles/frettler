@@ -17,7 +17,6 @@
 
 package me.flotsam.frettler.command;
 
-import lombok.Data;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;

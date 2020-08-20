@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Banjo;
@@ -45,14 +45,14 @@ import picocli.CommandLine.Option;
 public abstract class FrettedInstrumentCommand extends FrettlerCommand {
 
   @Option(names = {"-n", "--notes"}, description = "The chord notes to analyse", split = ",")
-  Note[] notes = new Note[] {};
+  Pitch[] notes = new Pitch[] {};
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
 
   @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
       description = "comma separated list of string tunings ie E,A,D,G,B,E")
-  Note[] strings = new Note[] {};
+  Pitch[] strings = new Pitch[] {};
 
   @Option(names = {"-f", "--frets"}, paramLabel = "num",
       description = "overrides the default 12 frets displayed")
@@ -79,7 +79,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
             horizontalView.new Options(intervals, true, !isMono(), isOctaves());
 
         if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
-          scale = new Scale(this.root, this.intervalPattern);
+          scale = new Scale(this.root.getPitch(), this.intervalPattern);
           horizontalView.showScale(scale, horizontalViewOptions);
           List<Chord> chords = new ArrayList<>();
           if (chordMode) {
@@ -94,7 +94,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
             }
           }
         } else {
-          chord = new Chord(this.root, this.intervalPattern);
+          chord = new Chord(this.root.getPitch(), this.intervalPattern);
           horizontalView.showChord(chord, horizontalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -107,7 +107,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
         VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !isMono(), isOctaves());
 
         if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
-          scale = new Scale(this.root, this.intervalPattern);
+          scale = new Scale(this.root.getPitch(), this.intervalPattern);
           verticalView.showScale(scale, verticalViewOptions);
           List<Chord> chords = new ArrayList<>();
           if (chordMode) {
@@ -122,7 +122,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
             }
           }
         } else {
-          chord = new Chord(this.root, this.intervalPattern);
+          chord = new Chord(this.root.getPitch(), this.intervalPattern);
           verticalView.showArpeggio(chord, verticalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -164,10 +164,10 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
     out.println(
         "\n┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈\n");
     for (Chord aChord : chords) {
-      StringBuilder sb = new StringBuilder("Take " + colourNote(aChord.getChordRootNote().getNote())
+      StringBuilder sb = new StringBuilder("Take " + colourNote(aChord.getChordRootNote().getPitch())
           + " and the following 2 alternate notes from the source scale:\n\n          ");
-      Note[] chordNotes = aChord.getChordNotes().stream().map(sn -> sn.getNote())
-          .collect(Collectors.toList()).toArray(new Note[] {});
+      Pitch[] chordNotes = aChord.getChordNotes().stream().map(sn -> sn.getPitch())
+          .collect(Collectors.toList()).toArray(new Pitch[] {});
       List<ScaleNote> scaleNotesTwice = new ArrayList<>();
       scaleNotesTwice.addAll(scale.getScaleNotes());
       scaleNotesTwice.addAll(scale.getScaleNotes());
@@ -176,17 +176,17 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       for (ScaleNote scaleNote : scaleNotesTwice) {
         boolean isChordNote = false;
         if (chordNoteIdx < chordNotes.length) {
-          isChordNote = chordNotes[chordNoteIdx] == scaleNote.getNote();
+          isChordNote = chordNotes[chordNoteIdx] == scaleNote.getPitch();
           if (isChordNote) {
             chordNoteIdx++;
           }
         }
-        sb.append(isChordNote ? colourNote(scaleNote.getNote()) : scaleNote.getNote().getLabel())
+        sb.append(isChordNote ? colourNote(scaleNote.getPitch()) : scaleNote.getPitch().getLabel())
             .append("    ");
       }
       out.println(sb.toString());
       out.println("\nFind those notes in the chromatic scale relative to "
-          + colourNote(aChord.getChordRootNote().getNote()));
+          + colourNote(aChord.getChordRootNote().getPitch()));
       out.println(aChord.describe(isMono()));
       out.print("Those intervals identify the chord as : ");
       out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
@@ -197,7 +197,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
     }
   }
 
-  private String colourNote(Note note) {
+  private String colourNote(Pitch note) {
     return "" + (isMono() ? "" : ColourMap.get(note)) + note.getLabel()
         + (isMono() ? "" : Colour.RESET);
   }

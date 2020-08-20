@@ -18,7 +18,7 @@
 package me.flotsam.frettler.command;
 
 import me.flotsam.frettler.engine.IntervalPattern;
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import picocli.CommandLine.Command;
 
 /**
@@ -44,7 +44,7 @@ public class CompletionsCommand implements Runnable {
     
     sb.append("    local note_opts\n"); 
     sb.append("    note_opts=\"");
-    for (Note note:Note.values()) {
+    for (Pitch note:Pitch.values()) {
       sb.append(note.name()).append(" ");
     }
     sb.replace(sb.length()-1, sb.length(), "");

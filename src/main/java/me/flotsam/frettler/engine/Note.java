@@ -18,13 +18,50 @@
 package me.flotsam.frettler.engine;
 
 import lombok.Getter;
+import me.flotsam.frettler.engine.Pitch;
+import static me.flotsam.frettler.engine.Note.Accidental.NATURAL;
+import static me.flotsam.frettler.engine.Note.Accidental.FLAT;
+import static me.flotsam.frettler.engine.Note.Accidental.SHARP;
 
 public enum Note {
-  C("C"), Cs("C#"), D("D"), Ds("D#"), E("E"), F("F"), Fs("F#"), G("G"), Gs("G#"), A("A"), As( "A#"), B("B");
+  C(Pitch.C, NATURAL, "C"),
+  Cs(Pitch.Cs, SHARP, "C#"),
+  Db(Pitch.Cs, FLAT, "Db"),
+  D(Pitch.D, NATURAL, "D"),
+  Ds(Pitch.Ds, SHARP, "D#"),
+  Eb(Pitch.Ds, FLAT, "Eb"),
+  E(Pitch.E, NATURAL, "E"),
+  F(Pitch.F, NATURAL, "F"),
+  Fs(Pitch.Fs, SHARP, "F#"),
+  Gb(Pitch.Fs, FLAT, "Gb"),
+  G(Pitch.G, NATURAL, "G"),
+  Gs(Pitch.Gs, SHARP, "G#"),
+  Ab(Pitch.Gs, FLAT, "Ab"),
+  A(Pitch.A, NATURAL, "A"),
+  As(Pitch.As, SHARP, "A#"),
+  Bb(Pitch.As, FLAT, "Bb"),
+  B(Pitch.B, NATURAL, "B");
 
+  @Getter private Pitch pitch;
+  @Getter private Accidental accidental;
   @Getter private String label;
 
-  private Note(String label) {
+  private Note(Pitch pitch, Accidental accidental, String label) {
+    this.pitch = pitch;
+    this.accidental = accidental;
     this.label = label;
+  }
+  
+  public Note getAlternate() {
+    for (Note note:values()) {
+      if (this.accidental != note.accidental && note.pitch == this.pitch) {
+        return note;
+      }
+    }
+    return this;
+  }
+  
+  public enum Accidental {
+    NATURAL, SHARP, FLAT
   }
 }

@@ -21,25 +21,28 @@ import java.util.Optional;
 import lombok.Getter;
 
 public class ScaleNote {
-  @Getter private Note note;
+  @Getter private Pitch pitch;
   @Getter private Position position;
   @Getter private ScaleNote nextScaleNote;
+  @Getter private ScaleNote prevScaleNote;
   @Getter private Optional<ScaleInterval> interval;
   @Getter private Scale scale;
 
   /**
    * Can only be created by the Scale class which will also assign it its Position in the Scale
    * linked list
-   * @param note the note it represents
+   * @param pitch the note it represents
    * @param interval is interval within the scale it is being created for
    * @param scale the scale it will belong to
    */
-  ScaleNote(Note note, Optional<ScaleInterval> interval, Scale scale) {
-    this.note = note;
+  ScaleNote(Pitch pitch, Optional<ScaleInterval> interval, Scale scale) {
+    this.pitch = pitch;
     this.interval = interval;
     this.scale = scale;
   }
-
+  void setPrevScaleNote(ScaleNote scaleNote) {
+    this.prevScaleNote = scaleNote;
+  }
   void setNextScaleNote(ScaleNote scaleNote) {
     this.nextScaleNote = scaleNote;
   }
@@ -48,10 +51,10 @@ public class ScaleNote {
   }
 
   public String toString() {
-    return note.getLabel() + " " + interval.toString();
+    return pitch.getLabel() + " " + interval.toString();
   }
 
   public boolean equalsTonally(ScaleNote other) {
-    return (other.note == this.note);
+    return (other.pitch == this.pitch);
   }
 }

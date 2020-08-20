@@ -30,7 +30,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
@@ -65,7 +65,7 @@ public class VerticalView {
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getLabel() + " ["
-        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
+        + instrument.getStringNotes().stream().map(Pitch::name).collect(Collectors.joining(","))
         + "])", 30));
     out.println();
 
@@ -74,7 +74,7 @@ public class VerticalView {
     for (List<Fret> fretFrets : fretboardFrets) {
       for (Fret fret : fretFrets) {
         Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
-            .filter(cn -> fret.getNote().equals(cn.getNote())).findAny();
+            .filter(cn -> fret.getNote().equals(cn.getPitch())).findAny();
         if (chordScaleNoteForFret.isPresent()) {
           chordFret.add(new ChordFret(fret, chordScaleNoteForFret.get().getInterval().get()));
         }
@@ -93,7 +93,7 @@ public class VerticalView {
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getLabel() + " ["
-        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
+        + instrument.getStringNotes().stream().map(Pitch::name).collect(Collectors.joining(","))
         + "])", 30));
     out.println();
 
@@ -105,7 +105,7 @@ public class VerticalView {
           continue; // must be fret 1-5 of the 5th string on banjo
         }
         Optional<ScaleNote> scaleNoteForFret = scale.getScaleNotes().stream()
-            .filter(sn -> fret.getNote().equals(sn.getNote())).findAny();
+            .filter(sn -> fret.getNote().equals(sn.getPitch())).findAny();
         if (scaleNoteForFret.isPresent()) {
           tones.add(new ChordFret(fret, scaleNoteForFret.get().getInterval().get()));
         }

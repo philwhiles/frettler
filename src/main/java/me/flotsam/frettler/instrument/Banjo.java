@@ -17,17 +17,17 @@
 
 package me.flotsam.frettler.instrument;
 
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 
 public class Banjo extends FrettedInstrument {
   
-  private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.D, Note.G, Note.B, Note.D};
+  private static final Pitch[] DEFAULT_STRINGS = new Pitch[] {Pitch.G, Pitch.D, Pitch.G, Pitch.B, Pitch.D};
 
   public Banjo() {
     this(DEFAULT_STRINGS, DEFAULT_FRETS);
   }
 
-  public Banjo(Note[] strings, Integer frets) {
+  public Banjo(Pitch[] strings, Integer frets) {
     super("Banjo", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
   

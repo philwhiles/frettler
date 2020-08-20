@@ -20,16 +20,16 @@ package me.flotsam.frettler.instrument;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 
 @AllArgsConstructor
 @ToString
 public class Fret {
   @Getter private final int index;
-  @Getter private final Note note;
+  @Getter private final Pitch note;
   @Getter private final int octave;
   @Getter private final int stringNum;
-  @Getter private final Note stringNote;
+  @Getter private final Pitch stringNote;
   @Getter private final int fretNum;
   
   

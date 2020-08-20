@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern;
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
@@ -37,7 +37,7 @@ public abstract class FrettedInstrument {
   @Getter
   List<Fret> allFrets = new ArrayList<>();
   @Getter
-  List<Note> stringNotes;
+  List<Pitch> stringNotes;
 
   // remember element 0 in each inner List is the open string note
   @Getter
@@ -54,7 +54,7 @@ public abstract class FrettedInstrument {
   private String label;
 
 
-  public FrettedInstrument(String label, int frets, Note[] strings) {
+  public FrettedInstrument(String label, int frets, Pitch[] strings) {
     this.label = label;
     this.frets = frets;
     this.stringNotes = Arrays.asList(strings);
@@ -81,7 +81,7 @@ public abstract class FrettedInstrument {
           fret = new Fret(stringNum * frets + fretNum, null, currentOctave, stringNum,
               stringNotes.get(stringNum), fretNum);
         } else {
-          fret = new Fret(stringNum * frets + fretNum, fretNote.getNote(), currentOctave, stringNum,
+          fret = new Fret(stringNum * frets + fretNum, fretNote.getPitch(), currentOctave, stringNum,
               stringNotes.get(stringNum), fretNum);
 
           fretNote = fretNote.getNextScaleNote();
@@ -108,9 +108,9 @@ public abstract class FrettedInstrument {
   private int calcRelativeDistance(ScaleNote fromNote, ScaleNote toNote) {
     // need to calculate distance from the from note in a new scale starting at that note
     // to avoid the wrapping issue if the to note occurs  before the from note 
-    Scale referenceScale = new Scale(fromNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
-    ScaleNote from = referenceScale.findScaleNote(fromNote.getNote()).get();
-    ScaleNote to = referenceScale.findScaleNote(toNote.getNote()).get();
+    Scale referenceScale = new Scale(fromNote.getPitch(), IntervalPattern.SCALE_CHROMATIC);
+    ScaleNote from = referenceScale.findScaleNote(fromNote.getPitch()).get();
+    ScaleNote to = referenceScale.findScaleNote(toNote.getPitch()).get();
     return to.getInterval().get().getSemiTones() - from.getInterval().get().getSemiTones();
   }
   

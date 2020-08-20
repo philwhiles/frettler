@@ -39,7 +39,7 @@ enum Position {
  */
 public class Scale {
 
-  public static final Scale CHROMATIC_SCALE = new Scale(Arrays.asList(Note.values()));
+  public static final Scale CHROMATIC_SCALE = new Scale(Arrays.asList(Pitch.values()));
 
   @Getter
   private ScaleNote head = null;
@@ -48,10 +48,10 @@ public class Scale {
   @Getter
   private IntervalPattern scalePattern;
   @Getter
-  private Note rootNote;
+  private Pitch rootNote;
 
 
-  public Scale(Note rootNote, IntervalPattern scalePattern) {
+  public Scale(Pitch rootNote, IntervalPattern scalePattern) {
     if (scalePattern.getPatternType() == PatternType.CHORD) {
       System.err.println(
           "Interval pattern '" + scalePattern.getLabel() + "' is not a scale/mode pattern");
@@ -63,23 +63,23 @@ public class Scale {
     Optional<ScaleNote> rootScaleNote = CHROMATIC_SCALE.findScaleNote(rootNote);
     for (ScaleInterval interval : scalePattern.getIntervals()) {
       ScaleNote scaleNote = Scale.getScaleNote(rootScaleNote.get(), interval);
-      addScaleNote(scaleNote.getNote(), Optional.of(interval));
+      addScaleNote(scaleNote.getPitch(), Optional.of(interval));
     }
   }
 
 
-  public Scale(List<Note> notes) {
+  public Scale(List<Pitch> notes) {
     this.scalePattern = IntervalPattern.SCALE_CHROMATIC;
     this.rootNote = notes.get(0);
     ScaleInterval [] intervals = ScaleInterval.values(); 
     int interval = 0;
-    for (Note note : notes) {
+    for (Pitch note : notes) {
       addScaleNote(note, Optional.of(intervals[interval++]));
     }
   }
 
 
-  private void addScaleNote(Note note, Optional<ScaleInterval> interval) {
+  private void addScaleNote(Pitch note, Optional<ScaleInterval> interval) {
     ScaleNote newNoteNode = new ScaleNote(note, interval, this);
 
     if (head == null) {
@@ -87,24 +87,26 @@ public class Scale {
       head.setPosition(Position.HEAD);
     } else {
       tail.setNextScaleNote(newNoteNode);
+      newNoteNode.setPrevScaleNote(tail);
       tail.setPosition(Position.MIDDLE);
     }
 
     tail = newNoteNode;
     tail.setPosition(Position.TAIL);
     tail.setNextScaleNote(head);
+    head.setPrevScaleNote(tail);
   }
 
 
 
-  public boolean containsNote(Note note) {
+  public boolean containsNote(Pitch note) {
     ScaleNote currentNoteNode = head;
 
     if (head == null) {
       return false;
     } else {
       do {
-        if (currentNoteNode.getNote() == note) {
+        if (currentNoteNode.getPitch() == note) {
           return true;
         }
         currentNoteNode = currentNoteNode.getNextScaleNote();
@@ -113,14 +115,14 @@ public class Scale {
     }
   }
 
-  public Optional<ScaleNote> findScaleNote(Note note) {
+  public Optional<ScaleNote> findScaleNote(Pitch note) {
     ScaleNote currentNoteNode = head;
 
     if (head == null) {
       return Optional.empty();
     } else {
       do {
-        if (currentNoteNode.getNote() == note) {
+        if (currentNoteNode.getPitch() == note) {
           return Optional.of(currentNoteNode);
         }
         currentNoteNode = currentNoteNode.getNextScaleNote();
@@ -153,7 +155,7 @@ public class Scale {
       do {
         scaleNotes.add(scaleNote);
         scaleNote = scaleNote.getNextScaleNote();
-      } while (scaleNote != head && scaleNote.getNote() != head.getNote());
+      } while (scaleNote != head && scaleNote.getPitch() != head.getPitch());
     }
     return scaleNotes;
   }
@@ -174,8 +176,8 @@ public class Scale {
 
   public static ScaleNote getScaleNote(ScaleNote rootScaleNote, int semiTones) {
     ScaleNote scaleNote = rootScaleNote;
-    for (int i = 0; i < semiTones; i++) {
-      scaleNote = scaleNote.getNextScaleNote();
+    for (int i = 0; i < Math.abs(semiTones); i++) {
+      scaleNote = semiTones <= 0 ? scaleNote.getPrevScaleNote() : scaleNote.getNextScaleNote();
     }
     return scaleNote;
   }
@@ -204,7 +206,7 @@ public class Scale {
   }
 
   public String toString() {
-    return describe(false);
+    return describe(true);
   }
 
 
@@ -213,14 +215,14 @@ public class Scale {
     sb.append("\n          ");
     Optional<ScaleNote> chromaticScaleNote = CHROMATIC_SCALE.findScaleNote(rootNote);
     ScaleNote scaleNote = head;
-    List<Note> notes = new ArrayList<>();
+    List<Pitch> notes = new ArrayList<>();
     List<ScaleInterval> intervals = new ArrayList<>();
-    List<Note> chromaticScaleNotes = new ArrayList<>();
+    List<Pitch> chromaticScaleNotes = new ArrayList<>();
 
     do {
-      Note note = chromaticScaleNote.get().getNote();
+      Pitch note = chromaticScaleNote.get().getPitch();
       chromaticScaleNotes.add(note);
-      if (note == scaleNote.getNote()) {
+      if (note == scaleNote.getPitch()) {
         notes.add(note);
         intervals.add(scaleNote.getInterval().get());
         scaleNote = scaleNote.getNextScaleNote();
@@ -229,9 +231,9 @@ public class Scale {
         intervals.add(null);
       }
       chromaticScaleNote = Optional.of(chromaticScaleNote.get().getNextScaleNote());
-    } while (chromaticScaleNote.get().getNote() != head.getNote());
+    } while (chromaticScaleNote.get().getPitch() != head.getPitch());
 
-    for (Note note : chromaticScaleNotes) {
+    for (Pitch note : chromaticScaleNotes) {
       sb.append(String.format("%s%-2s    %s",
           notes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "", note.getLabel(),
           (mono ? "" : Colour.RESET)));

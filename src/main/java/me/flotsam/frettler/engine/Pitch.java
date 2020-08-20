@@ -15,19 +15,16 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.flotsam.frettler.instrument;
+package me.flotsam.frettler.engine;
 
-import me.flotsam.frettler.engine.Pitch;
+import lombok.Getter;
 
-public class Guitar extends FrettedInstrument {
-  
-  private static final Pitch[] DEFAULT_STRINGS = new Pitch[] {Pitch.E, Pitch.A, Pitch.D, Pitch.G, Pitch.B, Pitch.E};
+public enum Pitch {
+  C("C"), Cs("C#"), D("D"), Ds("D#"), E("E"), F("F"), Fs("F#"), G("G"), Gs("G#"), A("A"), As( "A#"), B("B");
 
-  public Guitar() {
-    this(DEFAULT_STRINGS, DEFAULT_FRETS);
-  }
+  @Getter private String label;
 
-  public Guitar(Pitch[] strings, Integer frets) {
-    super("Guitar", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  private Pitch(String label) {
+    this.label = label;
   }
 }

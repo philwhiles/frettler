@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -36,7 +36,7 @@ public class ChordCommand implements Runnable {
 
 
   @Parameters(index = "0", description = "The chord notes to analyse", split = ",")
-  Note[] notes = new Note[] {};
+  Pitch[] notes = new Pitch[] {};
 
   @Option(names = {"-v", "--verbose"},
       description = "if you want some background to Frettlers application of music theory")

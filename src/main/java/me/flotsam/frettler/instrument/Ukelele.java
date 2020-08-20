@@ -17,17 +17,17 @@
 
 package me.flotsam.frettler.instrument;
 
-import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 
 public class Ukelele extends FrettedInstrument {
   
-  private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.C, Note.E, Note.A};
+  private static final Pitch[] DEFAULT_STRINGS = new Pitch[] {Pitch.G, Pitch.C, Pitch.E, Pitch.A};
 
   public Ukelele() {
     this(DEFAULT_STRINGS, DEFAULT_FRETS);
   }
 
-  public Ukelele(Note[] strings, Integer frets) {
+  public Ukelele(Pitch[] strings, Integer frets) {
     super("Ukelele", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }
