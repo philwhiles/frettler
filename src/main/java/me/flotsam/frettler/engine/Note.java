@@ -17,11 +17,11 @@
 
 package me.flotsam.frettler.engine;
 
-import lombok.Getter;
-import me.flotsam.frettler.engine.Pitch;
-import static me.flotsam.frettler.engine.Note.Accidental.NATURAL;
 import static me.flotsam.frettler.engine.Note.Accidental.FLAT;
+import static me.flotsam.frettler.engine.Note.Accidental.NATURAL;
 import static me.flotsam.frettler.engine.Note.Accidental.SHARP;
+import java.util.Optional;
+import lombok.Getter;
 
 public enum Note {
   C(Pitch.C, NATURAL, "C"),
@@ -59,6 +59,25 @@ public enum Note {
       }
     }
     return this;
+  }
+  
+  public static Optional<Note> getSharp(Pitch pitch) {
+    return getAccidental(pitch, SHARP);
+  }
+
+  public static Optional<Note> getFlat(Pitch pitch) {
+    return getAccidental(pitch, FLAT);
+  }
+
+  public static Optional<Note> getAccidental(Pitch pitch, Accidental accidental) {
+    Optional<Note> note = Optional.empty();
+    for (Note candidateNote:values()) {
+      if (candidateNote.pitch == pitch && candidateNote.accidental == accidental) {
+        note = Optional.of(candidateNote);
+        break;
+      }
+    }
+    return note;
   }
   
   public enum Accidental {

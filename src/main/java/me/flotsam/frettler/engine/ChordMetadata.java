@@ -64,5 +64,4 @@ public class ChordMetadata {
   public enum Quality {
     MAJOR, MINOR, AUGMENTED, DIMINISHED, DOMINANT
   }
-
 }

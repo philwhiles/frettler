@@ -1,54 +1,70 @@
 package me.flotsam.frettler.engine;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/**
- * This started as something far more complex. Far too complex! I tried to extend the circular Scale class for a circle of fifths.
- * And it was ... complex. Sitting back, reading more about the whole COF theory and looking at what the engine could already do for me, and also
- * at what I needed from the COF, I came to the conclusion that a LINE of fifths was all that was needed. 
- * @author philwhiles
- */
 public class LineOfFifths {
-
-  static LinkedHashMap<ScaleNote, ScaleTuple> majorLine = new LinkedHashMap<>();
-  static LinkedHashMap<ScaleNote, ScaleTuple> minorLine = new LinkedHashMap<>();
+  static LinkedHashMap<Pitch, LineEntry> majorLine = new LinkedHashMap<>();
+  static LinkedHashMap<Pitch, LineEntry> minorLine = new LinkedHashMap<>();
+  static
   {
-    Scale chromatic = Scale.CHROMATIC_SCALE;
-    ScaleNote c = chromatic.findScaleNote(Pitch.C).get();
+    ScaleNote c = Scale.CHROMATIC_SCALE.findScaleNote(Pitch.C).get();
     for (int i = -7; i <= 7; i++) {
-      ScaleNote majorNote = Scale.getScaleNote(c, i * 7);
-      ScaleNote minorNote = Scale.getScaleNote(c, i * 7 + 21);
+      int fifthIntervals = ScaleInterval.P5.getSemiTones();
+
+      ScaleNote majorNote = Scale.getScaleNote(c, i * fifthIntervals);
+      ScaleNote minorNote = Scale.getScaleNote(c, i * fifthIntervals + 21);
 
       Scale majorScale = new Scale(majorNote.getPitch(), IntervalPattern.SCALE_MAJOR);
       Scale minorScale = new Scale(minorNote.getPitch(), IntervalPattern.SCALE_MINOR);
 
 
-      majorLine.put(majorNote, new ScaleTuple(majorScale, minorScale));
-      minorLine.put(minorNote, new ScaleTuple(majorScale, minorScale));
+      List<Note> accidentals = new ArrayList<>();
+      if (i > 0) {
+        for (int n = -1; n < i - 1; n++) {
+          ScaleNote sharpNote = Scale.getScaleNote(c, n * fifthIntervals + 1);
+          System.out.println(sharpNote);
+          Optional<Note> note =
+              Note.getSharp(Scale.getScaleNote(c, n * fifthIntervals + 1).getPitch());
+          if (note.isPresent()) {
+            accidentals.add(note.get());
+          }
+        }
+      } else if (i < 0) {
+        for (int n = 3; n > i + 3; n--) {
+          ScaleNote flatNote = Scale.getScaleNote(c, n * fifthIntervals + 1);
+          System.out.println(flatNote);
+          Optional<Note> note =
+              Note.getFlat(Scale.getScaleNote(c, n * fifthIntervals + 1).getPitch());
+          if (note.isPresent()) {
+            accidentals.add(note.get());
+          }
+        }
+      }
+
+      majorLine.put(majorNote.getPitch(), new LineEntry(majorScale, minorScale, accidentals));
+      minorLine.put(minorNote.getPitch(), new LineEntry(majorScale, minorScale, accidentals));
+      System.out.println("----------------");
     }
   }
-
-  public static void main(String[] args) {
-    LineOfFifths lof = new LineOfFifths();
-    lof.foo();
+  
+  public static LineEntry getMajorEntry(Pitch pitch) {
+    return majorLine.get(pitch);
   }
+  
 
-  public void foo() {
-    for (Map.Entry<ScaleNote, ScaleTuple> entry : majorLine.entrySet()) {
-      System.out.println(entry.getKey() + " : " + entry.getValue().getMajor() + " and " + entry.getValue().getMinor());
-    }
+
+  @AllArgsConstructor
+  static class LineEntry {
+    @Getter
+    private Scale major;
+    @Getter
+    private Scale minor;
+    @Getter
+    private List<Note> accidentals;
   }
-
-}
-
-
-@AllArgsConstructor
-class ScaleTuple {
-  @Getter
-  private Scale major;
-  @Getter
-  private Scale minor;
 }

@@ -20,6 +20,7 @@ package me.flotsam.frettler.engine;
 import java.util.Optional;
 import lombok.Getter;
 
+// pitch
 public class ScaleNote {
   @Getter private Pitch pitch;
   @Getter private Position position;
@@ -31,7 +32,7 @@ public class ScaleNote {
   /**
    * Can only be created by the Scale class which will also assign it its Position in the Scale
    * linked list
-   * @param pitch the note it represents
+   * @param note the note it represents
    * @param interval is interval within the scale it is being created for
    * @param scale the scale it will belong to
    */
