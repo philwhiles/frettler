@@ -38,6 +38,8 @@ public class Chord {
   private List<ScaleNote> chordNotes = new ArrayList<>();;
   @Getter
   private ChordMetadata metaData;
+  @Getter
+  private List<Note> accidentals;
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
@@ -55,7 +57,7 @@ public class Chord {
    * @param chordRootNote the tonic for the chord
    * @param chordPattern the scale pattern ie MAJOR, HARMONIC_MINOR
    */
-  public Chord(Pitch chordRootNote, IntervalPattern chordPattern) {
+  public Chord(Note chordRootNote, IntervalPattern chordPattern) {
     if (chordPattern.getPatternType() != PatternType.CHORD) {
       System.err
           .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
@@ -64,9 +66,14 @@ public class Chord {
     Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
-
+    this.accidentals = LineOfFifths.getMajorEntry(chordRootNote).getAccidentals();
     for (ScaleInterval interval : chordPattern.getIntervals()) {
-      chordNotes.add(chromaticScaleFromChordRoot.findScaleNote(interval).get());
+      ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(interval).get();
+      Note note = scaleNote.getNote();
+      if (note.getAccidental() == Note.Accidental.SHARP && !accidentals.contains(note)) {
+        note = note.getAlternate();
+      }
+      addScaleNote(chromaticScaleFromChordRoot, note, interval);
     }
     metaData = analyse();
   }
@@ -89,13 +96,18 @@ public class Chord {
     this.chordRootNote = chordRootNote;
 
     Scale chromaticScaleFromChordRoot =
-        new Scale(chordRootNote.getPitch(), IntervalPattern.SCALE_CHROMATIC);
+        new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
 
     for (int third : chordType.getThirds()) {
       ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
       Optional<ScaleNote> noteInRootScale =
-          chromaticScaleFromChordRoot.findScaleNote(chordNote.getPitch());
-      chordNotes.add(noteInRootScale.get());
+          chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
+      
+      Note note = noteInRootScale.get().getNote();
+      if (note.getAccidental() == Note.Accidental.SHARP && !accidentals.contains(note)) {
+        note = note.getAlternate();
+      }
+      addScaleNote(chromaticScaleFromChordRoot, note, noteInRootScale.get().getInterval().get());
     }
     this.chordPattern = IntervalPattern.SCALE_CHROMATIC;
     for (IntervalPattern pattern : IntervalPattern.values()) {
@@ -115,21 +127,26 @@ public class Chord {
     metaData = analyse();
   }
 
+  private void addScaleNote(Scale scale, Note note, ScaleInterval interval) {
+    ScaleNote newNote = new ScaleNote(note, Optional.of(interval), scale);
+    chordNotes.add(newNote);
+  }
+  
   /**
    * Will search all possible chords having the first note as the tonic, and containing
    * all the other notes exclusively
    * @param notes the notes to use in the chord search
    * @return optionally! the matching chord
    */
-  public static Optional<Chord> findChord(Pitch... notes) {
+  public static Optional<Chord> findChord(Note... notes) {
     Optional<Chord> result = Optional.empty();
 
-    Set<Pitch> chordSet = new HashSet<>(Arrays.asList(notes));
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
     if (notes.length != chordSet.size()) {
       out.println("Ooops - spotted a dupicate note there!");
       System.exit(-1);
     }
-    for (Pitch note : notes) {
+    for (Note note : notes) {
       if (result.isPresent()) {
         break;
       }
@@ -153,19 +170,19 @@ public class Chord {
    * @param notes the notes to use in the chord search
    * @return the matching chords
    */
-  public static List<Chord> findAllChords(Pitch... notes) {
-    Set<Pitch> chordSet = new HashSet<>(Arrays.asList(notes));
+  public static List<Chord> findAllChords(Note... notes) {
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
     if (notes.length != chordSet.size()) {
       out.println("Ooops - spotted a dupicate note there!");
       System.exit(-1);
     }
     List<Chord> chords = new ArrayList<>();
-    for (Pitch note : Pitch.values()) {
+    for (Pitch pitch : Pitch.values()) {
       for (IntervalPattern pattern : IntervalPattern.values()) {
         if (pattern.getPatternType() != PatternType.CHORD) {
           continue;
         }
-        Chord candidate = new Chord(note, pattern);
+        Chord candidate = new Chord(Note.forPitch(pitch), pattern);
         if (candidate.containsNotes(notes)) {
           chords.add(candidate);
         }
@@ -180,8 +197,8 @@ public class Chord {
    * @param notes the notes to use in the chord search
    * @return the matching chords
    */
-  public static List<Chord> findChords(Pitch... notes) {
-    Set<Pitch> chordSet = new HashSet<>(Arrays.asList(notes));
+  public static List<Chord> findChords(Note... notes) {
+    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
     if (notes.length != chordSet.size()) {
       out.println("Ooops - spotted a dupicate note there!");
       System.exit(-1);
@@ -200,13 +217,13 @@ public class Chord {
   }
 
   public String getLabel() {
-    return chordRootNote.getPitch().getLabel() + metaData.label;
+    return chordRootNote.getNote().getLabel() + metaData.label;
   }
 
   public String getTitle() {
-    return getLabel() + "   (" + chordRootNote.getPitch().name().toLowerCase() + " "
+    return getLabel() + "   (" + chordRootNote.getNote().name().toLowerCase() + " "
         + chordPattern.name().toLowerCase() + ")" + "   ["
-        + chordNotes.stream().map(n -> n.getPitch().getLabel() + "(" + n.getInterval().get() + ")")
+        + chordNotes.stream().map(n -> n.getNote().getLabel() + "(" + n.getInterval().get() + ")")
             .collect(Collectors.joining(", "))
         + "]";
   }
@@ -218,28 +235,28 @@ public class Chord {
   public String describe(boolean mono) {
     StringBuilder sb = new StringBuilder();
     Scale chromaticScaleFromChordRoot =
-        new Scale(chordRootNote.getPitch(), IntervalPattern.SCALE_CHROMATIC);
+        new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
     sb.append("\n          ");
-    ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(chordRootNote.getPitch()).get();
+    ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(chordRootNote.getNote()).get();
 
-    List<Pitch> notes = new ArrayList<>();
+    List<Note> notes = new ArrayList<>();
     List<ScaleInterval> intervals = new ArrayList<>();
-    List<Pitch> chordsNotes = new ArrayList<>();
+    List<Note> chordsNotes = new ArrayList<>();
 
     do {
-      Pitch note = scaleNote.getPitch();
+      Note note = scaleNote.getNote();
       notes.add(note);
       Optional<ScaleNote> chordNote =
-          chordNotes.stream().filter(sn -> sn.getPitch() == note).findAny();
+          chordNotes.stream().filter(sn -> sn.getNote() == note).findAny();
       intervals.add(scaleNote.getInterval().get());
       if (chordNote.isPresent()) {
-        chordsNotes.add(chordNote.get().getPitch());
+        chordsNotes.add(chordNote.get().getNote());
       }
       scaleNote = scaleNote.getNextScaleNote();
-    } while (scaleNote.getPitch() != chordRootNote.getPitch());
+    } while (scaleNote.getNote() != chordRootNote.getNote());
 
 
-    for (Pitch note : notes) {
+    for (Note note : notes) {
       sb.append(String.format("%s%-2s    %s",
           chordsNotes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "", note.getLabel(),
           (mono ? "" : Colour.RESET)));
@@ -255,11 +272,11 @@ public class Chord {
     return sb.toString();
   }
 
-  public boolean containsOnlyNotes(Pitch... notes) {
+  public boolean containsOnlyNotes(Note... notes) {
     int cnt = 0;
-    for (Pitch note : notes) {
+    for (Note note : notes) {
       for (ScaleNote scaleNote : chordNotes) {
-        if (scaleNote.getPitch() == note) {
+        if (scaleNote.getNote() == note) {
           cnt++;
           break;
         }
@@ -268,11 +285,11 @@ public class Chord {
     return cnt == chordNotes.size() && cnt == notes.length;
   }
 
-  public boolean containsNotes(Pitch... notes) {
+  public boolean containsNotes(Note... notes) {
     int cnt = 0;
-    for (Pitch note : notes) {
+    for (Note note : notes) {
       for (ScaleNote scaleNote : chordNotes) {
-        if (scaleNote.getPitch() == note) {
+        if (scaleNote.getNote() == note) {
           cnt++;
           break;
         }

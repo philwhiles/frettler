@@ -17,17 +17,17 @@
 
 package me.flotsam.frettler.instrument;
 
-import me.flotsam.frettler.engine.Pitch;
+import me.flotsam.frettler.engine.Note;
 
 public class Mandolin extends FrettedInstrument {
   
-  private static final Pitch[] DEFAULT_STRINGS = new Pitch[] {Pitch.G, Pitch.D, Pitch.A, Pitch.E};
+  private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.D, Note.A, Note.E};
 
   public Mandolin() {
     this(DEFAULT_STRINGS, DEFAULT_FRETS);
   }
 
-  public Mandolin(Pitch[] strings, Integer frets) {
+  public Mandolin(Note[] strings, Integer frets) {
     super("Mandolin", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

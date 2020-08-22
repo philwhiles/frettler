@@ -1,19 +1,17 @@
 /*
-    Copyright (C) 2020  Philip Whiles
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2020 Philip Whiles
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this program.
+ * If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package me.flotsam.frettler.engine;
 
@@ -24,6 +22,7 @@ import java.util.Optional;
 import lombok.Getter;
 
 public enum Note {
+  // @formatter:off
   C(Pitch.C, NATURAL, "C"),
   Cs(Pitch.Cs, SHARP, "C#"),
   Db(Pitch.Cs, FLAT, "Db"),
@@ -41,26 +40,39 @@ public enum Note {
   As(Pitch.As, SHARP, "A#"),
   Bb(Pitch.As, FLAT, "Bb"),
   B(Pitch.B, NATURAL, "B");
+  // @formatter:on
 
-  @Getter private Pitch pitch;
-  @Getter private Accidental accidental;
-  @Getter private String label;
+  @Getter
+  private Pitch pitch;
+  @Getter
+  private Accidental accidental;
+  @Getter
+  private String label;
 
   private Note(Pitch pitch, Accidental accidental, String label) {
     this.pitch = pitch;
     this.accidental = accidental;
     this.label = label;
   }
-  
+
   public Note getAlternate() {
-    for (Note note:values()) {
+    for (Note note : values()) {
       if (this.accidental != note.accidental && note.pitch == this.pitch) {
         return note;
       }
     }
     return this;
   }
-  
+
+  public static Note forPitch(Pitch pitch) {
+    for (Note candidateNote : values()) {
+      if (candidateNote.pitch == pitch) {
+        return candidateNote;
+      }
+    }
+    return null;// won't happen
+  }
+
   public static Optional<Note> getSharp(Pitch pitch) {
     return getAccidental(pitch, SHARP);
   }
@@ -71,7 +83,7 @@ public enum Note {
 
   public static Optional<Note> getAccidental(Pitch pitch, Accidental accidental) {
     Optional<Note> note = Optional.empty();
-    for (Note candidateNote:values()) {
+    for (Note candidateNote : values()) {
       if (candidateNote.pitch == pitch && candidateNote.accidental == accidental) {
         note = Optional.of(candidateNote);
         break;
@@ -79,7 +91,7 @@ public enum Note {
     }
     return note;
   }
-  
+
   public enum Accidental {
     NATURAL, SHARP, FLAT
   }

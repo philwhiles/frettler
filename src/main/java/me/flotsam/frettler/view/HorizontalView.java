@@ -26,6 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
@@ -65,7 +66,7 @@ public class HorizontalView {
   public void showChord(Chord chord, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(chord.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Pitch::name).collect(Collectors.joining(",")) + "]" , 84));
+    out.println(StringUtils.center(chord.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
     display(chord.getChordNotes(), options);
   }
@@ -77,7 +78,7 @@ public class HorizontalView {
   public void showScale(Scale scale, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(scale.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Pitch::name).collect(Collectors.joining(",")) + "]" , 84));
+    out.println(StringUtils.center(scale.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
     display(scale.getScaleNotes(), options);
   }
@@ -92,7 +93,7 @@ public class HorizontalView {
       StringBuilder stringBuilder = new StringBuilder();
       for (Fret fret : tonesInString) {
         Optional<ScaleNote> note =
-            scaleNotes.stream().filter(sn -> sn.getPitch() == fret.getNote()).findFirst();
+            scaleNotes.stream().filter(sn -> sn.getNote().getPitch() == fret.getNote().getPitch()).findFirst();
         
         if (octave != fret.getOctave()) {
           octave = fret.getOctave();
@@ -103,12 +104,12 @@ public class HorizontalView {
         if (note.isPresent()) {
           String fretStr = null;
           if (options.isIntervals()) {
-            fretStr = note.get().getInterval().isPresent() ? note.get().getInterval().get().getLabel() : note.get().getPitch().getLabel();
+            fretStr = note.get().getInterval().isPresent() ? note.get().getInterval().get().getLabel() : note.get().getNote().getLabel();
           } else {
-            fretStr = note.get().getPitch().getLabel();
+            fretStr = note.get().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getPitch());
+            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getNote());
             if (fret.getFretNum() == 0) {
               stringBuilder.append(col).append(String.format("%3s",fretStr)).append(Colour.RESET).append("┃┃");
             } else {

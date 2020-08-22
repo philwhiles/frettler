@@ -17,17 +17,17 @@
 
 package me.flotsam.frettler.instrument;
 
-import me.flotsam.frettler.engine.Pitch;
+import me.flotsam.frettler.engine.Note;
 
 public class Guitar extends FrettedInstrument {
   
-  private static final Pitch[] DEFAULT_STRINGS = new Pitch[] {Pitch.E, Pitch.A, Pitch.D, Pitch.G, Pitch.B, Pitch.E};
+  private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
 
   public Guitar() {
     this(DEFAULT_STRINGS, DEFAULT_FRETS);
   }
 
-  public Guitar(Pitch[] strings, Integer frets) {
+  public Guitar(Note[] strings, Integer frets) {
     super("Guitar", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

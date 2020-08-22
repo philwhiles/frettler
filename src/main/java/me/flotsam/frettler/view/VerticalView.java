@@ -19,9 +19,7 @@ import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +28,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
@@ -65,7 +64,7 @@ public class VerticalView {
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getLabel() + " ["
-        + instrument.getStringNotes().stream().map(Pitch::name).collect(Collectors.joining(","))
+        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "])", 30));
     out.println();
 
@@ -74,9 +73,10 @@ public class VerticalView {
     for (List<Fret> fretFrets : fretboardFrets) {
       for (Fret fret : fretFrets) {
         Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
-            .filter(cn -> fret.getNote().equals(cn.getPitch())).findAny();
+            .filter(cn -> fret.getNote().getPitch().equals(cn.getNote().getPitch())).findAny();
         if (chordScaleNoteForFret.isPresent()) {
-          chordFret.add(new ChordFret(fret, chordScaleNoteForFret.get().getInterval().get()));
+          Fret altFret = new Fret(fret.getIndex(),chordScaleNoteForFret.get().getNote(), fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
+          chordFret.add(new ChordFret(altFret, chordScaleNoteForFret.get().getInterval().get()));
         }
       }
     }
@@ -88,12 +88,12 @@ public class VerticalView {
   }
 
   public void showScale(Scale scale, Options options) {
-    List<ChordFret> tones = new ArrayList<>();
+    List<ChordFret> chordFrets = new ArrayList<>();
 
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getLabel() + " ["
-        + instrument.getStringNotes().stream().map(Pitch::name).collect(Collectors.joining(","))
+        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "])", 30));
     out.println();
 
@@ -105,13 +105,14 @@ public class VerticalView {
           continue; // must be fret 1-5 of the 5th string on banjo
         }
         Optional<ScaleNote> scaleNoteForFret = scale.getScaleNotes().stream()
-            .filter(sn -> fret.getNote().equals(sn.getPitch())).findAny();
+            .filter(sn -> fret.getNote().getPitch().equals(sn.getNote().getPitch())).findAny();
         if (scaleNoteForFret.isPresent()) {
-          tones.add(new ChordFret(fret, scaleNoteForFret.get().getInterval().get()));
+          Fret altFret = new Fret(fret.getIndex(),scaleNoteForFret.get().getNote(), fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
+          chordFrets.add(new ChordFret(altFret, scaleNoteForFret.get().getInterval().get()));
         }
       }
     }
-    display(tones, options);
+    display(chordFrets, options);
   }
 
   private void display(List<ChordFret> chordFrets, Options options) {
@@ -137,7 +138,7 @@ public class VerticalView {
         String ldr = (stringNum == 0 && fretNum != 0) ? "┃" : (fretNum == 0 ? " " : "");
 
         Optional<ChordFret> chordFret =
-            chordFrets.stream().filter(ct -> fret == ct.getFret()).findAny();
+            chordFrets.stream().filter(ct -> fret.getStringNum() == ct.getFret().getStringNum() && fret.getFretNum() == ct.getFret().getFretNum()).findAny();
 
         if (chordFret.isPresent()) {
           String fretStr = null;

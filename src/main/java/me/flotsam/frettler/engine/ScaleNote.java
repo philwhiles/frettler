@@ -22,7 +22,7 @@ import lombok.Getter;
 
 // pitch
 public class ScaleNote {
-  @Getter private Pitch pitch;
+  @Getter private Note note;
   @Getter private Position position;
   @Getter private ScaleNote nextScaleNote;
   @Getter private ScaleNote prevScaleNote;
@@ -36,8 +36,8 @@ public class ScaleNote {
    * @param interval is interval within the scale it is being created for
    * @param scale the scale it will belong to
    */
-  ScaleNote(Pitch pitch, Optional<ScaleInterval> interval, Scale scale) {
-    this.pitch = pitch;
+  ScaleNote(Note note, Optional<ScaleInterval> interval, Scale scale) {
+    this.note = note;
     this.interval = interval;
     this.scale = scale;
   }
@@ -52,10 +52,10 @@ public class ScaleNote {
   }
 
   public String toString() {
-    return pitch.getLabel() + " " + interval.toString();
+    return note.getLabel() + " " + interval.toString();
   }
 
   public boolean equalsTonally(ScaleNote other) {
-    return (other.pitch == this.pitch);
+    return (other.note.getPitch() == this.note.getPitch());
   }
 }
