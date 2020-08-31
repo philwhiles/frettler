@@ -109,7 +109,7 @@ public class HorizontalView {
             fretStr = note.get().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getNote());
+            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getNote().getPitch());
             if (fret.getFretNum() == 0) {
               stringBuilder.append(col).append(String.format("%3s",fretStr)).append(Colour.RESET).append("┃┃");
             } else {

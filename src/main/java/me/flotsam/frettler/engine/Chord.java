@@ -40,6 +40,8 @@ public class Chord {
   private ChordMetadata metaData;
   @Getter
   private List<Note> accidentals;
+  @Getter
+  private boolean flat;
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
@@ -70,11 +72,13 @@ public class Chord {
     for (ScaleInterval interval : chordPattern.getIntervals()) {
       ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(interval).get();
       Note note = scaleNote.getNote();
-      if (note.getAccidental() == Note.Accidental.SHARP && !accidentals.contains(note)) {
-        note = note.getAlternate();
+      if (chordRootNote.getAccidental() != Note.Accidental.SHARP && interval.isFlat()) {
+        this.flat = true;
+        note = note.getFlat();
       }
       addScaleNote(chromaticScaleFromChordRoot, note, interval);
     }
+    
     metaData = analyse();
   }
 
@@ -94,7 +98,8 @@ public class Chord {
    */
   public Chord(ScaleNote chordRootNote, ChordType chordType) {
     this.chordRootNote = chordRootNote;
-
+    this.accidentals = LineOfFifths.getMajorEntry(chordRootNote.getNote()).getAccidentals();
+    
     Scale chromaticScaleFromChordRoot =
         new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
 
@@ -143,7 +148,7 @@ public class Chord {
 
     Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
     if (notes.length != chordSet.size()) {
-      out.println("Ooops - spotted a dupicate note there!");
+      out.println("Ooops - spotted a duplicate note there!");
       System.exit(-1);
     }
     for (Note note : notes) {
@@ -247,7 +252,7 @@ public class Chord {
       Note note = scaleNote.getNote();
       notes.add(note);
       Optional<ScaleNote> chordNote =
-          chordNotes.stream().filter(sn -> sn.getNote() == note).findAny();
+          chordNotes.stream().filter(sn -> sn.getNote().getPitch() == note.getPitch()).findAny();
       intervals.add(scaleNote.getInterval().get());
       if (chordNote.isPresent()) {
         chordsNotes.add(chordNote.get().getNote());
@@ -257,26 +262,32 @@ public class Chord {
 
 
     for (Note note : notes) {
-      sb.append(String.format("%s%-2s    %s",
-          chordsNotes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "", note.getLabel(),
-          (mono ? "" : Colour.RESET)));
+      // find the current notes pitch in the chordNotes
+      Optional<ScaleNote> chordMatch = chordNotes.stream().filter(cn->cn.getNote().getPitch() == note.getPitch()).findFirst();
+      // if matched, display the chord notes label and not the note in the scale, as it may be a flat alternative
+      if (chordMatch.isPresent()) {
+        sb.append(String.format("%s%-2s    %s",  (mono ? "" : ColourMap.get(note.getPitch())), chordMatch.get().getNote().getLabel(), (mono ? "" : Colour.RESET)));
+      } else {
+        sb.append(String.format("%-2s    ", note.getLabel()));
+      }
     }
     sb.append("\n          ");
     for (int n = 0; n < intervals.size(); n++) {
       ScaleInterval interval = intervals.get(n);
       sb.append(String.format("%s%-2s    %s",
-          chordsNotes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n))) : "",
+          chordsNotes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n).getPitch())) : "",
           interval, (mono ? "" : Colour.RESET)));
     }
     sb.append("\n\n");
     return sb.toString();
   }
 
+  // TODO rename pitches
   public boolean containsOnlyNotes(Note... notes) {
     int cnt = 0;
     for (Note note : notes) {
       for (ScaleNote scaleNote : chordNotes) {
-        if (scaleNote.getNote() == note) {
+        if (scaleNote.getNote().getPitch() == note.getPitch()) {
           cnt++;
           break;
         }
@@ -285,11 +296,12 @@ public class Chord {
     return cnt == chordNotes.size() && cnt == notes.length;
   }
 
+  // TODO rename pitches
   public boolean containsNotes(Note... notes) {
     int cnt = 0;
     for (Note note : notes) {
       for (ScaleNote scaleNote : chordNotes) {
-        if (scaleNote.getNote() == note) {
+        if (scaleNote.getNote().getPitch() == note.getPitch()) {
           cnt++;
           break;
         }

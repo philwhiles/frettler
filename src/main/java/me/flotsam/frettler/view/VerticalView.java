@@ -148,7 +148,7 @@ public class VerticalView {
             fretStr = chordFret.get().getFret().getNote().getLabel();
           }
           if (options.isColour()) {
-            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(fret.getNote());
+            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(fret.getNote().getPitch());
             out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '), Colour.RESET, sep));
           } else {
             out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));

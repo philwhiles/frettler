@@ -177,7 +177,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
       for (ScaleNote scaleNote : scaleNotesTwice) {
         boolean isChordNote = false;
         if (chordNoteIdx < chordNotes.length) {
-          isChordNote = chordNotes[chordNoteIdx] == scaleNote.getNote();
+          isChordNote = chordNotes[chordNoteIdx].getPitch() == scaleNote.getNote().getPitch();
           if (isChordNote) {
             chordNoteIdx++;
           }
@@ -199,7 +199,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
   }
 
   private String colourNote(Note note) {
-    return "" + (isMono() ? "" : ColourMap.get(note)) + note.getLabel()
+    return "" + (isMono() ? "" : ColourMap.get(note.getPitch())) + note.getLabel()
         + (isMono() ? "" : Colour.RESET);
   }
 }

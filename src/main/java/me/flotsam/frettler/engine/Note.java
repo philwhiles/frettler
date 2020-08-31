@@ -30,6 +30,7 @@ public enum Note {
   Ds(Pitch.Ds, SHARP, "D#"),
   Eb(Pitch.Ds, FLAT, "Eb"),
   E(Pitch.E, NATURAL, "E"),
+  Fb(Pitch.E, FLAT, "Fb"),
   F(Pitch.F, NATURAL, "F"),
   Fs(Pitch.Fs, SHARP, "F#"),
   Gb(Pitch.Fs, FLAT, "Gb"),
@@ -64,6 +65,32 @@ public enum Note {
     return this;
   }
 
+  public Note getFlat() {
+    for (Note note : values()) {
+      if (FLAT == note.accidental && note.pitch == this.pitch) {
+        return note;
+      }
+    }
+    return this;
+  }
+
+  public Note getSharp() {
+    for (Note note : values()) {
+      if (SHARP == note.accidental && note.pitch == this.pitch) {
+        return note;
+      }
+    }
+    return this;
+  }
+
+  public boolean isFlat() {
+    return accidental == FLAT;
+  }
+  
+  public boolean isSharp() {
+    return accidental == SHARP;
+  }
+  
   public static Note forPitch(Pitch pitch) {
     for (Note candidateNote : values()) {
       if (candidateNote.pitch == pitch) {

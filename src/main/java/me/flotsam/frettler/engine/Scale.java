@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord.ChordType;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
@@ -149,7 +150,7 @@ public class Scale {
       return Optional.empty();
     } else {
       do {
-        if (currentNoteNode.getInterval().get() == scaleInterval) {
+        if (currentNoteNode.getInterval().get().getSemiTones() == scaleInterval.getSemiTones()) {
           return Optional.of(currentNoteNode);
         }
         currentNoteNode = currentNoteNode.getNextScaleNote();
@@ -194,7 +195,7 @@ public class Scale {
   }
 
   public List<Chord> createScaleChords() {
-    List<Chord> chords = new ArrayList<>();
+    List<Chord> scaleChords = new ArrayList<>();
     List<ScaleNote> scaleNotesToUse = null;
     List<ScaleNote> scaleNotes = null;
 
@@ -209,9 +210,14 @@ public class Scale {
       }
       for (ScaleNote scaleNote : scaleNotesToUse) {
         if (scaleNotes == null || scaleNotes.stream().anyMatch(sn -> sn.equalsTonally(scaleNote))) {
-          chords.add(new Chord(scaleNote, ChordType.STANDARD));
+          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD));
         }
       }
+    }
+    List<Chord> chords = new ArrayList<>();
+    for (Chord scaleChord : scaleChords) {
+      chords.add(Chord.findChord(scaleChord.getChordNotes().stream()
+          .map(sn -> sn.getNote()).collect(Collectors.toList()).toArray(new Note[] {})).get());
     }
     return chords;
   }
@@ -252,7 +258,7 @@ public class Scale {
 
     for (Note note : chromaticScaleNotes) {
       sb.append(String.format("%s%-2s    %s",
-          notes.contains(note) ? (mono ? "" : ColourMap.get(note)) : "", note.getLabel(),
+          notes.contains(note) ? (mono ? "" : ColourMap.get(note.getPitch())) : "", note.getLabel(),
           (mono ? "" : Colour.RESET)));
     }
     sb.append("\n          ");
@@ -262,8 +268,9 @@ public class Scale {
         sb.append(String.format("      "));
       } else
         sb.append(String.format("%s%-2s    %s",
-            notes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n))) : "", interval,
-            (mono ? "" : Colour.RESET)));
+            notes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n).getPitch()))
+                : "",
+            interval, (mono ? "" : Colour.RESET)));
     }
     sb.append("\n\n");
     return sb.toString();
