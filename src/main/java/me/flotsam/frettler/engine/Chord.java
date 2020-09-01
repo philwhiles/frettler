@@ -147,10 +147,11 @@ public class Chord {
     Optional<Chord> result = Optional.empty();
 
     Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
-    if (notes.length != chordSet.size()) {
-      out.println("Ooops - spotted a duplicate note there!");
-      System.exit(-1);
-    }
+    // TODO what?
+//    if (notes.length != chordSet.size()) {
+//      out.println("Ooops - spotted a duplicate note there!");
+//      System.exit(-1);
+//    }
     for (Note note : notes) {
       if (result.isPresent()) {
         break;
