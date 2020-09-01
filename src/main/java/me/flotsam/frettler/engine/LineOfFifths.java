@@ -16,7 +16,7 @@ public class LineOfFifths {
       int fifthIntervals = ScaleInterval.P5.getSemiTones();
 
       ScaleNote majorNote = Scale.getScaleNote(c, i * fifthIntervals);
-      ScaleNote minorNote = Scale.getScaleNote(c, i * fifthIntervals + 21);
+      ScaleNote minorNote = Scale.getScaleNote(c, i * fifthIntervals + fifthIntervals * 3);
 
       List<Note> accidentals = new ArrayList<>();
       boolean isFlat = false;

@@ -23,6 +23,7 @@ import lombok.Getter;
 
 public enum Note {
   // @formatter:off
+  Cb(Pitch.B, NATURAL, "Cb"),
   C(Pitch.C, NATURAL, "C"),
   Cs(Pitch.Cs, SHARP, "C#"),
   Db(Pitch.Cs, FLAT, "Db"),

@@ -1,3 +1,6 @@
+# 1st September 2020
+- extensive changes to accomplish understanding of flats within scales and chords
+
 # 16th Aug 2020
 - octaves working again
 - find command added

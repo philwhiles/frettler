@@ -6,6 +6,14 @@ The rendering uses Unicode boxing characters and ANSI colour coding, the latter 
 so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
 color support.
 
+Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
+The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns indiviudal use of those intervals.
+
+UPDATE: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
+or sharps. Point of fact - it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
+It is a line rather than a circle, as it does not (currently!) need to traverse around the circle, and even if it did, could be made to go to either end of its LineOfFifths when needed.
+It's calculation of whether a chords notes should be sharp or flat is based on the chord's root, and the intervals within the chord.
+
 Here is an example of its output :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo1.png"/>
@@ -87,7 +95,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 
 1. Instrument - 'guitar', 'banjo', 'mandolin', 'bassguitar' or 'ukelele'
 1. View - 'horizontal' (fretboard view) or 'vertical' (vertical diagram akin to chord charts, which can also display scales)
-1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' - note the 's' indicates a sharp
+1. Root - the note of the scale or chord you want. ie 'C' or 'Ds' or 'Eb' - note the 's' indicates a sharp, the 'b' indicates a flat.
 1. Pattern - for the scale or chord ie 'scale_major' or 'chord_min9'
 
 ### Optional Arguments - Instrument Commands
@@ -150,7 +158,7 @@ The simplest takes the form :
 A#maj (A# maj) [A#,D,F]
 ```
 
-- It expects it to be followed by a series of notes, (using its notation for sharps, not flats)
+- It expects it to be followed by a series of notes, (using its notation for sharps or flats)
 - The notes in this simple form follow the 'chord' keyword immediately.
 - The output is simply the printing of the chord found as shown above.
 
@@ -305,7 +313,6 @@ And './frettler g v', would do the same as './frettler guitar vertical C scale_m
 
 ## Todo
 - change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi). If I hear of enough Windows users wanting this...
-- chord and note labelling currently only uses sharps - I need to work out how to decide whether each should be labelled as sharp or flat
 - blues scale does not support chord generation...
 - write some unit tests!
 
