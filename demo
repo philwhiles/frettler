@@ -32,7 +32,7 @@ declare -a cmds=(
 "./frettler guitar horizontal C chord_maj=Standard guitar, fretboard view of C Arpeggio"
 "./frettler bassguitar horizontal C scale_major_pentatonic=Bass guitar, fretboard view of C Major Pentatonic scale"
 "./frettler bassguitar horizontal C scale_major_pentatonic --intervals --frets 17=Bass guitar, fretboard view to 17th fret of C Major Pentatonic Scale, with intervals"
-"./frettler banjo horizontal C scale_blues=Banjo, fretboard view of C Blues scale"
+"./frettler banjo horizontal C scale_blues_major=Banjo, fretboard view of C Blues Major scale"
 "./frettler guitar vertical G chord_maj=Guitar, vertical view of G Major arpeggio"
 )
 

@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord.ChordType;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
+import me.flotsam.frettler.engine.LineOfFifths.LineEntry;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 
@@ -63,16 +63,24 @@ public class Scale {
     }
     this.scalePattern = scalePattern;
     this.rootNote = rootNote;
-    this.accidentals = LineOfFifths.getMajorEntry(rootNote).getAccidentals();
-    this.flat = LineOfFifths.getMajorEntry(rootNote).isFlat();
+    LineEntry lineEntry = null;
+    if (scalePattern.getMetadata().isMajorRange()) {
+      lineEntry = LineOfFifths.getMajorEntry(rootNote);
+    } else {
+      lineEntry = LineOfFifths.getMinorEntry(rootNote);
+    }
+    this.accidentals = lineEntry.getAccidentals();
+    this.flat = lineEntry.isFlat();
 
     Optional<ScaleNote> rootScaleNote = CHROMATIC_SCALE.findScaleNote(rootNote);
     for (ScaleInterval interval : scalePattern.getIntervals()) {
       ScaleNote scaleNote = Scale.getScaleNote(rootScaleNote.get(), interval);
       Note note = scaleNote.getNote();
-      // if (note.getAccidental() == Note.Accidental.SHARP && !accidentals.contains(note)) {
-      if (this.flat) {
-        note = note.getAlternate();
+      final Note theNote = note;
+      if (scalePattern != IntervalPattern.SCALE_CHROMATIC) {
+        Optional<Note> accidental =
+            this.accidentals.stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
+        note = accidental.orElse(note);
       }
       addScaleNote(note, Optional.of(interval));
     }
@@ -210,16 +218,19 @@ public class Scale {
       }
       for (ScaleNote scaleNote : scaleNotesToUse) {
         if (scaleNotes == null || scaleNotes.stream().anyMatch(sn -> sn.equalsTonally(scaleNote))) {
-          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD));
+          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD, isFlat()));
         }
       }
     }
-    List<Chord> chords = new ArrayList<>();
-    for (Chord scaleChord : scaleChords) {
-      chords.add(Chord.findChord(scaleChord.getChordNotes().stream()
-          .map(sn -> sn.getNote()).collect(Collectors.toList()).toArray(new Note[] {})).get());
-    }
-    return chords;
+    // I added this for a reason but can't remember why!
+    // commented out because I found that it loses the flat nature of the generated key chords
+    // List<Chord> chords = new ArrayList<>();
+    // for (Chord scaleChord : scaleChords) {
+    // chords.add(Chord.findChord(scaleChord.getChordNotes().stream()
+    // .map(sn -> sn.getNote()).collect(Collectors.toList()).toArray(new Note[] {})).get());
+    // }
+    // return chords;
+    return scaleChords;
   }
 
   public String toString() {
@@ -238,12 +249,17 @@ public class Scale {
 
     do {
       Note note = chromaticScaleNote.get().getNote();
-      if (isFlat()) {
-        Optional<Note> flatNote = Note.getFlat(note.getPitch());
-        if (flatNote.isPresent()) {
-          note = flatNote.get();
-        }
-      }
+
+      final Note theNote = note;
+      Optional<Note> accidental =
+          this.accidentals.stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
+      note = accidental.orElse(note);
+      // if (isFlat()) {
+      // Optional<Note> flatNote = Note.getFlat(note.getPitch());
+      // if (flatNote.isPresent()) {
+      // note = flatNote.get();
+      // }
+      // }
       chromaticScaleNotes.add(note);
       if (note.getPitch() == scaleNote.getNote().getPitch()) {
         notes.add(note);

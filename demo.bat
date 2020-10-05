@@ -23,7 +23,7 @@ SET cmds[16]=frettler guitar horizontal A scale_minor -i=Again but with abbrev. 
 SET cmds[17]=frettler guitar horizontal C chord_maj=Standard guitar, fretboard view of C Arpeggio
 SET cmds[18]=frettler bassguitar horizontal C scale_major_pentatonic=Bass guitar, fretboard view of C Major Pentatonic scale
 SET cmds[19]=frettler bassguitar horizontal C scale_major_pentatonic --intervals --frets 17=Bass guitar, fretboard view to 17th fret of C Major Pentatonic Scale, with intervals
-SET cmds[20]=frettler banjo horizontal C scale_blues=Banjo, fretboard view of C Blues scale
+SET cmds[20]=frettler banjo horizontal C scale_blues_major=Banjo, fretboard view of C Blues Major scale
 SET cmds[21]=frettler guitar vertical G chord_maj=Guitar, vertical view of G Major arpeggio
 
 for /L %%i in (0 1 13) do (

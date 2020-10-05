@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern.PatternType;
+import me.flotsam.frettler.engine.LineOfFifths.LineEntry;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 
@@ -32,6 +33,8 @@ public class Chord {
 
   @Getter
   private ScaleNote chordRootNote;
+  @Getter
+  private Note chordRoot;
   @Getter
   private IntervalPattern chordPattern;
   @Getter
@@ -60,6 +63,7 @@ public class Chord {
    * @param chordPattern the scale pattern ie MAJOR, HARMONIC_MINOR
    */
   public Chord(Note chordRootNote, IntervalPattern chordPattern) {
+    this.chordRoot = chordRootNote;
     if (chordPattern.getPatternType() != PatternType.CHORD) {
       System.err
           .println("Interval pattern '" + chordPattern.getLabel() + "' is not a chord pattern");
@@ -68,18 +72,22 @@ public class Chord {
     Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
     this.chordPattern = chordPattern;
-    this.accidentals = LineOfFifths.getMajorEntry(chordRootNote).getAccidentals();
     for (ScaleInterval interval : chordPattern.getIntervals()) {
       ScaleNote scaleNote = chromaticScaleFromChordRoot.findScaleNote(interval).get();
       Note note = scaleNote.getNote();
-      if (chordRootNote.getAccidental() != Note.Accidental.SHARP && interval.isFlat()) {
-        this.flat = true;
-        note = note.getFlat();
-      }
       addScaleNote(chromaticScaleFromChordRoot, note, interval);
     }
-    
-    metaData = analyse();
+
+    this.metaData = analyse();
+
+    LineEntry lineEntry = null;
+    if (this.metaData.getIntervalPatternMetadata().isMajorRange()) {
+      lineEntry = LineOfFifths.getMajorEntry(chordRootNote);
+    } else {
+      lineEntry = LineOfFifths.getMinorEntry(chordRootNote);
+    }
+    this.accidentals = lineEntry.getAccidentals();
+    this.flat = lineEntry.isFlat();
   }
 
 
@@ -97,9 +105,29 @@ public class Chord {
    * @param chordType standard or extended - this indicates the thirds to use
    */
   public Chord(ScaleNote chordRootNote, ChordType chordType) {
+    this(chordRootNote, chordType, false);
+  }
+
+  /**
+   * Creates a chord from a given note in a scale. Used to create a standard triad or quadriad chord
+   * from the tonic/root - in the scale that the chordRootNote was taken. ie the chordRootNote may
+   * be 'D' sitting within say the scale of A Minor, and will sit with that scales notes either side
+   * of it. The chordType indicates the thirds to pick out of the root notes scale.
+   * 
+   * It gets the chromatic scale starting at the root note, then finds each of the derived chord
+   * notes relative to the tonic in the chromatic scale in order to work out the interval of each
+   * chord note.
+   * 
+   * @param chordRootNote the scale note tonic
+   * @param chordType standard or extended - this indicates the thirds to use
+   * @param flattened true if the notes are in key of flats
+   */
+  public Chord(ScaleNote chordRootNote, ChordType chordType, boolean flattened) {
     this.chordRootNote = chordRootNote;
+    this.flat = flattened;
+    this.chordRoot = chordRootNote.getNote();
     this.accidentals = LineOfFifths.getMajorEntry(chordRootNote.getNote()).getAccidentals();
-    
+
     Scale chromaticScaleFromChordRoot =
         new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
 
@@ -107,10 +135,10 @@ public class Chord {
       ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
       Optional<ScaleNote> noteInRootScale =
           chromaticScaleFromChordRoot.findScaleNote(chordNote.getNote());
-      
+
       Note note = noteInRootScale.get().getNote();
-      if (note.getAccidental() == Note.Accidental.SHARP && !accidentals.contains(note)) {
-        note = note.getAlternate();
+      if (flattened) {
+        note = note.getFlat();
       }
       addScaleNote(chromaticScaleFromChordRoot, note, noteInRootScale.get().getInterval().get());
     }
@@ -136,22 +164,17 @@ public class Chord {
     ScaleNote newNote = new ScaleNote(note, Optional.of(interval), scale);
     chordNotes.add(newNote);
   }
-  
+
   /**
-   * Will search all possible chords having the first note as the tonic, and containing
-   * all the other notes exclusively
+   * Will search all possible chords having the first note as the tonic, and containing all the
+   * other notes exclusively
+   * 
    * @param notes the notes to use in the chord search
    * @return optionally! the matching chord
    */
   public static Optional<Chord> findChord(Note... notes) {
     Optional<Chord> result = Optional.empty();
 
-    Set<Note> chordSet = new HashSet<>(Arrays.asList(notes));
-    // TODO what?
-//    if (notes.length != chordSet.size()) {
-//      out.println("Ooops - spotted a duplicate note there!");
-//      System.exit(-1);
-//    }
     for (Note note : notes) {
       if (result.isPresent()) {
         break;
@@ -173,6 +196,7 @@ public class Chord {
   /**
    * Will search all possible chords with all possible tonics (even if not in the notes provided)
    * having all the provided notes in, but not exclusively
+   * 
    * @param notes the notes to use in the chord search
    * @return the matching chords
    */
@@ -198,8 +222,9 @@ public class Chord {
   }
 
   /**
-   * Will search all possible chords having the first note as the tonic, and containing
-   * all the other notes, but not exclusively
+   * Will search all possible chords having the first note as the tonic, and containing all the
+   * other notes, but not exclusively
+   * 
    * @param notes the notes to use in the chord search
    * @return the matching chords
    */
@@ -223,15 +248,24 @@ public class Chord {
   }
 
   public String getLabel() {
-    return chordRootNote.getNote().getLabel() + metaData.label;
+    return chordRoot.getLabel() + metaData.label;
   }
 
   public String getTitle() {
-    return getLabel() + "   (" + chordRootNote.getNote().name().toLowerCase() + " "
-        + chordPattern.name().toLowerCase() + ")" + "   ["
-        + chordNotes.stream().map(n -> n.getNote().getLabel() + "(" + n.getInterval().get() + ")")
-            .collect(Collectors.joining(", "))
-        + "]";
+    StringBuilder sb = new StringBuilder();
+    sb.append(getLabel()).append("   (").append(chordRoot.name().toLowerCase()).append(" ").append(chordPattern.name().toLowerCase()).append(")    [");
+    
+    for (ScaleNote cn:chordNotes) {
+      Note note = cn.getNote();
+//      final Note theNote = note;
+//      Optional<Note> accidental =
+//          this.accidentals.stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
+//      note = accidental.orElse(note);
+      note = this.isFlat() ? note.getFlat() : note;
+      sb.append(note.getLabel()).append("(").append(cn.getInterval().get().getLabel()).append("), ");
+    }
+    sb.replace(sb.length()-2, sb.length()-1, "]");
+    return sb.toString();
   }
 
   public String toString() {
@@ -251,12 +285,19 @@ public class Chord {
 
     do {
       Note note = scaleNote.getNote();
+      final Note theNote = note;
+
+      Optional<Note> accidental =
+          this.accidentals.stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
+      note = accidental.orElse(note);
       notes.add(note);
+      
+      
       Optional<ScaleNote> chordNote =
-          chordNotes.stream().filter(sn -> sn.getNote().getPitch() == note.getPitch()).findAny();
+          chordNotes.stream().filter(sn -> sn.getNote().getPitch() == theNote.getPitch()).findAny();
       intervals.add(scaleNote.getInterval().get());
       if (chordNote.isPresent()) {
-        chordsNotes.add(chordNote.get().getNote());
+        chordsNotes.add(note);
       }
       scaleNote = scaleNote.getNextScaleNote();
     } while (scaleNote.getNote() != chordRootNote.getNote());
@@ -264,10 +305,11 @@ public class Chord {
 
     for (Note note : notes) {
       // find the current notes pitch in the chordNotes
-      Optional<ScaleNote> chordMatch = chordNotes.stream().filter(cn->cn.getNote().getPitch() == note.getPitch()).findFirst();
-      // if matched, display the chord notes label and not the note in the scale, as it may be a flat alternative
+      Optional<ScaleNote> chordMatch =
+          chordNotes.stream().filter(cn -> cn.getNote().getPitch() == note.getPitch()).findFirst();
       if (chordMatch.isPresent()) {
-        sb.append(String.format("%s%-2s    %s",  (mono ? "" : ColourMap.get(note.getPitch())), chordMatch.get().getNote().getLabel(), (mono ? "" : Colour.RESET)));
+        sb.append(String.format("%s%-2s    %s", (mono ? "" : ColourMap.get(note.getPitch())),
+            note.getLabel(), (mono ? "" : Colour.RESET)));
       } else {
         sb.append(String.format("%-2s    ", note.getLabel()));
       }
@@ -276,7 +318,8 @@ public class Chord {
     for (int n = 0; n < intervals.size(); n++) {
       ScaleInterval interval = intervals.get(n);
       sb.append(String.format("%s%-2s    %s",
-          chordsNotes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n).getPitch())) : "",
+          chordsNotes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n).getPitch()))
+              : "",
           interval, (mono ? "" : Colour.RESET)));
     }
     sb.append("\n\n");
@@ -326,73 +369,27 @@ public class Chord {
 
 
   private ChordMetadata analyse() {
-    ChordMetadata meta = new ChordMetadata();
-    for (ScaleNote note : chordNotes) {
-      Optional<ScaleInterval> interval = note.getInterval();
-      if (interval.isPresent()) {
-        switch (interval.get()) {
-          case m2:
-            meta.minorSecond = true;
-            break;
-          case M2:
-            meta.majorSecond = true;
-            break;
-          case m3:
-            meta.minorThird = true;
-            break;
-          case M3:
-            meta.majorThird = true;
-            break;
-          case P4:
-            meta.perfectFourth = true;
-            break;
-          case d5:
-            meta.diminishedFifth = true;
-            break;
-          case P5:
-            meta.perfectFifth = true;
-            break;
-          case m6:
-            meta.minorSixth = true;
-            break;
-          case M6:
-            meta.majorSixth = true;
-            break;
-          case m7:
-            meta.minorSeventh = true;
-            break;
-          case M7:
-            meta.majorSeventh = true;
-            break;
-          case M9:
-            meta.majorNinth = true;
-            break;
-          case M11:
-            meta.majorEleventh = true;
-            break;
-          default:
-            break;
-        }
-      }
-    }
-    meta.majorRange =
-        (meta.majorThird || meta.perfectFifth) && !(meta.minorThird || meta.diminishedFifth);
-    meta.minorRange = meta.minorThird && !meta.majorThird;
-    meta.suspended =
-        (!meta.majorThird && !meta.minorThird && (meta.perfectFourth || meta.majorSecond));
+    List<ScaleInterval> intervals = (List<ScaleInterval>) chordNotes.stream()
+      .map(cn->cn.getInterval())
+      .filter(Optional::isPresent)
+      .map(Optional::get)
+      .collect(Collectors.toList());
 
-    meta.label = "UNCLASSIFIED";
+    IntervalPatternMetadata intervalPatternMetadata = IntervalPatternAnalyser.analyse(intervals);
+
+    IntervalPattern chordPattern = null;
+    String label = "UNCLASSIFIED";
     for (IntervalPattern pattern : IntervalPattern.values()) {
       if (pattern.getPatternType() != PatternType.CHORD) {
         continue;
       }
       if (containsOnlyIntervals(pattern.getIntervals().toArray(new ScaleInterval[] {}))) {
-        meta.label = pattern.getLabel();
-        meta.chordPattern = pattern;
+        label = pattern.getLabel();
+        chordPattern = pattern;
         break;
       }
     }
 
-    return meta;
+    return new ChordMetadata(intervalPatternMetadata, label, chordPattern);
   }
 }

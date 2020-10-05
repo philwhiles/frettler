@@ -29,7 +29,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
@@ -80,7 +79,7 @@ public class VerticalView {
         }
       }
     }
-    display(chordFret, options);
+    display(chordFret, options, chord.isFlat());
   }
 
   public void showScale(Scale scale) {
@@ -112,10 +111,10 @@ public class VerticalView {
         }
       }
     }
-    display(chordFrets, options);
+    display(chordFrets, options, false);
   }
 
-  private void display(List<ChordFret> chordFrets, Options options) {
+  private void display(List<ChordFret> chordFrets, Options options, boolean isFlat) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
     int lowestFret = chordFrets.stream()
@@ -145,7 +144,8 @@ public class VerticalView {
           if (options.isIntervals()) {
             fretStr = chordFret.get().getInterval().getLabel();
           } else {
-            fretStr = chordFret.get().getFret().getNote().getLabel();
+            Note chordFretNote = chordFret.get().getFret().getNote();
+            fretStr = isFlat ? chordFretNote.getFlat().getLabel() : chordFretNote.getLabel();
           }
           if (options.isColour()) {
             Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(fret.getNote().getPitch());

@@ -23,25 +23,29 @@ import lombok.Getter;
 
 public enum Note {
   // @formatter:off
-  Cb(Pitch.B, NATURAL, "Cb"),
   C(Pitch.C, NATURAL, "C"),
-  Cs(Pitch.Cs, SHARP, "C#"),
-  Db(Pitch.Cs, FLAT, "Db"),
   D(Pitch.D, NATURAL, "D"),
-  Ds(Pitch.Ds, SHARP, "D#"),
-  Eb(Pitch.Ds, FLAT, "Eb"),
   E(Pitch.E, NATURAL, "E"),
-  Fb(Pitch.E, FLAT, "Fb"),
   F(Pitch.F, NATURAL, "F"),
-  Fs(Pitch.Fs, SHARP, "F#"),
-  Gb(Pitch.Fs, FLAT, "Gb"),
   G(Pitch.G, NATURAL, "G"),
-  Gs(Pitch.Gs, SHARP, "G#"),
-  Ab(Pitch.Gs, FLAT, "Ab"),
   A(Pitch.A, NATURAL, "A"),
+  B(Pitch.B, NATURAL, "B"),
+
+  Cs(Pitch.Cs, SHARP, "C#"),
+  Ds(Pitch.Ds, SHARP, "D#"),
+  Es(Pitch.F, SHARP, "E#"),
+  Fs(Pitch.Fs, SHARP, "F#"),
+  Gs(Pitch.Gs, SHARP, "G#"),
   As(Pitch.As, SHARP, "A#"),
-  Bb(Pitch.As, FLAT, "Bb"),
-  B(Pitch.B, NATURAL, "B");
+  Bs(Pitch.C, SHARP, "B#"),
+
+  Cb(Pitch.B, FLAT, "Cb"),
+  Db(Pitch.Cs, FLAT, "Db"),
+  Eb(Pitch.Ds, FLAT, "Eb"),
+  Fb(Pitch.E, FLAT, "Fb"),
+  Gb(Pitch.Fs, FLAT, "Gb"),
+  Ab(Pitch.Gs, FLAT, "Ab"),
+  Bb(Pitch.As, FLAT, "Bb");
   // @formatter:on
 
   @Getter
@@ -59,7 +63,7 @@ public enum Note {
 
   public Note getAlternate() {
     for (Note note : values()) {
-      if (this.accidental != note.accidental && note.pitch == this.pitch) {
+      if (this != note && this.accidental != note.accidental && note.pitch == this.pitch) {
         return note;
       }
     }

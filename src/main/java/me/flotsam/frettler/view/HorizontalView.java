@@ -27,7 +27,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Fret;
@@ -68,7 +67,7 @@ public class HorizontalView {
     out.print("    ");
     out.println(StringUtils.center(chord.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
-    display(chord.getChordNotes(), options);
+    display(chord.getChordNotes(), options, chord.isFlat());
   }
 
   public void showScale(Scale scale) {
@@ -80,10 +79,10 @@ public class HorizontalView {
     out.print("    ");
     out.println(StringUtils.center(scale.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
-    display(scale.getScaleNotes(), options);
+    display(scale.getScaleNotes(), options, false);
   }
 
-  public void display(List<ScaleNote> scaleNotes, Options options) {
+  public void display(List<ScaleNote> scaleNotes, Options options, boolean isFlat) {
     out.println(createFretboardSide(true, options));
 
     int octave = 0; 
@@ -92,9 +91,10 @@ public class HorizontalView {
       List<Fret> tonesInString = instrument.getFretsByString().get(i);
       StringBuilder stringBuilder = new StringBuilder();
       for (Fret fret : tonesInString) {
-        Optional<ScaleNote> note =
-            scaleNotes.stream().filter(sn -> sn.getNote().getPitch() == fret.getNote().getPitch()).findFirst();
-        
+        Optional<ScaleNote> note = Optional.empty();
+        if (!(instrument.isBanjo() && (fret.getFretNum() > 0 && fret.getFretNum() < 6) && fret.getStringNum() == 0)) {
+            note = scaleNotes.stream().filter(sn -> sn.getNote().getPitch() == fret.getNote().getPitch()).findFirst();
+        }
         if (octave != fret.getOctave()) {
           octave = fret.getOctave();
           octaveToggle = !octaveToggle;
@@ -104,9 +104,10 @@ public class HorizontalView {
         if (note.isPresent()) {
           String fretStr = null;
           if (options.isIntervals()) {
+            // TODO isFlat
             fretStr = note.get().getInterval().isPresent() ? note.get().getInterval().get().getLabel() : note.get().getNote().getLabel();
           } else {
-            fretStr = note.get().getNote().getLabel();
+            fretStr = isFlat ? note.get().getNote().getFlat().getLabel() : note.get().getNote().getLabel();
           }
           if (options.isColour()) {
             Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getNote().getPitch());

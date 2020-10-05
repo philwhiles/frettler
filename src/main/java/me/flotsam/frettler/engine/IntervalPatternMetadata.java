@@ -15,25 +15,48 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-package me.flotsam.frettler.instrument;
+package me.flotsam.frettler.engine;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
-import me.flotsam.frettler.engine.Note;
 
-@AllArgsConstructor
-@ToString
-public class Fret {
-  @Getter private final int index;
-  @Getter private final Note note;
-  @Getter private final int octave;
-  @Getter private final int stringNum;
-  @Getter private final Note stringNote;
-  @Getter private final int fretNum;
+public class IntervalPatternMetadata {
+
+  @Getter
+  boolean minorSecond;
+  @Getter
+  boolean majorSecond;
+  @Getter
+  boolean augmentedSecond;
+  @Getter
+  boolean minorThird;
+  @Getter
+  boolean majorThird;
+  @Getter
+  boolean perfectFourth;
+  @Getter
+  boolean diminishedFifth;
+  @Getter
+  boolean perfectFifth;
+  @Getter
+  boolean minorSixth;
+  @Getter
+  boolean majorSixth;
+  @Getter
+  boolean minorSeventh;
+  @Getter
+  boolean majorSeventh;
+  @Getter
+  boolean majorNinth;
+  @Getter
+  boolean majorEleventh;
+  @Getter
+  boolean majorRange;
+  @Getter
+  boolean minorRange;
+  @Getter
+  boolean suspended;
   
-  
-  public boolean equalsTonally(Fret other) {
-    return (other.note == this.note && other.octave == this.octave);
+  public enum Quality {
+    MAJOR, MINOR, AUGMENTED, DIMINISHED, DOMINANT
   }
 }

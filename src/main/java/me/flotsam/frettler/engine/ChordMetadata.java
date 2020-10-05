@@ -17,51 +17,18 @@
 
 package me.flotsam.frettler.engine;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 public class ChordMetadata {
+  @Getter
+  IntervalPatternMetadata intervalPatternMetadata;
 
   @Getter
   String label;
-  @Getter
-  boolean minorSecond;
-  @Getter
-  boolean majorSecond;
-  @Getter
-  boolean augmentedSecond;
-  @Getter
-  boolean minorThird;
-  @Getter
-  boolean majorThird;
-  @Getter
-  boolean perfectFourth;
-  @Getter
-  boolean diminishedFifth;
-  @Getter
-  boolean perfectFifth;
-  @Getter
-  boolean minorSixth;
-  @Getter
-  boolean majorSixth;
-  @Getter
-  boolean minorSeventh;
-  @Getter
-  boolean majorSeventh;
-  @Getter
-  boolean majorNinth;
-  @Getter
-  boolean majorEleventh;
-  @Getter
-  boolean majorRange;
-  @Getter
-  boolean minorRange;
-  @Getter
-  boolean suspended;
   
   @Getter
   IntervalPattern chordPattern;
   
-  public enum Quality {
-    MAJOR, MINOR, AUGMENTED, DIMINISHED, DOMINANT
-  }
 }

@@ -18,7 +18,6 @@ package me.flotsam.frettler.command;
 import static java.lang.System.out;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern;
-import me.flotsam.frettler.engine.IntervalPattern.PatternType;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 

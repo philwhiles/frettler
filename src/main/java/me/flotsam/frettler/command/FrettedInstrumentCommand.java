@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Banjo;
@@ -137,7 +136,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
             finderView.new Options(false, true, !isMono(), isOctaves());
         Scale arbitraryScale = new Scale(Arrays.asList(notes).stream().map(n->n.getPitch()).collect(Collectors.toList()));
         out.println();
-        finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions);
+        finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions, false);
         break;
         
       case CHORD:

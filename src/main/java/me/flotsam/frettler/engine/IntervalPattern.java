@@ -1,19 +1,17 @@
 /*
-    Copyright (C) 2020  Philip Whiles
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-*/
+ * Copyright (C) 2020 Philip Whiles
+ * 
+ * This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU Affero General Public License as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License along with this program.
+ * If not, see <https://www.gnu.org/licenses/>.
+ */
 
 package me.flotsam.frettler.engine;
 
@@ -94,7 +92,13 @@ public enum IntervalPattern {
       "Minor Pentatonic",
       P1, m3, P4, P5, m7
   ), 
-  SCALE_BLUES(
+  SCALE_BLUES_MAJOR(
+      false,
+      PatternType.SCALE,
+      "Blues" ,
+      P1, M2, m3, P5, M6
+  ),
+  SCALE_BLUES_MINOR(
       false,
       PatternType.SCALE,
       "Blues",
@@ -326,46 +330,64 @@ public enum IntervalPattern {
   
   ;
   //@formatter:on
+
+
+
+  @Getter
+  private String label;
+  @Getter
+  private List<ScaleInterval> intervals;
+  @Getter
+  private PatternType patternType;
+  @Getter
+  private IntervalPattern parentPattern;
+  @Getter
+  private IntervalPatternMetadata metadata;
   
-
-
-  @Getter private String label;
-  @Getter private List<ScaleInterval> intervals;
-  @Getter private PatternType patternType;
-  @Getter private IntervalPattern parentPattern;
   private boolean scaleChordGenerationSupported;
 
-  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern aliasPattern, PatternType patternType,String label) {
+  private IntervalPattern(boolean scaleChordGenerationSupported,
+      IntervalPattern aliasPattern, PatternType patternType, String label) {
     this.scaleChordGenerationSupported = scaleChordGenerationSupported;
     this.patternType = patternType;
     this.label = label;
     this.intervals = aliasPattern.intervals;
+    this.metadata = IntervalPatternAnalyser.analyse(this.intervals);
   }
-  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern aliasPattern, String label) {
+
+  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern aliasPattern,
+      String label) {
     this.scaleChordGenerationSupported = scaleChordGenerationSupported;
     this.patternType = aliasPattern.patternType;
     this.label = label;
     this.intervals = aliasPattern.intervals;
-   
+    this.metadata = IntervalPatternAnalyser.analyse(this.intervals);
   }
-  private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern parentPattern, PatternType patternType, String label, ScaleInterval ... intervals) {
+
+  private IntervalPattern(boolean scaleChordGenerationSupported,
+      IntervalPattern parentPattern, PatternType patternType, String label,
+      ScaleInterval... intervals) {
     this(scaleChordGenerationSupported, patternType, label, intervals);
     this.parentPattern = parentPattern;
   }
-  private IntervalPattern(boolean scaleChordGenerationSupported, PatternType patternType, String label, ScaleInterval ... intervals) {
+
+  private IntervalPattern(boolean scaleChordGenerationSupported,
+      PatternType patternType, String label, ScaleInterval... intervals) {
     this.scaleChordGenerationSupported = scaleChordGenerationSupported;
     this.patternType = patternType;
     this.label = label;
     this.intervals = Arrays.asList(intervals);
+    this.metadata = IntervalPatternAnalyser.analyse(this.intervals);
   }
 
   public String getTitle() {
-    return this.name().toLowerCase() + " (" + this.label + ") " + this.intervals; 
+    return this.name().toLowerCase() + " (" + this.label + ") " + this.intervals;
   }
+
   public boolean isScaleChordGenerationSupported() {
     return scaleChordGenerationSupported;
   }
-  
+
   public enum PatternType {
     CHORD, SCALE, MODE
   }

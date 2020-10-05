@@ -11,8 +11,11 @@ The only data it needs to perform its calculations, is the definition of individ
 
 UPDATE: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
 or sharps. Point of fact - it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
-It is a line rather than a circle, as it does not (currently!) need to traverse around the circle, and even if it did, could be made to go to either end of its LineOfFifths when needed.
-It's calculation of whether a chords notes should be sharp or flat is based on the chord's root, and the intervals within the chord.
+It is a line rather than a circle, as it does not (currently!) need to traverse around the circle.
+When displaying a scale and the diatonic chords for that scale are generated using the '--chords' or '-c' argument, the notes in the chords are flats or sharps depending on the scale.
+When displaying just a chord, sharps are always used.
+
+
 
 Here is an example of its output :
 
