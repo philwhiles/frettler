@@ -8,7 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class LineOfFifths {
+  @Getter
   static LinkedHashMap<Note, LineEntry> majorLine = new LinkedHashMap<>();
+  @Getter
   static LinkedHashMap<Note, LineEntry> minorLine = new LinkedHashMap<>();
   static {
     ScaleNote c = Scale.CHROMATIC_SCALE.findScaleNote(Note.forPitch(Pitch.C)).get();
@@ -17,11 +19,8 @@ public class LineOfFifths {
 
       ScaleNote majorNote = Scale.getScaleNote(c, i * fifthIntervals);
       ScaleNote minorNote = Scale.getScaleNote(c, i * fifthIntervals + fifthIntervals * 3);
-
-//      System.out.println();
       
       List<Note> accidentals = new ArrayList<>();
-      boolean isFlat = false;
       if (i >= 0) {
         for (int n = -1; n < i - 1; n++) {
           Optional<Note> note =
@@ -30,31 +29,24 @@ public class LineOfFifths {
             accidentals.add(note.get());
           }
         }
-//      System.out.println(majorNote.getNote());
-//      System.out.println(minorNote.getNote());
         majorLine.put(majorNote.getNote(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals, isFlat));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
         minorLine.put(minorNote.getNote(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals, isFlat));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
       } else if (i < 0) {
         for (int n = 3; n > i + 3; n--) {
           Optional<Note> note =
               Note.getFlat(Scale.getScaleNote(c, n * fifthIntervals + 1).getNote().getPitch());
           if (note.isPresent()) {
             accidentals.add(note.get());
-            isFlat = true;
           }
         }
-//      System.out.println(majorNote.getNote().getFlat());
-//      System.out.println(minorNote.getNote().getFlat());
 
         majorLine.put(majorNote.getNote().getFlat(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals, isFlat));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
         minorLine.put(minorNote.getNote().getFlat(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals, isFlat));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
       }
-//      System.out.println(accidentals);
-
     }
   }
 
@@ -75,14 +67,12 @@ public class LineOfFifths {
   }
 
   @AllArgsConstructor
-  static class LineEntry {
+  public static class LineEntry {
     @Getter
     private Note major;
     @Getter
     private Note minor;
     @Getter
     private List<Note> accidentals;
-    @Getter
-    private boolean flat;
   }
 }

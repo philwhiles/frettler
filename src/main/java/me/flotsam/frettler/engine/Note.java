@@ -62,9 +62,12 @@ public enum Note {
   }
 
   public Note getAlternate() {
-    for (Note note : values()) {
-      if (this != note && this.accidental != note.accidental && note.pitch == this.pitch) {
-        return note;
+    if (this.accidental != NATURAL) {
+      for (Note note : values()) {
+        // find another Note having same pitch but diff accidental
+        if (this != note && this.accidental != note.accidental && note.pitch == this.pitch) {
+          return note;
+        }
       }
     }
     return this;
@@ -91,11 +94,11 @@ public enum Note {
   public boolean isFlat() {
     return accidental == FLAT;
   }
-  
+
   public boolean isSharp() {
     return accidental == SHARP;
   }
-  
+
   public static Note forPitch(Pitch pitch) {
     for (Note candidateNote : values()) {
       if (candidateNote.pitch == pitch) {

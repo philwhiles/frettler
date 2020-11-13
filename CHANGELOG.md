@@ -1,5 +1,6 @@
-# 1st September 2020
-- extensive changes to accomplish understanding of flats within scales and chords
+# 8th November 2020
+- very extensive changes to accomplish understanding of flats within scales
+- fifths command added
 
 # 16th Aug 2020
 - octaves working again

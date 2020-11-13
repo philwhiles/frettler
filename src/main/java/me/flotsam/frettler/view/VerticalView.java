@@ -79,7 +79,7 @@ public class VerticalView {
         }
       }
     }
-    display(chordFret, options, chord.isFlat());
+    display(chordFret, options);
   }
 
   public void showScale(Scale scale) {
@@ -111,10 +111,10 @@ public class VerticalView {
         }
       }
     }
-    display(chordFrets, options, false);
+    display(chordFrets, options);
   }
 
-  private void display(List<ChordFret> chordFrets, Options options, boolean isFlat) {
+  private void display(List<ChordFret> chordFrets, Options options) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
     int lowestFret = chordFrets.stream()
@@ -145,7 +145,7 @@ public class VerticalView {
             fretStr = chordFret.get().getInterval().getLabel();
           } else {
             Note chordFretNote = chordFret.get().getFret().getNote();
-            fretStr = isFlat ? chordFretNote.getFlat().getLabel() : chordFretNote.getLabel();
+            fretStr = chordFretNote.getLabel();
           }
           if (options.isColour()) {
             Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(fret.getNote().getPitch());

@@ -67,7 +67,7 @@ public class HorizontalView {
     out.print("    ");
     out.println(StringUtils.center(chord.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
-    display(chord.getChordNotes(), options, chord.isFlat());
+    display(chord.getChordNotes(), options);
   }
 
   public void showScale(Scale scale) {
@@ -79,10 +79,10 @@ public class HorizontalView {
     out.print("    ");
     out.println(StringUtils.center(scale.getTitle() + " ~ (" + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
-    display(scale.getScaleNotes(), options, false);
+    display(scale.getScaleNotes(), options);
   }
 
-  public void display(List<ScaleNote> scaleNotes, Options options, boolean isFlat) {
+  public void display(List<ScaleNote> scaleNotes, Options options) {
     out.println(createFretboardSide(true, options));
 
     int octave = 0; 
@@ -104,10 +104,9 @@ public class HorizontalView {
         if (note.isPresent()) {
           String fretStr = null;
           if (options.isIntervals()) {
-            // TODO isFlat
             fretStr = note.get().getInterval().isPresent() ? note.get().getInterval().get().getLabel() : note.get().getNote().getLabel();
           } else {
-            fretStr = isFlat ? note.get().getNote().getFlat().getLabel() : note.get().getNote().getLabel();
+            fretStr = note.get().getNote().getLabel();
           }
           if (options.isColour()) {
             Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(note.get().getNote().getPitch());

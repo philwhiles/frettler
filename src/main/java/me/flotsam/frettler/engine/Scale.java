@@ -52,8 +52,6 @@ public class Scale {
   private Note rootNote;
   @Getter
   private List<Note> accidentals;
-  @Getter
-  private boolean flat;
 
   public Scale(Note rootNote, IntervalPattern scalePattern) {
     if (scalePattern.getPatternType() == PatternType.CHORD) {
@@ -64,13 +62,12 @@ public class Scale {
     this.scalePattern = scalePattern;
     this.rootNote = rootNote;
     LineEntry lineEntry = null;
-    if (scalePattern.getMetadata().isMajorRange()) {
-      lineEntry = LineOfFifths.getMajorEntry(rootNote);
-    } else {
+    if (scalePattern.getMetadata().isMinorRange()) {
       lineEntry = LineOfFifths.getMinorEntry(rootNote);
+    } else {
+      lineEntry = LineOfFifths.getMajorEntry(rootNote);
     }
     this.accidentals = lineEntry.getAccidentals();
-    this.flat = lineEntry.isFlat();
 
     Optional<ScaleNote> rootScaleNote = CHROMATIC_SCALE.findScaleNote(rootNote);
     for (ScaleInterval interval : scalePattern.getIntervals()) {
@@ -218,18 +215,11 @@ public class Scale {
       }
       for (ScaleNote scaleNote : scaleNotesToUse) {
         if (scaleNotes == null || scaleNotes.stream().anyMatch(sn -> sn.equalsTonally(scaleNote))) {
-          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD, isFlat()));
+          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD, this.accidentals));
         }
       }
     }
-    // I added this for a reason but can't remember why!
-    // commented out because I found that it loses the flat nature of the generated key chords
-    // List<Chord> chords = new ArrayList<>();
-    // for (Chord scaleChord : scaleChords) {
-    // chords.add(Chord.findChord(scaleChord.getChordNotes().stream()
-    // .map(sn -> sn.getNote()).collect(Collectors.toList()).toArray(new Note[] {})).get());
-    // }
-    // return chords;
+
     return scaleChords;
   }
 
@@ -254,12 +244,7 @@ public class Scale {
       Optional<Note> accidental =
           this.accidentals.stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
       note = accidental.orElse(note);
-      // if (isFlat()) {
-      // Optional<Note> flatNote = Note.getFlat(note.getPitch());
-      // if (flatNote.isPresent()) {
-      // note = flatNote.get();
-      // }
-      // }
+ 
       chromaticScaleNotes.add(note);
       if (note.getPitch() == scaleNote.getNote().getPitch()) {
         notes.add(note);

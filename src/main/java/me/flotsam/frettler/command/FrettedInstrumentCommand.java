@@ -136,7 +136,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
             finderView.new Options(false, true, !isMono(), isOctaves());
         Scale arbitraryScale = new Scale(Arrays.asList(notes).stream().map(n->n.getPitch()).collect(Collectors.toList()));
         out.println();
-        finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions, false);
+        finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions);
         break;
         
       case CHORD:

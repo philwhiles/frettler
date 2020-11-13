@@ -7,13 +7,14 @@ so has been disabled in the generated Windows bat file. If you install an ANSI c
 color support.
 
 Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
-The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns indiviudal use of those intervals.
+The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns individual use of those intervals.
 
 UPDATE: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
-or sharps. Point of fact - it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
+or sharps. In fact it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
 It is a line rather than a circle, as it does not (currently!) need to traverse around the circle.
 When displaying a scale and the diatonic chords for that scale are generated using the '--chords' or '-c' argument, the notes in the chords are flats or sharps depending on the scale.
-When displaying just a chord, sharps are always used.
+When displaying just a chord, sharps are always used. Changes to show flats in chords was abandoned for the time being when I realised that it was not straightforward - if you can 
+enlighten me as to what the theory rules are for deciding if a random chords notes should be flat or sharp please do!
 
 
 
@@ -67,6 +68,7 @@ the --mono, then rebuild Frettler.
 ## Demo
 Do read the details below to get an understanding of how to drive Frettler, but perhaps first, after building it, try one of the provided demo scripts ('demo' for linux/macOS, 'demo.bat' for windows).
 The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
+The output of the demo command can be seen [Here](https://github.com/philwhiles/frettler/blob/master/demo.html)
 
 ## Arguments
 Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
@@ -74,7 +76,7 @@ the vertical view which looks more like the classic chord diagram you see widely
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
 Frettlers first argument can either be an instrument, in which case the following commands must follow the instrument conventions below, or it can be one of its secondary, ancilliary, arguments,
-such as 'patterns' or 'chord', each of which have expectations for the subsequent arguments.
+such as 'patterns' or 'chord', each of which have expectations for the subsequent arguments and options.
 
 
 ### Primary Argument - Instrument Commands
@@ -85,8 +87,6 @@ The following instruments are supported:
 - ukelele
 - mandolin
 - banjo
-- completions
-- chord
 
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
@@ -142,13 +142,18 @@ Produces (truncated output here) :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
-### Primary Argument - Find Notes
+### Secondary Argument - Find Notes
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the 'find' command. ie to see all occurences of the notes
 c and g, try:
 
 ```
 ./frettler guitar find --notes c,g
 ```
+
+### Primary Argument - Fifths
+Frettler generates dynamically a representation of the Circle Of Fifths, that it uses to determine if scales should use sharps or flats as the accidentals.
+It is perhaps better described as a Line Of Fifths, due to its somewhat flat structure, and the clockwise and anticlockwise arms don't overlap, but the 'fifths' command
+will print this out for you if your curious or want to refer to it.
 
 ### Primary Argument - Chord Reverse Lookup
 Frettler also has a 'chord' command. In fact it has two...
@@ -269,6 +274,16 @@ java -Dfile.encoding=UTF8 -jar ./target/frettler-0.1.0-jar-with-dependencies.jar
 
 Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
 
+There is also a small bash script provided that will iterate through a set of notes and collect frettlers output for all their scales  
+To run it simply provide the scale type you want :
+```
+#!/bin/bash
+./scales scale_major
+```
+
+The output will be written to 'scale_major.out'. I wrote this as I wanted to print out some scale sheets for practising. The output is by default coloured, so if printing that does not work,
+add the '--mono' option to the frettler command in the 'scales' script. I have some local tricks to convert it to html which I then open in safari and print, but those tricks are peculiar to the
+editor I use - Vim. If you use Vim, try the plugin [AnsiEsc](http://www.drchip.org/astronaut/vim/#ANSIESC) and then use ":TOhtml".
 
 ## Programmatically
 If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
