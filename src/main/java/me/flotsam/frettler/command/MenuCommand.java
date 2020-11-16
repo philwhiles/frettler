@@ -90,6 +90,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
         root = Note.forPitch(Pitch.valueOf(args[2][argV[2]]));
         intervalPattern = IntervalPattern.valueOf(args[3][argV[3]]);
 
+            System.out.println(String.format("%x", (byte) buff[0]));
         switch ((byte) buff[0]) {
           case KEY_C:
             chordMode = !chordMode;
