@@ -42,9 +42,14 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
   private static String[] instrumentArgs =
       new String[] {"GUITAR", "BASSGUITAR", "UKELELE", "MANDOLIN", "BANJO"};
   private static String[] viewArgs = new String[] {"HORIZONTAL", "VERTICAL"};
-  private static String[] pitchArgs = Arrays.stream(Pitch.values()).map(ip->ip.name()).collect(Collectors.toList()).toArray(new String[] {});
-  private static String[] patternArgs = Arrays.stream(IntervalPattern.values()).filter(ip->ip!=IntervalPattern.SCALE_CHROMATIC).map(ip->ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
+  private static String[] pitchArgs = Arrays.stream(Pitch.values()).map(ip -> ip.name())
+      .collect(Collectors.toList()).toArray(new String[] {});
+  private static String[] patternArgs =
+      Arrays.stream(IntervalPattern.values()).filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
+          .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
 
+  private static final int KEY_ESC = 0x0B;
+  private static final int KEY_OPEN_BRACKET = 0x5B;
   private static final int KEY_UP = 0x41;
   private static final int KEY_DOWN = 0x42;
   private static final int KEY_LEFT = 0x44;
@@ -78,19 +83,23 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
 
       int argN = 0;
       int[] argV = new int[args.length];
-      char[] buff = new char[10];
 
       do {
         printMenu(argN, argV);
-        reader.read(buff);
-        System.out.print("\r");
-        
+        int key = reader.read();
+        if (key == KEY_ESC) {
+          key = reader.read();
+          if (key == KEY_OPEN_BRACKET) {
+            key = reader.read();
+          }
+        }
+
         String instrument = args[0][argV[0]];
         view = View.valueOf(args[1][argV[1]]);
         root = Note.forPitch(Pitch.valueOf(args[2][argV[2]]));
         intervalPattern = IntervalPattern.valueOf(args[3][argV[3]]);
 
-        switch ((byte) buff[0]) {
+        switch (key) {
           case KEY_C:
             chordMode = !chordMode;
             display(instrument);
@@ -130,7 +139,6 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
       } while (!exit);
     } catch (Exception e) {
       e.printStackTrace();
-
     }
   }
 
@@ -155,12 +163,17 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
   }
 
   private void printMenu(int argN, int[] argV) {
+    System.out.print("\r");
     for (int i = 0; i < argV.length; i++) {
-      System.out.print("" + (isMono() ? "" : (argN == i ? Colour.GOLD1 : Colour.RESET)) + args[i][argV[i]] + " " + (isMono() ? "" : Colour.RESET));
+      System.out.print("" + (isMono() ? "" : (argN == i ? Colour.GOLD1 : Colour.RESET))
+          + args[i][argV[i]] + " " + (isMono() ? "" : Colour.RESET));
     }
-    System.out.print("(intervals:" + (intervals ? (isMono() ? "" : Colour.GREEN) + "on" : "off") + (isMono() ? "" : Colour.RESET));
-    System.out.print(" chords:" + (chordMode ? (isMono() ? "" : Colour.GREEN) + "on" : "off") + (isMono() ? "" : Colour.RESET));
-    System.out.print(" verbose:" + (verbose ? (isMono() ? "" : Colour.GREEN) + "on" : "off") + (isMono() ? "" : Colour.RESET) + ")");
+    System.out.print("(intervals:" + (intervals ? (isMono() ? "" : Colour.GREEN) + "on" : "off")
+        + (isMono() ? "" : Colour.RESET));
+    System.out.print(" chords:" + (chordMode ? (isMono() ? "" : Colour.GREEN) + "on" : "off")
+        + (isMono() ? "" : Colour.RESET));
+    System.out.print(" verbose:" + (verbose ? (isMono() ? "" : Colour.GREEN) + "on" : "off")
+        + (isMono() ? "" : Colour.RESET) + ")");
 
     System.out.print("                                  ");
     System.out.print("\r");
