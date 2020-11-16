@@ -92,6 +92,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
               out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
                   Colour.RESET));
             }
+            out.println();
           }
         } else {
           chord = new Chord(this.root, this.intervalPattern);
@@ -120,6 +121,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
               out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
                   Colour.RESET));
             }
+            out.println();
           }
         } else {
           chord = new Chord(this.root, this.intervalPattern);

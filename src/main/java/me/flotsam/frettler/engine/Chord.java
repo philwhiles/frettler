@@ -340,7 +340,7 @@ public class Chord {
     IntervalPatternMetadata intervalPatternMetadata = IntervalPatternAnalyser.analyse(intervals);
 
     IntervalPattern chordPattern = null;
-    String label = "UNKNOWN";
+    String label = " ???";
     for (IntervalPattern pattern : IntervalPattern.values()) {
       if (pattern.getPatternType() != PatternType.CHORD) {
         continue;

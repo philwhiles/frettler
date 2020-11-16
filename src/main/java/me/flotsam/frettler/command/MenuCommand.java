@@ -49,6 +49,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
           .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
 
   private static final int KEY_ESC = 0x0B;
+  private static final int KEY_TAB = 0x09;
   private static final int KEY_OPEN_BRACKET = 0x5B;
   private static final int KEY_UP = 0x41;
   private static final int KEY_DOWN = 0x42;
@@ -66,8 +67,9 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
   public void run() {
     boolean exit = false;
     System.out.println("In menu mode:");
-    System.out.println(" - arrow keys to select the combo");
+    System.out.println(" - arrow keys to move between fields");
     System.out.println(" - enter to display that combo");
+    System.out.println(" - tab to jump within the current field");
     System.out.println("");
     System.out.println(" - Toggle options:");
     System.out.println(" - (i)ntervals");
@@ -100,6 +102,16 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
         intervalPattern = IntervalPattern.valueOf(args[3][argV[3]]);
 
         switch (key) {
+          case KEY_TAB:
+            String current = args[argN][argV[argN]];
+            do {
+              argV[argN] = argV[argN] < args[argN].length - 1 ? argV[argN] + 1 : 0;
+              String next = args[argN][argV[argN]];
+              if (next.charAt(0) != current.charAt(0)) {
+                break;
+              }
+            } while (true);
+            break;
           case KEY_C:
             chordMode = !chordMode;
             display(instrument);
