@@ -41,101 +41,6 @@ import lombok.Getter;
 public enum IntervalPattern {
 
   //@formatter:off
-  // SCALES AND MODES
-  SCALE_CHROMATIC(
-      false,
-      PatternType.SCALE,
-      "Chromatic",
-      P1, m2, M2, m3, M3, P4, d5, P5, m6, M6, m7, M7, P8, m9, M9, m10, M10, m11, M11 
-  ),
-  SCALE_MAJOR(
-      true,
-      PatternType.SCALE,
-      "Major",
-      P1, M2, M3, P4, P5, M6, M7
-  ),
-  SCALE_MELODIC_MINOR(
-      true,
-      PatternType.SCALE,
-      "Melodic Minor",
-      P1, M2, m3, P4, P5, M6, M7
-  ),
-  SCALE_HARMONIC_MINOR(
-      true,
-      PatternType.SCALE,
-      "Harmonic Minor",
-      P1, M2, m3, P4, P5, m6, M7
-  ),
-  SCALE_MAJOR_PENTATONIC(
-      true,
-      SCALE_MAJOR,
-      PatternType.SCALE,
-      "Major Pentatonic",
-      P1, M2, M3, P5, M6
-  ),
-  MODE_AEOLIAN(
-      true,
-      PatternType.MODE,
-      "Aeolian",
-      P1, M2, m3, P4, P5, m6, m7
-  ),
-  SCALE_MINOR(
-      true,
-      MODE_AEOLIAN,
-      PatternType.SCALE,
-      "Minor Scale"
-  ),
-  SCALE_MINOR_PENTATONIC(
-      true,
-      SCALE_MINOR,
-      PatternType.SCALE,
-      "Minor Pentatonic",
-      P1, m3, P4, P5, m7
-  ), 
-  SCALE_BLUES_MAJOR(
-      false,
-      PatternType.SCALE,
-      "Blues" ,
-      P1, M2, m3, P5, M6
-  ),
-  SCALE_BLUES_MINOR(
-      false,
-      PatternType.SCALE,
-      "Blues",
-      P1, m3, P4, d5, P5, m7
-  ),
-  MODE_DORIAN_(
-      true,
-      PatternType.MODE,
-      "Dorian",
-      P1, M2, m3, P4, P5, M6, m7
-  ), 
-  MODE_MIXOLYDIAN(
-      true,
-      PatternType.MODE,
-      "Mixolydian",
-      P1, M2, M3, P4, P5, M6, m7
-  ), 
-  MODE_LYDIAN(
-      true,
-      PatternType.MODE,
-      "Lydian",
-      P1, M2, M3, d5, P5, M6, M7
-  ), 
-  MODE_IONIAN(
-      true,
-      SCALE_MAJOR,
-      PatternType.MODE,
-      "Ionian"
-  ), 
-  MODE_LOCRIAN(
-      true,
-      PatternType.MODE,
-      "Aeolian",
-      P1, m2, m3, P4, d5, m6, m7
-  ),
-  
-  
   // PATTERNS FOR CHORD GENERATION
   CHORD_MIN11(
       true,
@@ -323,10 +228,100 @@ public enum IntervalPattern {
       "5",
       P1, P5
   ),
-  
-  
-  
-  
+
+  // SCALES AND MODES
+  SCALE_CHROMATIC(
+      false,
+      PatternType.SCALE,
+      "Chromatic",
+      P1, m2, M2, m3, M3, P4, d5, P5, m6, M6, m7, M7, P8, m9, M9, m10, M10, m11, M11 
+  ),
+  SCALE_MAJOR(
+      true,
+      PatternType.SCALE,
+      "Major",
+      P1, M2, M3, P4, P5, M6, M7
+  ),
+  SCALE_MELODIC_MINOR(
+      true,
+      PatternType.SCALE,
+      "Melodic Minor",
+      P1, M2, m3, P4, P5, M6, M7
+  ),
+  SCALE_HARMONIC_MINOR(
+      true,
+      PatternType.SCALE,
+      "Harmonic Minor",
+      P1, M2, m3, P4, P5, m6, M7
+  ),
+  SCALE_MAJOR_PENTATONIC(
+      true,
+      SCALE_MAJOR,
+      PatternType.SCALE,
+      "Major Pentatonic",
+      P1, M2, M3, P5, M6
+  ),
+  MODE_AEOLIAN(
+      true,
+      PatternType.MODE,
+      "Aeolian",
+      P1, M2, m3, P4, P5, m6, m7
+  ),
+  SCALE_MINOR(
+      true,
+      MODE_AEOLIAN,
+      PatternType.SCALE,
+      "Minor Scale"
+  ),
+  SCALE_MINOR_PENTATONIC(
+      true,
+      SCALE_MINOR,
+      PatternType.SCALE,
+      "Minor Pentatonic",
+      P1, m3, P4, P5, m7
+  ), 
+  SCALE_BLUES_MAJOR(
+      false,
+      PatternType.SCALE,
+      "Blues" ,
+      P1, M2, m3, P5, M6
+  ),
+  SCALE_BLUES_MINOR(
+      false,
+      PatternType.SCALE,
+      "Blues",
+      P1, m3, P4, d5, P5, m7
+  ),
+  MODE_DORIAN(
+      true,
+      PatternType.MODE,
+      "Dorian",
+      P1, M2, m3, P4, P5, M6, m7
+  ), 
+  MODE_MIXOLYDIAN(
+      true,
+      PatternType.MODE,
+      "Mixolydian",
+      P1, M2, M3, P4, P5, M6, m7
+  ), 
+  MODE_LYDIAN(
+      true,
+      PatternType.MODE,
+      "Lydian",
+      P1, M2, M3, d5, P5, M6, M7
+  ), 
+  MODE_IONIAN(
+      true,
+      SCALE_MAJOR,
+      PatternType.MODE,
+      "Ionian"
+  ), 
+  MODE_LOCRIAN(
+      true,
+      PatternType.MODE,
+      "Aeolian",
+      P1, m2, m3, P4, d5, m6, m7
+  ),
   
   ;
   //@formatter:on

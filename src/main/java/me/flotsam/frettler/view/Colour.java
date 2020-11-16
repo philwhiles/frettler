@@ -19,6 +19,7 @@ package me.flotsam.frettler.view;
 
 public enum Colour {
   RESET("\033[0m"),
+  BOLD("\033[1m"),
   BG_WHITE("\033[48;5;231m"),
 
   WHITE("\033[0;37;1m"),

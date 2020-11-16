@@ -16,6 +16,9 @@ When displaying a scale and the diatonic chords for that scale are generated usi
 When displaying just a chord, sharps are always used. Changes to show flats in chords was abandoned for the time being when I realised that it was not straightforward - if you can 
 enlighten me as to what the theory rules are for deciding if a random chords notes should be flat or sharp please do!
 
+UPDATE: Frettler now has an interactive 'menu' mode. Rather than relaunching Frettler repeatedly to display different views, roots, chords, scales, one each time, start
+Frettler with the 'menu' argument and choose what to display to your hearts content. Don't know why I didn't think of doing this before!
+See the Menu section below for full instructions.
 
 
 Here is an example of its output :
@@ -150,6 +153,28 @@ c and g, try:
 ./frettler guitar find --notes c,g
 ```
 
+## Primary Argument - Menu
+Start Frettler with the menu argument and it will offer a simple one line menu. Depending on your key presses it will display your fretboard over and over, each time 
+reflecting your choices. It will become apparent when you start it :
+
+```
+./frettler menu
+
+In menu mode:
+ - arrow keys to select the combo
+ - enter to display that combo
+
+ - Toggle options:
+ - (i)ntervals
+ - (c)hords
+ - (v)erbose
+
+ - and (q)uit
+```
+
+All the usual instrument mode optional arguments can be used when first starting Frettler in menu mode (--intervals --verbose --chords --mono --octaves --strings --frets). 
+The first three of those can be toggled with key presses once in menu mode, while the others will be used constantly.
+
 ### Primary Argument - Fifths
 Frettler generates dynamically a representation of the Circle Of Fifths, that it uses to determine if scales should use sharps or flats as the accidentals.
 It is perhaps better described as a Line Of Fifths, due to its somewhat flat structure, and the clockwise and anticlockwise arms don't overlap, but the 'fifths' command
@@ -255,7 +280,7 @@ Create a file in the top frettler directory, and call it 'dropd', with the follo
 ### Linux/macOS
 ```
 #!/bin/bash
-java -jar target/frettler-0.1.0-jar-with-dependencies.jar $@ --strings D,A,D,G,B,E
+./frettler $@ --strings D,A,D,G,B,E
 ```
 
 Save your dropd file, then back at your terminal prompt, execute :
@@ -267,12 +292,19 @@ chmod +x dropd
 ### Windows
 ```
 @echo off
-chcp 65001 ^> nul
-java -Dfile.encoding=UTF8 -jar ./target/frettler-0.1.0-jar-with-dependencies.jar %%\* --strings D,A,D,G,B,E
+frettler.bat %%\* --strings D,A,D,G,B,E
 ```
 
 
 Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
+
+
+And if your prefer menu mode and want to use a custom tuning, number of frets etc:
+### Linux/macOS
+```
+#!/bin/bash
+./frettler menu $@ --strings D,A,D,G,B,E
+```
 
 There is also a small bash script provided that will iterate through a set of notes and collect frettlers output for all their scales  
 To run it simply provide the scale type you want :

@@ -71,6 +71,9 @@ public class VerticalView {
 
     for (List<Fret> fretFrets : fretboardFrets) {
       for (Fret fret : fretFrets) {
+        if (fret.getNote() == null) {
+          continue; // must be fret 1-5 of the 5th string on banjo
+        }
         Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
             .filter(cn -> fret.getNote().getPitch().equals(cn.getNote().getPitch())).findAny();
         if (chordScaleNoteForFret.isPresent()) {

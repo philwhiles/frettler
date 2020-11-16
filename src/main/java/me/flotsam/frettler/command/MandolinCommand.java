@@ -27,7 +27,6 @@ import picocli.CommandLine.Command;
  */
 @Command(name = "mandolin", description = "Generates mandolin scales and chords")
 public class MandolinCommand extends FrettedInstrumentCommand implements Runnable {
-
   
   @Override
   public void run() {

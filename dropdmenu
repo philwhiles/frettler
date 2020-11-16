@@ -1,0 +1,3 @@
+#!/bin/bash
+./frettler menu $@ --strings D,A,D,G,B,E
+

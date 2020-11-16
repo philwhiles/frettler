@@ -28,7 +28,6 @@ import picocli.CommandLine.Command;
 @Command(name = "banjo", description = "Generates banjo scales and chords")
 public class BanjoCommand extends FrettedInstrumentCommand implements Runnable {
 
-  
   @Override
   public void run() {
    exec(new Banjo(strings, frets));

@@ -42,9 +42,9 @@ import picocli.CommandLine.Option;
  *
  */
 @Command
-public abstract class FrettedInstrumentCommand extends FrettlerCommand {
+public abstract class FrettedInstrumentCommand extends FrettlerCommand implements Runnable {
 
-  @Option(names = {"-n", "--notes"}, description = "The chord notes to analyse", split = ",")
+  @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
   Note[] notes = new Note[] {};
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
@@ -61,7 +61,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand {
   @Option(names = {"-v", "--verbose"},
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
-
+  
   public void exec(FrettedInstrument instrument) {
 
     Scale scale = null;

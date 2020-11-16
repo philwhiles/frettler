@@ -32,29 +32,26 @@ import picocli.CommandLine.Parameters;
 public class FrettlerCommand {
 
   @Parameters(index = "0", defaultValue = "HORIZONTAL", description = "The view to use")
-  @Getter
-  protected View view;
+  View view;
 
   @Parameters(index = "1", defaultValue = "C", description = "The root/tonic of the chord or scale")
-  @Getter
-  protected Note root;
+  Note root;
 
   @Parameters(index = "2", defaultValue = "SCALE_MAJOR",
       description = "The interval pattern to use to generate the scale or arpeggio")
-  @Getter
-  protected IntervalPattern intervalPattern;
+  IntervalPattern intervalPattern;
 
   @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
   @Getter
-  protected boolean mono;
+  boolean mono;
 
   @Option(names = {"-o", "--octaves"}, description = "Colourize octaves instead of notes/intervals")
   @Getter
-  protected boolean octaves;
+  boolean octaves;
 
   @Option(names = {"-i", "--intervals"}, description = "Show interval labels instead of notes")
   @Getter
-  protected boolean intervals;
+  boolean intervals;
   
   public enum View {
     HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), CHORD, C(CHORD), FIND, F(FIND);

@@ -28,9 +28,9 @@ import picocli.CommandLine.Command;
 @Command(name = "guitar", description = "Generates guitar scales and chords")
 public class GuitarCommand extends FrettedInstrumentCommand implements Runnable {
 
-  
   @Override
   public void run() {
    exec(new Guitar(strings, frets));
   }
+  
 }

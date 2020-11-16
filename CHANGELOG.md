@@ -1,3 +1,7 @@
+# 16th November 2020
+- added menu mode (in a day!)
+- fixed banjo display of chords
+
 # 8th November 2020
 - very extensive changes to accomplish understanding of flats within scales
 - fifths command added
