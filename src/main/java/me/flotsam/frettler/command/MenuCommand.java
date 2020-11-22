@@ -67,9 +67,9 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
   public void run() {
     boolean exit = false;
     System.out.println("In menu mode:");
-    System.out.println(" - arrow keys to move between fields");
-    System.out.println(" - enter to display that combo");
-    System.out.println(" - tab to jump within the current field");
+    System.out.println(" - arrow keys move between fields");
+    System.out.println(" - enter displays that combo");
+    System.out.println(" - tab jumps within the current field");
     System.out.println("");
     System.out.println(" - Toggle options:");
     System.out.println(" - (i)ntervals");

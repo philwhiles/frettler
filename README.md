@@ -9,16 +9,18 @@ color support.
 Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
 The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns individual use of those intervals.
 
-UPDATE: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
+*UPDATE*: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
 or sharps. In fact it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
 It is a line rather than a circle, as it does not (currently!) need to traverse around the circle.
 When displaying a scale and the diatonic chords for that scale are generated using the '--chords' or '-c' argument, the notes in the chords are flats or sharps depending on the scale.
 When displaying just a chord, sharps are always used. Changes to show flats in chords was abandoned for the time being when I realised that it was not straightforward - if you can 
 enlighten me as to what the theory rules are for deciding if a random chords notes should be flat or sharp please do!
 
-UPDATE: Frettler now has an interactive 'menu' mode. Rather than relaunching Frettler repeatedly to display different views, roots, chords, scales, one each time, start
-Frettler with the 'menu' argument and choose what to display to your hearts content. Don't know why I didn't think of doing this before!
-See the Menu section below for full instructions.
+*UPDATE*: Frettler now has an interactive 'menu' mode. Rather than relaunching Frettler repeatedly to display different views, roots, chords, scales, one each time, start
+Frettler with the 'menu' argument and choose what to display to your hearts content. 
+The menu mode is an easier way of exploring different scales and chords, and effectively allows you to keep repeating the instrument view over and over. The other non instrument commands
+have to be accessed using the original way.
+See the Menu section below for full instructions, but the best explanation is achieved by actually trying it.
 
 
 Here is an example of its output :
