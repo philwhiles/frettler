@@ -159,20 +159,7 @@ c and g, try:
 Start Frettler with the menu argument and it will offer a simple one line menu. Depending on your key presses it will display your fretboard over and over, each time 
 reflecting your choices. It will become apparent when you start it :
 
-```
-./frettler menu
-
-In menu mode:
- - arrow keys to select the combo
- - enter to display that combo
-
- - Toggle options:
- - (i)ntervals
- - (c)hords
- - (v)erbose
-
- - and (q)uit
-```
+<img src="https://github.com/philwhiles/frettler/blob/master/demo-menu.png"/>
 
 All the usual instrument mode optional arguments can be used when first starting Frettler in menu mode (--intervals --verbose --chords --mono --octaves --strings --frets). 
 The first three of those can be toggled with key presses once in menu mode, while the others will be used constantly.
