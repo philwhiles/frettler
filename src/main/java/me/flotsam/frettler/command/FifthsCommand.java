@@ -37,21 +37,17 @@ public class FifthsCommand implements Runnable {
   public void run() {
     LinkedHashMap<Note, LineEntry> majorLine = LineOfFifths.getMajorLine();
     LinkedHashMap<Note, LineEntry> minorLine = LineOfFifths.getMinorLine();
+    LinkedHashMap<Note, LineEntry> dimLine = LineOfFifths.getDimLine();
     List<Note> majorLineNotes = LineOfFifths.getMajorLine().keySet().stream().collect(Collectors.toList());
-    List<Note> minorLineNotes = LineOfFifths.getMinorLine().keySet().stream().collect(Collectors.toList());
     
-    for (int n = 0;n < majorLine.size(); n++) {
-      Note majorNote = majorLineNotes.get(n);
+    for (Note majorNote : majorLineNotes) {
       LineEntry currentMajorLine = majorLine.get(majorNote);
       System.out.print (majorNote.getLabel() + "maj [");
       System.out.print(currentMajorLine.getAccidentals().stream().map(Note::getLabel).collect(Collectors.joining(", ")));
       System.out.println("]");
 
-      Note minorNote = minorLineNotes.get(n);
-      LineEntry currentMinorLine = minorLine.get(minorNote);
-      System.out.print (minorNote.getLabel() + "min [");
-      System.out.print(currentMinorLine.getAccidentals().stream().map(Note::getLabel).collect(Collectors.joining(", ")));
-      System.out.println("]");
+      System.out.println (currentMajorLine.getMinor().getLabel() + "min");
+      System.out.println (currentMajorLine.getDim().getLabel() + "dim");
       System.out.println();
     }
   }

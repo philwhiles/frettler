@@ -271,7 +271,7 @@ public enum IntervalPattern {
       true,
       MODE_AEOLIAN,
       PatternType.SCALE,
-      "Minor Scale"
+      "Minor"
   ),
   SCALE_MINOR_PENTATONIC(
       true,
@@ -283,13 +283,13 @@ public enum IntervalPattern {
   SCALE_BLUES_MAJOR(
       false,
       PatternType.SCALE,
-      "Blues" ,
+      "Major Blues" ,
       P1, M2, m3, P5, M6
   ),
   SCALE_BLUES_MINOR(
       false,
       PatternType.SCALE,
-      "Blues",
+      "Minor Blues",
       P1, m3, P4, d5, P5, m7
   ),
   MODE_DORIAN(

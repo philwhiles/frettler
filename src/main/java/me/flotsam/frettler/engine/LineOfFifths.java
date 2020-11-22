@@ -12,6 +12,9 @@ public class LineOfFifths {
   static LinkedHashMap<Note, LineEntry> majorLine = new LinkedHashMap<>();
   @Getter
   static LinkedHashMap<Note, LineEntry> minorLine = new LinkedHashMap<>();
+  @Getter
+  static LinkedHashMap<Note, LineEntry> dimLine = new LinkedHashMap<>();
+
   static {
     ScaleNote c = Scale.CHROMATIC_SCALE.findScaleNote(Note.forPitch(Pitch.C)).get();
     for (int i = -7; i <= 7; i++) {
@@ -19,6 +22,7 @@ public class LineOfFifths {
 
       ScaleNote majorNote = Scale.getScaleNote(c, i * fifthIntervals);
       ScaleNote minorNote = Scale.getScaleNote(c, i * fifthIntervals + fifthIntervals * 3);
+      ScaleNote dimNote = Scale.getScaleNote(c, i * fifthIntervals + fifthIntervals * 5);
       
       List<Note> accidentals = new ArrayList<>();
       if (i >= 0) {
@@ -30,9 +34,11 @@ public class LineOfFifths {
           }
         }
         majorLine.put(majorNote.getNote(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), dimNote.getNote(), accidentals));
         minorLine.put(minorNote.getNote(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), dimNote.getNote(), accidentals));
+        dimLine.put(dimNote.getNote(),
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), dimNote.getNote(), accidentals));
       } else if (i < 0) {
         for (int n = 3; n > i + 3; n--) {
           Optional<Note> note =
@@ -43,9 +49,11 @@ public class LineOfFifths {
         }
 
         majorLine.put(majorNote.getNote().getFlat(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), dimNote.getNote(), accidentals));
         minorLine.put(minorNote.getNote().getFlat(),
-            new LineEntry(majorNote.getNote(), minorNote.getNote(), accidentals));
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), dimNote.getNote(), accidentals));
+        dimLine.put(dimNote.getNote(),
+            new LineEntry(majorNote.getNote(), minorNote.getNote(), dimNote.getNote(), accidentals));
       }
     }
   }
@@ -66,12 +74,22 @@ public class LineOfFifths {
     return entry;
   }
 
+  public static LineEntry getDimEntry(Note note) {
+    LineEntry entry = dimLine.get(note);
+    if (entry == null) {
+      entry = dimLine.get(note.getAlternate());
+    }
+    return entry;
+  }
+
   @AllArgsConstructor
   public static class LineEntry {
     @Getter
     private Note major;
     @Getter
     private Note minor;
+    @Getter
+    private Note dim;
     @Getter
     private List<Note> accidentals;
   }

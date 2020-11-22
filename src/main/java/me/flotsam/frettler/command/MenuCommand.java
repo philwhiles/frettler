@@ -48,7 +48,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
       Arrays.stream(IntervalPattern.values()).filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
           .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
 
-  private static final int KEY_ESC = 0x0B;
+  private static final int KEY_ESC = 0x1B;
   private static final int KEY_TAB = 0x09;
   private static final int KEY_OPEN_BRACKET = 0x5B;
   private static final int KEY_UP = 0x41;
@@ -89,12 +89,6 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
       do {
         printMenu(argN, argV);
         int key = reader.read();
-        if (key == KEY_ESC) {
-          key = reader.read();
-          if (key == KEY_OPEN_BRACKET) {
-            key = reader.read();
-          }
-        }
 
         String instrument = args[0][argV[0]];
         view = View.valueOf(args[1][argV[1]]);
@@ -102,6 +96,26 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
         intervalPattern = IntervalPattern.valueOf(args[3][argV[3]]);
 
         switch (key) {
+          case KEY_ESC:
+            int key2 = reader.read();
+            if (key2 == KEY_OPEN_BRACKET) {
+              key2 = reader.read();
+              switch (key2) {
+                case KEY_UP:
+                  argV[argN] = argV[argN] < args[argN].length - 1 ? argV[argN] + 1 : 0;
+                  break;
+                case KEY_DOWN:
+                  argV[argN] = argV[argN] > 0 ? argV[argN] - 1 : args[argN].length - 1;
+                  break;
+                case KEY_LEFT:
+                  argN = argN > 0 ? argN - 1 : argN;
+                  break;
+                case KEY_RIGHT:
+                  argN = argN < args.length - 1 ? argN + 1 : argN;
+                  break;
+              }
+            }
+            break;
           case KEY_TAB:
             String current = args[argN][argV[argN]];
             do {
@@ -121,27 +135,16 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
             display(instrument);
             break;
           case KEY_Q:
-            System.out.println("");
-            System.out.println("");
+            System.out.println();
+            System.out.println();
             exit = true;
             break;
           case KEY_V:
             verbose = !verbose;
             display(instrument);
             break;
-          case KEY_UP:
-            argV[argN] = argV[argN] < args[argN].length - 1 ? argV[argN] + 1 : 0;
-            break;
-          case KEY_DOWN:
-            argV[argN] = argV[argN] > 0 ? argV[argN] - 1 : args[argN].length - 1;
-            break;
-          case KEY_LEFT:
-            argN = argN > 0 ? argN - 1 : argN;
-            break;
-          case KEY_RIGHT:
-            argN = argN < args.length - 1 ? argN + 1 : argN;
-            break;
           case KEY_ENTER:
+            System.out.println();
             display(instrument);
             break;
 
