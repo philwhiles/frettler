@@ -73,7 +73,7 @@ the --mono, then rebuild Frettler.
 ## Demo
 Do read the details below to get an understanding of how to drive Frettler, but perhaps first, after building it, try one of the provided demo scripts ('demo' for linux/macOS, 'demo.bat' for windows).
 The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
-The output of the demo command can be seen [Here](https://github.com/philwhiles/frettler/blob/master/demo.html)
+The output of the demo command can be seen [Here](https://htmlpreview.github.io/?https://github.com/philwhiles/frettler/blob/master/demo.html)
 
 ## Arguments
 Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
