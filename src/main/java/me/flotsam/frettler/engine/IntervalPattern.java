@@ -66,6 +66,12 @@ public enum IntervalPattern {
       "dom9",
       P1, M3, P5, m7, M9
   ),
+  CHORD_7(
+      true,
+      PatternType.CHORD,
+      "7",
+      P1, M3, P5, m7
+  ),
   CHORD_7SHARP9(
       true,
       PatternType.CHORD,
