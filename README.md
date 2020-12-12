@@ -22,6 +22,9 @@ The menu mode is an easier way of exploring different scales and chords, and eff
 have to be accessed using the original way.
 See the Menu section below for full instructions, but the best explanation is achieved by actually trying it.
 
+**EXTRAS** I have added some images to the extras folder which I use to print a circle of fifths calculator, which you may also find useful. I print these and laminate them, having very carefully cut the outer
+so that it is a ring with an empty centre.
+
 
 Here is an example of its output :
 
