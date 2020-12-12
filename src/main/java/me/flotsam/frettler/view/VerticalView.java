@@ -119,6 +119,7 @@ public class VerticalView {
 
   private void display(List<ChordFret> chordFrets, Options options) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
+    // deadString concept left over from display of chord fingerings which may come back
     List<Integer> deadStrings = new ArrayList<>();
     int lowestFret = chordFrets.stream()
         .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
@@ -157,11 +158,7 @@ public class VerticalView {
             out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));
           }
         } else {
-          String mark = " ";
-          if (fretNum == 0 && deadStrings.contains(stringNum)) {
-            mark = "X";
-          }
-          out.print(String.format("%s %s %s", ldr, mark, sep));
+          out.print(String.format("%s %s %s", ldr, (fretNum == 0 && deadStrings.contains(stringNum)) ? "X" : " ", sep));
         }
         stringNum++;
       }
