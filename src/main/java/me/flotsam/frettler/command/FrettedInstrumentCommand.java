@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.ChordBank;
+import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
+import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
@@ -61,14 +64,15 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   @Option(names = {"-v", "--verbose"},
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
-  
+
   public void exec(FrettedInstrument instrument) {
 
     Scale scale = null;
     Chord chord = null;
-    
+
     if (instrument instanceof Banjo && isOctaves()) {
-      out.println("Sorry - haven't worked out how to handle that 5th string in octave calculation - yet");
+      out.println(
+          "Sorry - haven't worked out how to handle that 5th string in octave calculation - yet");
       return;
     }
 
@@ -105,7 +109,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
       case VERTICAL:
         VerticalView verticalView = new VerticalView(instrument);
-        VerticalView.Options verticalViewOptions = verticalView.new Options(intervals, !isMono(), isOctaves());
+        VerticalView.Options verticalViewOptions =
+            verticalView.new Options(intervals, !isMono(), isOctaves());
 
         if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
           scale = new Scale(this.root, this.intervalPattern);
@@ -132,26 +137,62 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         }
         break;
 
-      case FIND:
+      case DISPLAY:
         HorizontalView finderView = new HorizontalView(instrument);
         HorizontalView.Options finderViewOptions =
             finderView.new Options(false, true, !isMono(), isOctaves());
-        Scale arbitraryScale = new Scale(Arrays.asList(notes).stream().map(n->n.getPitch()).collect(Collectors.toList()));
+        Scale arbitraryScale = new Scale(
+            Arrays.asList(notes).stream().map(n -> n.getPitch()).collect(Collectors.toList()));
         out.println();
         finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions);
         break;
-        
-      case CHORD:
-        VerticalView chordView = new VerticalView(instrument);
-        VerticalView.Options chordViewOptions = chordView.new Options(intervals, !isMono(), isOctaves());
-        Optional<Chord> chordOpt = Chord.findChord(notes);
-        if (chordOpt.isPresent()) {
-          chordView.showArpeggio(chordOpt.get(), chordViewOptions);
+
+      case FIND:
+        VerticalView findView = new VerticalView(instrument);
+        VerticalView.Options findViewOptions =
+            findView.new Options(intervals, !isMono(), isOctaves());
+        Optional<Chord> foundChordOpt = Chord.findChord(notes);
+        if (foundChordOpt.isPresent()) {
+          findView.showArpeggio(foundChordOpt.get(), findViewOptions);
           if (verbose) {
-            out.println(chordOpt.get().describe(isMono()));
+            out.println(foundChordOpt.get().describe(isMono()));
           }
         } else {
-            out.println("Could not find matching chord");
+          out.println("Could not find matching chord");
+        }
+        break;
+
+      case CHORD:
+        VerticalView chordView = new VerticalView(instrument);
+        VerticalView.Options chordViewOptions =
+            chordView.new Options(intervals, !isMono(), isOctaves());
+
+        Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
+            FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
+                instrument.getStringNotes());
+        if (optInstrument.isEmpty()) {
+          out.println("The current instrument is not currently defined for chords");
+          return;
+        } else {
+          FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
+
+          List<ChordDefinition> chordDefinitions =
+              ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern);
+
+          ChordDefinition lastDef = null;
+          for (ChordDefinition chordDefinition : chordDefinitions) {
+            // until we handle fingerings skip dupes
+            if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
+              continue;
+            }
+            lastDef = chordDefinition;
+            chord = new Chord(root, intervalPattern);
+            ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
+            chordView.showChord(chordBankInstance, chordViewOptions);
+            if (verbose) {
+              out.println(chord.describe(isMono()));
+            }
+          }
         }
         break;
 

@@ -28,6 +28,6 @@ public class Ukelele extends FrettedInstrument {
   }
 
   public Ukelele(Note[] strings, Integer frets) {
-    super("Ukelele", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+    super(FrettedInstrument.InstrumentType.UKELELE, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

@@ -28,6 +28,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
+import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
@@ -52,17 +53,58 @@ public class VerticalView {
     this.instrument = instrument;
   }
 
+  public void showChord(ChordBankInstance chordBankInstance, Options options) {
+    List<ChordFret> chordFrets = new ArrayList<>();
+    Chord chord = chordBankInstance.getChord();
+
+    out.println();
+    out.println(StringUtils.center(chord.getTitle(), 30));
+    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
+        + "])", 30));
+    out.println();
+
+    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
+
+    for (List<Fret> fretFrets : fretboardFrets) {
+      int stringNum = 0;
+      for (Fret fret : fretFrets) {
+        if (fret.getNote() == null) {
+          continue; // must be fret 1-5 of the 5th string on banjo
+        }
+        Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
+            .filter(cn -> fret.getNote().getPitch().equals(cn.getNote().getPitch())).findAny();
+        if (chordScaleNoteForFret.isPresent()) {
+          String stringDef = chordBankInstance.getChordDefinition().getStrings().get(stringNum);
+          if (!stringDef.equalsIgnoreCase("x")) {
+            int stringDefVal = Integer.valueOf(stringDef);
+            if (fret.getFretNum() == stringDefVal) {
+              Fret altFret = new Fret(fret.getIndex(), chordScaleNoteForFret.get().getNote(),
+                  fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
+              chordFrets
+                  .add(new ChordFret(altFret, chordScaleNoteForFret.get().getInterval().get()));
+            }
+          } else {
+            chordFrets
+                .add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), ScaleInterval.P1));
+          }
+        }
+        stringNum++;
+      }
+    }
+    display(chordFrets, options);
+  }
 
   public void showArpeggio(Chord chord) {
     showArpeggio(chord, defaultOptions);
   }
 
   public void showArpeggio(Chord chord, Options options) {
-    List<ChordFret> chordFret = new ArrayList<>();
+    List<ChordFret> chordFrets = new ArrayList<>();
 
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getLabel() + " ["
+    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "])", 30));
     out.println();
@@ -77,12 +119,13 @@ public class VerticalView {
         Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
             .filter(cn -> fret.getNote().getPitch().equals(cn.getNote().getPitch())).findAny();
         if (chordScaleNoteForFret.isPresent()) {
-          Fret altFret = new Fret(fret.getIndex(),chordScaleNoteForFret.get().getNote(), fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
-          chordFret.add(new ChordFret(altFret, chordScaleNoteForFret.get().getInterval().get()));
+          Fret altFret = new Fret(fret.getIndex(), chordScaleNoteForFret.get().getNote(),
+              fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
+          chordFrets.add(new ChordFret(altFret, chordScaleNoteForFret.get().getInterval().get()));
         }
       }
     }
-    display(chordFret, options);
+    display(chordFrets, options);
   }
 
   public void showScale(Scale scale) {
@@ -94,7 +137,7 @@ public class VerticalView {
 
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getLabel() + " ["
+    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "])", 30));
     out.println();
@@ -109,7 +152,8 @@ public class VerticalView {
         Optional<ScaleNote> scaleNoteForFret = scale.getScaleNotes().stream()
             .filter(sn -> fret.getNote().getPitch().equals(sn.getNote().getPitch())).findAny();
         if (scaleNoteForFret.isPresent()) {
-          Fret altFret = new Fret(fret.getIndex(),scaleNoteForFret.get().getNote(), fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
+          Fret altFret = new Fret(fret.getIndex(), scaleNoteForFret.get().getNote(),
+              fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
           chordFrets.add(new ChordFret(altFret, scaleNoteForFret.get().getInterval().get()));
         }
       }
@@ -121,15 +165,15 @@ public class VerticalView {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     // deadString concept left over from display of chord fingerings which may come back
     List<Integer> deadStrings = new ArrayList<>();
-    int lowestFret = chordFrets.stream()
-        .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
-        .getFret().getFretNum();
-
     for (ChordFret chordFret : chordFrets) {
       if (chordFret.getFret().getNote() == null) {
         deadStrings.add(chordFret.getFret().getStringNum());
       }
     }
+
+    int lowestFret = chordFrets.stream()
+        .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
+        .getFret().getFretNum();
 
     int fretNum = 0;
     for (List<Fret> frets : fretboardFrets) {
@@ -140,25 +184,32 @@ public class VerticalView {
       for (Fret fret : frets) {
         String ldr = (stringNum == 0 && fretNum != 0) ? "┃" : (fretNum == 0 ? " " : "");
 
-        Optional<ChordFret> chordFret =
-            chordFrets.stream().filter(ct -> fret.getStringNum() == ct.getFret().getStringNum() && fret.getFretNum() == ct.getFret().getFretNum()).findAny();
-
-        if (chordFret.isPresent()) {
-          String fretStr = null;
-          if (options.isIntervals()) {
-            fretStr = chordFret.get().getInterval().getLabel();
-          } else {
-            Note chordFretNote = chordFret.get().getFret().getNote();
-            fretStr = chordFretNote.getLabel();
-          }
-          if (options.isColour()) {
-            Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave()) : ColourMap.get(fret.getNote().getPitch());
-            out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '), Colour.RESET, sep));
-          } else {
-            out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));
-          }
+        if (deadStrings.contains(stringNum)) {
+          out.print(String.format("%s%s%s", ldr, fretNum == 0 ? " X " : "   ", sep));
         } else {
-          out.print(String.format("%s %s %s", ldr, (fretNum == 0 && deadStrings.contains(stringNum)) ? "X" : " ", sep));
+          Optional<ChordFret> chordFret =
+              chordFrets.stream().filter(ct -> fret.getStringNum() == ct.getFret().getStringNum()
+                  && fret.getFretNum() == ct.getFret().getFretNum()).findAny();
+
+          if (chordFret.isPresent()) {
+            String fretStr = null;
+            if (options.isIntervals()) {
+              fretStr = chordFret.get().getInterval().getLabel();
+            } else {
+              Note chordFretNote = chordFret.get().getFret().getNote();
+              fretStr = chordFretNote.getLabel();
+            }
+            if (options.isColour()) {
+              Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
+                  : ColourMap.get(fret.getNote().getPitch());
+              out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '),
+                  Colour.RESET, sep));
+            } else {
+              out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));
+            }
+          } else {
+            out.print(String.format("%s   %s", ldr, sep));
+          }
         }
         stringNum++;
       }

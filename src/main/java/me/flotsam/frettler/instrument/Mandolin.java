@@ -28,6 +28,6 @@ public class Mandolin extends FrettedInstrument {
   }
 
   public Mandolin(Note[] strings, Integer frets) {
-    super("Mandolin", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+    super(FrettedInstrument.InstrumentType.MANDOLIN, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

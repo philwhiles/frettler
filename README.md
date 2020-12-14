@@ -9,6 +9,9 @@ color support.
 Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
 The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns individual use of those intervals.
 
+**UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
+is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
+
 **UPDATE**: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
 or sharps. In fact it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
 It is a line rather than a circle, as it does not (currently!) need to traverse around the circle.
@@ -84,7 +87,7 @@ the vertical view which looks more like the classic chord diagram you see widely
 can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
 Frettlers first argument can either be an instrument, in which case the following commands must follow the instrument conventions below, or it can be one of its secondary, ancilliary, arguments,
-such as 'patterns' or 'chord', each of which have expectations for the subsequent arguments and options.
+such as 'patterns' or 'lookup', each of which have expectations for the subsequent arguments and options.
 
 
 ### Primary Argument - Instrument Commands
@@ -150,12 +153,46 @@ Produces (truncated output here) :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
-### Secondary Argument - Find Notes
-Frettler can display all occurences of arbitrary notes on the fretboard for you with the `find` command. ie to see all occurences of the notes
+### Secondary Argument - Chord fingerings
+While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
+formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings'.
+ie to get frettler to show the fingering for 'Am':
+
+```
+./frettler guitar chord a chord_min
+```
+
+Produces:
+
+<img src="https://github.com/philwhiles/frettler/blob/master/aminor-chord.png"/>
+
+By default the 'chord' display will show notes, but can be used with the '--interval' or '-i' instead.
+
+The database currently only contains limited chords for guitar, six string, standard tuning.
+If you currently choose and instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
+instrument/tuning combination.
+
+The 'chord' feature is new, and over time I would like to build up the data in the database such that it can display chord fingerings for a wider selection of guitar chords,
+but also chords for other instruments, and with different tunings.
+
+If you would like to have additional chord fingerings added, email me with the following info, and I will gladly add them for you:
+
+Instrument: Guitar
+Tuning: EADGBE
+Root: A
+Chord: CHORD_MIN
+Frets: x02210
+Fingering: 002310
+
+'Frets' is... the frets to be pressed, while 'Fingering' is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
+known chords, and in time I will add an argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
+
+### Secondary Argument - Display Notes
+Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
 c and g, try:
 
 ```
-./frettler guitar find --notes c,g
+./frettler guitar display --notes c,g
 ```
 
 ## Primary Argument - Menu
@@ -173,13 +210,13 @@ It is perhaps better described as a Line Of Fifths, due to its somewhat flat str
 will print this out for you if your curious or want to refer to it.
 
 ### Primary Argument - Chord Reverse Lookup
-Frettler also has a `chord` command. In fact it has two...
+Frettler also has a `lookup` command. In fact it has two...
 #### Print chord name found
 The simplest takes the form :
 
 
 ```
-./frettler chord As,D,F
+./frettler lookup As,D,F
 A#maj (A# maj) [A#,D,F]
 ```
 
@@ -194,7 +231,7 @@ This is the default rule, in which the first note is assumed to be the tonic, an
 If you are wondering about the significance of the tonic, consider Cm7b5 (C m7b5) [C,D#,F#,A#] and D#min6 (D# min6) [D#,F#,A#,C].
 
 ```
-> ./frettler chord c,e,g
+> ./frettler lookup c,e,g
 Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
 ```
 
@@ -202,7 +239,7 @@ Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
 The first note is again considered to be the tonic, the listed chords will contain all the provided notes, but not exclusively ie the chords may include other notes.
 
 ```
-> ./frettler chord c,g -r relaxed
+> ./frettler lookup c,g -r relaxed
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
 Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
   etc
@@ -215,7 +252,7 @@ None of the notes is considered the sole tonic, and all chords, with any tonic, 
 all you provide is one note.
 
 ```
-> ./frettler chord c,g -r loose
+> ./frettler lookup c,g -r loose
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
 Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
   etc
@@ -227,10 +264,10 @@ A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
 
 
 #### View the chord found
-The second way of getting Frettler to do a reverse chord lookup is to use `chord` as the keyword immediately following your instrument, as follows :
+The second way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument, as follows :
 
 ```
-./frettler guitar chord --notes As,D,f
+./frettler guitar find --notes As,D,f
 ```
 
 With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles `--strings` and `--frets`).

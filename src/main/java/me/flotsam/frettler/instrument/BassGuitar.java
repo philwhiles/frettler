@@ -28,6 +28,6 @@ public class BassGuitar extends FrettedInstrument {
   }
 
   public BassGuitar(Note[] strings, Integer frets) {
-    super("Bass Guitar", frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+    super(FrettedInstrument.InstrumentType.BASSGUITAR, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
   }
 }

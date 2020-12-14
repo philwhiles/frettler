@@ -51,6 +51,11 @@ public class Chord {
       this.thirds = thirds;
     }
   }
+  //DYAD 2
+  //TRIAD 3
+  // TETRAD 4
+  // PENTAD 5
+  // HEXAD 6
 
   /**
    * Used to create a Chord from a root note when we know what the chords scale pattern should be

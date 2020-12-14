@@ -8,12 +8,12 @@ SET cmds[1]=frettler guitar horizontal C scale_major --intervals=Standard guitar
 SET cmds[2]=frettler guitar horizontal C scale_major --verbose=Standard guitar, fretboard view of C Major scale, verbose mode on
 SET cmds[3]=frettler guitar horizontal C scale_major --chords --verbose=Standard guitar, fretboard view of C Major scale, derive diatonic chords, verbose mode on
 SET cmds[4]=frettler guitar horizontal C scale_major --octaves=Standard guitar, fretboard view of C Major scale, colourizing the fretboard relative octaves
-SET cmds[5]=frettler guitar find --notes c=Standard guitar, just show all occurences of note 'C'
+SET cmds[5]=frettler guitar display --notes c=Standard guitar, just show all occurences of note 'C'
 SET cmds[6]=frettler fifths=Display the Line Of Fifths generated and used internally by Frettler
-SET cmds[7]=frettler chord c,e,g=No instrument, just exact reverse chord lookup
-SET cmds[8]=frettler chord c,e --rule relaxed=No instrument, just relaxed reverse chord lookup
-SET cmds[9]=frettler chord c,e --rule loose=No instrument, just loose reverse chord lookup
-SET cmds[10]=frettler guitar chord -n c,e,g =Standard guitar, lookup chord and display vertically
+SET cmds[7]=frettler lookup c,e,g=No instrument, just exact reverse chord lookup
+SET cmds[8]=frettler lookup c,e --rule relaxed=No instrument, just relaxed reverse chord lookup
+SET cmds[9]=frettler lookup c,e --rule loose=No instrument, just loose reverse chord lookup
+SET cmds[10]=frettler guitar find -n c,e,g =Standard guitar, lookup chord and display vertically
 SET cmds[11]=frettler guitar vertical A scale_minor --chords=Standard guitar, vertical view of A Minor chord, with diatonic chords
 SET cmds[12]=frettler guitar vertical C chord_maj=Standard guitar, vertical view of C Major arpeggio 
 SET cmds[13]=frettler bassguitar horizontal C scale_major_pentatonic=Bass guitar, fretboard view of C Major Pentatonic scale
