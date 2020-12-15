@@ -177,10 +177,11 @@ public class VerticalView {
 
     int fretNum = 0;
     for (List<Fret> frets : fretboardFrets) {
-      String inlay = inlays.contains(fretNum) ? String.format(" %-2s ", fretNum) : "   ";
+      String inlay = inlays.contains(fretNum) ? String.format(" %-2s", fretNum) : "   ";
       out.print(inlay);
       int stringNum = 0;
       for (Fret fret : frets) {
+        boolean lastString = stringNum == instrument.getStringCount() - 1;
         String ldr = fretNum == 0 ? " " : "┋";
 
         if (deadStrings.contains(stringNum)) {
@@ -205,13 +206,13 @@ public class VerticalView {
             if (options.isColour()) {
               Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
                   : ColourMap.get(fret.getNote().getPitch());
-              out.print(String.format("%s%s%s", col, StringUtils.center(fretStr, 4, ' '),
+              out.print(String.format("%s%s%s", col, StringUtils.center(fretStr, lastString ? 3 : 4, ' '),
                   Colour.RESET));
             } else {
-              out.print(String.format("%s", StringUtils.center(fretStr, 4, ' ')));
+              out.print(String.format("%s", StringUtils.center(fretStr,  lastString ? 3 : 4, ' ')));
             }
           } else {
-            out.print(String.format(" %s  ", ldr));
+            out.print(String.format(" %s%s", ldr, StringUtils.repeat(' ', lastString ? 1 : 2)));
           }
         }
         stringNum++;
