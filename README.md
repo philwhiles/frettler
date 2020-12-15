@@ -11,6 +11,8 @@ The only data it needs to perform its calculations, is the definition of individ
 
 **UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
+With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
+box, making the rendering consistent with a typical chord chart, and easy to read.
 
 **UPDATE**: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
 or sharps. In fact it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
@@ -35,7 +37,23 @@ Here is an example of its output :
 <img src="https://github.com/philwhiles/frettler/blob/master/demo2.png"/>
 
 ## Building
-Easily build Frettler from the command line or open in your favourite IDE.
+Easily build Frettler from the command line or open the code and build it in your favourite IDE.
+If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
+or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
+
+```
+git clone https://github.com/philwhiles/frettler.git
+```
+
+And then go to the build section below!
+
+The advantage to installing and using git is that you can periodically go back to the folder where you keep your copy of the git code, and auto pull the latest updates then repeat the build to stay up to date
+with new features and fixes, using :
+
+```
+git pull
+./build
+```
 
 ### Linux/macOS
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
@@ -83,8 +101,7 @@ The output of the demo command can be seen [Here](https://htmlpreview.github.io/
 
 ## Arguments
 Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
-the vertical view which looks more like the classic chord diagram you see widely. The notes in the vertical view are shown in the middle of each frets box, rather than on a string. Each view
-can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
+the vertical view which looks more like the classic chord diagram you see widely. Each view can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
 
 Frettlers first argument can either be an instrument, in which case the following commands must follow the instrument conventions below, or it can be one of its secondary, ancilliary, arguments,
 such as 'patterns' or 'lookup', each of which have expectations for the subsequent arguments and options.
@@ -155,7 +172,7 @@ Produces (truncated output here) :
 
 ### Secondary Argument - Chord fingerings
 While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
-formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings'.
+formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 300).
 ie to get frettler to show the fingering for 'Am':
 
 ```
@@ -168,6 +185,25 @@ Produces:
 
 By default the 'chord' display will show notes, but can be used with the '--interval' or '-i' instead.
 
+If you would like to see which chords frettler can show you for a given root, ie for A, use :
+
+```
+./frettler guitar chord a
+CHORD_MAJ
+CHORD_AUG
+CHORD_7SHARP5
+CHORD_5
+CHORD_7
+CHORD_7FLAT5
+CHORD_DIM
+CHORD_MIN
+CHORD_MIN7
+CHORD_MIN7FLAT5
+CHORD_SUS2
+CHORD_SUS4
+```
+
+
 The database currently only contains limited chords for guitar, six string, standard tuning.
 If you currently choose and instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
 instrument/tuning combination.
@@ -177,14 +213,14 @@ but also chords for other instruments, and with different tunings.
 
 If you would like to have additional chord fingerings added, email me with the following info, and I will gladly add them for you:
 
-Instrument: Guitar
-Tuning: EADGBE
-Root: A
-Chord: CHORD_MIN
-Frets: x02210
-Fingering: 002310
+- Instrument: Guitar
+- Tuning: EADGBE
+- Root: A
+- Chord: CHORD_MIN
+- Frets: x02210
+- Fingering: xx231x
 
-'Frets' is... the frets to be pressed, while 'Fingering' is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
+'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
 known chords, and in time I will add an argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
 
 ### Secondary Argument - Display Notes

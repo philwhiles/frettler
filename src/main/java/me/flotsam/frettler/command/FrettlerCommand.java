@@ -38,7 +38,7 @@ public class FrettlerCommand {
   Note root;
 
   @Parameters(index = "2", defaultValue = "SCALE_MAJOR",
-      description = "The interval pattern to use to generate the scale or arpeggio")
+      description = "The interval pattern to use")
   IntervalPattern intervalPattern;
 
   @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")

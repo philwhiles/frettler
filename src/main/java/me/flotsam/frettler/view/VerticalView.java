@@ -177,15 +177,18 @@ public class VerticalView {
 
     int fretNum = 0;
     for (List<Fret> frets : fretboardFrets) {
-      String inlay = inlays.contains(fretNum) ? String.format(" %-2s ", fretNum) : "    ";
+      String inlay = inlays.contains(fretNum) ? String.format(" %-2s", fretNum) : "   ";
       out.print(inlay);
-      String sep = (fretNum == 0) ? "" : "┃";
       int stringNum = 0;
       for (Fret fret : frets) {
-        String ldr = (stringNum == 0 && fretNum != 0) ? "┃" : (fretNum == 0 ? " " : "");
+        String ldr = fretNum == 0 ? " " : "┃";
 
         if (deadStrings.contains(stringNum)) {
-          out.print(String.format("%s%s%s", ldr, fretNum == 0 ? " X " : "   ", sep));
+          if (fretNum == 0) {
+            out.print(String.format("%s%s%s", ldr, "X ", ldr));
+          } else {
+            out.print(String.format(" %s%s", ldr, "  "));
+          }
         } else {
           Optional<ChordFret> chordFret =
               chordFrets.stream().filter(ct -> fret.getStringNum() == ct.getFret().getStringNum()
@@ -202,18 +205,18 @@ public class VerticalView {
             if (options.isColour()) {
               Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
                   : ColourMap.get(fret.getNote().getPitch());
-              out.print(String.format("%s%s%s%s%s", ldr, col, StringUtils.center(fretStr, 3, ' '),
-                  Colour.RESET, sep));
+              out.print(String.format("%s%s%s", col, StringUtils.center(fretStr, 4, ' '),
+                  Colour.RESET));
             } else {
-              out.print(String.format("%s%s%s", ldr, StringUtils.center(fretStr, 3, ' '), sep));
+              out.print(String.format("%s", StringUtils.center(fretStr, 4, ' ')));
             }
           } else {
-            out.print(String.format("%s   %s", ldr, sep));
+            out.print(String.format(" %s  ", ldr));
           }
         }
         stringNum++;
       }
-      out.println(inlay);
+      out.println(String.format("%s", inlay));
       if (fretNum >= 5 && fretNum >= lowestFret + 1) {
         break;
       }
@@ -233,9 +236,9 @@ public class VerticalView {
     int strings = instrument.getStringCount();
     StringBuilder sb = new StringBuilder("    ");
     sb.append(begin);
-    for (int n = 0; n < strings; n++) {
+    for (int n = 0; n < strings - 1; n++) {
       sb.append("━━━");
-      if (n < strings - 1) {
+      if (n < strings - 2) {
         sb.append(mid);
       } else {
         sb.append(end);

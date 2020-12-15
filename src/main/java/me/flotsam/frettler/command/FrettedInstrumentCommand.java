@@ -176,21 +176,34 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         } else {
           FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
 
+          // a bit hacky but skip the interval and it defaults to a non chord interval so...
+          if (intervalPattern == IntervalPattern.SCALE_MAJOR) {
+            ChordBank.findChordDefinitions(instrumentDefinition, root).stream().map(cd->cd.getChordPattern()).distinct().forEach(ip->out.println(ip.toString().toLowerCase()));
+            return;
+          }
+
           List<ChordDefinition> chordDefinitions =
               ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern);
-
-          ChordDefinition lastDef = null;
-          for (ChordDefinition chordDefinition : chordDefinitions) {
-            // until we handle fingerings skip dupes
-            if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
-              continue;
-            }
-            lastDef = chordDefinition;
-            chord = new Chord(root, intervalPattern);
-            ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
-            chordView.showChord(chordBankInstance, chordViewOptions);
-            if (verbose) {
-              out.println(chord.describe(isMono()));
+          if (chordDefinitions.size() == 0) {
+            out.println("Don't have that chord definition - why not contribute it?");
+            out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
+            out.println("ie GUITAR/EADGBE/A/CHORD_MIN/x0121x - Share and enjoy!");
+            out.println("phil.whiles@gmail.com");
+            return;
+          } else {
+            ChordDefinition lastDef = null;
+            for (ChordDefinition chordDefinition : chordDefinitions) {
+              // until we handle fingerings skip dupes
+              if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
+                continue;
+              }
+              lastDef = chordDefinition;
+              chord = new Chord(root, intervalPattern);
+              ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
+              chordView.showChord(chordBankInstance, chordViewOptions);
+              if (verbose) {
+                out.println(chord.describe(isMono()));
+              }
             }
           }
         }
