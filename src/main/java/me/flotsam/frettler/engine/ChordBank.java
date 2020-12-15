@@ -229,6 +229,7 @@ public class ChordBank {
     new ChordDefinition(GUITAR_EADGBE, E,CHORD_5,"022xxx","x12xxx"),
     new ChordDefinition(GUITAR_EADGBE, E,CHORD_7,"020100","x2x1xx"),
     new ChordDefinition(GUITAR_EADGBE, E,CHORD_7,"xx2434","xx1324"),
+    new ChordDefinition(GUITAR_EADGBE, E,CHORD_7,"020130","020140"),
     new ChordDefinition(GUITAR_EADGBE, E,CHORD_7FLAT5,"x10130","x1x24x"),
     new ChordDefinition(GUITAR_EADGBE, E,CHORD_7FLAT5,"xx2334","xx1234"),
     new ChordDefinition(GUITAR_EADGBE, E,CHORD_DIM,"x1232x","x1243x"),

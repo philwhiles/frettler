@@ -177,11 +177,11 @@ public class VerticalView {
 
     int fretNum = 0;
     for (List<Fret> frets : fretboardFrets) {
-      String inlay = inlays.contains(fretNum) ? String.format(" %-2s", fretNum) : "   ";
+      String inlay = inlays.contains(fretNum) ? String.format(" %-2s ", fretNum) : "   ";
       out.print(inlay);
       int stringNum = 0;
       for (Fret fret : frets) {
-        String ldr = fretNum == 0 ? " " : "┃";
+        String ldr = fretNum == 0 ? " " : "┋";
 
         if (deadStrings.contains(stringNum)) {
           if (fretNum == 0) {
