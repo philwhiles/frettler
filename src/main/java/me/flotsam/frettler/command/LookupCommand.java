@@ -32,8 +32,8 @@ import picocli.CommandLine.Parameters;
  * @author philwhiles
  *
  */
-@Command(name = "chord", description = "Analyses the given notes and attempts to name that chord")
-public class ChordCommand implements Runnable {
+@Command(name = "lookup", description = "Analyses the given notes and attempts to name that chord")
+public class LookupCommand implements Runnable {
 
 
   @Parameters(index = "0", description = "The chord notes to analyse", split = ",")

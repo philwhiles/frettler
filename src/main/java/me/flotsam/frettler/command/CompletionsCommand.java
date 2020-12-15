@@ -37,10 +37,10 @@ public class CompletionsCommand implements Runnable {
     sb.append("_frettler_completions()\n");
     sb.append("{\n");
     sb.append("    local instr_opts\n");
-    sb.append("    instr_opts=\"menu chord patterns fifths guitar bassguitar ukelele mandolin banjo\"\n");
+    sb.append("    instr_opts=\"menu find patterns fifths guitar bassguitar ukelele mandolin banjo\"\n");
 
     sb.append("    local view_opts\n");
-    sb.append("    view_opts=\"horizontal vertical\"\n");
+    sb.append("    view_opts=\"horizontal vertical chord\"\n");
 
     sb.append("    local note_opts\n");
     sb.append("    note_opts=\"");
