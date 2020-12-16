@@ -13,6 +13,7 @@ The only data it needs to perform its calculations, is the definition of individ
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
 With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
 box, making the rendering consistent with a typical chord chart, and easy to read.
+Adding the `chord` subcommand required renaming some of the existing subcommands to make more sense - `chord` became `lookup` and `find` became `display`.
 
 **UPDATE**: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
 or sharps. In fact it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
@@ -30,8 +31,9 @@ See the Menu section below for full instructions, but the best explanation is ac
 **EXTRAS** I have added some images to the extras folder which I use to print a circle of fifths calculator, which you may also find useful. I print these and laminate them, having very carefully cut the outer
 so that it is a ring with an empty centre.
 
+For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/demo1.png)
 
-Here is an example of its output :
+Here are examples of its output :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo1.png"/>
 <img src="https://github.com/philwhiles/frettler/blob/master/demo2.png"/>
@@ -299,7 +301,7 @@ A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
 ```
 
 
-#### View the chord found
+#### Find and view the chord found
 The second way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument, as follows :
 
 ```
@@ -337,8 +339,8 @@ Tab completion in bash helps greatly with Frettler - bash will complete all of t
 The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
 
 ## Customising your Frettler script
-The 'frettler' scripts created by the build, simply pass all arguments to the java program, and if you find yourself regularly using Frettler with say a strings argument
-you can make your life easier by creating your own frettler script. Say you want to use drop D tuning all the time :
+The 'frettler' script created by the build, passes all arguments to the java program (which is embedded withing the frettler script on macOs/linux), and if you find yourself regularly using Frettler with say a strings argument
+you can make your life easier by creating your own script wrapping the frettler script/command. Say you want to use drop D tuning all the time :
 
 Create a file in the top frettler directory, and call it 'dropd', with the following content:
 
@@ -382,32 +384,6 @@ The output will be written to 'scale_major.out'. I wrote this as I wanted to pri
 add the `--mono' option to the frettler command in the 'scales' script. I have some local tricks to convert it to html which I then open in safari and print, but those tricks are peculiar to the
 editor I use - Vim. If you use Vim, try the plugin [AnsiEsc](http://www.drchip.org/astronaut/vim/#ANSIESC) and then use ":TOhtml".
 
-## Programmatically
-If you want to you can write your own Main class and create one of the FrettedInstrument subtypes, create a Scale or Chord object, create a view for your instrument
-and then instruct the view to display your chord or object. The API is pretty straightfoward I think, and defaults standard tuning for each type of instrument.
-
-Have a look at the GuitarCommand for some examples of usage, look at the constructors of the various classes such as Guitar, Scale, Chord and the VerticalView and
-HorizontalView classes, and their public methods.
-
-### Engine
-The engine can generate Lists of notes that represent given scales, and can calculate the chords within that scale.
-The engine knows nothing about an instrument, it simply applies music theory to generate Java lists of the notes in scales and chords.
-
-### Instrument
-As mentioned, a fretted instrument is largely the same as another, and the classes in this package exist mainly so that Frettler can easily generate views for each
-instrument from the command line, without you having to specify the default strings and their tunings each time.
-
-### View
-Currently only console views, each constructed with a FrettedInstrument, which take the scale and chord constructs from the engine, and render them
-on that instruments fretboard, up to the 12th fret, by default.
-
-Both the views can display the notes or intervals with unique ANSI colours, if you are
-either running from the command line and using an ANSI colour friendly terminal, or in an IDE such as Eclipse using an ANSI Console
-plugin (goto to Eclipse Marketplace and search for 'ANSI console').
-
-The colours look best when Frettler is run in a terminal with a near black background.
-
-
 ## Caveats
 This is a work in progress, pretty much like the authors understanding of music theory.
 
@@ -429,9 +405,15 @@ And './frettler g v', would do the same as './frettler guitar vertical C scale_m
 ## Todo
 - change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi). If I hear of enough Windows users wanting this...
 - blues scale does not support chord generation...
-- write some unit tests!
+- write some unit tests. One day. Maybe.
+
+## Credits
+The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboad](https://github.com/fusionprogguy/Fretboard)
+
+## License
+This work is provided as is, with no warranties or guarantees, and is subject to the [GNU Affero General Public License v3.0](https://github.com/philwhiles/frettler/blob/master/LICENSE)
 
 ## Contact
-If you have any issues with running Frettler, questions or can help providing input or even code, do please get in touch.
+If you have any issues with running Frettler, questions or can help providing input, chord fingerings or even code, do please get in touch.
 
 email: <phil.whiles@gmail.com>

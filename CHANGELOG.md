@@ -1,5 +1,11 @@
+# 16th December 2020
+- chord fingering charts added with new `chord` command
+- vertical view now aligns notes on strings rather than in boxes
+- the `find` command renamed to `display`
+- the original `chord` command renamed to `lookup`
+
 # 16th November 2020
-- added menu mode (in a day!)
+- added interactive menu mode (in a day!)
 - fixed banjo display of chords
 
 # 8th November 2020
