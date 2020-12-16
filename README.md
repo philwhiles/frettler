@@ -207,8 +207,8 @@ CHORD_SUS4
 
 
 The database currently only contains limited chords for guitar, six string, standard tuning.
-If you currently choose and instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
-instrument/tuning combination.
+If you currently choose an instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
+instrument/tuning combination. Until you email it to me and I add it to Frettler for you!
 
 The 'chord' feature is new, and over time I would like to build up the data in the database such that it can display chord fingerings for a wider selection of guitar chords,
 but also chords for other instruments, and with different tunings.
@@ -223,7 +223,7 @@ If you would like to have additional chord fingerings added, email me with the f
 - Fingering: xx231x
 
 'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
-known chords, and in time I will add an argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
+known chords, and in time I will add an optional argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
 
 ### Secondary Argument - Display Notes
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
@@ -408,7 +408,7 @@ And './frettler g v', would do the same as './frettler guitar vertical C scale_m
 - write some unit tests. One day. Maybe.
 
 ## Credits
-The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboad](https://github.com/fusionprogguy/Fretboard)
+The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboard](https://github.com/fusionprogguy/Fretboard)
 
 ## License
 This work is provided as is, with no warranties or guarantees, and is subject to the [GNU Affero General Public License v3.0](https://github.com/philwhiles/frettler/blob/master/LICENSE)
