@@ -31,7 +31,7 @@ See the Menu section below for full instructions, but the best explanation is ac
 **EXTRAS** I have added some images to the extras folder which I use to print a circle of fifths calculator, which you may also find useful. I print these and laminate them, having very carefully cut the outer
 so that it is a ring with an empty centre.
 
-For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/demo1.png)
+For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
 Here are examples of its output :
 
