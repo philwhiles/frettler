@@ -1,3 +1,6 @@
+# 21st December 2020
+- chord charts improved to show circles and note/interval summary below
+
 # 16th December 2020
 - chord fingering charts added with new `chord` command
 - vertical view now aligns notes on strings rather than in boxes

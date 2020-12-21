@@ -33,13 +33,15 @@ so that it is a ring with an empty centre.
 
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
-Here are examples of its output :
+Here is an example of its output :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo1.png"/>
-<img src="https://github.com/philwhiles/frettler/blob/master/demo2.png"/>
 
 ## Building
-Easily build Frettler from the command line or open the code and build it in your favourite IDE.
+Easily build Frettler from the command line, but there are caveats:
+- regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
+- if you use windows, by default color support is disabled, but it can be re-enabled. See below.
+
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
 
@@ -173,6 +175,8 @@ Produces (truncated output here) :
 <img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
 ### Secondary Argument - Chord fingerings
+The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, and gives a summary below
+the chart aligned wit the strings, showing their notes and intervals.
 While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
 formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 300).
 ie to get frettler to show the fingering for 'Am':
@@ -185,7 +189,7 @@ Produces:
 
 <img src="https://github.com/philwhiles/frettler/blob/master/aminor-chord.png"/>
 
-By default the 'chord' display will show notes, but can be used with the '--interval' or '-i' instead.
+The `chord` mode also allows use of the `--octaves` and `--mono` arguments.
 
 If you would like to see which chords frettler can show you for a given root, ie for A, use :
 

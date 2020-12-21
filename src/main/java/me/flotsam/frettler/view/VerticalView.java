@@ -92,7 +92,7 @@ public class VerticalView {
         stringNum++;
       }
     }
-    display(chordFrets, options);
+    display(chordFrets, options, true);
   }
 
   public void showArpeggio(Chord chord) {
@@ -125,7 +125,7 @@ public class VerticalView {
         }
       }
     }
-    display(chordFrets, options);
+    display(chordFrets, options, false);
   }
 
   public void showScale(Scale scale) {
@@ -158,10 +158,10 @@ public class VerticalView {
         }
       }
     }
-    display(chordFrets, options);
+    display(chordFrets, options, false);
   }
 
-  private void display(List<ChordFret> chordFrets, Options options) {
+  private void display(List<ChordFret> chordFrets, Options options, boolean chordChart) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     // deadString concept left over from display of chord fingerings which may come back
     List<Integer> deadStrings = new ArrayList<>();
@@ -170,6 +170,10 @@ public class VerticalView {
         deadStrings.add(chordFret.getFret().getStringNum());
       }
     }
+
+    Note noteSummary[] = new Note[instrument.getStringCount()];
+    ScaleInterval intervalSummary[] = new ScaleInterval[instrument.getStringCount()];
+    Integer octaveSummary[] = new Integer[instrument.getStringCount()];
 
     int lowestFret = chordFrets.stream()
         .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
@@ -197,19 +201,27 @@ public class VerticalView {
 
           if (chordFret.isPresent()) {
             String fretStr = null;
-            if (options.isIntervals()) {
-              fretStr = chordFret.get().getInterval().getLabel();
-            } else {
+            if (chordChart) {
+              fretStr = fretNum == 0 ? " " : "⬤";
+              intervalSummary[stringNum] = chordFret.get().getInterval();
               Note chordFretNote = chordFret.get().getFret().getNote();
-              fretStr = chordFretNote.getLabel();
+              noteSummary[stringNum] = chordFretNote;
+              octaveSummary[stringNum] = fret.getOctave();
+            } else {
+              if (options.isIntervals()) {
+                fretStr = chordFret.get().getInterval().getLabel();
+              } else {
+                Note chordFretNote = chordFret.get().getFret().getNote();
+                fretStr = chordFretNote.getLabel();
+              }
             }
             if (options.isColour()) {
               Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
                   : ColourMap.get(fret.getNote().getPitch());
-              out.print(String.format("%s%s%s", col, StringUtils.center(fretStr, lastString ? 3 : 4, ' '),
-                  Colour.RESET));
+              out.print(String.format("%s%s%s", col,
+                  StringUtils.center(fretStr, lastString ? 3 : 4, ' '), Colour.RESET));
             } else {
-              out.print(String.format("%s", StringUtils.center(fretStr,  lastString ? 3 : 4, ' ')));
+              out.print(String.format("%s", StringUtils.center(fretStr, lastString ? 3 : 4, ' ')));
             }
           } else {
             out.print(String.format(" %s%s", ldr, StringUtils.repeat(' ', lastString ? 1 : 2)));
@@ -229,6 +241,34 @@ public class VerticalView {
       fretNum++;
     }
     out.println(createFretLine("┗", "┻", "┛"));
+
+    if (chordChart) {
+      StringBuilder noteBuilder = new StringBuilder("   ");
+      StringBuilder intervalBuilder = new StringBuilder("   ");
+      for (int n = 0;n < instrument.getStringCount();n++) {
+        Note note = noteSummary[n];
+        if (note != null) {
+          if (options.isColour()) {
+            Colour col = options.isOctaves() ? ColourMap.get((Integer) octaveSummary[n])
+                : ColourMap.get(note.getPitch());
+            noteBuilder.append(String.format("%s%s%s", col,
+                StringUtils.center(note.getLabel(), 4, ' '), Colour.RESET));
+            intervalBuilder.append(String.format("%s%s%s", col,
+                StringUtils.center(intervalSummary[n].getLabel(), 4, ' '), Colour.RESET));
+          } else {
+            noteBuilder.append(String.format("%s", StringUtils.center(note.getLabel(), 4, ' ')));
+            intervalBuilder.append(String.format("%s", StringUtils.center(intervalSummary[n].getLabel(), 4, ' ')));
+          }
+        } else {
+          noteBuilder.append("    ");
+          intervalBuilder.append("    ");
+        }
+      }
+      out.println(noteBuilder.toString());
+      out.println(intervalBuilder.toString());
+      out.print("   ");
+    }
+
     out.println();
     out.println();
   }
