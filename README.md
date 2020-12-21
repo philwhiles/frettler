@@ -187,7 +187,7 @@ ie to get frettler to show the fingering for 'Am':
 
 Produces:
 
-<img src="https://github.com/philwhiles/frettler/blob/master/aminor-chord.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/chord.png"/>
 
 The `chord` mode also allows use of the `--octaves` and `--mono` arguments.
 
