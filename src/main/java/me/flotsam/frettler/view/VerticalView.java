@@ -190,7 +190,7 @@ public class VerticalView {
 
         if (deadStrings.contains(stringNum)) {
           if (fretNum == 0) {
-            out.print(String.format("%s%s%s", ldr, "X ", ldr));
+            out.print(String.format("%s%s%s", ldr, "x ", ldr));
           } else {
             out.print(String.format(" %s%s", ldr, "  "));
           }
@@ -202,7 +202,7 @@ public class VerticalView {
           if (chordFret.isPresent()) {
             String fretStr = null;
             if (chordChart) {
-              fretStr = fretNum == 0 ? " " : "⬤";
+              fretStr = fretNum == 0 ? "◯" : "⬤";
               intervalSummary[stringNum] = chordFret.get().getInterval();
               Note chordFretNote = chordFret.get().getFret().getNote();
               noteSummary[stringNum] = chordFretNote;

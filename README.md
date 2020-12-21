@@ -176,7 +176,7 @@ Produces (truncated output here) :
 
 ### Secondary Argument - Chord fingerings
 The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, and gives a summary below
-the chart aligned wit the strings, showing their notes and intervals.
+the chart aligned with the strings, showing their notes and intervals.
 While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
 formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 300).
 ie to get frettler to show the fingering for 'Am':
