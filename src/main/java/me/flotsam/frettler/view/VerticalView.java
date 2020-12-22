@@ -43,7 +43,7 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
  * @author philwhiles
  *
  */
-public class VerticalView {
+public class VerticalView implements View {
 
   private Options defaultOptions = new Options(false, true, false);
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
@@ -56,7 +56,7 @@ public class VerticalView {
   public void showChord(ChordBankInstance chordBankInstance, Options options) {
     List<ChordFret> chordFrets = new ArrayList<>();
     Chord chord = chordBankInstance.getChord();
-
+    initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
@@ -102,6 +102,7 @@ public class VerticalView {
   public void showArpeggio(Chord chord, Options options) {
     List<ChordFret> chordFrets = new ArrayList<>();
 
+    initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
@@ -135,6 +136,7 @@ public class VerticalView {
   public void showScale(Scale scale, Options options) {
     List<ChordFret> chordFrets = new ArrayList<>();
 
+    initColourMap(scale);
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
     out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
@@ -181,8 +183,7 @@ public class VerticalView {
 
     int fretNum = 0;
     for (List<Fret> frets : fretboardFrets) {
-      String inlay = inlays.contains(fretNum) ? String.format(" %-2s", fretNum) : "   ";
-      out.print(inlay);
+      out.print(inlays.contains(fretNum) ? String.format("%2s ", fretNum) : "   ");
       int stringNum = 0;
       for (Fret fret : frets) {
         boolean lastString = stringNum == instrument.getStringCount() - 1;
@@ -192,7 +193,7 @@ public class VerticalView {
           if (fretNum == 0) {
             out.print(String.format("%s%s%s", ldr, "x ", ldr));
           } else {
-            out.print(String.format(" %s%s", ldr, "  "));
+            out.print(String.format(" %s%s", ldr, lastString ? " " : "  "));
           }
         } else {
           Optional<ChordFret> chordFret =
@@ -229,7 +230,7 @@ public class VerticalView {
         }
         stringNum++;
       }
-      out.println(String.format("%s", inlay));
+      out.println(inlays.contains(fretNum) ? String.format(" %-2s", fretNum) : "");
       if (fretNum >= 5 && fretNum >= lowestFret + 1) {
         break;
       }

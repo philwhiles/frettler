@@ -1,3 +1,7 @@
+# 22nd December 2020
+- colours used now sycnhronised across all views
+- chord charts fret inlays aligned
+
 # 21st December 2020
 - chord charts improved to show circles and note/interval summary below
 

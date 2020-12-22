@@ -39,7 +39,7 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
  * @author philwhiles
  *
  */
-public class HorizontalView {
+public class HorizontalView implements View {
 
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
 
@@ -67,6 +67,8 @@ public class HorizontalView {
     out.print("    ");
     out.println(StringUtils.center(chord.getTitle() + " ~ (" + instrument.getInstrumentType().getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
+
+    initColourMap(chord);
     display(chord.getChordNotes(), options);
   }
 
@@ -79,6 +81,7 @@ public class HorizontalView {
     out.print("    ");
     out.println(StringUtils.center(scale.getTitle() + " ~ (" + instrument.getInstrumentType().getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
+    initColourMap(scale);
     display(scale.getScaleNotes(), options);
   }
 
