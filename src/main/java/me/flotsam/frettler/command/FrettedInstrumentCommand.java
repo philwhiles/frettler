@@ -34,6 +34,8 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
+import me.flotsam.frettler.view.TabView;
+import me.flotsam.frettler.view.TabView.Options;
 import me.flotsam.frettler.view.VerticalView;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -77,6 +79,36 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     }
 
     switch (this.view.getType()) {
+      case SEQUENCE:
+        TabView tabView = new TabView(instrument);
+        TabView.Options tabViewOptions =
+            tabView.new Options(intervals, true, !isMono(), isOctaves());
+
+        if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+          scale = new Scale(this.root, this.intervalPattern);
+          tabView.showScale(scale, tabViewOptions);
+          List<Chord> chords = new ArrayList<>();
+          if (chordMode) {
+            chords = scale.createScaleChords();
+          }
+          if (verbose) {
+            explain(scale, chords);
+          } else {
+            for (Chord aChord : chords) {
+              out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
+                  Colour.RESET));
+            }
+            out.println();
+          }
+        } else {
+          chord = new Chord(this.root, this.intervalPattern);
+          tabView.showChord(chord, tabViewOptions);
+          if (verbose) {
+            out.println(chord.describe(isMono()));
+          }
+        }
+        break;
+
       case HORIZONTAL:
         HorizontalView horizontalView = new HorizontalView(instrument);
         HorizontalView.Options horizontalViewOptions =

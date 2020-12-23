@@ -39,14 +39,14 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
  * @author philwhiles
  *
  */
-public class HorizontalView implements View {
+public class TabView implements View {
 
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
 
   private FrettedInstrument instrument;
   private Options defaultOptions = new Options(false, true, true, false);
 
-  public HorizontalView(FrettedInstrument instrument) {
+  public TabView(FrettedInstrument instrument) {
     this.instrument = instrument;
   }
 
@@ -140,6 +140,10 @@ public class HorizontalView implements View {
     out.println();
   }
   
+  private List<List<StringScaleNote>> createStringScaleNotes(List<ScaleNote> scaleNotes) {
+    return null;
+  }
+  
   private String createFretboardSide(boolean upper, Options options) {
    String lowerTop = "╹┗";
    String lowerBottom = "┛";
@@ -166,6 +170,13 @@ public class HorizontalView implements View {
     private boolean inlays;
     private boolean colour;
     private boolean octaves;
+  }
+  
+  @Data
+  @AllArgsConstructor
+  public class StringScaleNote {
+    private ScaleNote scaleNote;
+    private int stringPosition;
   }
 }
 
