@@ -108,9 +108,9 @@ public class ChordBank {
         new ChordDefinition(A, CHORD_MAJ6, "x,x,2,2,2,2"), // (Db E  Gb A) : major triad plus 6th
         new ChordDefinition(A, CHORD_MAJ6MIN7, "0,0,2,0,2,2"), // (Db E  Gb G  A) : major triad plus 6th, minor 7th
         new ChordDefinition(A, CHORD_MAJ7, "x,0,2,1,2,0"), // (Db E  Ab A) : major triad, major 7th
+        new ChordDefinition(A, CHORD_MIN, "x,0,2,2,1,0", new String[] {"x,x,2,3,1,x"}),
         new ChordDefinition(A, CHORD_MIN, "x,3,2,2,1,0"), // (C  E  A) : minor triad
         new ChordDefinition(A, CHORD_MIN, "8,12,x,x,x,0"), // (C  E  A) : minor triad
-        new ChordDefinition(A, CHORD_MIN, "x,0,2,2,1,0", new String[] {"x,x,2,3,1,x"}),
         new ChordDefinition(A, CHORD_MIN, "x,0,7,5,5,5"), // (C  E  A) : minor triad
         new ChordDefinition(A, CHORD_MIN6, "x,0,2,2,1,2"), // (C  E  Gb A) : minor triad plus 6th
         new ChordDefinition(A, CHORD_MIN6, "x,x,2,2,1,2"), // (C  E  Gb A) : minor triad plus 6th
