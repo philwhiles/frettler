@@ -201,28 +201,28 @@ public class VerticalView implements View {
                   && fret.getFretNum() == ct.getFret().getFretNum()).findAny();
 
           if (chordFret.isPresent()) {
-            String fretStr = null;
+            String fretLabel = null;
             if (chordChart) {
-              fretStr = fretNum == 0 ? "◯" : "⬤";
+              fretLabel = fretNum == 0 ? "◯" : "⬤";
               intervalSummary[stringNum] = chordFret.get().getInterval();
               Note chordFretNote = chordFret.get().getFret().getNote();
               noteSummary[stringNum] = chordFretNote;
               octaveSummary[stringNum] = fret.getOctave();
             } else {
               if (options.isIntervals()) {
-                fretStr = chordFret.get().getInterval().getLabel();
+                fretLabel = chordFret.get().getInterval().getLabel();
               } else {
                 Note chordFretNote = chordFret.get().getFret().getNote();
-                fretStr = chordFretNote.getLabel();
+                fretLabel = chordFretNote.getLabel();
               }
             }
             if (options.isColour()) {
               Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
                   : ColourMap.get(fret.getNote().getPitch());
               out.print(String.format("%s%s%s", col,
-                  StringUtils.center(fretStr, lastString ? 3 : 4, ' '), Colour.RESET));
+                  StringUtils.center(fretLabel, lastString ? 3 : 4, ' '), Colour.RESET));
             } else {
-              out.print(String.format("%s", StringUtils.center(fretStr, lastString ? 3 : 4, ' ')));
+              out.print(String.format("%s", StringUtils.center(fretLabel, lastString ? 3 : 4, ' ')));
             }
           } else {
             out.print(String.format(" %s%s", ldr, StringUtils.repeat(' ', lastString ? 1 : 2)));

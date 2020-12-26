@@ -23,12 +23,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBank;
-import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
+import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 import me.flotsam.frettler.view.Colour;
@@ -99,7 +99,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println();
           }
         } else {
-          chord = new Chord(this.root, this.intervalPattern);
+          //TODO handle +x addedNote
+          chord = new Chord(this.root, this.intervalPattern, null);
           horizontalView.showChord(chord, horizontalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -129,7 +130,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println();
           }
         } else {
-          chord = new Chord(this.root, this.intervalPattern);
+          //TODO handle +x addedNote
+          chord = new Chord(this.root, this.intervalPattern, null);
           verticalView.showArpeggio(chord, verticalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -187,18 +189,23 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           if (chordDefinitions.size() == 0) {
             out.println("Don't have that chord definition - why not contribute it?");
             out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
-            out.println("ie GUITAR/EADGBE/A/CHORD_MIN/x0121x - Share and enjoy!");
+            out.println("ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x0121x/[Optional Fingerings]- Share and enjoy!");
             out.println("phil.whiles@gmail.com");
             return;
           } else {
             ChordDefinition lastDef = null;
             for (ChordDefinition chordDefinition : chordDefinitions) {
-              // until we handle fingerings skip dupes
-              if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
+              // TODO deal with defs having addedNote
+              if (chordDefinition.getAddedNote() != null) {
                 continue;
               }
+              // until we handle fingerings skip dupes
+//              if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
+//                continue;
+//              }
               lastDef = chordDefinition;
-              chord = new Chord(root, intervalPattern);
+              //TODO handle +x addedNote
+              chord = new Chord(root, intervalPattern, null);
               ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
               chordView.showChord(chordBankInstance, chordViewOptions);
               if (verbose) {

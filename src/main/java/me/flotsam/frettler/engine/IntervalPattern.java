@@ -81,13 +81,19 @@ public enum IntervalPattern {
   CHORD_MAJ69(
       true,
       PatternType.CHORD,
-      "maj6/9",
+      "6/9",
       P1, M3, P5, M6, M9
+  ),
+  CHORD_MAJ6MIN7(
+      true,
+      PatternType.CHORD,
+      "6/min7",
+      P1, M3, P5, M6, m7
   ),
   CHORD_MAJ9(
       true,
       PatternType.CHORD,
-      "maj9",
+      "9",
       P1, M3, P5, M7, M9
   ),
   CHORD_MIN9(
@@ -135,7 +141,7 @@ public enum IntervalPattern {
   CHORD_MAJ7(
       true,
       PatternType.CHORD,
-      "maj7",
+      "7",
       P1, M3, P5, M7
   ),
   CHORD_DOM7(
@@ -153,13 +159,13 @@ public enum IntervalPattern {
   CHORD_MAJ6(
       true,
       PatternType.CHORD,
-      "maj6",
+      "6",
       P1, M3, P5, M6
   ),
   CHORD_MINMAJ7(
       true,
       PatternType.CHORD,
-      "min maj7",
+      "min/7",
       P1, m3, P5, M7
   ),
   CHORD_MIN7FLAT5(
@@ -174,7 +180,7 @@ public enum IntervalPattern {
       "7+",
       P1, M3, d5, M7
   ),
-  CHORD_7SUS4(
+  CHORD_MIN7SUS4(
       true,
       PatternType.CHORD,
       "7sus4",
