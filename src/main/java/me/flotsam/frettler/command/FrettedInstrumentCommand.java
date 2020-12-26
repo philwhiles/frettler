@@ -46,6 +46,9 @@ import picocli.CommandLine.Option;
  */
 @Command
 public abstract class FrettedInstrumentCommand extends FrettlerCommand implements Runnable {
+  
+  @Option(names = {"-a", "--added"}, description = "The note to add")
+  Note addedNote;
 
   @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
   Note[] notes = new Note[] {};
@@ -130,8 +133,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println();
           }
         } else {
-          //TODO handle +x addedNote
-          chord = new Chord(this.root, this.intervalPattern, null);
+          chord = new Chord(this.root, this.intervalPattern, addedNote);
           verticalView.showArpeggio(chord, verticalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -185,7 +187,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           }
 
           List<ChordDefinition> chordDefinitions =
-              ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern);
+              ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern, addedNote);
           if (chordDefinitions.size() == 0) {
             out.println("Don't have that chord definition - why not contribute it?");
             out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
@@ -195,17 +197,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           } else {
             ChordDefinition lastDef = null;
             for (ChordDefinition chordDefinition : chordDefinitions) {
-              // TODO deal with defs having addedNote
-              if (chordDefinition.getAddedNote() != null) {
-                continue;
-              }
-              // until we handle fingerings skip dupes
-//              if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
-//                continue;
-//              }
               lastDef = chordDefinition;
-              //TODO handle +x addedNote
-              chord = new Chord(root, intervalPattern, null);
+              chord = new Chord(root, intervalPattern, addedNote);
               ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
               chordView.showChord(chordBankInstance, chordViewOptions);
               if (verbose) {

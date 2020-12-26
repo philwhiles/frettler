@@ -1102,53 +1102,63 @@ public class ChordBank {
   );
   //@formatter:on
 
-  public static List<ChordDefinition> findChordDefinitions(InstrumentDefinition instrumentDefinition) {
+  public static List<ChordDefinition> findChordDefinitions(
+      InstrumentDefinition instrumentDefinition) {
     return definitions.get(instrumentDefinition);
   }
 
-  public static List<ChordDefinition> findChordDefinitions(InstrumentDefinition instrumentDefinition,
-      Note chordRoot) {
-    return definitions.get(instrumentDefinition)
-        .stream().filter(ce -> ce.getChordRoot().getPitch() == chordRoot.getPitch())
+  public static List<ChordDefinition> findChordDefinitions(
+      InstrumentDefinition instrumentDefinition, Note chordRoot) {
+    return definitions.get(instrumentDefinition).stream()
+        .filter(ce -> ce.getChordRoot().getPitch() == chordRoot.getPitch())
         .collect(Collectors.toList());
   }
 
-  public static List<ChordDefinition> findChordDefinitions(InstrumentDefinition instrumentDefinition,
-      Note chordRoot, IntervalPattern chordPattern) {
-    return definitions.get(instrumentDefinition)
-        .stream().filter(ce -> ce.getChordRoot().getPitch() == chordRoot.getPitch() && ce.getChordPattern() == chordPattern)
-        .collect(Collectors.toList());
+  public static List<ChordDefinition> findChordDefinitions(
+      InstrumentDefinition instrumentDefinition, Note chordRoot, IntervalPattern chordPattern,
+      Note addedNote) {
+    return definitions.get(instrumentDefinition).stream().filter(cd -> {
+      return cd.getChordRoot().getPitch() == chordRoot.getPitch()
+          && cd.getChordPattern() == chordPattern
+          && (addedNote == null ? (cd.getAddedNote() == null ? true : false)
+              : (cd.getAddedNote() == null ? false
+                  : cd.getAddedNote().getPitch() == addedNote.getPitch()));
+    }).collect(Collectors.toList());
   }
 
   public static class ChordDefinition {
-    @Getter private Note chordRoot;
-    @Getter private Note addedNote;
-    @Getter private IntervalPattern chordPattern;
-    @Getter private List<String> strings;
-    @Getter private List<String> fingers;
+    @Getter
+    private Note chordRoot;
+    @Getter
+    private Note addedNote;
+    @Getter
+    private IntervalPattern chordPattern;
+    @Getter
+    private List<String> strings;
+    @Getter
+    private List<String> fingers;
 
-    public ChordDefinition(Note chordRoot, 
-        IntervalPattern chordPattern, String strings, String[] fingers) {
+    public ChordDefinition(Note chordRoot, IntervalPattern chordPattern, String strings,
+        String[] fingers) {
       this(chordRoot, null, chordPattern, strings, fingers);
     }
 
-    public ChordDefinition(Note chordRoot, 
-        IntervalPattern chordPattern, String strings) {
+    public ChordDefinition(Note chordRoot, IntervalPattern chordPattern, String strings) {
       this(chordRoot, null, chordPattern, strings, null);
     }
 
-    public ChordDefinition(Note chordRoot, Note addedNote,
-        IntervalPattern chordPattern, String strings) {
+    public ChordDefinition(Note chordRoot, Note addedNote, IntervalPattern chordPattern,
+        String strings) {
       this(chordRoot, addedNote, chordPattern, strings, null);
     }
-    
-    public ChordDefinition(Note chordRoot, Note addedNote,
-        IntervalPattern chordPattern, String strings, String[] fingers) {
+
+    public ChordDefinition(Note chordRoot, Note addedNote, IntervalPattern chordPattern,
+        String strings, String[] fingers) {
       this.chordRoot = chordRoot;
       this.addedNote = addedNote;
       this.chordPattern = chordPattern;
       this.strings = Arrays.asList(strings.split(","));
-//      this.fingers = Arrays.asList(fingers != null ? fingers.split("") : new String[] {});
+      // this.fingers = Arrays.asList(fingers != null ? fingers.split("") : new String[] {});
     }
 
   }
