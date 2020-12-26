@@ -102,8 +102,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println();
           }
         } else {
-          //TODO handle +x addedNote
-          chord = new Chord(this.root, this.intervalPattern, null);
+          chord = new Chord(this.root, this.intervalPattern, addedNote);
           horizontalView.showChord(chord, horizontalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));

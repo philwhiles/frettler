@@ -69,7 +69,11 @@ public class HorizontalView implements View {
     out.println();
 
     initColourMap(chord);
-    display(chord.getChordNotes(), options);
+    List<ScaleNote> chordNotes = chord.getChordNotes();
+    if (chord.getAddedNote() != null) {
+      chordNotes.add(chord.getAddedScaleNote());
+    }
+    display(chordNotes, options);
   }
 
   public void showScale(Scale scale) {
