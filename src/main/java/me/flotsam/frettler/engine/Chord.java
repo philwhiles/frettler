@@ -261,7 +261,6 @@ public class Chord {
     return describe(false);
   }
 
-  //TODO handle addedNote
   public String describe(boolean mono) {
     StringBuilder sb = new StringBuilder();
     Scale chromaticScaleFromChordRoot =

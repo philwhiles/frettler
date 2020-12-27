@@ -55,7 +55,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   Note addedNote;
 
   @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
-  Note[] notes = new Note[] {};
+  Note[] notes;
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
@@ -145,6 +145,10 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         break;
 
       case DISPLAY:
+        if (notes == null) {
+          out.println("Specify the notes to display ie '--notes A,B,C'");
+          return;
+        }
         HorizontalView finderView = new HorizontalView(instrument);
         HorizontalView.Options finderViewOptions =
             finderView.new Options(false, true, !isMono(), isOctaves());
