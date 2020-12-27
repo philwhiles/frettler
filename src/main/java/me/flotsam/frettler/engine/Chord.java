@@ -234,12 +234,16 @@ public class Chord {
   }
 
   public String getLabel() {
-    return chordRoot.getLabel() + metaData.label;
+    return chordRoot.getLabel() + metaData.label + ((addedNote != null) ? "/"+addedNote.getLabel() : "");
   }
 
   public String getTitle() {
     StringBuilder sb = new StringBuilder();
-    sb.append(getLabel()).append("   (").append(chordRoot.name().toLowerCase()).append(" ").append(getMetaData().getChordPattern().name().toLowerCase()).append(")    [");
+    sb.append(getLabel()).append("   (").append(chordRoot.name().toLowerCase()).append(" ").append(getMetaData().getChordPattern().name().toLowerCase());
+    if (addedNote != null) {
+      sb.append("/").append(addedNote.getLabel());
+    }
+    sb.append(")    [");
     
     for (ScaleNote cn:chordNotes) {
       Note note = cn.getNote();

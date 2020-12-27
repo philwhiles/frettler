@@ -189,9 +189,16 @@ public class VerticalView implements View {
     int lowestFret = chordFrets.stream()
         .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
         .getFret().getFretNum();
+    int highestFret = chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
+        .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
+        .getFret().getFretNum();
 
     int fretNum = 0;
     for (List<Fret> frets : fretboardFrets) {
+      if (fretNum > 0 && fretNum < highestFret - 1) {
+        fretNum++;
+        continue;
+      }
       out.print(inlays.contains(fretNum) ? String.format("%2s ", fretNum) : "   ");
       int stringNum = 0;
       for (Fret fret : frets) {

@@ -23,14 +23,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBank;
+import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.instrument.Banjo;
+import me.flotsam.frettler.instrument.BassGuitar;
 import me.flotsam.frettler.instrument.FrettedInstrument;
+import me.flotsam.frettler.instrument.Guitar;
+import me.flotsam.frettler.instrument.Mandolin;
+import me.flotsam.frettler.instrument.Ukelele;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
@@ -166,6 +170,23 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         break;
 
       case CHORD:
+        switch (instrument.getInstrumentType()) {
+          case GUITAR:
+            instrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case BASSGUITAR:
+            instrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case UKELELE:
+            instrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case MANDOLIN:
+            instrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case BANJO:
+            instrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+        }
         VerticalView chordView = new VerticalView(instrument);
         VerticalView.Options chordViewOptions =
             chordView.new Options(intervals, !isMono(), isOctaves());
@@ -179,9 +200,14 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         } else {
           FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
 
-          // a bit hacky but skip the interval and it defaults to a non chord interval so...
-          if (intervalPattern == IntervalPattern.SCALE_MAJOR) {
-            ChordBank.findChordDefinitions(instrumentDefinition, root).stream().map(cd->cd.getChordPattern()).distinct().forEach(ip->out.println(ip.toString().toLowerCase()));
+          if (list) {
+            List<ChordDefinition> chordDefs = ChordBank.findChordDefinitions(instrumentDefinition, root);
+            for (ChordDefinition chordDef:chordDefs) {
+              if (chordDef.getChordRoot().getPitch() == root.getPitch() && chordDef.getChordPattern() == intervalPattern) {
+                Chord chordDefChord = new Chord(root, chordDef.getChordPattern(), chordDef.getAddedNote());
+                out.println(chordDefChord.getTitle());
+              }
+            }
             return;
           }
 
@@ -194,9 +220,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println("phil.whiles@gmail.com");
             return;
           } else {
-            ChordDefinition lastDef = null;
             for (ChordDefinition chordDefinition : chordDefinitions) {
-              lastDef = chordDefinition;
               chord = new Chord(root, intervalPattern, addedNote);
               ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
               chordView.showChord(chordBankInstance, chordViewOptions);

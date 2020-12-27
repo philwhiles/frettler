@@ -9,6 +9,9 @@ color support.
 Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
 The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns individual use of those intervals.
 
+**UPDATE** Frettler now has over 1000 chords in its chord definitions to use to display fingerings. The internet archive of OLGA provided the fingering definitions, all of which
+have been munged into Frettlers own repesentation, including chords with added notes. The horizontal and vertical views are also capable of displaying these chords with added notes.
+
 **UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
 With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
@@ -102,6 +105,10 @@ the `--mono`, then rebuild Frettler.
 Do read the details below to get an understanding of how to drive Frettler, but perhaps first, after building it, try one of the provided demo scripts ('demo' for linux/macOS, 'demo.bat' for windows).
 The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
 The output of the demo command can be seen [Here](https://htmlpreview.github.io/?https://github.com/philwhiles/frettler/blob/master/demo.html)
+
+## Tutorial
+Similar to the demo, but interactive, try the `tutorial` script. It will execute a number of frettler invocations, pausing after each with the last invocation it ran ready for you to edit and experiment with.
+After your edit, press return to see the result. Once you have tired of each example, simply delete the example invocation shown and press return to move to the next step.
 
 ## Arguments
 Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
@@ -223,11 +230,14 @@ If you would like to have additional chord fingerings added, email me with the f
 - Tuning: EADGBE
 - Root: A
 - Chord: CHORD_MIN
-- Frets: x02210
-- Fingering: xx231x
+- Frets: x,0,2,2,1,0
+- Fingering: x,x,2,3,1,x
 
 'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
 known chords, and in time I will add an optional argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
+
+####Added notes
+With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the `-added' argument followed by the added note.
 
 ### Secondary Argument - Display Notes
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
@@ -412,7 +422,8 @@ And './frettler g v', would do the same as './frettler guitar vertical C scale_m
 - write some unit tests. One day. Maybe.
 
 ## Credits
-The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboard](https://github.com/fusionprogguy/Fretboard)
+- The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboard](https://github.com/fusionprogguy/Fretboard)
+- The chord fingerings were given a huge boost by a transformation of the data found in the web archive of [OLGA](https://web.archive.org/web/20060610121532/http://www.olga.net/)
 
 ## License
 This work is provided as is, with no warranties or guarantees, and is subject to the [GNU Affero General Public License v3.0](https://github.com/philwhiles/frettler/blob/master/LICENSE)
