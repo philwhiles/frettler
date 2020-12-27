@@ -18,7 +18,9 @@ package me.flotsam.frettler.command;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import me.flotsam.frettler.engine.Chord;
@@ -205,13 +207,17 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
 
           if (list) {
+            Map<String, ChordDefinition> found = new HashMap<>();
             List<ChordDefinition> chordDefs = ChordBank.findChordDefinitions(instrumentDefinition, root);
             for (ChordDefinition chordDef:chordDefs) {
-              if (chordDef.getChordRoot().getPitch() == root.getPitch() && chordDef.getChordPattern() == intervalPattern) {
-                Chord chordDefChord = new Chord(root, chordDef.getChordPattern(), chordDef.getAddedNote());
-                out.println(chordDefChord.getTitle());
+              if (intervalPattern == IntervalPattern.SCALE_MAJOR || chordDef.getChordPattern() == intervalPattern) {
+                found.put(chordDef.getChordRoot().getLabel()+chordDef.getChordPattern().getLabel()+(chordDef.getAddedNote() != null ? chordDef.getAddedNote().getLabel() : ""), chordDef);
               }
             }
+            found.values().forEach(cd -> {
+              Chord chordDefChord = new Chord(root, cd.getChordPattern(), cd.getAddedNote());
+              out.println(chordDefChord.getTitle());
+            });
             return;
           }
 

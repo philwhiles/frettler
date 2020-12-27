@@ -201,23 +201,29 @@ The `chord` mode also allows use of the `--octaves` and `--mono` arguments.
 If you would like to see which chords frettler can show you for a given root, ie for A, use :
 
 ```
-./frettler guitar chord a
-CHORD_MAJ
-CHORD_AUG
-CHORD_7SHARP5
-CHORD_5
-CHORD_7
-CHORD_7FLAT5
-CHORD_DIM
-CHORD_MIN
-CHORD_MIN7
-CHORD_MIN7FLAT5
-CHORD_SUS2
-CHORD_SUS4
+./frettler guitar chord a --list
+Asus2   (a chord_sus2)    [A(P1), B(M2), E(P5)] 
+Asus4/B   (a chord_sus4/B)    [A(P1), D(P4), E(P5)] 
+Asus4/C   (a chord_sus4/C)    [A(P1), D(P4), E(P5)] 
+Asus4   (a chord_sus4)    [A(P1), D(P4), E(P5)] 
+A5   (a chord_5)    [A(P1), E(P5)] 
+etc
+etc
 ```
 
+If you want to see what chord definitions Frettler has for a specific chord type, add the interval pattern name as well :
 
-The database currently only contains limited chords for guitar, six string, standard tuning.
+```
+./frettler guitar chord d chord_dim --list
+Ddim/C   (d chord_dim/C)    [D(P1), F(m3), G#(d5)] 
+Ddim/B   (d chord_dim/B)    [D(P1), F(m3), G#(d5)] 
+Ddim   (d chord_dim)    [D(P1), F(m3), G#(d5)] 
+Ddim/Bb   (d chord_dim/Bb)    [D(P1), F(m3), G#(d5)] 
+```
+
+Note that the chord definitions found include those with added notes.
+
+The database currently contains over 1000 chords for guitar, six string, standard tuning.
 If you currently choose an instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
 instrument/tuning combination. Until you email it to me and I add it to Frettler for you!
 
