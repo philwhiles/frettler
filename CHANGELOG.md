@@ -1,3 +1,9 @@
+# 26th December 2020
+- Happy Xmas!
+- chords from the internet archive of OLGA have been merged into the chord bank, which now has 1000+ chord definitions
+- as some of the OLGA chords have introduced notes, Frettler can both display them and search the chord bank for them
+through the use of the -a parameter ie `frettler guitar chord c chord_dim -a d`
+
 # 22nd December 2020
 - colours used now sycnhronised across all views
 - chord charts fret inlays aligned

@@ -41,6 +41,10 @@ public class Chord {
   private ChordMetadata metaData;
   @Getter
   private List<Note> accidentals;
+  @Getter
+  private Note addedNote;
+  @Getter
+  private ScaleNote addedScaleNote;
 
   public enum ChordType {
     STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
@@ -63,7 +67,7 @@ public class Chord {
    * @param chordRootNote the tonic for the chord
    * @param chordPattern the scale pattern ie MAJOR, HARMONIC_MINOR
    */
-  public Chord(Note chordRootNote, IntervalPattern chordPattern) {
+  public Chord(Note chordRootNote, IntervalPattern chordPattern, Note addedNote) {
     this.chordRoot = chordRootNote;
     if (chordPattern.getPatternType() != PatternType.CHORD) {
       System.err
@@ -72,6 +76,11 @@ public class Chord {
     }
     Scale chromaticScaleFromChordRoot = new Scale(chordRootNote, IntervalPattern.SCALE_CHROMATIC);
     this.chordRootNote = chromaticScaleFromChordRoot.getHead();
+    this.addedNote = addedNote;
+    if (addedNote != null) {
+      Optional<ScaleNote> optAddedScaleNote = chromaticScaleFromChordRoot.findScaleNote(addedNote);
+      addedScaleNote = optAddedScaleNote.get();
+    }
     
     LineEntry lineEntry = null;
     if (chordPattern.getMetadata().isMinorRange()) {
@@ -109,14 +118,19 @@ public class Chord {
    * @param chordType standard or extended - this indicates the thirds to use
    * @param accidentals the list of sharps/flats in the chord
    */
-  public Chord(ScaleNote chordRootNote, ChordType chordType, List<Note> accidentals) {
+  public Chord(ScaleNote chordRootNote, ChordType chordType, List<Note> accidentals, Note addedNote) {
     this.chordRootNote = chordRootNote;
     this.chordRoot = chordRootNote.getNote();
     this.accidentals = accidentals;
+    this.addedNote = addedNote;
 
     Scale chromaticScaleFromChordRoot =
         new Scale(chordRootNote.getNote(), IntervalPattern.SCALE_CHROMATIC);
 
+    if (addedNote != null) {
+      Optional<ScaleNote> optAddedScaleNote = chromaticScaleFromChordRoot.findScaleNote(addedNote);
+      addedScaleNote = optAddedScaleNote.get();
+    }
     for (int third : chordType.getThirds()) {
       ScaleNote chordNote = Scale.getScaleNote(chordRootNote, third);
       Optional<ScaleNote> noteInRootScale =
@@ -127,7 +141,6 @@ public class Chord {
     }
     metaData = analyse();
   }
-  
   
 
   private void addScaleNote(Scale scale, Note note, ScaleInterval interval) {
@@ -153,7 +166,8 @@ public class Chord {
         if (pattern.getPatternType() != PatternType.CHORD) {
           continue;
         }
-        Chord candidate = new Chord(note, pattern);
+        // TODO? cannot find the chords with added Notes
+        Chord candidate = new Chord(note, pattern, null);
         if (candidate.containsOnlyNotes(notes)) {
           result = Optional.of(candidate);
           break;
@@ -182,7 +196,8 @@ public class Chord {
         if (pattern.getPatternType() != PatternType.CHORD) {
           continue;
         }
-        Chord candidate = new Chord(Note.forPitch(pitch), pattern);
+        // TODO? cannot find the chords with added Notes
+        Chord candidate = new Chord(Note.forPitch(pitch), pattern, null);
         if (candidate.containsNotes(notes)) {
           chords.add(candidate);
         }
@@ -209,7 +224,8 @@ public class Chord {
       if (pattern.getPatternType() != PatternType.CHORD) {
         continue;
       }
-      Chord candidate = new Chord(notes[0], pattern);
+      // TODO? cannot find the chords with added Notes
+      Chord candidate = new Chord(notes[0], pattern, null);
       if (candidate.containsNotes(notes)) {
         chords.add(candidate);
       }
@@ -218,12 +234,16 @@ public class Chord {
   }
 
   public String getLabel() {
-    return chordRoot.getLabel() + metaData.label;
+    return chordRoot.getLabel() + metaData.label + ((addedNote != null) ? "/"+addedNote.getLabel() : "");
   }
 
   public String getTitle() {
     StringBuilder sb = new StringBuilder();
-    sb.append(getLabel()).append("   (").append(chordRoot.name().toLowerCase()).append(" ").append(getMetaData().getChordPattern().name().toLowerCase()).append(")    [");
+    sb.append(getLabel()).append("   (").append(chordRoot.name().toLowerCase()).append(" ").append(getMetaData().getChordPattern().name().toLowerCase());
+    if (addedNote != null) {
+      sb.append("/").append(addedNote.getLabel());
+    }
+    sb.append(")    [");
     
     for (ScaleNote cn:chordNotes) {
       Note note = cn.getNote();

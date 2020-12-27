@@ -30,7 +30,11 @@ import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Banjo;
+import me.flotsam.frettler.instrument.BassGuitar;
 import me.flotsam.frettler.instrument.FrettedInstrument;
+import me.flotsam.frettler.instrument.Guitar;
+import me.flotsam.frettler.instrument.Mandolin;
+import me.flotsam.frettler.instrument.Ukelele;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
@@ -46,9 +50,12 @@ import picocli.CommandLine.Option;
  */
 @Command
 public abstract class FrettedInstrumentCommand extends FrettlerCommand implements Runnable {
+  
+  @Option(names = {"-a", "--added"}, description = "The note to add")
+  Note addedNote;
 
   @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
-  Note[] notes = new Note[] {};
+  Note[] notes;
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
@@ -99,7 +106,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println();
           }
         } else {
-          chord = new Chord(this.root, this.intervalPattern);
+          chord = new Chord(this.root, this.intervalPattern, addedNote);
           horizontalView.showChord(chord, horizontalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -129,7 +136,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             out.println();
           }
         } else {
-          chord = new Chord(this.root, this.intervalPattern);
+          chord = new Chord(this.root, this.intervalPattern, addedNote);
           verticalView.showArpeggio(chord, verticalViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
@@ -138,6 +145,10 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         break;
 
       case DISPLAY:
+        if (notes == null) {
+          out.println("Specify the notes to display ie '--notes A,B,C'");
+          return;
+        }
         HorizontalView finderView = new HorizontalView(instrument);
         HorizontalView.Options finderViewOptions =
             finderView.new Options(false, true, !isMono(), isOctaves());
@@ -163,6 +174,23 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         break;
 
       case CHORD:
+        switch (instrument.getInstrumentType()) {
+          case GUITAR:
+            instrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case BASSGUITAR:
+            instrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case UKELELE:
+            instrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case MANDOLIN:
+            instrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+          case BANJO:
+            instrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            break;
+        }
         VerticalView chordView = new VerticalView(instrument);
         VerticalView.Options chordViewOptions =
             chordView.new Options(intervals, !isMono(), isOctaves());
@@ -176,29 +204,28 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         } else {
           FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
 
-          // a bit hacky but skip the interval and it defaults to a non chord interval so...
-          if (intervalPattern == IntervalPattern.SCALE_MAJOR) {
-            ChordBank.findChordDefinitions(instrumentDefinition, root).stream().map(cd->cd.getChordPattern()).distinct().forEach(ip->out.println(ip.toString().toLowerCase()));
+          if (list) {
+            List<ChordDefinition> chordDefs = ChordBank.findChordDefinitions(instrumentDefinition, root);
+            for (ChordDefinition chordDef:chordDefs) {
+              if (chordDef.getChordRoot().getPitch() == root.getPitch() && chordDef.getChordPattern() == intervalPattern) {
+                Chord chordDefChord = new Chord(root, chordDef.getChordPattern(), chordDef.getAddedNote());
+                out.println(chordDefChord.getTitle());
+              }
+            }
             return;
           }
 
           List<ChordDefinition> chordDefinitions =
-              ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern);
+              ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern, addedNote);
           if (chordDefinitions.size() == 0) {
             out.println("Don't have that chord definition - why not contribute it?");
             out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
-            out.println("ie GUITAR/EADGBE/A/CHORD_MIN/x0121x - Share and enjoy!");
+            out.println("ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x0121x/[Optional Fingerings]- Share and enjoy!");
             out.println("phil.whiles@gmail.com");
             return;
           } else {
-            ChordDefinition lastDef = null;
             for (ChordDefinition chordDefinition : chordDefinitions) {
-              // until we handle fingerings skip dupes
-              if (lastDef != null && lastDef.getStrings().equals(chordDefinition.getStrings())) {
-                continue;
-              }
-              lastDef = chordDefinition;
-              chord = new Chord(root, intervalPattern);
+              chord = new Chord(root, intervalPattern, addedNote);
               ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
               chordView.showChord(chordBankInstance, chordViewOptions);
               if (verbose) {
