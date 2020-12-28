@@ -256,7 +256,13 @@ public class Scale {
         intervals.add(scaleNote.getInterval().get());
         scaleNote = scaleNote.getNextScaleNote();
         if (lastNote != null) {
-          steps.add(chromaticScaleNote.get().getInterval().get().getSemiTones() - lastNote.getInterval().get().getSemiTones()); 
+          // if the current note has wrapped back to the root or beyond...
+          int chromaticScaleNoteSemiTones = chromaticScaleNote.get().getInterval().get().getSemiTones();
+          int lastNotesSemiTones = lastNote.getInterval().get().getSemiTones();
+          if (chromaticScaleNoteSemiTones < lastNotesSemiTones) {
+            chromaticScaleNoteSemiTones += ScaleInterval.P8.getSemiTones();
+          }
+          steps.add(chromaticScaleNoteSemiTones - lastNotesSemiTones); 
         } else {
           steps.add(null);
         }
