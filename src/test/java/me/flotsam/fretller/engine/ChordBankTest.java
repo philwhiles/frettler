@@ -79,7 +79,7 @@ public class ChordBankTest {
             fail("\nChord contains " + chord.getChordNotes() + "\nChordDef "
                 + chordDef.getChordRoot() + " " + chordDef.getChordPattern().getLabel()
                 + chordDef.getStrings() + " invalid fret num " + fretNum + " on string num "
-                + (stringNum + 1) + " (" + fretNote.getLabel() + ")");
+                + (instrument.getTuning().size() - stringNum) + " (" + fretNote.getLabel() + ")");
           }
         }
       }

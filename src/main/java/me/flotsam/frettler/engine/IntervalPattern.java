@@ -54,12 +54,6 @@ public enum IntervalPattern {
       "dom11",
       P1, M3, P5, m7, M9, M11
   ),
-  CHORD_9FLAT5(
-      true,
-      PatternType.CHORD,
-      "9b5",
-      P1, M3, P5, m7, M9
-  ),
   CHORD_DOM9(
       true,
       PatternType.CHORD,
@@ -102,23 +96,11 @@ public enum IntervalPattern {
       "min9",
       P1, m3, P5, m7, M9
   ),
-  CHORD_7(
-      true,
-      PatternType.CHORD,
-      "7",
-      P1, M3, P5, m7
-  ),
   CHORD_DIM7(
       true,
       PatternType.CHORD,
       "dim7",
       P1, m3, d5, M6
-  ),
-  CHORD_7SHARP5(
-      true,
-      PatternType.CHORD,
-      "7#5",
-      P1, M3, m6, m7
   ),
   CHORD_7FLAT5(
       true,
@@ -349,6 +331,8 @@ public enum IntervalPattern {
   @Getter
   private IntervalPattern parentPattern;
   @Getter
+  private IntervalPattern aliasPattern;
+  @Getter
   private IntervalPatternMetadata metadata;
   
   private boolean scaleChordGenerationSupported;
@@ -356,6 +340,7 @@ public enum IntervalPattern {
   private IntervalPattern(boolean scaleChordGenerationSupported,
       IntervalPattern aliasPattern, PatternType patternType, String label) {
     this.scaleChordGenerationSupported = scaleChordGenerationSupported;
+    this.aliasPattern = aliasPattern;
     this.patternType = patternType;
     this.label = label;
     this.intervals = aliasPattern.intervals;
@@ -365,6 +350,7 @@ public enum IntervalPattern {
   private IntervalPattern(boolean scaleChordGenerationSupported, IntervalPattern aliasPattern,
       String label) {
     this.scaleChordGenerationSupported = scaleChordGenerationSupported;
+    this.aliasPattern = aliasPattern;
     this.patternType = aliasPattern.patternType;
     this.label = label;
     this.intervals = aliasPattern.intervals;
