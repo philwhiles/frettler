@@ -1,6 +1,5 @@
 
-Frettler - A flexible command line program for generating and displaying musical scales and chords for Guitar, Mandolin, Ukelele, BassGuitar and Banjo
-Or any fretted instument with any number of strings, any tuning and any number of frets
+Frettler - A flexible command line program for generating and displaying musical scales and chords for guitar or any fretted instrument
 =============================
 
 - [Synopsis](#Synopsis)
@@ -35,12 +34,10 @@ Or any fretted instument with any number of strings, any tuning and any number o
 
 ## Synopsis
 This is a CLI program, written in Java 11, that calculates scales, modes and chords and displays them on fretboard representations.
-The rendering uses Unicode boxing characters and ANSI colour coding, the latter of which does not work in a standard Windows command prompt,
-so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
-color support.
+It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukelele and banjo, but through use
+of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine.
 
-Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
-The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns individual use of those intervals.
+Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
 **UPDATE** Frettler now has over 1000 chords in its chord definitions to use to display fingerings. The internet archive of OLGA provided the fingering definitions, all of which
 have been munged into Frettlers own repesentation, including chords with added notes. The horizontal and vertical views are also capable of displaying these chords with added notes.
@@ -92,6 +89,9 @@ The application is built using maven, but you don't need to have maven pre-insta
 ### MS Windows
 The windows 'build.bat' will run the maven build, the only prerequisite, as for Linux/macOS, is to have Java 11 installed.
 Once Frettler has built the build.bat creates the wrapper cmd file to launch Frettler, 'frettler.cmd'.
+The rendering uses Unicode boxing characters and ANSI colour coding, the latter of which does not work in a standard Windows command prompt,
+so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
+color support.
 
 ### IDE
 If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from [Lombok](https://projectlombok.org)
