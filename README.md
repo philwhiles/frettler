@@ -43,7 +43,7 @@ Here is an example of its output :
 ## Building
 Easily build Frettler from the command line, but there are caveats:
 - regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
-- if you use windows, by default color support is disabled, but it can be re-enabled. See below.
+- if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
 
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
@@ -364,7 +364,7 @@ you can make your life easier by creating your own script wrapping the frettler 
 
 Create a file in the top frettler directory, and call it 'dropd', with the following content:
 
-### Linux/macOS
+### Linux/macOS customisation
 ```bash
 #!/bin/bash
 ./frettler $@ --strings D,A,D,G,B,E
@@ -376,7 +376,7 @@ Save your dropd file, then back at your terminal prompt, execute :
 chmod +x dropd
 ```
 
-### Windows
+### Windows customisation
 ```Batchfile
 @echo off
 frettler.bat %%\* --strings D,A,D,G,B,E
