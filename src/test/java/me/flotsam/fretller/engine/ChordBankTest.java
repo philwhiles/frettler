@@ -53,9 +53,9 @@ public class ChordBankTest {
       for (ChordDefinition chordDef : instrumentsDefs) {
         // TODO - how to validate those - perhaps when addNote is added to chord the contains() can
         // also consider the added
-        if (chordDef.getAddedNote() != null) {
-          continue;
-        }
+//        if (chordDef.getAddedNote() != null) {
+//          continue;
+//        }
         InstrumentDefinition instrumentDef = instrument;
         FrettedInstrument thisInstrument = null;
         switch (instrumentDef.getInstrumentType()) {
@@ -66,7 +66,7 @@ public class ChordBankTest {
             break;
         }
 
-        Chord chord = new Chord(chordDef.getChordRoot(), chordDef.getChordPattern(), null);
+        Chord chord = new Chord(chordDef.getChordRoot(), chordDef.getChordPattern(), chordDef.getAddedNote());
         int stringNum = -1;
         for (String str : chordDef.getStrings()) {
           stringNum++;

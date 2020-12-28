@@ -47,7 +47,7 @@ public class Chord {
   private ScaleNote addedScaleNote;
 
   public enum ChordType {
-    STANDARD(new int[] {0, 2, 4}), EXTENDED(new int[] {0, 2, 4, 6});
+    TRIAD(new int[] {0, 2, 4}), TETRAD(new int[] {0, 2, 4, 6}); //DYAD 2 // PENTAD 5 // HEXAD 6
     @Getter
     private int[] thirds;
 
@@ -55,11 +55,6 @@ public class Chord {
       this.thirds = thirds;
     }
   }
-  //DYAD 2
-  //TRIAD 3
-  // TETRAD 4
-  // PENTAD 5
-  // HEXAD 6
 
   /**
    * Used to create a Chord from a root note when we know what the chords scale pattern should be
@@ -318,6 +313,10 @@ public class Chord {
   public boolean containsOnlyNotes(Note... notes) {
     int cnt = 0;
     for (Note note : notes) {
+      if (addedNote != null && note.getPitch() == addedNote.getPitch()) {
+        cnt++;
+        break;
+      }
       for (ScaleNote scaleNote : chordNotes) {
         if (scaleNote.getNote().getPitch() == note.getPitch()) {
           cnt++;
@@ -331,6 +330,10 @@ public class Chord {
   public boolean containsNotes(Note... notes) {
     int cnt = 0;
     for (Note note : notes) {
+      if (addedNote != null && note.getPitch() == addedNote.getPitch()) {
+        cnt++;
+        break;
+      }
       for (ScaleNote scaleNote : chordNotes) {
         if (scaleNote.getNote().getPitch() == note.getPitch()) {
           cnt++;
@@ -341,6 +344,7 @@ public class Chord {
     return cnt == notes.length;
   }
 
+  // TODO cannot include addedeNote as it has not interval - currently
   public boolean containsOnlyIntervals(ScaleInterval... intervals) {
     int cnt = 0;
     for (ScaleInterval interval : intervals) {

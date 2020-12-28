@@ -215,7 +215,7 @@ public class Scale {
       }
       for (ScaleNote scaleNote : scaleNotesToUse) {
         if (scaleNotes == null || scaleNotes.stream().anyMatch(sn -> sn.equalsTonally(scaleNote))) {
-          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD, this.accidentals, null));
+          scaleChords.add(new Chord(scaleNote, ChordType.TRIAD, this.accidentals, null));
         }
       }
     }
