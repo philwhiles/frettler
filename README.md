@@ -1,6 +1,5 @@
-# Frettler - A CLI for generating musical scales and chords with fretboard and chord rendering for a variety of fretted instruments
 
-Getting started with Frettler
+Frettler - A CLI for generating musical scales and chords with fretboard and chord rendering for a variety of fretted instruments
 =============================
 
 - [Synopsis](#Synopsis)
