@@ -1,5 +1,6 @@
 
 Frettler - A flexible command line program for generating and displaying musical scales and chords for Guitar, Mandolin, Ukelele, BassGuitar and Banjo
+Or any fretted instument with any number of strings, any tuning and any number of frets
 =============================
 
 - [Synopsis](#Synopsis)
@@ -9,7 +10,7 @@ Frettler - A flexible command line program for generating and displaying musical
 - [Arguments](#Arguments)
   - [Instrument Commands](#Instrument-Commands)
     - [Required Arguments](#Instrument-Commands)
-    - [Optional Arguments](#Optional-Commands)
+    - [Optional Arguments](#Optional-Arguments)
     - [Verbose Mode](#Verbose-Mode)
     - [Chord Subcommand](#Chord-Subcommand)
       - [Added Notes](#Added-Notes)
@@ -127,8 +128,8 @@ Similar to the demo, but interactive, try the `tutorial` script. It will execute
 After your edit, press return to see the result. Once you have tired of each example, simply delete the example invocation shown and press return to move to the next step.
 
 ## Arguments
-Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
-the vertical view which looks more like the classic chord diagram you see widely. Each view can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
+Frettler has two ways of viewing entire scales/modes and chords. One is horizontal, the other is vertical. Your mileage may vary, so you get to choose the one your prefer!
+Each view can be used to display a scale or chord in its entirety, and each default to showing the first 12 frets.
 
 Frettlers first argument can either be an instrument, in which case the following commands must follow the instrument conventions below, or it can be one of its secondary, ancilliary, arguments,
 such as 'patterns' or 'lookup', each of which have expectations for the subsequent arguments and options.
@@ -261,7 +262,7 @@ known chords, and in time I will add an optional argument and the wherewithall t
 #### Added notes
 With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the `-added' argument followed by the added note.
 
-### Display Subcommand
+#### Display Subcommand
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
 c and g, try:
 

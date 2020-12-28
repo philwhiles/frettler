@@ -174,7 +174,6 @@ public class VerticalView implements View {
 
   private void display(List<ChordFret> chordFrets, Options options, boolean chordChart) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
-    // deadString concept left over from display of chord fingerings which may come back
     List<Integer> deadStrings = new ArrayList<>();
     for (ChordFret chordFret : chordFrets) {
       if (chordFret.getFret().getNote() == null) {
@@ -319,13 +318,8 @@ public class VerticalView implements View {
   @Data
   @RequiredArgsConstructor
   class ChordFret {
-
-    @NonNull
-    private final Fret fret;
-
-    @NonNull
-    private final ScaleInterval interval;
-
+    @NonNull private final Fret fret;
+    @NonNull private final ScaleInterval interval;
     private int weighting;
   }
 
