@@ -58,6 +58,7 @@ Here is an example of its output :
 Easily build Frettler from the command line, but there are caveats:
 - regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
 - if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
+- you will need the [Java11 JDK](https://adoptopenjdk.net/index.html) installed and in your PATH environment variable
 
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
