@@ -51,11 +51,6 @@ public class ChordBankTest {
     for (InstrumentDefinition instrument : definitions.keySet()) {
       List<ChordDefinition> instrumentsDefs = definitions.get(instrument);
       for (ChordDefinition chordDef : instrumentsDefs) {
-        // TODO - how to validate those - perhaps when addNote is added to chord the contains() can
-        // also consider the added
-//        if (chordDef.getAddedNote() != null) {
-//          continue;
-//        }
         InstrumentDefinition instrumentDef = instrument;
         FrettedInstrument thisInstrument = null;
         switch (instrumentDef.getInstrumentType()) {
