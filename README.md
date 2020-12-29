@@ -155,7 +155,44 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 1. Instrument - `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
 1. View - `horizontal` (fretboard view) or `vertical` (vertical diagram akin to chord charts, which can also display scales)
 1. Root - the note of the scale or chord you want. ie `C` or `Ds` or `Eb` - note the 's' indicates a sharp, the 'b' indicates a flat.
-1. Pattern - for the scale or chord ie `scale_major` or `chord_min9`
+1. Pattern - for the scale or chord ie `scale_major` or `chord_min9`. 
+
+The patterns Frettler understands at the time of writing are:
+
+| Scales/Modes            | Chords            |
+| ----------------------- |:-----------------:|
+| scale_major             | chord_min11       | 
+| scale_melodic_minor     | chord_dom11       |
+| scale_harmonic_minor    | chord_dom9        |
+| scale_major_pentatonic  | chord_7sharp9     |
+| scale_minor             | chord_7flat9      |
+| scale_minor_pentatonic  | chord_maj69       |
+| scale_blues_major       | chord_maj6min7    |
+| scale_blues_minor       | chord_maj9        |
+| mode_aeolian            | chord_min9        |
+| mode_dorian             | chord_dim7        |
+| mode_mixolydian         | chord_7flat5      |
+| mode_lydian             | chord_min7        |
+| mode_ionian             | chord_aug7        |
+| mode_locrian            | chord_maj7        |
+|                         | chord_dom7        |
+|                         | chord_min6        |
+|                         | chord_maj6        |
+|                         | chord_minmaj7     |
+|                         | chord_min7flat5   |
+|                         | chord_7plus       |
+|                         | chord_min7sus4    |
+|                         | chord_add9        |
+|                         | chord_add11       |
+|                         | chord_aug         |
+|                         | chord_dim         |
+|                         | chord_min         |
+|                         | chord_sus2        |
+|                         | chord_sus4        |
+|                         | chord_maj         |
+|                         | chord_5           |
+
+To see the patterns Frettler currently understands use the [Patterns Command](#Patterns-Command)
 
 #### Optional Arguments 
 - `-s` or `--strings` followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use `-s D,A,D,G,B,E`.
