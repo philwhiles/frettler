@@ -1355,9 +1355,14 @@ public class ChordBank {
   public static List<ChordDefinition> findChordDefinitions(
       InstrumentDefinition instrumentDefinition, Note chordRoot, IntervalPattern chordPattern,
       Note addedNote) {
+    List<IntervalPattern> aliases = new ArrayList<>();
+    aliases.add(chordPattern);
+    if (chordPattern.getAliasPattern() != null) {
+      aliases.add(chordPattern.getAliasPattern());
+    }
     return definitions.get(instrumentDefinition).stream().filter(cd -> {
       return cd.getChordRoot().getPitch() == chordRoot.getPitch()
-          && cd.getChordPattern() == chordPattern
+          && aliases.contains(cd.getChordPattern())
           && (addedNote == null ? (cd.getAddedNote() == null ? true : false)
               : (cd.getAddedNote() == null ? false
                   : cd.getAddedNote().getPitch() == addedNote.getPitch()));

@@ -163,20 +163,23 @@ The patterns Frettler understands at the time of writing are:
 | Scales/Modes            | Chords            | Chords            |
 | ----------------------- |-------------------|-------------------|
 | scale_major             | chord_min11       | chord_dom7        |
-| scale_melodic_minor     | chord_dom11       | chord_min6        |
-| scale_harmonic_minor    | chord_dom9        | chord_maj6        |
-| scale_major_pentatonic  | chord_7sharp9     | chord_minmaj7     |
-| scale_minor             | chord_7flat9      | chord_min7flat5   |
-| scale_minor_pentatonic  | chord_maj69       | chord_7plus       |
-| scale_blues_major       | chord_maj6min7    | chord_min7sus4    |
-| scale_blues_minor       | chord_maj9        | chord_add9        |
-| mode_aeolian            | chord_min9        | chord_add11       |
-| mode_dorian             | chord_dim7        | chord_aug         |
-| mode_mixolydian         | chord_7flat5      | chord_dim         |
-| mode_lydian             | chord_min7        | chord_min         |
-| mode_ionian             | chord_aug7        | chord_sus2        |
-| mode_locrian            | chord_maj7        | chord_sus4        |
-|                         | chord_maj         | chord_5           |
+| mode_ionian(a)          | chord_dom11       | chord_7(a)        |
+| scale_melodic_minor     | chord_dom9        | chord_min6        |
+| scale_major_pentatonic  | chord_7sharp9     | chord_maj6        |
+| scale_minor             | chord_7flat9      | chord_minmaj7     |
+| scale_harmonic_minor(a) | chord_maj69       | chord_min7flat5   |
+| mode_aeolian(a)         | chord_maj6min7    | chord_7plus       |
+| scale_minor_pentatonic  | chord_maj9        | chord_min7sus4    |
+| scale_blues_major       | chord_min9        | chord_add9        |
+| scale_blues_minor       | chord_dim7        | chord_add11       |
+| mode_dorian             | chord_7flat5      | chord_aug         |
+| mode_mixolydian         | chord_min7        | chord_dim         |
+| mode_lydian             | chord_aug7        | chord_min         |
+| mode_ionian             | chord_maj7        | chord_sus2        |
+| mode_locrian            | chord_maj         | chord_sus4        |
+|                         |                   | chord_5                          |
+
+(Frettler understands interval pattern aliases, so in the above, those denoted as (a) are an alias for the preceeding pattern)
 
 To see the patterns Frettler currently understands use the [Patterns Command](#Patterns-Command)
 

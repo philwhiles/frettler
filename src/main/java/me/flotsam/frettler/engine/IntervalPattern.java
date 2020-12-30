@@ -132,6 +132,12 @@ public enum IntervalPattern {
       "dom7",
       P1, M3, P5, m7
   ),
+  CHORD_7(
+      true,
+      CHORD_DOM7,
+      PatternType.CHORD,
+      "7"
+  ),
   CHORD_MIN6(
       true,
       PatternType.CHORD,
@@ -242,12 +248,6 @@ public enum IntervalPattern {
       "Melodic Minor",
       P1, M2, m3, P4, P5, M6, M7
   ),
-  SCALE_HARMONIC_MINOR(
-      true,
-      PatternType.SCALE,
-      "Harmonic Minor",
-      P1, M2, m3, P4, P5, m6, M7
-  ),
   SCALE_MAJOR_PENTATONIC(
       true,
       SCALE_MAJOR,
@@ -255,17 +255,23 @@ public enum IntervalPattern {
       "Major Pentatonic",
       P1, M2, M3, P5, M6
   ),
-  MODE_AEOLIAN(
-      true,
-      PatternType.MODE,
-      "Aeolian",
-      P1, M2, m3, P4, P5, m6, m7
-  ),
   SCALE_MINOR(
       true,
-      MODE_AEOLIAN,
       PatternType.SCALE,
-      "Minor"
+      "Minor",
+      P1, M2, m3, P4, P5, m6, m7
+  ),
+  MODE_AEOLIAN(
+      true,
+      SCALE_MINOR,
+      PatternType.MODE,
+      "Aeolian"
+  ),
+  SCALE_HARMONIC_MINOR(
+      true,
+      SCALE_MINOR,
+      PatternType.SCALE,
+      "Harmonic Minor"
   ),
   SCALE_MINOR_PENTATONIC(
       true,
@@ -313,7 +319,7 @@ public enum IntervalPattern {
   MODE_LOCRIAN(
       true,
       PatternType.MODE,
-      "Aeolian",
+      "Locrian",
       P1, m2, m3, P4, d5, m6, m7
   ),
   
@@ -374,7 +380,7 @@ public enum IntervalPattern {
   }
 
   public String getTitle() {
-    return this.name().toLowerCase() + " (" + this.label + ") " + this.intervals;
+    return this.name().toLowerCase() + (this.aliasPattern != null ? " an alias of " + this.aliasPattern.getTitle().toLowerCase() : " (" + this.label + ") " + this.intervals);
   }
 
   public boolean isScaleChordGenerationSupported() {
