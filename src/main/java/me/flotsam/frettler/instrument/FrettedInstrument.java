@@ -136,7 +136,8 @@ public abstract class FrettedInstrument {
   }
 
   public enum InstrumentDefinition {
-    GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE");
+    GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE"),
+    UKELELE_GCEA(InstrumentType.UKELELE, "GCEA");
 
     @Getter
     private InstrumentType instrumentType;

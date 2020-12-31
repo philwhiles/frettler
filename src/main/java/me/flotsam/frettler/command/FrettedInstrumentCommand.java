@@ -52,12 +52,15 @@ import picocli.CommandLine.Option;
  */
 @Command
 public abstract class FrettedInstrumentCommand extends FrettlerCommand implements Runnable {
-  
+
   @Option(names = {"-a", "--added"}, description = "The note to add")
   Note addedNote;
 
   @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
   Note[] notes;
+
+  @Option(names = {"-d", "--digits"}, description = "The chord digits to find", split = ",")
+  List<String> digits;
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
@@ -164,35 +167,46 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         VerticalView findView = new VerticalView(instrument);
         VerticalView.Options findViewOptions =
             findView.new Options(intervals, !isMono(), isOctaves());
-        Optional<Chord> foundChordOpt = Chord.findChord(notes);
-        if (foundChordOpt.isPresent()) {
-          findView.showArpeggio(foundChordOpt.get(), findViewOptions);
-          if (verbose) {
-            out.println(foundChordOpt.get().describe(isMono()));
+        if (notes != null) {
+          Optional<Chord> foundChordOpt = Chord.findChord(notes);
+          if (foundChordOpt.isPresent()) {
+            findView.showArpeggio(foundChordOpt.get(), findViewOptions);
+            if (verbose) {
+              out.println(foundChordOpt.get().describe(isMono()));
+            }
+          } else {
+            out.println("Could not find matching chord");
           }
         } else {
-          out.println("Could not find matching chord");
+          instrument = getBiggerInstrument(instrument);
+
+          Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
+              FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
+                  instrument.getStringNotes());
+          if (optInstrument.isEmpty()) {
+            out.println("The current instrument is not currently defined for chords");
+            return;
+          } else {
+            FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
+
+            List<ChordDefinition> chordDefs = ChordBank.findChordDefinitions(instrumentDefinition);
+            List<ChordDefinition> found = chordDefs.stream()
+                .filter(cd -> cd.getStrings().equals(digits)).collect(Collectors.toList());
+            for (ChordDefinition chordDefinition : found) {
+              chord = new Chord(chordDefinition.getChordRoot(), chordDefinition.getChordPattern(), chordDefinition.getAddedNote());
+              ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
+              findView.showChord(chordBankInstance, findViewOptions);
+              if (verbose) {
+                out.println(chord.describe(isMono()));
+              }
+            }
+
+          }
         }
         break;
 
       case CHORD:
-        switch (instrument.getInstrumentType()) {
-          case GUITAR:
-            instrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
-            break;
-          case BASSGUITAR:
-            instrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
-            break;
-          case UKELELE:
-            instrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 30);
-            break;
-          case MANDOLIN:
-            instrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 30);
-            break;
-          case BANJO:
-            instrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
-            break;
-        }
+        instrument = getBiggerInstrument(instrument);
         VerticalView chordView = new VerticalView(instrument);
         VerticalView.Options chordViewOptions =
             chordView.new Options(intervals, !isMono(), isOctaves());
@@ -208,10 +222,14 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
           if (list) {
             Map<String, ChordDefinition> found = new HashMap<>();
-            List<ChordDefinition> chordDefs = ChordBank.findChordDefinitions(instrumentDefinition, root);
-            for (ChordDefinition chordDef:chordDefs) {
-              if (intervalPattern == IntervalPattern.SCALE_MAJOR || chordDef.getChordPattern() == intervalPattern) {
-                found.put(chordDef.getChordRoot().getLabel()+chordDef.getChordPattern().getLabel()+(chordDef.getAddedNote() != null ? chordDef.getAddedNote().getLabel() : ""), chordDef);
+            List<ChordDefinition> chordDefs =
+                ChordBank.findChordDefinitions(instrumentDefinition, root);
+            for (ChordDefinition chordDef : chordDefs) {
+              if (intervalPattern == IntervalPattern.SCALE_MAJOR
+                  || chordDef.getChordPattern() == intervalPattern) {
+                found.put(chordDef.getChordRoot().getLabel() + chordDef.getChordPattern().getLabel()
+                    + (chordDef.getAddedNote() != null ? chordDef.getAddedNote().getLabel() : ""),
+                    chordDef);
               }
             }
             found.values().forEach(cd -> {
@@ -221,12 +239,13 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
             return;
           }
 
-          List<ChordDefinition> chordDefinitions =
-              ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern, addedNote);
+          List<ChordDefinition> chordDefinitions = ChordBank
+              .findChordDefinitions(instrumentDefinition, root, intervalPattern, addedNote);
           if (chordDefinitions.size() == 0) {
             out.println("Don't have that chord definition - why not contribute it?");
             out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
-            out.println("ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x0121x/[Optional Fingerings]- Share and enjoy!");
+            out.println(
+                "ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x0121x/[Optional Fingerings]- Share and enjoy!");
             out.println("phil.whiles@gmail.com");
             return;
           } else {
@@ -245,6 +264,28 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       default:
         break;
     }
+  }
+
+  private FrettedInstrument getBiggerInstrument(FrettedInstrument instrument) {
+    FrettedInstrument biggerInstrument = null;
+    switch (instrument.getInstrumentType()) {
+      case GUITAR:
+        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        break;
+      case BASSGUITAR:
+        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        break;
+      case UKELELE:
+        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        break;
+      case MANDOLIN:
+        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        break;
+      case BANJO:
+        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        break;
+    }
+    return biggerInstrument;
   }
 
   private void explain(Scale scale, List<Chord> chords) {

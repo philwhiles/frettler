@@ -1,3 +1,8 @@
+# 31st December 2020
+- Happy New Year!
+- added find --digits/-d (--frets/-f got there first...)
+- added the first ukelele chord definition
+
 # 26th December 2020
 - Happy Xmas!
 - chords from the internet archive of OLGA have been merged into the chord bank, which now has 1000+ chord definitions

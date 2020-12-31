@@ -52,6 +52,7 @@ import static me.flotsam.frettler.engine.Note.F;
 import static me.flotsam.frettler.engine.Note.G;
 import static me.flotsam.frettler.engine.Note.Gb;
 import static me.flotsam.frettler.instrument.FrettedInstrument.InstrumentDefinition.GUITAR_EADGBE;
+import static me.flotsam.frettler.instrument.FrettedInstrument.InstrumentDefinition.UKELELE_GCEA;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +66,9 @@ public class ChordBank {
   //@formatter:off
   @Getter
   private static Map<InstrumentDefinition, List<ChordDefinition>> definitions = Map.of(
+      UKELELE_GCEA, Arrays.asList(
+        new ChordDefinition(C, CHORD_MAJ, "0,0,0,3")
+      ),
       GUITAR_EADGBE, Arrays.asList(
         new ChordDefinition(A, CHORD_5, "x,0,2,2,x,0"), // (E  A) : root and 5th (power chord)
         new ChordDefinition(A, CHORD_5, "x,0,2,x,x,x", new String[] {"x,2,x,x,x,x"}),

@@ -13,6 +13,7 @@ import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 import me.flotsam.frettler.instrument.FrettedInstrument.InstrumentDefinition;
 import me.flotsam.frettler.instrument.Guitar;
+import me.flotsam.frettler.instrument.Ukelele;
 
 public class ChordBankTest {
 
@@ -56,6 +57,9 @@ public class ChordBankTest {
         switch (instrumentDef.getInstrumentType()) {
           case GUITAR:
             thisInstrument = new Guitar(instrumentDef.getTuning().toArray(new Note[] {}), 30);
+            break;
+          case UKELELE:
+            thisInstrument = new Ukelele(instrumentDef.getTuning().toArray(new Note[] {}), 30);
             break;
           default:
             break;

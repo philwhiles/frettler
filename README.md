@@ -296,14 +296,23 @@ c and g, try:
 ./frettler guitar display --notes c,g
 ```
 #### Find Subcommand
-One way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument, as follows :
+One way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument. In fact there are two ways to get frettler to `find` chords:
 
+#### Find by note
 ```
 ./frettler guitar find --notes As,D,f
 ```
 
 With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles `--strings` and `--frets`).
 With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
+
+#### Find by fingering
+```
+./frettler guitar find --digits x,0,2,2,1,0
+```
+
+Frettler will display the chord it finds using the vertical chord chart view.
+I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead.
 
 ### Menu Command
 Start Frettler with the menu argument and it will offer a simple one line menu. Depending on your key presses it will display your fretboard over and over, each time 
