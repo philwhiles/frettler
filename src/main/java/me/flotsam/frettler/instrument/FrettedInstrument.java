@@ -120,6 +120,7 @@ public abstract class FrettedInstrument {
 
   public enum InstrumentType {
     //@formatter:off
+    CUSTOM("Custom Instrument"),
     GUITAR("Guitar"),
     BANJO("Banjo"),
     BASSGUITAR("Bass Guitar"),

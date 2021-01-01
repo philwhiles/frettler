@@ -20,11 +20,12 @@ package me.flotsam.frettler;
 import java.util.concurrent.Callable;
 import me.flotsam.frettler.command.BanjoCommand;
 import me.flotsam.frettler.command.BassGuitarCommand;
-import me.flotsam.frettler.command.LookupCommand;
 import me.flotsam.frettler.command.CompletionsCommand;
+import me.flotsam.frettler.command.CustomCommand;
 import me.flotsam.frettler.command.FifthsCommand;
 import me.flotsam.frettler.command.FrettlerCommand;
 import me.flotsam.frettler.command.GuitarCommand;
+import me.flotsam.frettler.command.LookupCommand;
 import me.flotsam.frettler.command.MandolinCommand;
 import me.flotsam.frettler.command.MenuCommand;
 import me.flotsam.frettler.command.PatternsCommand;
@@ -37,7 +38,7 @@ import picocli.CommandLine.HelpCommand;
     description = "Generates scales/arpeggios, chords and arpeggios for fretted instruments",
     mixinStandardHelpOptions = true,
     subcommands = {MenuCommand.class, FifthsCommand.class, HelpCommand.class, PatternsCommand.class, CompletionsCommand.class, LookupCommand.class, GuitarCommand.class,
-        BassGuitarCommand.class, BanjoCommand.class, MandolinCommand.class, UkeleleCommand.class})
+        BassGuitarCommand.class, BanjoCommand.class, MandolinCommand.class, UkeleleCommand.class, CustomCommand.class})
 public class Main implements Callable<Integer> {
 
   public static void main(String... args) throws Exception {
