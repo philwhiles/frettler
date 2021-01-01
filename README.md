@@ -39,6 +39,9 @@ of the optional arguments, can display its full scales and chords for any frette
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
+**UPDATE**: Frettler now has a `custom` instrument, configured through properties. Rather than have to define your strings in each invocation, edit the properties
+file and each time you use `custom` as the instrument, that will be the default. See [Custom Instrument](#Custom-Instrument).
+
 **UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
 With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
@@ -155,11 +158,37 @@ The following instruments are supported:
 - ukelele
 - mandolin
 - banjo
+- custom
 
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
 The instrument `banjo` will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with `--strings A,B,C,etc`.
+
+#### Custom Instrument
+The `custom` instrument differs from the others, in that Frettler has no hard wired understanding of how many strings it has or what their tunings are.
+There is text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
+by default. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
+The 'name' property will be used in Frettlers titling of scales and chords.
+
+So with the example 'custom.properties' provided :
+
+```
+name=Irish Bouzouki
+strings=G,D,A,D
+frets=12
+```
+
+With :
+
+```
+./frettler custom horizontal c scale_major
+```
+
+You will get :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/irish-bouzouki.png"/>
+
 
 #### Required Arguments 
 When you want Frettler to display a scale or chord on a fretboard, in this order:
@@ -420,8 +449,9 @@ Tab completion in bash helps greatly with Frettler - bash will complete all of t
 The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
 
 ## Customising Frettler Startup
-The 'frettler' script created by the build, passes all arguments to the java program (which is embedded withing the frettler script on macOs/linux), and if you find yourself regularly using Frettler with say a strings argument
-you can make your life easier by creating your own script wrapping the frettler script/command. Say you want to use drop D tuning all the time :
+If the [custom instrument](#Custom-Instrument) doesn't do it for you, you can customise Frettler by writing a wrapper script.
+If you find yourself regularly using Frettler with the same old optional arguments, say the `--strings` you can make your life easier by creating your own script wrapping the 
+frettler script/command. Say you want to use drop D tuning all the time :
 
 Create a file in the top frettler directory, and call it 'dropd', with the following content:
 
