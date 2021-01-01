@@ -138,6 +138,7 @@ public abstract class FrettedInstrument {
   public enum InstrumentDefinition {
     GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE"),
     BASSGUITAR_EADG(InstrumentType.BASSGUITAR, "EADG"),
+    MANDOLIN_GDAE(InstrumentType.MANDOLIN, "GDAE"),
     UKELELE_GCEA(InstrumentType.UKELELE, "GCEA");
 
     @Getter

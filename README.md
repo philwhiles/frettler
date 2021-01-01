@@ -45,12 +45,21 @@ With the new chord display comes a change to the normal vertical view also - the
 box, making the rendering consistent with a typical chord chart, and easy to read.
 Adding the `chord` subcommand required renaming some of the existing subcommands to make more sense - `chord` became `lookup` and `find` became `display`.
 
-Frettler now has over *1000* chords in its chord definitions to use to display *guitar* chord fingerings. The internet archive of OLGA provided the fingering definitions, all of which
-have been munged into Frettlers own repesentation, including chords with added notes. The horizontal and vertical views are also capable of displaying these chords with added notes.
-Frettler now has *96* chords in its chord definitions to use to display *bass guitar* chord fingerings.
-Frettler now has *165* chords in its chord definitions to use to display *ukelele* chord fingerings.
+The internet archive of OLGA provided the bulk of the guitar fingering definitions, which were munged, with corrections, into Frettlers own repesentation, including chords with added notes.
+The horizontal and vertical views are also capable of displaying these chords with added notes.
 
-For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
+Chord definitions have been added for some of the other Frettler instruments as well, and the chord definitions currently stand at :
+
+
+| Instrument              | Chord Definitions |
+| ----------------------- |-------------------|
+| GUITAR                  | 1023              |
+| BASSGUITAR              | 96                |
+| UKELELE                 | 165               |
+| MANDOLIN                | 129               |
+
+
+For posterity there is a change log [here]Frettler will display the chord it finds using the chord chart view.(https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
 Here is an example of its output :
 
@@ -309,11 +318,13 @@ With this form, frettler will display the chord found using its Vertical view on
 With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
 
 #### Find by fingering
+Find and display the chord chart matching the provided fret numbering.
+
 ```
 ./frettler guitar find --digits x,0,2,2,1,0
 ```
 
-Frettler will display the chord it finds using the vertical chord chart view.
+Using this command, Frettler will search its chord definitions, looking for a match, instead of dynamically calculating the entire chord across the fretboard and looking for a note match.
 I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead.
 
 ### Menu Command

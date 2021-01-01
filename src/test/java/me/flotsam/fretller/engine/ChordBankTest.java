@@ -14,6 +14,7 @@ import me.flotsam.frettler.instrument.BassGuitar;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 import me.flotsam.frettler.instrument.FrettedInstrument.InstrumentDefinition;
 import me.flotsam.frettler.instrument.Guitar;
+import me.flotsam.frettler.instrument.Mandolin;
 import me.flotsam.frettler.instrument.Ukelele;
 
 public class ChordBankTest {
@@ -65,6 +66,9 @@ public class ChordBankTest {
           case BASSGUITAR:
             thisInstrument = new BassGuitar(instrumentDef.getTuning().toArray(new Note[] {}), 30);
             break;
+          case MANDOLIN:
+            thisInstrument = new Mandolin(instrumentDef.getTuning().toArray(new Note[] {}), 30);
+            break;
           default:
             break;
         }
@@ -79,7 +83,7 @@ public class ChordBankTest {
           int fretNum = Integer.parseInt(str);
           Note fretNote = thisInstrument.getFretsByString().get(stringNum).get(fretNum).getNote();
           if (!chord.containsNotes(fretNote)) {
-            fail("\nChord contains " + chord.getChordNotes() + "\nChordDef "
+            fail("\n" + instrument.getInstrumentType() + " Actual chord contains " + chord.getChordNotes() + "\nChordDef "
                 + chordDef.getChordRoot() + " " + chordDef.getChordPattern().getLabel()
                 + chordDef.getStrings() + " invalid fret num " + fretNum + " on string num "
                 + (instrument.getTuning().size() - stringNum) + " (" + fretNote.getLabel() + ")");
