@@ -193,7 +193,7 @@ You will get :
 #### Required Arguments 
 When you want Frettler to display a scale or chord on a fretboard, in this order:
 
-1. Instrument - `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
+1. Instrument - `custom`, `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
 1. View - `horizontal` (fretboard view) or `vertical` (vertical diagram akin to chord charts, which can also display scales)
 1. Root - the note of the scale or chord you want. ie `C` or `Ds` or `Eb` - note the 's' indicates a sharp, the 'b' indicates a flat.
 1. Pattern - for the scale or chord ie `scale_major` or `chord_min9`. 
