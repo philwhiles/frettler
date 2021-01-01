@@ -59,9 +59,9 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+    out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "])", 30));
+        + "]", 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
@@ -109,9 +109,9 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+    out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "])", 30));
+        + "]", 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
@@ -148,9 +148,9 @@ public class VerticalView implements View {
     initColourMap(scale);
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+    out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "])", 30));
+        + "]", 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();

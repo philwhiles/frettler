@@ -35,6 +35,7 @@ public class CustomInstrument extends FrettedInstrument {
       Note [] stringNotes = Arrays.asList(prop.getProperty("strings").split(",")).stream().map(s->Note.valueOf(s)).toArray(Note[]::new);
       customProperties.setStrings(stringNotes);
       customProperties.setFrets(Integer.parseInt(prop.getProperty("frets")));
+      customProperties.setName(prop.getProperty("name"));
       System.out.println(customProperties.getStrings());
     } catch (IOException ex) {
       System.out.println("There was a problem loading the custom.properties");
@@ -48,5 +49,9 @@ public class CustomInstrument extends FrettedInstrument {
 
   public CustomInstrument(Note[] strings, Integer frets) {
     super(FrettedInstrument.InstrumentType.CUSTOM, customProperties.getFrets(), customProperties.getStrings());
+  }
+  
+  public String getLabel() {
+    return customProperties.getName();
   }
 }

@@ -100,6 +100,9 @@ public abstract class FrettedInstrument {
     }
   }
 
+  public String getLabel() {
+    return instrumentType.getLabel();
+  };
 
   private int calcRelativeDistance(ScaleNote fromNote, ScaleNote toNote) {
     // need to calculate distance from the from note in a new scale starting at that note
