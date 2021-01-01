@@ -39,14 +39,16 @@ of the optional arguments, can display its full scales and chords for any frette
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
-**UPDATE** Frettler now has over 1000 chords in its chord definitions to use to display fingerings. The internet archive of OLGA provided the fingering definitions, all of which
-have been munged into Frettlers own repesentation, including chords with added notes. The horizontal and vertical views are also capable of displaying these chords with added notes.
-
 **UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
 With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
 box, making the rendering consistent with a typical chord chart, and easy to read.
 Adding the `chord` subcommand required renaming some of the existing subcommands to make more sense - `chord` became `lookup` and `find` became `display`.
+
+Frettler now has over *1000* chords in its chord definitions to use to display *guitar* chord fingerings. The internet archive of OLGA provided the fingering definitions, all of which
+have been munged into Frettlers own repesentation, including chords with added notes. The horizontal and vertical views are also capable of displaying these chords with added notes.
+Frettler now has *96* chords in its chord definitions to use to display *bass guitar* chord fingerings.
+Frettler now has *165* chords in its chord definitions to use to display *ukelele* chord fingerings.
 
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
