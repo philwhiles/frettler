@@ -47,6 +47,6 @@ public class CustomInstrument extends FrettedInstrument {
   }
 
   public CustomInstrument(Note[] strings, Integer frets) {
-    super(FrettedInstrument.InstrumentType.GUITAR, customProperties.getFrets(), customProperties.getStrings());
+    super(FrettedInstrument.InstrumentType.CUSTOM, customProperties.getFrets(), customProperties.getStrings());
   }
 }
