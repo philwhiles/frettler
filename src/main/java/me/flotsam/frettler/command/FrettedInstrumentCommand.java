@@ -33,6 +33,7 @@ import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.BassGuitar;
+import me.flotsam.frettler.instrument.CustomInstrument;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 import me.flotsam.frettler.instrument.Guitar;
 import me.flotsam.frettler.instrument.Mandolin;
@@ -283,6 +284,9 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         break;
       case BANJO:
         biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        break;
+      case CUSTOM:
+        biggerInstrument = new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), 30);
         break;
     }
     return biggerInstrument;
