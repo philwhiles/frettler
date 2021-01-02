@@ -94,7 +94,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
     switch (this.view.getType()) {
       case SEQUENCE:
-        handleTabView(instrument);
+        handleScaleSequenceView(instrument);
         break;
 
       case HORIZONTAL:
@@ -123,35 +123,35 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   }
 
 
-  private void handleTabView(FrettedInstrument instrument) {
+  private void handleScaleSequenceView(FrettedInstrument instrument) {
     Chord chord = null;
     Scale scale = null;
     TabView tabView = new TabView(instrument);
     TabView.Options tabViewOptions = tabView.new Options(intervals, true, !isMono(), isOctaves());
 
-    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+//    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
-      tabView.showScale(scale, tabViewOptions);
-      List<Chord> chords = new ArrayList<>();
-      if (chordMode) {
-        chords = scale.createScaleChords();
-      }
-      if (verbose) {
-        explain(scale, chords);
-      } else {
-        for (Chord aChord : chords) {
-          out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
-              Colour.RESET));
-        }
-        out.println();
-      }
-    } else {
-      chord = new Chord(this.root, this.intervalPattern, this.addedNote);
-      tabView.showChord(chord, tabViewOptions);
-      if (verbose) {
-        out.println(chord.describe(isMono()));
-      }
-    }
+      tabView.showScale(scale, scaleNoteSequence, tabViewOptions);
+//      List<Chord> chords = new ArrayList<>();
+//      if (chordMode) {
+//        chords = scale.createScaleChords();
+//      }
+//      if (verbose) {
+//        explain(scale, chords);
+//      } else {
+//        for (Chord aChord : chords) {
+//          out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
+//              Colour.RESET));
+//        }
+//        out.println();
+//      }
+//    } else {
+//      chord = new Chord(this.root, this.intervalPattern, this.addedNote);
+//      tabView.showChord(chord, tabViewOptions);
+//      if (verbose) {
+//        out.println(chord.describe(isMono()));
+//      }
+//    }
   }
 
   private void handleHorizontalView(FrettedInstrument instrument) {
