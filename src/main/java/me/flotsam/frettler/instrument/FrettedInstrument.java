@@ -100,6 +100,9 @@ public abstract class FrettedInstrument {
     }
   }
 
+  public String getLabel() {
+    return instrumentType.getLabel();
+  };
 
   private int calcRelativeDistance(ScaleNote fromNote, ScaleNote toNote) {
     // need to calculate distance from the from note in a new scale starting at that note
@@ -120,6 +123,7 @@ public abstract class FrettedInstrument {
 
   public enum InstrumentType {
     //@formatter:off
+    CUSTOM("Custom Instrument"),
     GUITAR("Guitar"),
     BANJO("Banjo"),
     BASSGUITAR("Bass Guitar"),
@@ -136,7 +140,10 @@ public abstract class FrettedInstrument {
   }
 
   public enum InstrumentDefinition {
-    GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE");
+    GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE"),
+    BASSGUITAR_EADG(InstrumentType.BASSGUITAR, "EADG"),
+    MANDOLIN_GDAE(InstrumentType.MANDOLIN, "GDAE"),
+    UKELELE_GCEA(InstrumentType.UKELELE, "GCEA");
 
     @Getter
     private InstrumentType instrumentType;

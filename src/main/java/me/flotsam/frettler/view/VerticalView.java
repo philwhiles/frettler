@@ -59,20 +59,25 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+    out.println(StringUtils.center(chord.getDetails(), 30));
+    out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "])", 30));
+        + "]", 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
 
+    List<ScaleNote> chordNotes = chord.getChordNotes();
+    if (chord.getAddedNote() != null) {
+      chordNotes.add(chord.getAddedScaleNote());
+    }
     for (List<Fret> fretFrets : fretboardFrets) {
       int stringNum = 0;
       for (Fret fret : fretFrets) {
         if (fret.getNote() == null) {
           continue; // must be fret 1-5 of the 5th string on banjo
         }
-        Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
+        Optional<ScaleNote> chordScaleNoteForFret = chordNotes.stream()
             .filter(cn -> fret.getNote().getPitch().equals(cn.getNote().getPitch())).findAny();
         if (chordScaleNoteForFret.isPresent()) {
           String stringDef = chordBankInstance.getChordDefinition().getStrings().get(stringNum);
@@ -105,19 +110,25 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+    out.println(StringUtils.center(chord.getDetails(), 30));
+    out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "])", 30));
+        + "]", 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
+
+    List<ScaleNote> chordNotes = chord.getChordNotes();
+    if (chord.getAddedNote() != null) {
+      chordNotes.add(chord.getAddedScaleNote());
+    }
 
     for (List<Fret> fretFrets : fretboardFrets) {
       for (Fret fret : fretFrets) {
         if (fret.getNote() == null) {
           continue; // must be fret 1-5 of the 5th string on banjo
         }
-        Optional<ScaleNote> chordScaleNoteForFret = chord.getChordNotes().stream()
+        Optional<ScaleNote> chordScaleNoteForFret = chordNotes.stream()
             .filter(cn -> fret.getNote().getPitch().equals(cn.getNote().getPitch())).findAny();
         if (chordScaleNoteForFret.isPresent()) {
           Fret altFret = new Fret(fret.getIndex(), chordScaleNoteForFret.get().getNote(),
@@ -139,9 +150,9 @@ public class VerticalView implements View {
     initColourMap(scale);
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
-    out.println(StringUtils.center("(" + instrument.getInstrumentType().getLabel() + " ["
+    out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "])", 30));
+        + "]", 30));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
@@ -165,7 +176,6 @@ public class VerticalView implements View {
 
   private void display(List<ChordFret> chordFrets, Options options, boolean chordChart) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
-    // deadString concept left over from display of chord fingerings which may come back
     List<Integer> deadStrings = new ArrayList<>();
     for (ChordFret chordFret : chordFrets) {
       if (chordFret.getFret().getNote() == null) {
@@ -181,9 +191,24 @@ public class VerticalView implements View {
         .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
         .getFret().getFretNum();
 
+    int highestFret = 0;
+    Optional<ChordFret> highestFretOpt = chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
+        .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
+    if (highestFretOpt.isEmpty()) {
+      // a chord that is just a combo of open or muted strings
+    } else {
+     highestFret = highestFretOpt.get() .getFret().getFretNum();
+    }
+
     int fretNum = 0;
+    int fretsPrinted = 0;
     for (List<Fret> frets : fretboardFrets) {
-      out.print(inlays.contains(fretNum) ? String.format("%2s ", fretNum) : "   ");
+      if (fretNum > 0 && fretNum < highestFret - 1) {
+        fretNum++;
+        continue;
+      }
+      fretsPrinted++;
+      out.print(inlays.contains(fretNum) ? String.format("    %2s ", fretNum) : "       ");
       int stringNum = 0;
       for (Fret fret : frets) {
         boolean lastString = stringNum == instrument.getStringCount() - 1;
@@ -201,28 +226,29 @@ public class VerticalView implements View {
                   && fret.getFretNum() == ct.getFret().getFretNum()).findAny();
 
           if (chordFret.isPresent()) {
-            String fretStr = null;
+            String fretLabel = null;
             if (chordChart) {
-              fretStr = fretNum == 0 ? "◯" : "⬤";
+              fretLabel = fretNum == 0 ? "◯" : "⬤";
               intervalSummary[stringNum] = chordFret.get().getInterval();
               Note chordFretNote = chordFret.get().getFret().getNote();
               noteSummary[stringNum] = chordFretNote;
               octaveSummary[stringNum] = fret.getOctave();
             } else {
               if (options.isIntervals()) {
-                fretStr = chordFret.get().getInterval().getLabel();
+                fretLabel = chordFret.get().getInterval().getLabel();
               } else {
                 Note chordFretNote = chordFret.get().getFret().getNote();
-                fretStr = chordFretNote.getLabel();
+                fretLabel = chordFretNote.getLabel();
               }
             }
             if (options.isColour()) {
               Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
                   : ColourMap.get(fret.getNote().getPitch());
               out.print(String.format("%s%s%s", col,
-                  StringUtils.center(fretStr, lastString ? 3 : 4, ' '), Colour.RESET));
+                  StringUtils.center(fretLabel, lastString ? 3 : 4, ' '), Colour.RESET));
             } else {
-              out.print(String.format("%s", StringUtils.center(fretStr, lastString ? 3 : 4, ' ')));
+              out.print(
+                  String.format("%s", StringUtils.center(fretLabel, lastString ? 3 : 4, ' ')));
             }
           } else {
             out.print(String.format(" %s%s", ldr, StringUtils.repeat(' ', lastString ? 1 : 2)));
@@ -231,7 +257,7 @@ public class VerticalView implements View {
         stringNum++;
       }
       out.println(inlays.contains(fretNum) ? String.format(" %-2s", fretNum) : "");
-      if (fretNum >= 5 && fretNum >= lowestFret + 1) {
+      if (fretsPrinted >= 6 && fretNum >= lowestFret + 1) {
         break;
       }
       if (fretNum == 0) {
@@ -244,9 +270,9 @@ public class VerticalView implements View {
     out.println(createFretLine("┗", "┻", "┛"));
 
     if (chordChart) {
-      StringBuilder noteBuilder = new StringBuilder("   ");
-      StringBuilder intervalBuilder = new StringBuilder("   ");
-      for (int n = 0;n < instrument.getStringCount();n++) {
+      StringBuilder noteBuilder = new StringBuilder("       ");
+      StringBuilder intervalBuilder = new StringBuilder("       ");
+      for (int n = 0; n < instrument.getStringCount(); n++) {
         Note note = noteSummary[n];
         if (note != null) {
           if (options.isColour()) {
@@ -258,7 +284,8 @@ public class VerticalView implements View {
                 StringUtils.center(intervalSummary[n].getLabel(), 4, ' '), Colour.RESET));
           } else {
             noteBuilder.append(String.format("%s", StringUtils.center(note.getLabel(), 4, ' ')));
-            intervalBuilder.append(String.format("%s", StringUtils.center(intervalSummary[n].getLabel(), 4, ' ')));
+            intervalBuilder.append(
+                String.format("%s", StringUtils.center(intervalSummary[n].getLabel(), 4, ' ')));
           }
         } else {
           noteBuilder.append("    ");
@@ -276,7 +303,7 @@ public class VerticalView implements View {
 
   private String createFretLine(String begin, String mid, String end) {
     int strings = instrument.getStringCount();
-    StringBuilder sb = new StringBuilder("    ");
+    StringBuilder sb = new StringBuilder("        ");
     sb.append(begin);
     for (int n = 0; n < strings - 1; n++) {
       sb.append("━━━");
@@ -301,13 +328,8 @@ public class VerticalView implements View {
   @Data
   @RequiredArgsConstructor
   class ChordFret {
-
-    @NonNull
-    private final Fret fret;
-
-    @NonNull
-    private final ScaleInterval interval;
-
+    @NonNull private final Fret fret;
+    @NonNull private final ScaleInterval interval;
     private int weighting;
   }
 

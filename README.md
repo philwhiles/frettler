@@ -1,13 +1,46 @@
-# Frettler - A CLI for generating musical scales and chords with fretboard and chord rendering for a variety of fretted instruments
+
+Frettler - A flexible command line program for generating and displaying musical scales and chords for guitar or any fretted instrument
+=============================
+
+- [Synopsis](#Synopsis)
+- [Building](#Building)
+- [Demo](#Demo)
+- [Tutorial](#Tutorial)
+- [Arguments](#Arguments)
+  - [Instrument Commands](#Instrument-Commands)
+    - [Required Arguments](#Instrument-Commands)
+    - [Optional Arguments](#Optional-Arguments)
+    - [Verbose Mode](#Verbose-Mode)
+    - [Chord Subcommand](#Chord-Subcommand)
+      - [Added Notes](#Added-Notes)
+    - [Display Subcommand](#Display-Subcommand)
+    - [Find Subcommand](#Find-Subcommand)
+  - [Menu Command](#Menu-Command)
+  - [Fifths Command](#Fifths-Command)
+  - [Lookup Command](#Lookup-Command)
+  - [Patterns Command](#Pattern-Command)
+  - [Tab Completion Command](#Tab-Completion-Command)
+- [Customising Frettler Startup](#Customising-Frettler-Startup)
+- [Caveats](#Caveats)
+- [Tips](#Tips)
+- [Todo](#Todo)
+- [Credits](#Credits)
+- [License](#License)
+- [Contact](#Contact)
+  
+
+----------------------------------
+
 
 ## Synopsis
 This is a CLI program, written in Java 11, that calculates scales, modes and chords and displays them on fretboard representations.
-The rendering uses Unicode boxing characters and ANSI colour coding, the latter of which does not work in a standard Windows command prompt,
-so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
-color support.
+It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukelele and banjo, but through use
+of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine.
 
-Frettler perfoms all of its scale and chord calculations using first principles. ie it does not resort to using tables of data obtained from online references etc.
-The only data it needs to perform its calculations, is the definition of individual intervals, and the scale and chord patterns individual use of those intervals.
+Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
+
+**UPDATE**: Frettler now has a `custom` instrument, configured through properties. Rather than have to define your strings in each invocation, edit the properties
+file and each time you use `custom` as the instrument, that will be the default. See [Custom Instrument](#Custom-Instrument).
 
 **UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
@@ -15,23 +48,21 @@ With the new chord display comes a change to the normal vertical view also - the
 box, making the rendering consistent with a typical chord chart, and easy to read.
 Adding the `chord` subcommand required renaming some of the existing subcommands to make more sense - `chord` became `lookup` and `find` became `display`.
 
-**UPDATE**: Frettler has been extensively updated so that it now displays flats when it should. For scales, frettler uses the circle of fifths to determine if a key contains flats
-or sharps. In fact it now has a class called LineOfFifths, which calculates from first principles the major and minor chords in the circle of fifths and the sharps/flats in each.
-It is a line rather than a circle, as it does not (currently!) need to traverse around the circle.
-When displaying a scale and the diatonic chords for that scale are generated using the '--chords' or '-c' argument, the notes in the chords are flats or sharps depending on the scale.
-When displaying just a chord, sharps are always used. Changes to show flats in chords was abandoned for the time being when I realised that it was not straightforward - if you can 
-enlighten me as to what the theory rules are for deciding if a random chords notes should be flat or sharp please do!
+The internet archive of OLGA provided the bulk of the guitar fingering definitions, which were munged, with corrections, into Frettlers own repesentation, including chords with added notes.
+The horizontal and vertical views are also capable of displaying these chords with added notes.
 
-**UPDATE**: Frettler now has an interactive 'menu' mode. Rather than relaunching Frettler repeatedly to display different views, roots, chords, scales, one each time, start
-Frettler with the 'menu' argument and choose what to display to your hearts content. 
-The menu mode is an easier way of exploring different scales and chords, and effectively allows you to keep repeating the instrument view over and over. The other non instrument commands
-have to be accessed using the original way.
-See the Menu section below for full instructions, but the best explanation is achieved by actually trying it.
+Chord definitions have been added for some of the other Frettler instruments as well, and the chord definitions currently stand at :
 
-**EXTRAS** I have added some images to the extras folder which I use to print a circle of fifths calculator, which you may also find useful. I print these and laminate them, having very carefully cut the outer
-so that it is a ring with an empty centre.
 
-For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
+| Instrument              | Chord Definitions |
+| ----------------------- |-------------------|
+| GUITAR                  | 1023              |
+| BASSGUITAR              | 96                |
+| UKELELE                 | 165               |
+| MANDOLIN                | 129               |
+
+
+For posterity there is a change log [here]Frettler will display the chord it finds using the chord chart view.(https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
 Here is an example of its output :
 
@@ -40,7 +71,8 @@ Here is an example of its output :
 ## Building
 Easily build Frettler from the command line, but there are caveats:
 - regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
-- if you use windows, by default color support is disabled, but it can be re-enabled. See below.
+- if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
+- you will need the [Java11 JDK](https://adoptopenjdk.net/index.html) installed and in your PATH environment variable
 
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
@@ -72,6 +104,9 @@ The application is built using maven, but you don't need to have maven pre-insta
 ### MS Windows
 The windows 'build.bat' will run the maven build, the only prerequisite, as for Linux/macOS, is to have Java 11 installed.
 Once Frettler has built the build.bat creates the wrapper cmd file to launch Frettler, 'frettler.cmd'.
+The rendering uses Unicode boxing characters and ANSI colour coding, the latter of which does not work in a standard Windows command prompt,
+so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
+color support.
 
 ### IDE
 If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from [Lombok](https://projectlombok.org)
@@ -103,15 +138,19 @@ Do read the details below to get an understanding of how to drive Frettler, but 
 The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
 The output of the demo command can be seen [Here](https://htmlpreview.github.io/?https://github.com/philwhiles/frettler/blob/master/demo.html)
 
+## Tutorial
+Similar to the demo, but interactive, try the `tutorial` script. It will execute a number of frettler invocations, pausing after each with the last invocation it ran ready for you to edit and experiment with.
+After your edit, press return to see the result. Once you have tired of each example, simply delete the example invocation shown and press return to move to the next step.
+
 ## Arguments
-Frettler has two ways of viewing scales/modes and chords. The first is the horizontal view of a fretboard, which tries to show the notes in position on strings. The second view is
-the vertical view which looks more like the classic chord diagram you see widely. Each view can be used to display a scale or arpeggio, in which case both default to showing the first 12 frets.
+Frettler has two ways of viewing entire scales/modes and chords. One is horizontal, the other is vertical. Your mileage may vary, so you get to choose the one your prefer!
+Each view can be used to display a scale or chord in its entirety, and each default to showing the first 12 frets.
 
 Frettlers first argument can either be an instrument, in which case the following commands must follow the instrument conventions below, or it can be one of its secondary, ancilliary, arguments,
 such as 'patterns' or 'lookup', each of which have expectations for the subsequent arguments and options.
 
 
-### Primary Argument - Instrument Commands
+### Instrument Commands
 The following instruments are supported:
 
 - guitar
@@ -119,21 +158,72 @@ The following instruments are supported:
 - ukelele
 - mandolin
 - banjo
+- custom
 
 A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
 The instrument `banjo` will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with `--strings A,B,C,etc`.
 
-### Required Arguments - Instrument Commands
+#### Custom Instrument
+The `custom` instrument differs from the others, in that Frettler has no hard wired understanding of how many strings it has or what their tunings are.
+There is text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
+by default. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
+The 'name' property will be used in Frettlers titling of scales and chords.
+
+So with the example 'custom.properties' provided :
+
+```
+name=Irish Bouzouki
+strings=G,D,A,D
+frets=12
+```
+
+With :
+
+```
+./frettler custom horizontal c scale_major
+```
+
+You will get :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/irish-bouzouki.png"/>
+
+
+#### Required Arguments 
 When you want Frettler to display a scale or chord on a fretboard, in this order:
 
-1. Instrument - `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
+1. Instrument - `custom`, `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
 1. View - `horizontal` (fretboard view) or `vertical` (vertical diagram akin to chord charts, which can also display scales)
 1. Root - the note of the scale or chord you want. ie `C` or `Ds` or `Eb` - note the 's' indicates a sharp, the 'b' indicates a flat.
-1. Pattern - for the scale or chord ie `scale_major` or `chord_min9`
+1. Pattern - for the scale or chord ie `scale_major` or `chord_min9`. 
 
-### Optional Arguments - Instrument Commands
+The patterns Frettler understands at the time of writing are:
+
+| Scales/Modes            | Chords            | Chords            |
+| ----------------------- |-------------------|-------------------|
+| scale_major             | chord_min11       | chord_dom7        |
+| mode_ionian(a)          | chord_dom11       | chord_7(a)        |
+| scale_melodic_minor     | chord_dom9        | chord_min6        |
+| scale_major_pentatonic  | chord_7sharp9     | chord_maj6        |
+| scale_minor             | chord_7flat9      | chord_minmaj7     |
+| scale_harmonic_minor(a) | chord_maj69       | chord_min7flat5   |
+| mode_aeolian(a)         | chord_maj6min7    | chord_7plus       |
+| scale_minor_pentatonic  | chord_maj9        | chord_min7sus4    |
+| scale_blues_major       | chord_min9        | chord_add9        |
+| scale_blues_minor       | chord_dim7        | chord_add11       |
+| mode_dorian             | chord_7flat5      | chord_aug         |
+| mode_mixolydian         | chord_min7        | chord_dim         |
+| mode_lydian             | chord_aug7        | chord_min         |
+| mode_ionian             | chord_maj7        | chord_sus2        |
+| mode_locrian            | chord_maj         | chord_sus4        |
+|                         |                   | chord_5                          |
+
+(Frettler understands interval pattern aliases, so in the above, those denoted as (a) are an alias for the preceeding pattern)
+
+To see the patterns Frettler currently understands use the [Patterns Command](#Patterns-Command)
+
+#### Optional Arguments 
 - `-s` or `--strings` followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use `-s D,A,D,G,B,E`.
 (If you regularly want to use a non default string setup, see below)
 - `-f` or `--frets` N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
@@ -159,7 +249,7 @@ When you want Frettler to display a scale or chord on a fretboard, in this order
 
 (**) The octave colouring is based on the frets octave, relative to the other frets on the fretboard, and not relative to piano octaves.
 
-#### Verbose mode
+#### Verbose Mode
 It's all well and good that Frettler can work out the scales and chords for you, but if you want to understand what choices it makes that leads to the notes displayed
 and how it identifies the chords, ie its application of music theory, you may like to use the verbose mode occasionally.
 With verbose mode on, Frettler will print out a bit of background info to help explain what it is doing.
@@ -174,11 +264,11 @@ Produces (truncated output here) :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
 
-### Secondary Argument - Chord fingerings
+#### Chord Subcommand 
 The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, and gives a summary below
 the chart aligned with the strings, showing their notes and intervals.
 While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
-formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 300).
+formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 1000).
 ie to get frettler to show the fingering for 'Am':
 
 ```
@@ -194,23 +284,29 @@ The `chord` mode also allows use of the `--octaves` and `--mono` arguments.
 If you would like to see which chords frettler can show you for a given root, ie for A, use :
 
 ```
-./frettler guitar chord a
-CHORD_MAJ
-CHORD_AUG
-CHORD_7SHARP5
-CHORD_5
-CHORD_7
-CHORD_7FLAT5
-CHORD_DIM
-CHORD_MIN
-CHORD_MIN7
-CHORD_MIN7FLAT5
-CHORD_SUS2
-CHORD_SUS4
+./frettler guitar chord a --list
+Asus2   (a chord_sus2)    [A(P1), B(M2), E(P5)] 
+Asus4/B   (a chord_sus4/B)    [A(P1), D(P4), E(P5)] 
+Asus4/C   (a chord_sus4/C)    [A(P1), D(P4), E(P5)] 
+Asus4   (a chord_sus4)    [A(P1), D(P4), E(P5)] 
+A5   (a chord_5)    [A(P1), E(P5)] 
+etc
+etc
 ```
 
+If you want to see what chord definitions Frettler has for a specific chord type, add the interval pattern name as well :
 
-The database currently only contains limited chords for guitar, six string, standard tuning.
+```
+./frettler guitar chord d chord_dim --list
+Ddim/C   (d chord_dim/C)    [D(P1), F(m3), G#(d5)] 
+Ddim/B   (d chord_dim/B)    [D(P1), F(m3), G#(d5)] 
+Ddim   (d chord_dim)    [D(P1), F(m3), G#(d5)] 
+Ddim/Bb   (d chord_dim/Bb)    [D(P1), F(m3), G#(d5)] 
+```
+
+Note that the chord definitions found include those with added notes.
+
+The database currently contains over 1000 chords for guitar, six string, standard tuning.
 If you currently choose an instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
 instrument/tuning combination. Until you email it to me and I add it to Frettler for you!
 
@@ -223,21 +319,44 @@ If you would like to have additional chord fingerings added, email me with the f
 - Tuning: EADGBE
 - Root: A
 - Chord: CHORD_MIN
-- Frets: x02210
-- Fingering: xx231x
+- Frets: x,0,2,2,1,0
+- Fingering: x,x,2,3,1,x
 
 'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
 known chords, and in time I will add an optional argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
 
-### Secondary Argument - Display Notes
+#### Added notes
+With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the `-added' argument followed by the added note.
+
+#### Display Subcommand
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
 c and g, try:
 
 ```
 ./frettler guitar display --notes c,g
 ```
+#### Find Subcommand
+One way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument. In fact there are two ways to get frettler to `find` chords:
 
-## Primary Argument - Menu
+#### Find by note
+```
+./frettler guitar find --notes As,D,f
+```
+
+With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles `--strings` and `--frets`).
+With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
+
+#### Find by fingering
+Find and display the chord chart matching the provided fret numbering.
+
+```
+./frettler guitar find --digits x,0,2,2,1,0
+```
+
+Using this command, Frettler will search its chord definitions, looking for a match, instead of dynamically calculating the entire chord across the fretboard and looking for a note match.
+I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead.
+
+### Menu Command
 Start Frettler with the menu argument and it will offer a simple one line menu. Depending on your key presses it will display your fretboard over and over, each time 
 reflecting your choices. It will become apparent when you start it ie `./frettler menu`:
 
@@ -246,14 +365,13 @@ reflecting your choices. It will become apparent when you start it ie `./frettle
 All the usual instrument mode optional arguments can be used when first starting Frettler in menu mode (`--intervals` `--verbose` `--chords` `--mono` `--octaves` `--strings` `--frets`). 
 The first three of those can be toggled with key presses once in menu mode, while the others will be used constantly.
 
-### Primary Argument - Fifths
+#### Fifths Command
 Frettler generates dynamically a representation of the Circle Of Fifths, that it uses to determine if scales should use sharps or flats as the accidentals.
 It is perhaps better described as a Line Of Fifths, due to its somewhat flat structure, and the clockwise and anticlockwise arms don't overlap, but the `fifths` command
 will print this out for you if your curious or want to refer to it.
 
-### Primary Argument - Chord Reverse Lookup
-Frettler also has a `lookup` command. In fact it has two...
-#### Print chord name found
+#### Lookup Command
+Frettler also has a chord reverse `lookup` command. 
 The simplest takes the form :
 
 
@@ -304,19 +422,7 @@ Am7b5   (a chord_min7flat5)   [A(P1), C(m3), D#(d5), G(m7)]
 A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
 ```
 
-
-#### Find and view the chord found
-The second way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument, as follows :
-
-```
-./frettler guitar find --notes As,D,f
-```
-
-With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles `--strings` and `--frets`).
-With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
-
-
-### Primary Argument - Patterns Command
+#### Patterns Command
 Frettler understands three types of interval patterns - scales, modes and chords. At times it will expect you to provide it one type and not the other. The framework it uses for
 parsing the various commands will help you by suggesting the possible type at times, and bash tab completion can help you a lot - if you had typed 'scale' then hit tab, it would list 
 only the possible scales you can use (that's why the patterns are prefixed with their type). But if you don't use bash and Frettlers provided tab completion, it might help you to list
@@ -332,7 +438,7 @@ Want to just see the list of Frettler understood chords?
 ```
 Or 'scale'. Or 'mode'. You get the idea.
 
-### Primary Argument - Tab Completion Command
+#### Tab Completion Command
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
 
 ```
@@ -342,13 +448,14 @@ source <(./frettler completions)
 Tab completion in bash helps greatly with Frettler - bash will complete all of the args for you and show you the possible completions, handy with the Frettler interval pattern names.
 The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
 
-## Customising your Frettler script
-The 'frettler' script created by the build, passes all arguments to the java program (which is embedded withing the frettler script on macOs/linux), and if you find yourself regularly using Frettler with say a strings argument
-you can make your life easier by creating your own script wrapping the frettler script/command. Say you want to use drop D tuning all the time :
+## Customising Frettler Startup
+If the [custom instrument](#Custom-Instrument) doesn't do it for you, you can customise Frettler by writing a wrapper script.
+If you find yourself regularly using Frettler with the same old optional arguments, say the `--strings` you can make your life easier by creating your own script wrapping the 
+frettler script/command. Say you want to use drop D tuning all the time :
 
 Create a file in the top frettler directory, and call it 'dropd', with the following content:
 
-### Linux/macOS
+### Linux/macOS customisation
 ```bash
 #!/bin/bash
 ./frettler $@ --strings D,A,D,G,B,E
@@ -360,7 +467,7 @@ Save your dropd file, then back at your terminal prompt, execute :
 chmod +x dropd
 ```
 
-### Windows
+### Windows customisation
 ```Batchfile
 @echo off
 frettler.bat %%\* --strings D,A,D,G,B,E
@@ -390,8 +497,6 @@ editor I use - Vim. If you use Vim, try the plugin [AnsiEsc](http://www.drchip.o
 
 ## Caveats
 This is a work in progress, pretty much like the authors understanding of music theory.
-
-### Music theory
 Contributions and advice are welcomed. Frettler was initially created as an exercise in learning music theory and the author still has a long way to go.
 
 ## Tips
@@ -409,10 +514,10 @@ And './frettler g v', would do the same as './frettler guitar vertical C scale_m
 ## Todo
 - change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi). If I hear of enough Windows users wanting this...
 - blues scale does not support chord generation...
-- write some unit tests. One day. Maybe.
 
 ## Credits
-The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboard](https://github.com/fusionprogguy/Fretboard)
+- The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboard](https://github.com/fusionprogguy/Fretboard)
+- The chord fingerings were given a huge boost by a transformation of the data found in the web archive of [OLGA](https://web.archive.org/web/20060610121532/http://www.olga.net/)
 
 ## License
 This work is provided as is, with no warranties or guarantees, and is subject to the [GNU Affero General Public License v3.0](https://github.com/philwhiles/frettler/blob/master/LICENSE)

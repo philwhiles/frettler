@@ -52,6 +52,7 @@ public class FrettlerCommand {
   @Option(names = {"-i", "--intervals"}, description = "Show interval labels instead of notes")
   @Getter
   boolean intervals;
+
   
   public enum View {
     HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), DISPLAY, D(DISPLAY), FIND, F(FIND), CHORD, C(CHORD), SEQUENCE, S(SEQUENCE);

@@ -1,0 +1,53 @@
+#!/usr/local/bin/bash
+
+  ruler="----------------------------------------------------------------------------------------------------------------"
+declare -a cmds=(
+"./frettler guitar horizontal C scale_major=Standard guitar, horizontal fretboard view of C Major scale\n$ruler\nFrettler has two views used for scales and full chords, horizontal and vertical.\nEach expects to be followed by a root note and one of its scale/mode/chord names.\nThe root note can have a following 's' to indicate a sharp, or 'b' to indicate a flat."
+"./frettler guitar horizontal C scale_major --intervals=Standard guitar, horizontal fretboard view of C Major scale, intervals instead of notes\n$ruler\nFrettlers default is to display the notes, but using the '--interval' or its short form '-i', intervals will be displayed instead"
+"./frettler guitar vertical D scale_minor=Standard guitar, vertical fretboard view of D Minor scale\n$ruler\nHere the scale is displayed using the vertical view"
+"./frettler guitar vertical A chord_min=Standard guitar, vertical fretboard view of D Minor scale\n$ruler\nAnd a vertical view of all the notes from an Am chord"
+"./frettler guitar chord a chord_min=Standard guitar, chord chart of Am\n$ruler\nFrettlers chords displayed in the vertical view are entire, ie every occurence across the fret board of the chords notes.\nScales and chords in the horizontal and vertical views are calculated from first principles.\nThe 'chord' view on the otherhand uses an internal database of over 1000 chord fingerings\nThe chord view is also focused on the fingerings section of the fretboard, and displays dots instead of notes/intervals which are shown at the bottom of the chart"
+"./frettler guitar horizontal C scale_major --octaves=Standard guitar, fretboard view of C Major scale, octave mode\n$ruler\nWith the '--octaves' optional argument, the colourising shows the transition of the chord or scale across octaves, relative to the fretboard"
+"./frettler guitar horizontal C scale_major --verbose=Standard guitar, fretboard view of C Major scale, verbose mode\n$rule\nVerbose mode gives a description of how the scale or chord was constructed"
+"./frettler guitar horizontal C scale_major --chords=Standard guitar, fretboard view of C Major scale, derive diatonic chords, verbose mode\n$ruler\nWith the additional '--chords' argument, Frettler will display the diatonic chords in the chosen scale. Try it with '--verbose' as well."
+"./frettler guitar display --notes c=Standard guitar, just show all occurences of note 'C'\n$rule\nIn 'display' mode, Frettler will display only the notes you ask it to."
+"./frettler fifths=Display the Line Of Fifths generated and used internally by Frettler\n$ruler\nFor its calculations regarding sharps of flats in scales, frettler calculates the circle of fifths from first principles, and can display it"
+"./frettler lookup c,e,g=No instrument, just exact reverse chord lookup\n$rule\nFrettler can tell you which chords contain exactly the notes you provide. The 'lookup' mode does NOT use the chord fingering database, but instead creates an instance of each chord it knows about, rooted on the fist of the provided notes, to look for matches."
+"./frettler lookup c,e --rule relaxed=No instrument, just relaxed reverse chord lookup\n$ruler\nAgain, chord lookup, but relaxed"
+"./frettler lookup c,e --rule loose=No instrument, just loose reverse chord lookup\n$ruler\nAgain, chord lookup, but loose"
+"./frettler guitar find -n c,e,g =Standard guitar, lookup chord and display vertically\n$ruler\nLike the 'lookup' mode, but it will display the notes in the vertical view also"
+"./frettler bassguitar horizontal C scale_major_pentatonic=Bass guitar, fretboard view of C Major Pentatonic scale\n$ruler\nFrettler understands other instruments as well such as the bass guitar"
+"./frettler guitar horizontal A scale_minor_pentatonic -s B,E,A,D,G,B,E=Am Pentatonic scale on a 7 string guitar\n$ruler\nIf you use the '--strings' or '-s' parameter, Frettler will use that number of strings and their tunings instead of the standard EADGBE 6 string tuning"
+"./frettler ukelele horizontal A scale_harmonic_minor=Ukelele, fretboard view of Am Harmonic scale\n$ruler\nYes, it understands Ukelele as well"
+"./frettler guitar horizontal C scale_major -im=Standard guitar, fretboard view of C Major Scale with intervals, in 'monochrome'\n$ruler\nIf you don't like the colours, or your computer cannot handle them, go for '--mono' or it's shortform '-m'"
+"./frettler bassguitar horizontal C scale_major_pentatonic --intervals --frets 17=Bass guitar, fretboard view to 17th fret of C Major Pentatonic Scale, with intervals\n$ruler\nChoose the number of frets to display with '--frets' or '-f'"
+"./frettler banjo horizontal C scale_blues_major=Banjo, fretboard view of C Blues Major scale\n$ruler\nLet's not forget the Banjo"
+)
+
+echo ""
+echo "This interactive demo will take you through each of the variations used in the 'demo' script one by one."
+echo ""
+echo "You may edit the example shown repeatedly, to experiment with it. Press RETURN to execute"
+echo "each example, and when ready to proceed to the next example, just delete the example shown and press RETURN"
+echo ""
+
+let n=1
+for i in "${cmds[@]}"; do
+  cmd=${i%=*}
+  comment=${i#*=}
+
+  echo -e $comment
+  eval $cmd
+  echo ""
+  quit=0
+  while [ $quit -eq 0 ]; do
+    builtin read -ei "$cmd" response
+    if [[ $response == "" ]] ; then
+      quit=1
+    else
+      eval $response
+    fi
+  done
+
+  ((n=n+1))
+done

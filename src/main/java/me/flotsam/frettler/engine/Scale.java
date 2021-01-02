@@ -215,7 +215,7 @@ public class Scale {
       }
       for (ScaleNote scaleNote : scaleNotesToUse) {
         if (scaleNotes == null || scaleNotes.stream().anyMatch(sn -> sn.equalsTonally(scaleNote))) {
-          scaleChords.add(new Chord(scaleNote, ChordType.STANDARD, this.accidentals));
+          scaleChords.add(new Chord(scaleNote, ChordType.TRIAD, this.accidentals, null));
         }
       }
     }
@@ -236,8 +236,13 @@ public class Scale {
     List<Note> notes = new ArrayList<>();
     List<ScaleInterval> intervals = new ArrayList<>();
     List<Note> chromaticScaleNotes = new ArrayList<>();
+    List<Integer> steps = new ArrayList<>();
 
-    do {
+    ScaleNote lastNote = null;
+    int rootCount = 0;
+    while (rootCount < 2) {
+      rootCount += chromaticScaleNote.get().getNote().getPitch() == head.getNote().getPitch() ? 1 : 0;
+
       Note note = chromaticScaleNote.get().getNote();
 
       final Note theNote = note;
@@ -250,12 +255,25 @@ public class Scale {
         notes.add(note);
         intervals.add(scaleNote.getInterval().get());
         scaleNote = scaleNote.getNextScaleNote();
+        if (lastNote != null) {
+          // if the current note has wrapped back to the root or beyond...
+          int chromaticScaleNoteSemiTones = chromaticScaleNote.get().getInterval().get().getSemiTones();
+          int lastNotesSemiTones = lastNote.getInterval().get().getSemiTones();
+          if (chromaticScaleNoteSemiTones < lastNotesSemiTones) {
+            chromaticScaleNoteSemiTones += ScaleInterval.P8.getSemiTones();
+          }
+          steps.add(chromaticScaleNoteSemiTones - lastNotesSemiTones); 
+        } else {
+          steps.add(null);
+        }
+        lastNote = chromaticScaleNote.get();
       } else {
         notes.add(null);
         intervals.add(null);
+        steps.add(null);
       }
       chromaticScaleNote = Optional.of(chromaticScaleNote.get().getNextScaleNote());
-    } while (chromaticScaleNote.get().getNote().getPitch() != head.getNote().getPitch());
+    }
 
     for (Note note : chromaticScaleNotes) {
       sb.append(String.format("%s%-2s    %s",
@@ -272,6 +290,14 @@ public class Scale {
             notes.contains(notes.get(n)) ? (mono ? "" : ColourMap.get(notes.get(n).getPitch()))
                 : "",
             interval, (mono ? "" : Colour.RESET)));
+    }
+    sb.append("\n          ");
+    for (int n = 0; n < steps.size(); n++) {
+      Integer step = steps.get(n);
+      if (step == null) {
+        sb.append(String.format("      "));
+      } else
+        sb.append(String.format("%-6s", step == 2 ? "Tone" : "Semi"));
     }
     sb.append("\n\n");
     return sb.toString();
