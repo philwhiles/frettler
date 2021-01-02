@@ -53,9 +53,6 @@ public class FrettlerCommand {
   @Getter
   boolean intervals;
 
-  @Option(names = {"-l", "--list"}, description = "List chord definitions for the root (and interval pattern if provided)")
-  @Getter
-  boolean list;
   
   public enum View {
     HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), DISPLAY, D(DISPLAY), FIND, F(FIND), CHORD, C(CHORD);

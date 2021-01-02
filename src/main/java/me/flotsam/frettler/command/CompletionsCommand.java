@@ -37,10 +37,10 @@ public class CompletionsCommand implements Runnable {
     sb.append("_frettler_completions()\n");
     sb.append("{\n");
     sb.append("    local instr_opts\n");
-    sb.append("    instr_opts=\"menu find patterns fifths guitar bassguitar ukelele mandolin banjo\"\n");
+    sb.append("    instr_opts=\"menu lookup patterns fifths custom guitar bassguitar ukelele mandolin banjo\"\n");
 
     sb.append("    local view_opts\n");
-    sb.append("    view_opts=\"horizontal vertical chord\"\n");
+    sb.append("    view_opts=\"horizontal vertical chord find display\"\n");
 
     sb.append("    local note_opts\n");
     sb.append("    note_opts=\"");
@@ -66,15 +66,18 @@ public class CompletionsCommand implements Runnable {
     sb.append( "            COMPREPLY=( $(compgen -W \"${instr_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
     sb.append("            ;;\n");
     sb.append("        2)\n");
-    sb.append("            if [ ${COMP_WORDS[1]} == \"chord\" ]; then");
-    sb.append("                COMPREPLY=( $(compgen -W \"${note_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )");
-    sb.append("              elif [ ${COMP_WORDS[1]} == \"patterns\" ]; then");
-    sb.append("                return 0");
-    sb.append("              elif [ ${COMP_WORDS[1]} == \"fifths\" ]; then");
-    sb.append("                return 0");
-    sb.append("              else");
-    sb.append("                COMPREPLY=( $(compgen -W \"${view_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )");
-    sb.append("              fi");
+    sb.append("            if [ ${COMP_WORDS[1]} == \"chord\" ]; then\n");
+    sb.append("                COMPREPLY=( $(compgen -W \"${note_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
+    sb.append("              elif [ ${COMP_WORDS[1]} == \"patterns\" ]; then\n");
+    sb.append("                return 0\n");
+    sb.append("              elif [ ${COMP_WORDS[1]} == \"fifths\" ]; then\n");
+    sb.append("                return 0\n");
+    sb.append("              elif [ ${COMP_WORDS[1]} == \"lookup\" ]; then\n");
+    sb.append("                return 0\n");
+    sb.append("              else\n");
+    sb.append("                COMPREPLY=( $(compgen -W \"${view_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
+    sb.append("              fi\n");
+    sb.append("            ;;\n");
     sb.append("        3)\n");
     sb.append( "            COMPREPLY=( $(compgen -W \"${note_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
     sb.append("            ;;\n");

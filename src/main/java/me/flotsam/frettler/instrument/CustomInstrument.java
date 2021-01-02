@@ -36,7 +36,6 @@ public class CustomInstrument extends FrettedInstrument {
       customProperties.setStrings(stringNotes);
       customProperties.setFrets(Integer.parseInt(prop.getProperty("frets")));
       customProperties.setName(prop.getProperty("name"));
-      System.out.println(customProperties.getStrings());
     } catch (IOException ex) {
       System.out.println("There was a problem loading the custom.properties");
       System.exit(-1);

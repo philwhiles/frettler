@@ -18,12 +18,14 @@ package me.flotsam.frettler.command;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.jline.terminal.TerminalBuilder;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.BassGuitar;
+import me.flotsam.frettler.instrument.CustomInstrument;
 import me.flotsam.frettler.instrument.Guitar;
 import me.flotsam.frettler.instrument.Mandolin;
 import me.flotsam.frettler.instrument.Ukelele;
@@ -40,7 +42,7 @@ import picocli.CommandLine.Command;
 public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
 
   private static String[] instrumentArgs =
-      new String[] {"GUITAR", "BASSGUITAR", "UKELELE", "MANDOLIN", "BANJO"};
+      new String[] {"CUSTOM", "GUITAR", "BASSGUITAR", "UKELELE", "MANDOLIN", "BANJO"};
   private static String[] viewArgs = new String[] {"HORIZONTAL", "VERTICAL"};
   private static String[] pitchArgs = Arrays.stream(Pitch.values()).map(ip -> ip.name())
       .collect(Collectors.toList()).toArray(new String[] {});
@@ -144,7 +146,8 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
             display(instrument);
             break;
           case KEY_ENTER:
-            System.out.println();
+            System.out.print("\r");
+            System.out.println(StringUtils.repeat(' ', 70));
             display(instrument);
             break;
 
@@ -173,6 +176,9 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
         break;
       case "UKELELE":
         exec(new Ukelele(strings, frets));
+        break;
+      case "CUSTOM":
+        exec(new CustomInstrument());
         break;
     }
   }
