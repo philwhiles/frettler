@@ -84,7 +84,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
 
-  
+
   public void exec(FrettedInstrument instrument) {
     if (instrument instanceof Banjo && isOctaves()) {
       out.println(
@@ -94,33 +94,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
     switch (this.view.getType()) {
       case SEQUENCE:
-        TabView tabView = new TabView(instrument);
-        TabView.Options tabViewOptions =
-            tabView.new Options(intervals, true, !isMono(), isOctaves());
-
-        if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
-          scale = new Scale(this.root, this.intervalPattern);
-          tabView.showScale(scale, tabViewOptions);
-          List<Chord> chords = new ArrayList<>();
-          if (chordMode) {
-            chords = scale.createScaleChords();
-          }
-          if (verbose) {
-            explain(scale, chords);
-          } else {
-            for (Chord aChord : chords) {
-              out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
-                  Colour.RESET));
-            }
-            out.println();
-          }
-        } else {
-          chord = new Chord(this.root, this.intervalPattern);
-          tabView.showChord(chord, tabViewOptions);
-          if (verbose) {
-            out.println(chord.describe(isMono()));
-          }
-        }
+        handleTabView(instrument);
         break;
 
       case HORIZONTAL:
@@ -145,6 +119,38 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
       default:
         break;
+    }
+  }
+
+
+  private void handleTabView(FrettedInstrument instrument) {
+    Chord chord = null;
+    Scale scale = null;
+    TabView tabView = new TabView(instrument);
+    TabView.Options tabViewOptions = tabView.new Options(intervals, true, !isMono(), isOctaves());
+
+    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+      scale = new Scale(this.root, this.intervalPattern);
+      tabView.showScale(scale, tabViewOptions);
+      List<Chord> chords = new ArrayList<>();
+      if (chordMode) {
+        chords = scale.createScaleChords();
+      }
+      if (verbose) {
+        explain(scale, chords);
+      } else {
+        for (Chord aChord : chords) {
+          out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
+              Colour.RESET));
+        }
+        out.println();
+      }
+    } else {
+      chord = new Chord(this.root, this.intervalPattern, this.addedNote);
+      tabView.showChord(chord, tabViewOptions);
+      if (verbose) {
+        out.println(chord.describe(isMono()));
+      }
     }
   }
 
