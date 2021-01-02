@@ -25,7 +25,6 @@ public class IntervalPatternTest {
     
     for (IntervalPattern ip :  IntervalPattern.values()) {
       if (ip.getParentPattern() != null || ip.getAliasPattern() != null) {
-        System.out.println("Skipping " + ip.name());
         continue;
       }
       if (intervals.contains(ip.getIntervals())) {

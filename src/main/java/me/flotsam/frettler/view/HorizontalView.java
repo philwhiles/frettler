@@ -65,7 +65,7 @@ public class HorizontalView implements View {
   public void showChord(Chord chord, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(chord.getTitle() + " ~ " + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
+    out.println(StringUtils.center(chord.getTitle() + "  " + chord.getDetails() + " ~ " + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
 
     initColourMap(chord);

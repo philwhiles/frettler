@@ -238,7 +238,13 @@ public class Chord {
     if (addedNote != null) {
       sb.append("/").append(addedNote.getLabel());
     }
-    sb.append(")    [");
+    sb.append(")");
+    return sb.toString();
+  }
+
+  public String getDetails() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[");
     
     for (ScaleNote cn:chordNotes) {
       Note note = cn.getNote();
@@ -251,7 +257,6 @@ public class Chord {
     sb.replace(sb.length()-2, sb.length()-1, "]");
     return sb.toString();
   }
-
   public String toString() {
     return describe(false);
   }

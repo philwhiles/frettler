@@ -59,6 +59,7 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
+    out.println(StringUtils.center(chord.getDetails(), 30));
     out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "]", 30));
@@ -109,6 +110,7 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), 30));
+    out.println(StringUtils.center(chord.getDetails(), 30));
     out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "]", 30));
@@ -206,7 +208,7 @@ public class VerticalView implements View {
         continue;
       }
       fretsPrinted++;
-      out.print(inlays.contains(fretNum) ? String.format("%2s ", fretNum) : "   ");
+      out.print(inlays.contains(fretNum) ? String.format("    %2s ", fretNum) : "       ");
       int stringNum = 0;
       for (Fret fret : frets) {
         boolean lastString = stringNum == instrument.getStringCount() - 1;
@@ -268,8 +270,8 @@ public class VerticalView implements View {
     out.println(createFretLine("┗", "┻", "┛"));
 
     if (chordChart) {
-      StringBuilder noteBuilder = new StringBuilder("   ");
-      StringBuilder intervalBuilder = new StringBuilder("   ");
+      StringBuilder noteBuilder = new StringBuilder("       ");
+      StringBuilder intervalBuilder = new StringBuilder("       ");
       for (int n = 0; n < instrument.getStringCount(); n++) {
         Note note = noteSummary[n];
         if (note != null) {
@@ -301,7 +303,7 @@ public class VerticalView implements View {
 
   private String createFretLine(String begin, String mid, String end) {
     int strings = instrument.getStringCount();
-    StringBuilder sb = new StringBuilder("    ");
+    StringBuilder sb = new StringBuilder("        ");
     sb.append(begin);
     for (int n = 0; n < strings - 1; n++) {
       sb.append("━━━");
