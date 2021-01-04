@@ -84,6 +84,13 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
 
+  @Option(names = {"-r", "--reverse"},
+      description = "generate sequences from the 1st string")
+  boolean reverse = false;
+
+  @Option(names = {"-z", "--zero"},
+      description = "generate sequences using open strings (zero frets - octaves already taken!)")
+  boolean zero = false;
 
   public void exec(FrettedInstrument instrument) {
     if (instrument instanceof Banjo && isOctaves()) {
@@ -124,34 +131,13 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
 
   private void handleScaleSequenceView(FrettedInstrument instrument) {
-    Chord chord = null;
     Scale scale = null;
+    instrument = FrettedInstrument.getBiggerInstrument(instrument);
     TabView tabView = new TabView(instrument);
-    TabView.Options tabViewOptions = tabView.new Options(intervals, true, !isMono(), isOctaves());
+    TabView.Options tabViewOptions = tabView.new Options(!isMono(), reverse, zero);
 
-//    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
-      scale = new Scale(this.root, this.intervalPattern);
-      tabView.showScale(scale, scaleNoteSequence, tabViewOptions);
-//      List<Chord> chords = new ArrayList<>();
-//      if (chordMode) {
-//        chords = scale.createScaleChords();
-//      }
-//      if (verbose) {
-//        explain(scale, chords);
-//      } else {
-//        for (Chord aChord : chords) {
-//          out.println(String.format("%s%s%s", (isMono() ? "" : Colour.GREEN), aChord.getTitle(),
-//              Colour.RESET));
-//        }
-//        out.println();
-//      }
-//    } else {
-//      chord = new Chord(this.root, this.intervalPattern, this.addedNote);
-//      tabView.showChord(chord, tabViewOptions);
-//      if (verbose) {
-//        out.println(chord.describe(isMono()));
-//      }
-//    }
+    scale = new Scale(this.root, this.intervalPattern);
+    tabView.showScale(scale, sequence, tabViewOptions);
   }
 
   private void handleHorizontalView(FrettedInstrument instrument) {
@@ -195,7 +181,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
-      verticalView.showScale(scale, verticalViewOptions);
+      verticalView.showScale(scale, this.sequence, verticalViewOptions);
       List<Chord> chords = new ArrayList<>();
       if (chordMode) {
         chords = scale.createScaleChords();
@@ -233,7 +219,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         out.println("Could not find matching chord");
       }
     } else {
-      instrument = getBiggerInstrument(instrument);
+      instrument = FrettedInstrument.getBiggerInstrument(instrument);
 
       Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
           FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
@@ -262,7 +248,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
   private void handleChordCommand(FrettedInstrument instrument) {
     Chord chord = null;
-    instrument = getBiggerInstrument(instrument);
+    instrument = FrettedInstrument.getBiggerInstrument(instrument);
     VerticalView chordView = new VerticalView(instrument);
     VerticalView.Options chordViewOptions =
         chordView.new Options(intervals, !isMono(), isOctaves());
@@ -332,31 +318,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     finderView.display(arbitraryScale.getScaleNotes(), finderViewOptions);
   }
 
-  private FrettedInstrument getBiggerInstrument(FrettedInstrument instrument) {
-    FrettedInstrument biggerInstrument = null;
-    switch (instrument.getInstrumentType()) {
-      case GUITAR:
-        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
-        break;
-      case BASSGUITAR:
-        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
-        break;
-      case UKELELE:
-        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 30);
-        break;
-      case MANDOLIN:
-        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 30);
-        break;
-      case BANJO:
-        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
-        break;
-      case CUSTOM:
-        biggerInstrument =
-            new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), 30);
-        break;
-    }
-    return biggerInstrument;
-  }
+
 
   private void explain(Scale scale, List<Chord> chords) {
     out.println("The scale is :");

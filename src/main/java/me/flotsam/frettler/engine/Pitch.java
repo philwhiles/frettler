@@ -17,6 +17,7 @@
 
 package me.flotsam.frettler.engine;
 
+import java.util.Arrays;
 import lombok.Getter;
 
 public enum Pitch {
@@ -26,5 +27,22 @@ public enum Pitch {
 
   private Pitch(String label) {
     this.label = label;
+  }
+  
+  public boolean isBefore(Pitch other) {
+    boolean result = false;
+    if (this == other) {
+      return false;
+    }
+    for (Pitch pitch:values()) {
+      if (pitch == this) {
+        result = true;
+        break;
+      }
+      if (pitch == other) {
+        break;
+      }
+    }
+    return result;
   }
 }

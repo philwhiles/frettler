@@ -33,6 +33,7 @@ import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
+import me.flotsam.frettler.engine.Sequence;
 import me.flotsam.frettler.instrument.Fret;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 
@@ -140,14 +141,20 @@ public class VerticalView implements View {
     display(chordFrets, options, false);
   }
 
-  public void showScale(Scale scale) {
-    showScale(scale, defaultOptions);
+  public void showScale(Scale scale, Sequence sequence) {
+    showScale(scale, sequence, defaultOptions);
   }
 
-  public void showScale(Scale scale, Options options) {
+  public void showScale(Scale scale, Sequence sequence, Options options) {
     List<ChordFret> chordFrets = new ArrayList<>();
 
     initColourMap(scale);
+    List<List<SequenceFretNote>> fretSequence = null;
+    if (sequence != Sequence.NONE) {
+      instrument = FrettedInstrument.getBiggerInstrument(instrument);
+      fretSequence = prepareSequence(scale, sequence, instrument, false, false);
+    }
+
     out.println();
     out.println(StringUtils.center(scale.getTitle(), 30));
     out.println(StringUtils.center(instrument.getLabel() + " ["
@@ -165,6 +172,10 @@ public class VerticalView implements View {
         Optional<ScaleNote> scaleNoteForFret = scale.getScaleNotes().stream()
             .filter(sn -> fret.getNote().getPitch().equals(sn.getNote().getPitch())).findAny();
         if (scaleNoteForFret.isPresent()) {
+          if (fretSequence != null && !fretSequence.get(fret.getStringNum()).stream().anyMatch(sfn->sfn.getFret().equals(fret))) {
+            continue;
+          }
+
           Fret altFret = new Fret(fret.getIndex(), scaleNoteForFret.get().getNote(),
               fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
           chordFrets.add(new ChordFret(altFret, scaleNoteForFret.get().getInterval().get()));
@@ -192,12 +203,13 @@ public class VerticalView implements View {
         .getFret().getFretNum();
 
     int highestFret = 0;
-    Optional<ChordFret> highestFretOpt = chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
-        .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
+    Optional<ChordFret> highestFretOpt =
+        chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
+            .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
     if (highestFretOpt.isEmpty()) {
       // a chord that is just a combo of open or muted strings
     } else {
-     highestFret = highestFretOpt.get() .getFret().getFretNum();
+      highestFret = highestFretOpt.get().getFret().getFretNum();
     }
 
     int fretNum = 0;
@@ -328,8 +340,10 @@ public class VerticalView implements View {
   @Data
   @RequiredArgsConstructor
   class ChordFret {
-    @NonNull private final Fret fret;
-    @NonNull private final ScaleInterval interval;
+    @NonNull
+    private final Fret fret;
+    @NonNull
+    private final ScaleInterval interval;
     private int weighting;
   }
 
