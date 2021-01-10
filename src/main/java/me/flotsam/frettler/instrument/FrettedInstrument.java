@@ -125,23 +125,23 @@ public abstract class FrettedInstrument {
     FrettedInstrument biggerInstrument = null;
     switch (instrument.getInstrumentType()) {
       case GUITAR:
-        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 23);
         break;
       case BASSGUITAR:
-        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 23);
         break;
       case UKELELE:
-        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 23);
         break;
       case MANDOLIN:
-        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 23);
         break;
       case BANJO:
-        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 30);
+        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 23);
         break;
       case CUSTOM:
         biggerInstrument =
-            new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), 30);
+            new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), 23);
         break;
     }
     return biggerInstrument;
@@ -187,8 +187,5 @@ public abstract class FrettedInstrument {
           .filter(id -> id.getInstrumentType() == instrumentType && id.getTuning().equals(tuning))
           .findFirst();
     }
-
-
-
   }
 }

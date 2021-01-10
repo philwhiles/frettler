@@ -62,7 +62,7 @@ Chord definitions have been added for some of the other Frettler instruments as 
 | MANDOLIN                | 129               |
 
 
-For posterity there is a change log [here]Frettler will display the chord it finds using the chord chart view.(https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
+For posterity there is a change log [here]
 
 Here is an example of its output :
 
@@ -354,7 +354,7 @@ Find and display the chord chart matching the provided fret numbering.
 ```
 
 Using this command, Frettler will search its chord definitions, looking for a match, instead of dynamically calculating the entire chord across the fretboard and looking for a note match.
-I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead.
+I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead. Only so many options in the alphabet!
 
 ### Menu Command
 Start Frettler with the menu argument and it will offer a simple one line menu. Depending on your key presses it will display your fretboard over and over, each time 
@@ -447,6 +447,34 @@ source <(./frettler completions)
 
 Tab completion in bash helps greatly with Frettler - bash will complete all of the args for you and show you the possible completions, handy with the Frettler interval pattern names.
 The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
+
+I use macOS for all my work and play, and used linux for many years prior to that. I use the bash shell exclusively (v5.0.7 installed via Homebrew).
+I like to make my life as easy as possible and spend a huge amount of time at the command line - one of the reasons Frettler doesn't have a GUI I guess!
+I keep lots of random personal utils in a bin folder off my home folder, which is in my PATH and executable from any folder in the command line.
+I keep a copy of Frettler in ~/bin and in my ~/.bashrc I also have :
+
+```
+alias f='frettler'
+source <(~bin/frettler completion)
+complete -F _frettler_completions f
+```
+
+Which ensures that whenever I start a new shell session with bash, the completions are loaded, I have an alias for frettler, so
+I can just use 'f' instead of 'frettler' and the completions still work if I need them with the alias.
+I also use the single letter short cuts (see below) in frettler as an alternative to using tab completion - I have tried to make Frettler as
+easy and as helpful as I can! So I often end up using something like :
+
+```
+f g c c chord_maj
+```
+
+instead of :
+
+```
+frettler guitar chord c chord_maj
+```
+
+If you use Frettler for a while, once you have learned its command line verbs, using shortcuts comes more naturall.
 
 ## Customising Frettler Startup
 If the [custom instrument](#Custom-Instrument) doesn't do it for you, you can customise Frettler by writing a wrapper script.

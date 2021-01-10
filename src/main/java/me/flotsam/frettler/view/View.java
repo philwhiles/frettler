@@ -37,11 +37,11 @@ public interface View {
     chord.getChordNotes().forEach(cn -> ColourMap.get(cn.getNote().getPitch()));
   }
 
-  public default List<List<SequenceFretNote>> prepareSequence(Scale scale, Sequence scaleNoteSequence, FrettedInstrument instrument,
-      boolean reversed, boolean open) {
+  public default List<List<SequenceFretNote>> prepareSequence(Scale scale,
+      Sequence scaleNoteSequence, FrettedInstrument instrument, boolean reversed, boolean open, int jump, int group) {
     List<List<SequenceFretNote>> allStringFrets = new ArrayList<>();
     int[] sequence = scaleNoteSequence.getSequence();
-    int seqIdx = 0;
+    int seqIdx = jump;
     List<ScaleNote> notesToUse = new ArrayList<>();
 
     // if (options.isReverse()) {
@@ -59,8 +59,9 @@ public interface View {
     }
     seqIdx = 0;
 
-    Fret lastFret = null;
     for (int i = 0; i < instrument.getFretsByString().size(); i++) {
+      int firstFret = -1;
+      int lastFret = -1;
       List<SequenceFretNote> stringFrets = new ArrayList<>();
       allStringFrets.add(stringFrets);
 
@@ -70,25 +71,27 @@ public interface View {
           continue;
         }
         if (fret.getNote().getPitch() == notesToUse.get(seqIdx).getNote().getPitch()) {
-          // SequenceFretNote lastStringFret =
-          // stringFrets.size() == 0 ? null : stringFrets.get(stringFrets.size() - 1);
-          if (lastFret != null && Math.abs(fret.getFretNum() - lastFret.getFretNum()) > 5) {
-            continue;
+          if (firstFret == -1) {
+            firstFret = fret.getFretNum();
           } else {
-            stringFrets.add(new SequenceFretNote(fret, notesToUse.get(seqIdx).getInterval().get()));
-            lastFret = fret;
-            seqIdx++;
-
-            if (stringFrets.size() == scaleNoteSequence.getGrouping()) {
+            lastFret = fret.getFretNum();
+            if (Math.abs(lastFret - firstFret) > 5 && Math.abs(lastFret + 12 - firstFret) > 5) {
               break;
             }
+          }
+
+          stringFrets.add(new SequenceFretNote(fret, notesToUse.get(seqIdx).getInterval().get()));
+          seqIdx++;
+
+          if (stringFrets.size() == group) {
+            break;
           }
         }
       }
     }
     return allStringFrets;
   }
-  
+
   @Data
   @AllArgsConstructor
   public class SequenceFretNote {

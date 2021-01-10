@@ -37,14 +37,9 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
 public class TabView implements View {
 
   private FrettedInstrument instrument;
-  private Options defaultOptions = new Options(false, false, false);
 
   public TabView(FrettedInstrument instrument) {
     this.instrument = instrument;
-  }
-
-  public void showScale(Scale scale, Sequence scaleNoteSequence) {
-    showScale(scale, scaleNoteSequence, defaultOptions);
   }
 
   public void showScale(Scale scale, Sequence scaleNoteSequence, Options options) {
@@ -57,7 +52,7 @@ public class TabView implements View {
     out.println(StringUtils.center(scaleNoteSequence.getLabel(), 104));
     out.println();
     initColourMap(scale);
-    List<List<SequenceFretNote>> fretSequence = prepareSequence(scale, scaleNoteSequence, instrument, options.isReverse(), options.isOpen());
+    List<List<SequenceFretNote>> fretSequence = prepareSequence(scale, scaleNoteSequence, instrument, options.isReverse(), options.isOpen(), options.getPosition(), options.getGroup());
     display(fretSequence, options);
   }
 
@@ -130,6 +125,8 @@ public class TabView implements View {
     private boolean colour;
     private boolean reverse;
     private boolean open;
+    private int position;
+    private int group;
   }
 }
 
