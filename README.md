@@ -38,7 +38,8 @@ Frettler - A flexible command line program for generating and displaying musical
 ## Synopsis
 This is a CLI program, written in Java 11, that calculates scales, modes and chords and displays them on fretboard representations.
 It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukelele and banjo, but through use
-of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine.
+of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine. If your instrument or its tuning is not one
+of the out of box instruments, take a look at the [Custom Instrument](#Custom-Instrument)
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
@@ -332,19 +333,19 @@ If you would like to have additional chord fingerings added, email me with the f
 'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
 known chords, and in time I will add an optional argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
 
-#### Added notes
-With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the `-added' argument followed by the added note.
+##### Added notes
+With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the optional `-added' argument followed by the added note.
 
 #### Box Subcommand
-Frettler can show a 'boxed' view of a scale, centered around one part of the fretboard, for practising. This has only recently been added, and requires a few tweaks to it note selection, so pull the code
-periodically and check for updates. It looks at the scale you want boxing, and displays the notes in the scale sequence, by default starting the box sequence at the first occurence of the scales root not on
+Frettler can show a 'boxed' view of a scale, centered around one part of the fretboard, for practising. This has only recently been added, and requires a few tweaks to its note selection, so pull the code
+periodically and check for updates. It looks at the scale you want boxing, and displays the notes in the scale sequence, by default starting the box sequence at the first occurence of the scales root note on
 the lowest string and then finding the following notes (2 for diatonic scales or 3 for pentatonic scales), on the same string before moving to the next highest string. This produces the typical scale boxes that 
 you see on various sites and tutorials. 
 
-In the `box` view, the root of the scale is displayed inverted, to make it stand out. This is because there are two optional arguments you can use with the `box` subcommand, which make the sequence of the scale's
+In the `box` view, the root of the scale is displayed inverted, to make it stand out. This is because there are two optional arguments you can use with the `box` subcommand, which make the sequence of the scales
 notes different, and keeping sight of the root helps when practicing:
 
-`--group' or `-g` followed by a number determines the number of notes to look for on each string, before moving to the next string. If not used, the default group is 0.
+`--group` or `-g` followed by a number determines the number of notes to look for on each string, before moving to the next string. If not used, the default group is 0.
 `--position` or `-p` followed by a number determines where the box sequence starts in the scale. If not used, it default to 0, meaning the sequence starts on the root or P1. Use `-p 1` and the sequence
 will start on the 2nd note of the scale.
 
