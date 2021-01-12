@@ -30,9 +30,11 @@ import lombok.RequiredArgsConstructor;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleInterval;
 import me.flotsam.frettler.engine.ScaleNote;
+import me.flotsam.frettler.engine.Sequence;
 import me.flotsam.frettler.instrument.Fret;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 
@@ -45,7 +47,7 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
  */
 public class VerticalView implements View {
 
-  private Options defaultOptions = new Options(false, true, false);
+  private static final int TITLE_CENTER = 37;
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
   private FrettedInstrument instrument;
 
@@ -58,11 +60,11 @@ public class VerticalView implements View {
     Chord chord = chordBankInstance.getChord();
     initColourMap(chord);
     out.println();
-    out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center(chord.getDetails(), 30));
+    out.println(StringUtils.center(chord.getTitle(), TITLE_CENTER));
+    out.println(StringUtils.center(chord.getDetails(), TITLE_CENTER));
     out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "]", 30));
+        + "]", TITLE_CENTER));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
@@ -89,19 +91,20 @@ public class VerticalView implements View {
               chordFrets
                   .add(new ChordFret(altFret, chordScaleNoteForFret.get().getInterval().get()));
             }
-          } else {
-            chordFrets
-                .add(new ChordFret(new Fret(-1, null, -1, stringNum, null, 0), ScaleInterval.P1));
           }
         }
         stringNum++;
       }
     }
-    display(chordFrets, options, true);
-  }
-
-  public void showArpeggio(Chord chord) {
-    showArpeggio(chord, defaultOptions);
+    for (int sn = 0; sn < chordBankInstance.getChordDefinition().getStrings().size(); sn++) {
+      if (chordBankInstance.getChordDefinition().getStrings().get(sn).equalsIgnoreCase("x")) {
+        chordFrets.add(new ChordFret(new Fret(-1, null, -1, sn, null, 0), ScaleInterval.P1));
+      }
+    }
+    chordFrets = chordFrets.stream()
+        .sorted((a, b) -> a.getFret().getStringNum() - b.getFret().getStringNum())
+        .collect(Collectors.toList());
+    display(chord.getChordRoot().getPitch(), chordFrets, options, ViewMode.CHORD);
   }
 
   public void showArpeggio(Chord chord, Options options) {
@@ -109,8 +112,8 @@ public class VerticalView implements View {
 
     initColourMap(chord);
     out.println();
-    out.println(StringUtils.center(chord.getTitle(), 30));
-    out.println(StringUtils.center(chord.getDetails(), 30));
+    out.println(StringUtils.center(chord.getTitle(), TITLE_CENTER));
+    out.println(StringUtils.center(chord.getDetails(), TITLE_CENTER));
     out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "]", 30));
@@ -137,24 +140,39 @@ public class VerticalView implements View {
         }
       }
     }
-    display(chordFrets, options, false);
+    chordFrets = chordFrets.stream()
+        .sorted((a, b) -> a.getFret().getStringNum() - b.getFret().getStringNum())
+        .collect(Collectors.toList());
+    display(chord.getChordRoot().getPitch(), chordFrets, options, ViewMode.VERTICAL);
   }
 
-  public void showScale(Scale scale) {
-    showScale(scale, defaultOptions);
+  public void showScaleBox(Scale scale, Sequence sequence, Options options) {
+    showScale(scale, sequence, options, ViewMode.BOX);
   }
-
-  public void showScale(Scale scale, Options options) {
+  public void showScale(Scale scale, Sequence sequence, Options options) {
+    showScale(scale, sequence, options, ViewMode.VERTICAL);
+  }
+  private void showScale(Scale scale, Sequence sequence, Options options, ViewMode viewMode) {
     List<ChordFret> chordFrets = new ArrayList<>();
 
     initColourMap(scale);
+
     out.println();
-    out.println(StringUtils.center(scale.getTitle(), 30));
+    out.println(StringUtils.center(scale.getTitle(), TITLE_CENTER));
     out.println(StringUtils.center(instrument.getLabel() + " ["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "]", 30));
+        + "]", TITLE_CENTER));
     out.println();
 
+    List<List<SequenceFretNote>> fretSequence = null;
+    if (sequence != Sequence.NONE) {
+      instrument = FrettedInstrument.getBiggerInstrument(instrument);
+      fretSequence = prepareSequence(scale, sequence, instrument, false, options.isOpen(),
+          options.getPosition(), options.getGroup());
+      out.println(StringUtils.center(sequence.getLabel(), TITLE_CENTER));
+      out.println(StringUtils.center(
+          "Position: " + options.getPosition() + " Group: " + options.getGroup(), TITLE_CENTER));
+    }
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
 
     for (List<Fret> fretFrets : fretboardFrets) {
@@ -165,16 +183,24 @@ public class VerticalView implements View {
         Optional<ScaleNote> scaleNoteForFret = scale.getScaleNotes().stream()
             .filter(sn -> fret.getNote().getPitch().equals(sn.getNote().getPitch())).findAny();
         if (scaleNoteForFret.isPresent()) {
+          if (fretSequence != null && !fretSequence.get(fret.getStringNum()).stream()
+              .anyMatch(sfn -> sfn.getFret().equals(fret))) {
+            continue;
+          }
+
           Fret altFret = new Fret(fret.getIndex(), scaleNoteForFret.get().getNote(),
               fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
           chordFrets.add(new ChordFret(altFret, scaleNoteForFret.get().getInterval().get()));
         }
       }
     }
-    display(chordFrets, options, false);
+    chordFrets = chordFrets.stream()
+        .sorted((a, b) -> a.getFret().getStringNum() - b.getFret().getStringNum())
+        .collect(Collectors.toList());
+    display(scale.getRootNote().getPitch(), chordFrets, options, viewMode);
   }
 
-  private void display(List<ChordFret> chordFrets, Options options, boolean chordChart) {
+  private void display(Pitch root, List<ChordFret> chordFrets, Options options, ViewMode viewMode) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();
     for (ChordFret chordFret : chordFrets) {
@@ -192,12 +218,54 @@ public class VerticalView implements View {
         .getFret().getFretNum();
 
     int highestFret = 0;
-    Optional<ChordFret> highestFretOpt = chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
-        .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
-    if (highestFretOpt.isEmpty()) {
-      // a chord that is just a combo of open or muted strings
-    } else {
-     highestFret = highestFretOpt.get() .getFret().getFretNum();
+    Optional<ChordFret> highestFretOpt =
+        chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
+            .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
+    if (!highestFretOpt.isEmpty()) { // else a chord that is just a combo of open or muted strings
+      highestFret = highestFretOpt.get().getFret().getFretNum();
+    }
+
+
+    if (viewMode == ViewMode.CHORD) {
+      // the chordfrets are in string order 0 being low E
+      // work thru strings to the right but not the last one
+      for (int cfn = 0; cfn < chordFrets.size() - 1; cfn++) {
+        ChordFret chordFret = chordFrets.get(cfn);
+        int fretNum = chordFret.getFret().getFretNum();
+
+        // an 'x' or 'o' string
+        if (chordFret.getFret().getNote() == null || fretNum == 0) {
+          continue;
+        }
+
+        // assume barred
+        boolean barred = true;
+        boolean paired = false;
+        if (fretNum == highestFret) {
+          for (int cfx = cfn + 1; cfx < chordFrets.size(); cfx++) {
+            ChordFret toTheRight = chordFrets.get(cfx);
+            if (toTheRight.getFret().getFretNum() == 0 || toTheRight.getFret().getNote() == null) {
+              barred = false;
+              break;
+            }
+            if (toTheRight.getFret().getFretNum() == fretNum) {
+              paired = true;
+            }
+          }
+          if (barred && paired) {
+            for (int cfx = cfn; cfx < chordFrets.size(); cfx++) {
+              ChordFret cf = chordFrets.get(cfx);
+              if (cf.getFret().getFretNum() == fretNum) {
+                cf.setBarred(true);
+                if (cfx == cfn) {
+                  cf.setStartsBarre(true);
+                }
+              }
+            }
+            break;
+          }
+        }
+      }
     }
 
     int fretNum = 0;
@@ -207,12 +275,13 @@ public class VerticalView implements View {
         fretNum++;
         continue;
       }
+      boolean barring = false;
       fretsPrinted++;
       out.print(inlays.contains(fretNum) ? String.format("    %2s ", fretNum) : "       ");
       int stringNum = 0;
       for (Fret fret : frets) {
         boolean lastString = stringNum == instrument.getStringCount() - 1;
-        String ldr = fretNum == 0 ? " " : "┋";
+        String ldr = fretNum == 0 ? " " : "┆";
 
         if (deadStrings.contains(stringNum)) {
           if (fretNum == 0) {
@@ -226,32 +295,60 @@ public class VerticalView implements View {
                   && fret.getFretNum() == ct.getFret().getFretNum()).findAny();
 
           if (chordFret.isPresent()) {
+            ChordFret theChordFret = chordFret.get();
             String fretLabel = null;
-            if (chordChart) {
+            if (viewMode == ViewMode.CHORD) {
               fretLabel = fretNum == 0 ? "◯" : "⬤";
-              intervalSummary[stringNum] = chordFret.get().getInterval();
-              Note chordFretNote = chordFret.get().getFret().getNote();
+              intervalSummary[stringNum] = theChordFret.getInterval();
+              Note chordFretNote = theChordFret.getFret().getNote();
               noteSummary[stringNum] = chordFretNote;
               octaveSummary[stringNum] = fret.getOctave();
             } else {
               if (options.isIntervals()) {
-                fretLabel = chordFret.get().getInterval().getLabel();
+                fretLabel = theChordFret.getInterval().getLabel();
               } else {
-                Note chordFretNote = chordFret.get().getFret().getNote();
+                Note chordFretNote = theChordFret.getFret().getNote();
                 fretLabel = chordFretNote.getLabel();
               }
+            }
+            barring = theChordFret.isBarred();
+            String fretStr =
+                StringUtils.center(fretLabel, lastString ? 3 : 4, (barring ? '━' : ' '));
+            if (theChordFret.isStartsBarre()) {
+              fretStr = fretStr.replaceFirst("^━", " ");
+            } else if (lastString) {
+              fretStr = fretStr.replaceFirst("━$", " ");
             }
             if (options.isColour()) {
               Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
                   : ColourMap.get(fret.getNote().getPitch());
-              out.print(String.format("%s%s%s", col,
-                  StringUtils.center(fretLabel, lastString ? 3 : 4, ' '), Colour.RESET));
+              Colour special = (viewMode == ViewMode.BOX && fret.getNote().getPitch() == root) ? Colour.INVERSE : Colour.NORMAL;
+
+              StringBuilder colourFretStr = new StringBuilder();
+              boolean after = false;
+              for (int i = 0; i < fretStr.length(); i++) {
+                String theChar = fretStr.substring(i, i + 1);
+                if (!after) {
+                  if (!theChar.equals(" ") && !theChar.equals("━")) {
+                    colourFretStr.append(special);
+                    colourFretStr.append(col);
+                    after = true;
+                  }
+                } else {
+                  if (theChar.equals(" ") || theChar.equals("━")) {
+                    colourFretStr.append(Colour.RESET);
+                  }
+                }
+                colourFretStr.append(theChar);
+              }
+              out.print(colourFretStr.toString());
             } else {
-              out.print(
-                  String.format("%s", StringUtils.center(fretLabel, lastString ? 3 : 4, ' ')));
+              out.print(String.format("%s", fretStr));
             }
-          } else {
-            out.print(String.format(" %s%s", ldr, StringUtils.repeat(' ', lastString ? 1 : 2)));
+          } else { // chordFret.isPresent()
+            char c = (barring ? '━' : ' ');
+            ldr = barring ? "┿" : ldr;
+            out.print(String.format("%s%s%s", c, ldr, StringUtils.repeat(c, lastString ? 1 : 2)));
           }
         }
         stringNum++;
@@ -261,15 +358,15 @@ public class VerticalView implements View {
         break;
       }
       if (fretNum == 0) {
-        out.println(createFretLine("┏", "┳", "┓"));
+        out.println(createFretLine("┌", "┬", "┐"));
       } else if (fretNum < instrument.getFrets()) {
-        out.println(createFretLine("┣", "╋", "┫"));
+        out.println(createFretLine("├", "┼", "┤"));
       }
       fretNum++;
     }
-    out.println(createFretLine("┗", "┻", "┛"));
+    out.println(createFretLine("└", "┴", "┘"));
 
-    if (chordChart) {
+    if (viewMode == ViewMode.CHORD) {
       StringBuilder noteBuilder = new StringBuilder("       ");
       StringBuilder intervalBuilder = new StringBuilder("       ");
       for (int n = 0; n < instrument.getStringCount(); n++) {
@@ -306,7 +403,7 @@ public class VerticalView implements View {
     StringBuilder sb = new StringBuilder("        ");
     sb.append(begin);
     for (int n = 0; n < strings - 1; n++) {
-      sb.append("━━━");
+      sb.append("───");
       if (n < strings - 2) {
         sb.append(mid);
       } else {
@@ -322,15 +419,25 @@ public class VerticalView implements View {
     private final boolean intervals;
     private final boolean colour;
     private final boolean octaves;
+    private final boolean open;
+    private int position;
+    private int group;
   }
 
 
   @Data
   @RequiredArgsConstructor
   class ChordFret {
-    @NonNull private final Fret fret;
-    @NonNull private final ScaleInterval interval;
-    private int weighting;
+    @NonNull
+    private final Fret fret;
+    @NonNull
+    private final ScaleInterval interval;
+    private boolean barred;
+    private boolean startsBarre;
+  }
+  
+  private enum ViewMode {
+    VERTICAL, CHORD, BOX;
   }
 
 }

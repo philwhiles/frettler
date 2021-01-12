@@ -50,14 +50,6 @@ public class HorizontalView implements View {
     this.instrument = instrument;
   }
 
-  public void showFretboard() {
-    showScale(Scale.CHROMATIC_SCALE, defaultOptions);
-  }
-
-  public void showFretboard(Options options) {
-    showScale(Scale.CHROMATIC_SCALE, options);
-  }
-
   public void showChord(Chord chord) {
     showChord(chord, defaultOptions);
   }

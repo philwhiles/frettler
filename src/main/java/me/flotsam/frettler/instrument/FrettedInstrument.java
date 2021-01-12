@@ -121,6 +121,32 @@ public abstract class FrettedInstrument {
     return fretsByString.size();
   }
 
+  public static FrettedInstrument getBiggerInstrument(FrettedInstrument instrument) {
+    FrettedInstrument biggerInstrument = null;
+    switch (instrument.getInstrumentType()) {
+      case GUITAR:
+        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        break;
+      case BASSGUITAR:
+        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        break;
+      case UKELELE:
+        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        break;
+      case MANDOLIN:
+        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        break;
+      case BANJO:
+        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        break;
+      case CUSTOM:
+        biggerInstrument =
+            new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        break;
+    }
+    return biggerInstrument;
+  }
+
   public enum InstrumentType {
     //@formatter:off
     CUSTOM("Custom Instrument"),
@@ -140,10 +166,9 @@ public abstract class FrettedInstrument {
   }
 
   public enum InstrumentDefinition {
-    GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE"),
-    BASSGUITAR_EADG(InstrumentType.BASSGUITAR, "EADG"),
-    MANDOLIN_GDAE(InstrumentType.MANDOLIN, "GDAE"),
-    UKELELE_GCEA(InstrumentType.UKELELE, "GCEA");
+    GUITAR_EADGBE(InstrumentType.GUITAR, "EADGBE"), BASSGUITAR_EADG(InstrumentType.BASSGUITAR,
+        "EADG"), MANDOLIN_GDAE(InstrumentType.MANDOLIN,
+            "GDAE"), UKELELE_GCEA(InstrumentType.UKELELE, "GCEA");
 
     @Getter
     private InstrumentType instrumentType;
@@ -152,7 +177,8 @@ public abstract class FrettedInstrument {
 
     private InstrumentDefinition(InstrumentType instrumentType, String tuning) {
       this.instrumentType = instrumentType;
-      this.tuning = Arrays.asList(tuning.split("")).stream().map(s->Note.valueOf(s)).collect(Collectors.toList());
+      this.tuning = Arrays.asList(tuning.split("")).stream().map(s -> Note.valueOf(s))
+          .collect(Collectors.toList());
     }
 
     public static Optional<InstrumentDefinition> findInstrument(InstrumentType instrumentType,

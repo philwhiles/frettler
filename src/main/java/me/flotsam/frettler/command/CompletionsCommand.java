@@ -17,6 +17,7 @@ package me.flotsam.frettler.command;
 
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Pitch;
+import me.flotsam.frettler.engine.Sequence;
 import picocli.CommandLine.Command;
 
 /**
@@ -40,7 +41,7 @@ public class CompletionsCommand implements Runnable {
     sb.append("    instr_opts=\"menu lookup patterns fifths custom guitar bassguitar ukelele mandolin banjo\"\n");
 
     sb.append("    local view_opts\n");
-    sb.append("    view_opts=\"horizontal vertical chord find display\"\n");
+    sb.append("    view_opts=\"horizontal vertical chord find display box tab\"\n");
 
     sb.append("    local note_opts\n");
     sb.append("    note_opts=\"");
@@ -60,6 +61,13 @@ public class CompletionsCommand implements Runnable {
     sb.replace(sb.length() - 1, sb.length(), "");
     sb.append("\"\n");
 
+    sb.append("    local sequence_opts\n");
+    sb.append("    sequence_opts=\"");
+    for (Sequence pattern : Sequence.values()) {
+      sb.append(pattern.name().toLowerCase()).append(" ");
+    }
+    sb.replace(sb.length() - 1, sb.length(), "");
+    sb.append("\"\n");
     //@formatter:off
     sb.append("    case $COMP_CWORD in\n");
     sb.append("        1)\n");
@@ -83,6 +91,9 @@ public class CompletionsCommand implements Runnable {
     sb.append("            ;;\n");
     sb.append("        4)\n");
     sb.append( "            COMPREPLY=( $(compgen -W \"${pattern_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
+    sb.append("            ;;\n");
+    sb.append("        5)\n");
+    sb.append( "            COMPREPLY=( $(compgen -W \"${sequence_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
     sb.append("            ;;\n");
     sb.append("    esac\n");
     sb.append("    return 0\n");

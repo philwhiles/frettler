@@ -132,6 +132,14 @@ public class Scale {
     }
   }
 
+  public ScaleNote getNthScaleNote(int n) {
+    ScaleNote rootNote = head;
+    for (int i=1; i < n;i++) {
+      rootNote = rootNote.getNextScaleNote();
+    }
+    return rootNote;
+  }
+  
   public Optional<ScaleNote> findScaleNote(Note note) {
     ScaleNote currentNoteNode = head;
 

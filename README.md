@@ -8,11 +8,14 @@ Frettler - A flexible command line program for generating and displaying musical
 - [Tutorial](#Tutorial)
 - [Arguments](#Arguments)
   - [Instrument Commands](#Instrument-Commands)
-    - [Required Arguments](#Instrument-Commands)
+    - [Custom Instrument](#Custom-Instrument)
+    - [Required Arguments](#Required-Arguments)
     - [Optional Arguments](#Optional-Arguments)
     - [Verbose Mode](#Verbose-Mode)
     - [Chord Subcommand](#Chord-Subcommand)
       - [Added Notes](#Added-Notes)
+    - [Box Subcommand](#Box-Subcommand)
+    - [Tab Subcommand](#Tab-Subcommand)
     - [Display Subcommand](#Display-Subcommand)
     - [Find Subcommand](#Find-Subcommand)
   - [Menu Command](#Menu-Command)
@@ -39,10 +42,10 @@ of the optional arguments, can display its full scales and chords for any frette
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
-**UPDATE**: Frettler now has a `custom` instrument, configured through properties. Rather than have to define your strings in each invocation, edit the properties
-file and each time you use `custom` as the instrument, that will be the default. See [Custom Instrument](#Custom-Instrument).
+**UPDATE** Box and Tab subcommands have been added which display a vertical and a tabsheet view of an isolated scale sequence.
 
-**UPDATE**: Frettler can now display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
+
+Frettler can display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
 With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
 box, making the rendering consistent with a typical chord chart, and easy to read.
@@ -62,11 +65,11 @@ Chord definitions have been added for some of the other Frettler instruments as 
 | MANDOLIN                | 129               |
 
 
-For posterity there is a change log [here]Frettler will display the chord it finds using the chord chart view.(https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
+For posterity there is a change log [here]
 
 Here is an example of its output :
 
-<img src="https://github.com/philwhiles/frettler/blob/master/demo1.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/images/example.png"/>
 
 ## Building
 Easily build Frettler from the command line, but there are caveats:
@@ -187,7 +190,7 @@ With :
 
 You will get :
 
-<img src="https://github.com/philwhiles/frettler/blob/master/irish-bouzouki.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/images/irish-bouzouki.png"/>
 
 
 #### Required Arguments 
@@ -262,7 +265,7 @@ For example:
 
 Produces (truncated output here) :
 
-<img src="https://github.com/philwhiles/frettler/blob/master/demo-verbose.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/images/verbose.png"/>
 
 #### Chord Subcommand 
 The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, and gives a summary below
@@ -277,7 +280,11 @@ ie to get frettler to show the fingering for 'Am':
 
 Produces:
 
-<img src="https://github.com/philwhiles/frettler/blob/master/chord.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/images/chord.png"/>
+
+If it is a barre chord, then frettler will show you:
+
+<img src="https://github.com/philwhiles/frettler/blob/master/images/barre.png"/>
 
 The `chord` mode also allows use of the `--octaves` and `--mono` arguments.
 
@@ -310,7 +317,7 @@ The database currently contains over 1000 chords for guitar, six string, standar
 If you currently choose an instrument other than 'guitar' or use the '--strings' argument, frettler will politely exit, as it will not have a chord definition for that
 instrument/tuning combination. Until you email it to me and I add it to Frettler for you!
 
-The 'chord' feature is new, and over time I would like to build up the data in the database such that it can display chord fingerings for a wider selection of guitar chords,
+The 'chord' feature is fairly new, and over time I would like to build up the data in the database such that it can display chord fingerings for a wider selection of guitar chords,
 but also chords for other instruments, and with different tunings.
 
 If you would like to have additional chord fingerings added, email me with the following info, and I will gladly add them for you:
@@ -328,6 +335,38 @@ known chords, and in time I will add an optional argument and the wherewithall t
 #### Added notes
 With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the `-added' argument followed by the added note.
 
+#### Box Subcommand
+Frettler can show a 'boxed' view of a scale, centered around one part of the fretboard, for practising. This has only recently been added, and requires a few tweaks to it note selection, so pull the code
+periodically and check for updates. It looks at the scale you want boxing, and displays the notes in the scale sequence, by default starting the box sequence at the first occurence of the scales root not on
+the lowest string and then finding the following notes (2 for diatonic scales or 3 for pentatonic scales), on the same string before moving to the next highest string. This produces the typical scale boxes that 
+you see on various sites and tutorials. 
+
+In the `box` view, the root of the scale is displayed inverted, to make it stand out. This is because there are two optional arguments you can use with the `box` subcommand, which make the sequence of the scale's
+notes different, and keeping sight of the root helps when practicing:
+
+`--group' or `-g` followed by a number determines the number of notes to look for on each string, before moving to the next string. If not used, the default group is 0.
+`--position` or `-p` followed by a number determines where the box sequence starts in the scale. If not used, it default to 0, meaning the sequence starts on the root or P1. Use `-p 1` and the sequence
+will start on the 2nd note of the scale.
+
+Here is an example of a boxed diatonic chord, using `./frettler guitar box c scale_major` :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/images/diatonic-box.png"/>
+
+And here is an example of a boxed diatonic chord, using `./frettler guitar box c scale_major_pentatonic` :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/images/pentatonic-box.png"/>
+
+The idea for the boxing came from an experiment with practice sequences, which first triggered the development of the `tab` subcommand. I tried a wide variety of practise sequences as used in the
+open source project 'Fretboard' (see credits), but the results were quite mixed. The jury is out on those sequences, but I might resurrect those later.
+
+#### Tab Subcommand
+As mentioned above, the `tab` subcommand came about from experimenting with sequences, but they were parked for the time being. But I realised that the `tab` might be useful for practising the boxed scales 
+so it stayed. If you want to see a standard tab for a boxed scale, just use `./frettler guitar box c scale_major` :
+
+<img src="https://github.com/philwhiles/frettler/blob/master/images/tab.png"/>
+
+Just like the `box` subcommand, the `--group` and `--position` options will move the tab sequence around for you.
+
 #### Display Subcommand
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
 c and g, try:
@@ -343,7 +382,7 @@ One way of getting Frettler to do a reverse chord lookup is to use `find` as the
 ./frettler guitar find --notes As,D,f
 ```
 
-With this form, frettler will display the chord found using its Vertical view on the selected instrument (and still handles `--strings` and `--frets`).
+With this form, frettler will display the chord found using its Vertical view on the selected instrument ().
 With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
 
 #### Find by fingering
@@ -354,13 +393,13 @@ Find and display the chord chart matching the provided fret numbering.
 ```
 
 Using this command, Frettler will search its chord definitions, looking for a match, instead of dynamically calculating the entire chord across the fretboard and looking for a note match.
-I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead.
+I would have used `--fingers` but `--frets` was there first, and as the shortform for that is `-f`, I opted for `digits` instead. Only so many options in the alphabet!
 
 ### Menu Command
 Start Frettler with the menu argument and it will offer a simple one line menu. Depending on your key presses it will display your fretboard over and over, each time 
 reflecting your choices. It will become apparent when you start it ie `./frettler menu`:
 
-<img src="https://github.com/philwhiles/frettler/blob/master/demo-menu.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/images/demo-menu.png"/>
 
 All the usual instrument mode optional arguments can be used when first starting Frettler in menu mode (`--intervals` `--verbose` `--chords` `--mono` `--octaves` `--strings` `--frets`). 
 The first three of those can be toggled with key presses once in menu mode, while the others will be used constantly.
@@ -448,6 +487,34 @@ source <(./frettler completions)
 Tab completion in bash helps greatly with Frettler - bash will complete all of the args for you and show you the possible completions, handy with the Frettler interval pattern names.
 The interval patterns all have a prefix or either 'scale_', 'mode_' or 'chord_' largely to allow the tab completion to show you just the selection of patterns that is relevant to you.
 
+I use macOS for all my work and play, and used linux for many years prior to that. I use the bash shell exclusively (v5.0.7 installed via Homebrew).
+I like to make my life as easy as possible and spend a huge amount of time at the command line - one of the reasons Frettler doesn't have a GUI I guess!
+I keep lots of random personal utils in a bin folder off my home folder, which is in my PATH and executable from any folder in the command line.
+I keep a copy of Frettler in ~/bin and in my ~/.bashrc I also have :
+
+```
+alias f='frettler'
+source <(~bin/frettler completion)
+complete -F _frettler_completions f
+```
+
+Which ensures that whenever I start a new shell session with bash, the completions are loaded, I have an alias for frettler, so
+I can just use 'f' instead of 'frettler' and the completions still work if I need them with the alias.
+I also use the single letter short cuts (see below) in frettler as an alternative to using tab completion - I have tried to make Frettler as
+easy and as helpful as I can! So I often end up using something like :
+
+```
+f g c c chord_maj
+```
+
+instead of :
+
+```
+frettler guitar chord c chord_maj
+```
+
+If you use Frettler for a while, once you have learned its command line verbs, using shortcuts comes more naturall.
+
 ## Customising Frettler Startup
 If the [custom instrument](#Custom-Instrument) doesn't do it for you, you can customise Frettler by writing a wrapper script.
 If you find yourself regularly using Frettler with the same old optional arguments, say the `--strings` you can make your life easier by creating your own script wrapping the 
@@ -524,5 +591,6 @@ This work is provided as is, with no warranties or guarantees, and is subject to
 
 ## Contact
 If you have any issues with running Frettler, questions or can help providing input, chord fingerings or even code, do please get in touch.
+And if you like Frettler, star the GitHub repo, top right of the page, and I shall at least get the satisfaction of knowing that you like and use Frettler.
 
 email: <phil.whiles@gmail.com>
