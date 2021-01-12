@@ -31,6 +31,7 @@ import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
+import me.flotsam.frettler.engine.Sequence;
 import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.BassGuitar;
 import me.flotsam.frettler.instrument.CustomInstrument;
@@ -84,21 +85,18 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
 
-  @Option(names = {"-r", "--reverse"},
-      description = "generate sequences from the 1st string")
+  @Option(names = {"-r", "--reverse"}, description = "generate sequences from the 1st string")
   boolean reverse = false;
 
   @Option(names = {"-z", "--zero"},
       description = "generate sequences using open strings (zero frets - octaves already taken!)")
   boolean zero = false;
 
-  @Option(names = {"-g", "--group"}, paramLabel = "num",
-      description = "sequence grouping")
-  Integer group = 3;
+  @Option(names = {"-g", "--group"}, paramLabel = "num", description = "box grouping")
+  Integer group = null;
 
-  @Option(names = {"-p", "--position"}, paramLabel = "num",
-      description = "sequence position")
-  Integer position = 0;
+  @Option(names = {"-p", "--position"}, paramLabel = "num", description = "box position")
+  Integer position = null;
 
   public void exec(FrettedInstrument instrument) {
     if (instrument instanceof Banjo && isOctaves()) {
@@ -108,8 +106,12 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     }
 
     switch (this.view.getType()) {
-      case SEQUENCE:
-        handleScaleSequenceView(instrument);
+      case TAB:
+        handleScaleTabView(instrument);
+        break;
+
+      case BOX:
+        handleScaleBoxView(instrument);
         break;
 
       case HORIZONTAL:
@@ -137,15 +139,54 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     }
   }
 
+  private void handleScaleBoxView(FrettedInstrument instrument) {
+    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.SCALE) {
+      out.println("The interval pattern for the Box view must be a scale pattern");
+      return;
+    } else {
+      Scale scale = new Scale(this.root, this.intervalPattern);
+      Sequence sequence = null;
+      int scaleSize = scale.getScaleNotes().size();
+      if (scaleSize == 5) {
+        sequence = Sequence.PENTATONIC_BOX;
+        position = position == null ? 0 : position % scaleSize;
+        group = group == null ? 2 : group;
+      } else {
+        sequence = Sequence.DIATONIC_BOX;
+        position = position == null ? 0 : position % scaleSize;
+        group = group == null ? 3 : group;
+      }
+      VerticalView verticalView = new VerticalView(instrument);
+      VerticalView.Options verticalViewOptions =
+          verticalView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
 
-  private void handleScaleSequenceView(FrettedInstrument instrument) {
-    Scale scale = null;
-    instrument = FrettedInstrument.getBiggerInstrument(instrument);
-    TabView tabView = new TabView(instrument);
-    TabView.Options tabViewOptions = tabView.new Options(!isMono(), reverse, zero, position, group);
+      verticalView.showScaleBox(scale, sequence, verticalViewOptions);
+    }
+  }
 
-    scale = new Scale(this.root, this.intervalPattern);
-    tabView.showScale(scale, sequence, tabViewOptions);
+  private void handleScaleTabView(FrettedInstrument instrument) {
+    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.SCALE) {
+      out.println("The interval pattern for the Tab view must be a scale pattern");
+      return;
+    } else {
+      Scale scale = new Scale(this.root, this.intervalPattern);
+      int scaleSize = scale.getScaleNotes().size();
+      if (scaleSize == 5) {
+        sequence = Sequence.PENTATONIC_BOX;
+        position = position == null ? 0 : position % scaleSize;
+        group = group == null ? 2 : group;
+      } else {
+        sequence = Sequence.DIATONIC_BOX;
+        position = position == null ? 0 : position % scaleSize;
+        group = group == null ? 3 : group;
+      }
+      instrument = FrettedInstrument.getBiggerInstrument(instrument);
+      TabView tabView = new TabView(instrument);
+      TabView.Options tabViewOptions =
+          tabView.new Options(!isMono(), reverse, zero, position, group);
+
+      tabView.showScale(scale, sequence, tabViewOptions);
+    }
   }
 
   private void handleHorizontalView(FrettedInstrument instrument) {
@@ -185,7 +226,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     Scale scale = null;
     VerticalView verticalView = new VerticalView(instrument);
     VerticalView.Options verticalViewOptions =
-        verticalView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
+        verticalView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
 
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
@@ -215,7 +256,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   private void handleFindCommand(FrettedInstrument instrument) {
     Chord chord = null;
     VerticalView findView = new VerticalView(instrument);
-    VerticalView.Options findViewOptions = findView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
+    VerticalView.Options findViewOptions =
+        findView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
     if (notes != null) {
       Optional<Chord> foundChordOpt = Chord.findChord(notes);
       if (foundChordOpt.isPresent()) {
@@ -226,7 +268,6 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       } else {
         out.println("Could not find matching chord");
       }
-    } else {
       instrument = FrettedInstrument.getBiggerInstrument(instrument);
 
       Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
@@ -255,57 +296,62 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   }
 
   private void handleChordCommand(FrettedInstrument instrument) {
-    Chord chord = null;
-    instrument = FrettedInstrument.getBiggerInstrument(instrument);
-    VerticalView chordView = new VerticalView(instrument);
-    VerticalView.Options chordViewOptions =
-        chordView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
-
-    Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
-        FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
-            instrument.getStringNotes());
-    if (optInstrument.isEmpty()) {
-      out.println("The current instrument is not currently defined for chords");
+    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+      out.println("The interval pattern for the Chord view must be a chord pattern");
       return;
     } else {
-      FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
+      Chord chord = null;
+      instrument = FrettedInstrument.getBiggerInstrument(instrument);
+      VerticalView chordView = new VerticalView(instrument);
+      VerticalView.Options chordViewOptions =
+          chordView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
 
-      if (list) {
-        Map<String, ChordDefinition> found = new HashMap<>();
-        List<ChordDefinition> chordDefs =
-            ChordBank.findChordDefinitions(instrumentDefinition, root);
-        for (ChordDefinition chordDef : chordDefs) {
-          if (intervalPattern == IntervalPattern.SCALE_MAJOR
-              || chordDef.getChordPattern() == intervalPattern) {
-            found.put(
-                chordDef.getChordRoot().getLabel() + chordDef.getChordPattern().getLabel()
-                    + (chordDef.getAddedNote() != null ? chordDef.getAddedNote().getLabel() : ""),
-                chordDef);
-          }
-        }
-        found.values().forEach(cd -> {
-          Chord chordDefChord = new Chord(root, cd.getChordPattern(), cd.getAddedNote());
-          out.println(chordDefChord.getTitle());
-        });
-        return;
-      }
-
-      List<ChordDefinition> chordDefinitions =
-          ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern, addedNote);
-      if (chordDefinitions.size() == 0) {
-        out.println("Don't have that chord definition - why not contribute it?");
-        out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
-        out.println(
-            "ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x02210/[Optional Fingerings]- Share and enjoy!");
-        out.println("phil.whiles@gmail.com");
+      Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
+          FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
+              instrument.getStringNotes());
+      if (optInstrument.isEmpty()) {
+        out.println("The current instrument is not currently defined for chords");
         return;
       } else {
-        for (ChordDefinition chordDefinition : chordDefinitions) {
-          chord = new Chord(root, intervalPattern, addedNote);
-          ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
-          chordView.showChord(chordBankInstance, chordViewOptions);
-          if (verbose) {
-            out.println(chord.describe(isMono()));
+        FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
+
+        if (list) {
+          Map<String, ChordDefinition> found = new HashMap<>();
+          List<ChordDefinition> chordDefs =
+              ChordBank.findChordDefinitions(instrumentDefinition, root);
+          for (ChordDefinition chordDef : chordDefs) {
+            if (intervalPattern == IntervalPattern.SCALE_MAJOR
+                || chordDef.getChordPattern() == intervalPattern) {
+              found.put(
+                  chordDef.getChordRoot().getLabel() + chordDef.getChordPattern().getLabel()
+                      + (chordDef.getAddedNote() != null ? chordDef.getAddedNote().getLabel() : ""),
+                  chordDef);
+            }
+          }
+          found.values().forEach(cd -> {
+            Chord chordDefChord = new Chord(root, cd.getChordPattern(), cd.getAddedNote());
+            out.println(chordDefChord.getTitle());
+          });
+          return;
+        }
+
+        List<ChordDefinition> chordDefinitions =
+            ChordBank.findChordDefinitions(instrumentDefinition, root, intervalPattern, addedNote);
+        if (chordDefinitions.size() == 0) {
+          out.println("Don't have that chord definition - why not contribute it?");
+          out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
+          out.println(
+              "ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x02210/[Optional Fingerings]- Share and enjoy!");
+          out.println("phil.whiles@gmail.com");
+          return;
+        } else {
+          for (ChordDefinition chordDefinition : chordDefinitions) {
+            chord = new Chord(root, intervalPattern, addedNote);
+            ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDefinition);
+            chordView.showChord(chordBankInstance, chordViewOptions);
+            if (verbose) {
+              out.println(chord.describe(isMono()));
+            }
           }
         }
       }

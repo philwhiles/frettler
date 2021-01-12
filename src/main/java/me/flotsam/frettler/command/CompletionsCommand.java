@@ -41,7 +41,7 @@ public class CompletionsCommand implements Runnable {
     sb.append("    instr_opts=\"menu lookup patterns fifths custom guitar bassguitar ukelele mandolin banjo\"\n");
 
     sb.append("    local view_opts\n");
-    sb.append("    view_opts=\"horizontal vertical chord find display\"\n");
+    sb.append("    view_opts=\"horizontal vertical chord find display box tab\"\n");
 
     sb.append("    local note_opts\n");
     sb.append("    note_opts=\"");

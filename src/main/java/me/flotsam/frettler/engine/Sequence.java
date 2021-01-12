@@ -28,8 +28,8 @@ public enum Sequence {
 
   NONE(SCALE, 2, "DO NOT CHOOSE THIS SEQUENCE",  1,2,3,4,5,6,7),
   
-  DIATONIC_BOX(SCALE, 3, "Diatonic Sequence No. 1",  1,2,3,4,5,6,7),
-  PENTATONIC_BOX(SCALE, 2, "Pentatonic Sequence No. 1",  1,2,3,4,5),
+  DIATONIC_BOX(SCALE, 3, "Diatonic Sequence",  1,2,3,4,5,6,7),
+  PENTATONIC_BOX(SCALE, 2, "Pentatonic Sequence",  1,2,3,4,5),
   
   
   

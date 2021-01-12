@@ -44,13 +44,6 @@ public interface View {
     int seqIdx = jump;
     List<ScaleNote> notesToUse = new ArrayList<>();
 
-    // if (options.isReverse()) {
-    // int[] reversed = new int[sequence.length];
-    // for (int n = 0; n < sequence.length; n++) {
-    // reversed[n] = sequence[sequence.length -n];
-    // }
-    // sequence = reversed;
-    // }
     for (int i = 0; i < 200; i++) {
       notesToUse.add(scale.getNthScaleNote(sequence[seqIdx]));
       if (++seqIdx == sequence.length) {
