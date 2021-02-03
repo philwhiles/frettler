@@ -38,7 +38,8 @@ public interface View {
   }
 
   public default List<List<SequenceFretNote>> prepareSequence(Scale scale,
-      Sequence scaleNoteSequence, FrettedInstrument instrument, boolean reversed, boolean open, int jump, int group) {
+      Sequence scaleNoteSequence, FrettedInstrument instrument, boolean reversed, boolean open,
+      int jump, int group) {
     List<List<SequenceFretNote>> allStringFrets = new ArrayList<>();
     int[] sequence = scaleNoteSequence.getSequence();
     int seqIdx = jump;
@@ -52,9 +53,13 @@ public interface View {
     }
     seqIdx = 0;
 
+    int firstFretOnPrevString = -1;
+    int lastFretOnPrevString = -1;
+    int firstFret = -1;
+    int lastFret = -1;
     for (int i = 0; i < instrument.getFretsByString().size(); i++) {
-      int firstFret = -1;
-      int lastFret = -1;
+      firstFret = -1;
+      lastFret = -1;
       List<SequenceFretNote> stringFrets = new ArrayList<>();
       allStringFrets.add(stringFrets);
 
@@ -64,16 +69,24 @@ public interface View {
           continue;
         }
         if (fret.getNote().getPitch() == notesToUse.get(seqIdx).getNote().getPitch()) {
-          if (firstFret == -1) {
-            firstFret = fret.getFretNum();
-          } else {
-            lastFret = fret.getFretNum();
-            if (Math.abs(lastFret - firstFret) > 5 && Math.abs(lastFret + 12 - firstFret) > 5) {
-              break;
+          int candidateFret = fret.getFretNum();
+
+          if (firstFret != -1 && Math.abs(candidateFret - firstFret) > 5) {
+            // move on to the next string
+            break;
+          }
+
+          if (lastFretOnPrevString != -1) {
+            if (Math.abs(lastFretOnPrevString - candidateFret) > 5 || Math.abs(firstFretOnPrevString - candidateFret) > 5) {
+              // move on to a lower fret
+              continue;
             }
           }
 
+          firstFret = firstFret == -1 ? candidateFret : firstFret;
+          lastFret = candidateFret;
           stringFrets.add(new SequenceFretNote(fret, notesToUse.get(seqIdx).getInterval().get()));
+
           seqIdx++;
 
           if (stringFrets.size() == group) {
@@ -81,6 +94,8 @@ public interface View {
           }
         }
       }
+      lastFretOnPrevString = lastFret;
+      firstFretOnPrevString = firstFret;
     }
     return allStringFrets;
   }

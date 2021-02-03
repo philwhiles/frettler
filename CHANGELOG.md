@@ -1,6 +1,9 @@
+# 3rd February 2021
+- Added the progression subcommand
+
 # 31st December 2020
 - Happy New Year!
-- added find --digits/-d (--frets/-f got there first...)
+- added find --digits/-d (couldn't use --fingers as --frets/-f got there first...)
 - added the first ukelele chord definition
 
 # 26th December 2020

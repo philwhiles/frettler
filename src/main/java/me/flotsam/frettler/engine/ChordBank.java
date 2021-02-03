@@ -542,8 +542,8 @@ public class ChordBank {
         
         new ChordDefinition(A, CHORD_DOM9, "x,0,2,4,2,3"), 
 
-        new ChordDefinition(A, CHORD_MAJ, "0,0,2,2,2,0"), // (Db E  A) : major triad
         new ChordDefinition(A, CHORD_MAJ, "x,0,2,2,2,0", new String[] {"x,x,1,2,3,x", "x,x,2,1,3,x"}),
+        new ChordDefinition(A, CHORD_MAJ, "0,0,2,2,2,0"), // (Db E  A) : major triad
         new ChordDefinition(A, CHORD_MAJ, "0,4,x,2,5,0"), // (Db E  A) : major triad
         new ChordDefinition(A, CHORD_MAJ, "x,4,7,x,x,5"), // (Db E  A) : major triad
         new ChordDefinition(A, CHORD_MAJ, "5,7,7,6,5,5"), // (Db E  A) : major triad
@@ -929,8 +929,8 @@ public class ChordBank {
         new ChordDefinition(C, CHORD_DOM7, "x,3,2,3,1,0", new String[] {"x,3,2,4,1,x"}),
         new ChordDefinition(C, CHORD_DOM7, "x,3,5,3,5,3", new String[] {"x,1,3,1,4,1"}),
         
-        new ChordDefinition(C, CHORD_MAJ, "0,3,2,0,1,0", new String[] {"x,3,2,x,1,x"}),
         new ChordDefinition(C, CHORD_MAJ, "x,3,2,0,1,0"), // (C  E  G) : major triad
+        new ChordDefinition(C, CHORD_MAJ, "0,3,2,0,1,0", new String[] {"x,3,2,x,1,x"}),
         new ChordDefinition(C, CHORD_MAJ, "3,3,2,0,1,0"), // (C  E  G) : major triad
         new ChordDefinition(C, CHORD_MAJ, "3,x,2,0,1,0"), // (C  E  G) : major triad
         new ChordDefinition(C, CHORD_MAJ, "0,3,5,5,5,3"), // (C  E  G) : major triad
@@ -965,9 +965,9 @@ public class ChordBank {
         
         new ChordDefinition(C, CHORD_MAJ9, "x,3,0,0,0,0"), // (C  D  E  G  B) : major triad, major 7th plus 9th
         
+        new ChordDefinition(C, CHORD_MIN, "x,x,5,5,4,3"), // (C  Eb G) : minor triad
         new ChordDefinition(C, CHORD_MIN, "x,3,1,0,1,x", new String[] {"x,4,2,x,1,x"}),
         new ChordDefinition(C, CHORD_MIN, "x,3,5,5,4,3"), // (C  Eb G) : minor triad
-        new ChordDefinition(C, CHORD_MIN, "x,x,5,5,4,3"), // (C  Eb G) : minor triad
         new ChordDefinition(C, A, CHORD_MIN, "x,x,1,2,1,3"), // (C  Eb G  A) : minor triad (altered bass)
         new ChordDefinition(C, Bb, CHORD_MIN, "x,3,5,3,4,3"), // (C  Eb G  Bb) : minor triad (altered bass)
         
@@ -1061,12 +1061,12 @@ public class ChordBank {
         new ChordDefinition(D, CHORD_DOM9, "2,x,0,2,1,0"), // (C  D  E  Gb A) : major triad, minor 7th plus 9th
         new ChordDefinition(D, CHORD_DOM9, "x,5,7,5,7,0"), // (C  D  E  Gb A) : major triad, minor 7th plus 9th
         
+        new ChordDefinition(D, CHORD_MAJ, "x,x,0,2,3,2", new String[] {"x,x,x,1,3,2"}),
         new ChordDefinition(D, CHORD_MAJ, "2,0,0,2,3,2"), // (D  Gb A) : major triad
         new ChordDefinition(D, CHORD_MAJ, "x,0,0,2,3,2", new String[] {"x,x,x,1,3,2"}),
         new ChordDefinition(D, CHORD_MAJ, "x,0,4,2,3,2"), // (D  Gb A) : major triad
         new ChordDefinition(D, CHORD_MAJ, "x,5,4,2,3,2"), // (D  Gb A): major triad
         new ChordDefinition(D, CHORD_MAJ, "x,9,7,7,x,2"), // (D  Gb A): major triad
-        new ChordDefinition(D, CHORD_MAJ, "x,x,0,2,3,2", new String[] {"x,x,x,1,3,2"}),
         new ChordDefinition(D, CHORD_MAJ, "x,x,0,7,7,5"), // (D  Gb A) : major triad
         new ChordDefinition(D, C, CHORD_MAJ, "x,0,0,2,1,2"), // (C  D  Gb A) : major triad (altered bass)
         new ChordDefinition(D, C, CHORD_MAJ, "x,3,x,2,3,2"), // (C  D  Gb A) : major triad (altered bass)
@@ -1101,11 +1101,10 @@ public class ChordBank {
         new ChordDefinition(D, CHORD_MAJ7, "x,x,0,14,14,14"), // (Db D  Gb A) : major triad, major 7th
         new ChordDefinition(D, CHORD_MAJ7, "x,x,0,2,2,2"), // (Db D  Gb A) : major triad, major 7th
         
-        new ChordDefinition(D, CHORD_MIN, "x,0,0,2,3,1", new String[] {"x,x,x,2,3,1"}),
         new ChordDefinition(D, CHORD_MIN, "x,x,0,2,3,1", new String[] {"x,x,x,2,3,1"}),
+        new ChordDefinition(D, CHORD_MIN, "x,0,0,2,3,1", new String[] {"x,x,x,2,3,1"}),
         new ChordDefinition(D, CHORD_MIN, "x,5,7,7,6,5"),
         new ChordDefinition(D, CHORD_MIN, "10,12,12,10,10,10"),
-//        new ChordDefinition(D, B, CHORD_MIN, "1,1,3,2,3,1"), // (D  F  A  Bb) : minor triad (altered bass)
         new ChordDefinition(D, B, CHORD_MIN, "1,2,3,2,3,1"), // (D  F  A  B) : minor triad (altered bass)
         new ChordDefinition(D, B, CHORD_MIN, "x,2,0,2,0,1"), // (D  F  A  B) : minor triad (altered bass)
         new ChordDefinition(D, B, CHORD_MIN, "x,x,0,2,0,1"), // (D  F  A  B) : minor triad (altered bass)
@@ -1500,8 +1499,8 @@ public class ChordBank {
         new ChordDefinition(F, CHORD_DOM7, "x,x,1,2,1,1"), // (C  Eb F  A) : major triad, minor 7th
         new ChordDefinition(F, CHORD_DOM7, "x,x,3,5,4,5", new String[] {"x,x,1,3,2,4"}),
         
-        new ChordDefinition(F, CHORD_MAJ, "1,3,3,2,1,1", new String[] {"1,3,4,2,1,1"}),
         new ChordDefinition(F, CHORD_MAJ, "x,0,3,2,1,1"), // (C  F  A) : major triad
+        new ChordDefinition(F, CHORD_MAJ, "1,3,3,2,1,1", new String[] {"1,3,4,2,1,1"}),
         new ChordDefinition(F, CHORD_MAJ, "x,3,3,2,1,1"), // (C  F  A) : major triad
         new ChordDefinition(F, CHORD_MAJ, "x,x,3,2,1,1", new String[] {"x,x,3,2,1,1"}),
         new ChordDefinition(F, CHORD_MAJ, "x,8,10,10,10,8"), // (C  F  A) : major triad

@@ -41,7 +41,7 @@ public enum ScaleInterval {
   M9("M9", 14, false),
   m10("m10", 15, false),
   M10("M10", 16, false),
-  m11("M11", 18, false),
+  m11("m11", 17, false),
   M11("M11", 18, false);
   //@formatter:on
 

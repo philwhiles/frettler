@@ -200,6 +200,32 @@ public class VerticalView implements View {
     display(scale.getRootNote().getPitch(), chordFrets, options, viewMode);
   }
 
+  public void showDisplay(List<ScaleNote> scaleNotes, Options options) {
+    List<ChordFret> chordFrets = new ArrayList<>();
+
+    List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
+
+    for (List<Fret> fretFrets : fretboardFrets) {
+      for (Fret fret : fretFrets) {
+        if (fret.getNote() == null) {
+          continue; // must be fret 1-5 of the 5th string on banjo
+        }
+        Optional<ScaleNote> scaleNoteForFret = scaleNotes.stream()
+            .filter(sn -> fret.getNote().getPitch().equals(sn.getNote().getPitch())).findAny();
+        if (scaleNoteForFret.isPresent()) {
+
+          Fret altFret = new Fret(fret.getIndex(), scaleNoteForFret.get().getNote(),
+              fret.getOctave(), fret.getStringNum(), fret.getStringNote(), fret.getFretNum());
+          chordFrets.add(new ChordFret(altFret, scaleNoteForFret.get().getInterval().get()));
+        }
+      }
+    }
+    chordFrets = chordFrets.stream()
+        .sorted((a, b) -> a.getFret().getStringNum() - b.getFret().getStringNum())
+        .collect(Collectors.toList());
+    display(Pitch.C, chordFrets, options, ViewMode.VERTICAL);
+  }
+
   private void display(Pitch root, List<ChordFret> chordFrets, Options options, ViewMode viewMode) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret();
     List<Integer> deadStrings = new ArrayList<>();

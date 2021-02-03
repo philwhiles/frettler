@@ -386,7 +386,8 @@ public enum IntervalPattern {
   }
 
   public String getTitle() {
-    return this.name().toLowerCase() + (this.aliasPattern != null ? " an alias of " + this.aliasPattern.getTitle().toLowerCase() : " (" + this.label + ") " + this.intervals);
+    return this.name().toLowerCase() + (this.aliasPattern != null ? " an alias of " +
+  this.aliasPattern.getTitle().toLowerCase() : " (" + this.label + ") " + this.intervals);
   }
 
   public boolean isScaleChordGenerationSupported() {

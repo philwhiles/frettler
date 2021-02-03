@@ -82,22 +82,22 @@ public enum Note {
     return this;
   }
 
-  public Note getSharp() {
-    for (Note note : values()) {
-      if (SHARP == note.accidental && note.pitch == this.pitch) {
-        return note;
-      }
-    }
-    return this;
-  }
+//  public Note getSharp() {
+//    for (Note note : values()) {
+//      if (SHARP == note.accidental && note.pitch == this.pitch) {
+//        return note;
+//      }
+//    }
+//    return this;
+//  }
 
-  public boolean isFlat() {
-    return accidental == FLAT;
-  }
-
-  public boolean isSharp() {
-    return accidental == SHARP;
-  }
+//  public boolean isFlat() {
+//    return accidental == FLAT;
+//  }
+//
+//  public boolean isSharp() {
+//    return accidental == SHARP;
+//  }
 
   public static Note forPitch(Pitch pitch) {
     for (Note candidateNote : values()) {

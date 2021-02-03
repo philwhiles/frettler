@@ -14,6 +14,7 @@ Frettler - A flexible command line program for generating and displaying musical
     - [Verbose Mode](#Verbose-Mode)
     - [Chord Subcommand](#Chord-Subcommand)
       - [Added Notes](#Added-Notes)
+    - [Progression Subcommand](#Progression-Subcommand)
     - [Box Subcommand](#Box-Subcommand)
     - [Tab Subcommand](#Tab-Subcommand)
     - [Display Subcommand](#Display-Subcommand)
@@ -42,6 +43,8 @@ of the optional arguments, can display its full scales and chords for any frette
 of the out of box instruments, take a look at the [Custom Instrument](#Custom-Instrument)
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
+
+**UPDATE** Chord progressions now added
 
 **UPDATE** Box and Tab subcommands have been added which display a vertical and a tabsheet view of an isolated scale sequence.
 
@@ -198,7 +201,7 @@ You will get :
 When you want Frettler to display a scale or chord on a fretboard, in this order:
 
 1. Instrument - `custom`, `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
-1. View - `horizontal` (fretboard view) or `vertical` (vertical diagram akin to chord charts, which can also display scales)
+1. SubCommand - see subcommands such as `horizontal`, `chord`, `progression` in the sub sections below
 1. Root - the note of the scale or chord you want. ie `C` or `Ds` or `Eb` - note the 's' indicates a sharp, the 'b' indicates a flat.
 1. Pattern - for the scale or chord ie `scale_major` or `chord_min9`. 
 
@@ -335,6 +338,18 @@ known chords, and in time I will add an optional argument and the wherewithall t
 
 ##### Added notes
 With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the optional `-added' argument followed by the added note.
+
+#### Progression Subcommand 
+When using the `horizontal` or `vertical` subcommands for an instrument to display a scale, you can use the `--chords` option to get Frettler to print out the chords in that scale, but the `progression`
+subcommand takes this functionality one step further, combining it with the ability to display chord fingerings for the nominated chords in a scale.
+
+```
+./frettler guitar progression a scale_major -p 1,4,5
+```
+
+Will show the default chord fingerings for each of the I, IV and V chords in the scale of A Minor
+The chord fingerings will be the default from possibly many variations for the root and chord type, usually the simpler cowboy chord fingerings. If you want to see the other variants, use the `chord` subcommand
+above individually.
 
 #### Box Subcommand
 Frettler can show a 'boxed' view of a scale, centered around one part of the fretboard, for practising. This has only recently been added, and requires a few tweaks to its note selection, so pull the code

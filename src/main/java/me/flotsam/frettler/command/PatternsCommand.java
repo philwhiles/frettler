@@ -27,7 +27,7 @@ import picocli.CommandLine.Option;
  * @author philwhiles
  *
  */
-@Command(name = "patterns", description = "Lists the scales/modes/chords that Frettler understands")
+@Command(name = "patterns", description = "Lists the scale/mode/chord interval patterns that Frettler understands")
 public class PatternsCommand implements Runnable {
 
   @Option(names = {"-t", "--type"}, description = "Optionally only list patterns of this type")

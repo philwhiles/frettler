@@ -45,6 +45,11 @@ public class ColourMap {
  );
 
   private static int colourNum = -1;
+  
+  public static void init() {
+    colourNum = -1;
+    objColourMap = new HashMap<>();
+  }
 
   public static Colour get(Object obj) {
     Colour colour = objColourMap.get(obj);

@@ -56,7 +56,4 @@ public class IntervalPatternMetadata {
   @Getter
   boolean suspended;
   
-  public enum Quality {
-    MAJOR, MINOR, AUGMENTED, DIMINISHED, DOMINANT
-  }
 }
