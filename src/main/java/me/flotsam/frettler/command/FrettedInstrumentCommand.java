@@ -154,11 +154,11 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       int scaleSize = scale.getScaleNotes().size();
       if (scaleSize == 5) {
         sequence = Sequence.PENTATONIC_BOX;
-        position = position == null ? 0 : position % scaleSize;
+        position = position == null ? 0 : (position - 1) % scaleSize;
         group = group == null ? 2 : group;
       } else {
         sequence = Sequence.DIATONIC_BOX;
-        position = position == null ? 0 : position % scaleSize;
+        position = position == null ? 0 : (position - 1) % scaleSize;
         group = group == null ? 3 : group;
       }
       VerticalView verticalView = new VerticalView(instrument);

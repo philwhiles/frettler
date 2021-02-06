@@ -361,7 +361,7 @@ In the `box` view, the root of the scale is displayed inverted, to make it stand
 notes different, and keeping sight of the root helps when practicing:
 
 `--group` or `-g` followed by a number determines the number of notes to look for on each string, before moving to the next string. If not used, the default group is 0.
-`--position` or `-p` followed by a number determines where the box sequence starts in the scale. If not used, it default to 0, meaning the sequence starts on the root or P1. Use `-p 1` and the sequence
+`--position` or `-p` followed by a number determines where the box sequence starts in the scale. If not used, it defaults to 1, meaning the sequence starts on the root or P1. Use `-p 2` and the sequence
 will start on the 2nd note of the scale.
 
 Here is an example of a boxed diatonic chord, using `./frettler guitar box c scale_major` :
