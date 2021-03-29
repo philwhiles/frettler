@@ -63,7 +63,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
-  
+
   boolean oneMode = false;
 
   @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
@@ -95,10 +95,12 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   @Option(names = {"-b", "--box"}, paramLabel = "num", description = "box number")
   Integer position = null;
 
-//  @Option(names = {"-p", "--progression"}, paramLabel = "num", description = "progression number")
-//  Progression progression = Progression.P1;
-//
-  @Option(names = {"-p", "--progression"}, paramLabel = "num", description = "progression numbers ie 1,4,5", split=",")
+  // @Option(names = {"-p", "--progression"}, paramLabel = "num", description = "progression
+  // number")
+  // Progression progression = Progression.P1;
+  //
+  @Option(names = {"-p", "--progression"}, paramLabel = "num",
+      description = "progression numbers ie 1,4,5", split = ",")
   int[] progressions = {};
 
   public void exec(FrettedInstrument instrument) {
@@ -275,6 +277,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       } else {
         out.println("Could not find matching chord");
       }
+    } else {
       instrument = FrettedInstrument.getBiggerInstrument(instrument);
 
       Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
@@ -323,7 +326,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         List<Chord> chords = new ArrayList<>();
         chords = scale.createScaleChords();
         FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
-//        for (int prog : progression.getSequence()) {
+        // for (int prog : progression.getSequence()) {
         for (int prog : progressions) {
           Chord chord = chords.get(prog - 1);
 
@@ -331,7 +334,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
               ChordBank.findChordDefinitions(instrumentDefinition, chord.getChordRoot(),
                   chord.getMetaData().getChordPattern(), null);
           if (chordDefinitions.size() == 0) {
-            out.println("Don't have a definition for " + chord.getLabel() + " - why not contribute it?");
+            out.println(
+                "Don't have a definition for " + chord.getLabel() + " - why not contribute it?");
             out.println("Send me the instrument/tuning/fretNumbering and I will add it for you");
             out.println(
                 "ie GUITAR/EADGBE/A/(Optional Added Note)/CHORD_MIN/x02210/[Optional Fingerings]- Share and enjoy!");
