@@ -63,6 +63,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
+  
+  boolean oneMode = false;
 
   @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
       description = "comma separated list of string tunings ie E,A,D,G,B,E")
@@ -262,7 +264,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     Chord chord = null;
     VerticalView findView = new VerticalView(instrument);
     VerticalView.Options findViewOptions =
-        findView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
+        findView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
     if (notes != null) {
       Optional<Chord> foundChordOpt = Chord.findChord(notes);
       if (foundChordOpt.isPresent()) {
@@ -402,6 +404,9 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           chordView.showChord(chordBankInstance, chordViewOptions);
           if (verbose) {
             out.println(chord.describe(isMono()));
+          }
+          if (oneMode) {
+            break;
           }
         }
       }

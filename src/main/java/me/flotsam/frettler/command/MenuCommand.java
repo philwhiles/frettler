@@ -43,13 +43,20 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
 
   private static String[] instrumentArgs =
       new String[] {"CUSTOM", "GUITAR", "BASSGUITAR", "UKELELE", "MANDOLIN", "BANJO"};
-  private static String[] viewArgs = new String[] {"HORIZONTAL", "VERTICAL"};
+  private static String[] viewArgs = new String[] {"HORIZONTAL", "VERTICAL", "CHORD"};
   private static String[] pitchArgs = Arrays.stream(Pitch.values()).map(ip -> ip.name())
       .collect(Collectors.toList()).toArray(new String[] {});
-  private static String[] patternArgs =
+
+  private static String[] allPatternArgs =
       Arrays.stream(IntervalPattern.values()).filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
           .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
 
+  private static String[] chordPatternArgs =
+      Arrays.stream(IntervalPattern.values()).filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
+          .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
+
+  private static String[] patternArgs = allPatternArgs;
+  
   private static final int KEY_ESC = 0x1B;
   private static final int KEY_TAB = 0x09;
   private static final int KEY_OPEN_BRACKET = 0x5B;
@@ -67,6 +74,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
 
   @Override
   public void run() {
+    oneMode = true;
     boolean exit = false;
     System.out.println("In menu mode:");
     System.out.println(" - arrow keys move between fields");
@@ -186,7 +194,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
   private void printMenu(int argN, int[] argV) {
     System.out.print("\r");
     for (int i = 0; i < argV.length; i++) {
-      System.out.print("" + (isMono() ? "" : (argN == i ? Colour.GOLD1 : Colour.RESET))
+      System.out.print("" + (isMono() ? "" : (argN == i ? Colour.DARK_ORANGE : Colour.RESET))
           + args[i][argV[i]] + " " + (isMono() ? "" : Colour.RESET));
     }
     System.out.print("(intervals:" + (intervals ? (isMono() ? "" : Colour.GREEN) + "on" : "off")
