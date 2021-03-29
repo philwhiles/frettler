@@ -56,7 +56,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
           .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
 
   private static String[] patternArgs = allPatternArgs;
-  
+
   private static final int KEY_ESC = 0x1B;
   private static final int KEY_TAB = 0x09;
   private static final int KEY_OPEN_BRACKET = 0x5B;
@@ -96,6 +96,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
       int argN = 0;
       int[] argV = new int[args.length];
 
+      boolean enterDisabled = false;
       do {
         printMenu(argN, argV);
         int key = reader.read();
@@ -104,6 +105,10 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
         view = View.valueOf(args[1][argV[1]]);
         root = Note.forPitch(Pitch.valueOf(args[2][argV[2]]));
         intervalPattern = IntervalPattern.valueOf(args[3][argV[3]]);
+        enterDisabled = view == View.CHORD
+            && intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD ? true
+                : false;
+
 
         switch (key) {
           case KEY_ESC:
@@ -154,9 +159,11 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
             display(instrument);
             break;
           case KEY_ENTER:
-            System.out.print("\r");
-            System.out.println(StringUtils.repeat(' ', 70));
-            display(instrument);
+            if (!enterDisabled) {
+              System.out.print("\r");
+              System.out.println(StringUtils.repeat(' ', 70));
+              display(instrument);
+            }
             break;
 
           default:
