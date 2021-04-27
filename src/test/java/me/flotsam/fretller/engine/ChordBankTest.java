@@ -81,7 +81,7 @@ public class ChordBankTest {
             continue;
           }
           int fretNum = Integer.parseInt(str);
-          Note fretNote = thisInstrument.getFretsByString().get(stringNum).get(fretNum).getNote();
+          Note fretNote = thisInstrument.getFretsByString(false).get(stringNum).get(fretNum).getNote();
           if (!chord.containsNotes(fretNote)) {
             fail("\n" + instrument.getInstrumentType() + " Actual chord contains " + chord.getChordNotes() + "\nChordDef "
                 + chordDef.getChordRoot() + " " + chordDef.getChordPattern().getLabel()

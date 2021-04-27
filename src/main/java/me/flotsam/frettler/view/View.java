@@ -29,17 +29,32 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
 public interface View {
 
 
-  public default void initColourMap(Scale scale) {
+
+  default int[] getOrderedStrings(FrettedInstrument instrument, boolean lefty) {
+    int[] values = new int[instrument.getStringCount()];
+    int i = 0;
+    if (lefty) {
+      for (int s = 0; s<instrument.getStringCount(); s++) {
+        values[i++] = s;
+      }
+    } else {
+      for (int s = instrument.getStringCount() - 1; s >= 0; s--) {
+        values[i++] = s;
+      }
+    }
+    return values;
+  }
+
+  default void initColourMap(Scale scale) {
     scale.getScaleNotes().forEach(sn -> ColourMap.get(sn.getNote().getPitch()));
   }
 
-  public default void initColourMap(Chord chord) {
+  default void initColourMap(Chord chord) {
     chord.getChordNotes().forEach(cn -> ColourMap.get(cn.getNote().getPitch()));
   }
 
-  public default List<List<SequenceFretNote>> prepareSequence(Scale scale,
-      Sequence scaleNoteSequence, FrettedInstrument instrument, boolean reversed, boolean open,
-      int jump, int group) {
+  default List<List<SequenceFretNote>> prepareSequence(Scale scale, Sequence scaleNoteSequence,
+      FrettedInstrument instrument, boolean reversed, boolean open, int jump, int group) {
     List<List<SequenceFretNote>> allStringFrets = new ArrayList<>();
     int[] sequence = scaleNoteSequence.getSequence();
     int seqIdx = jump;
@@ -57,13 +72,13 @@ public interface View {
     int lastFretOnPrevString = -1;
     int firstFret = -1;
     int lastFret = -1;
-    for (int i = 0; i < instrument.getFretsByString().size(); i++) {
+    for (int i = 0; i < instrument.getFretsByString(false).size(); i++) {
       firstFret = -1;
       lastFret = -1;
       List<SequenceFretNote> stringFrets = new ArrayList<>();
       allStringFrets.add(stringFrets);
 
-      List<Fret> tonesInString = instrument.getFretsByString().get(i);
+      List<Fret> tonesInString = instrument.getFretsByString(false).get(i);
       for (Fret fret : tonesInString) {
         if (!open && fret.getFretNum() == 0) {
           continue;
@@ -77,7 +92,8 @@ public interface View {
           }
 
           if (lastFretOnPrevString != -1) {
-            if (Math.abs(lastFretOnPrevString - candidateFret) > 5 || Math.abs(firstFretOnPrevString - candidateFret) > 5) {
+            if (Math.abs(lastFretOnPrevString - candidateFret) > 5
+                || Math.abs(firstFretOnPrevString - candidateFret) > 5) {
               // move on to a lower fret
               continue;
             }

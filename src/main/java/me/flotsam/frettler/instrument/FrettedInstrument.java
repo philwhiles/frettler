@@ -17,6 +17,7 @@ package me.flotsam.frettler.instrument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,11 +38,9 @@ public abstract class FrettedInstrument {
   List<Note> stringNotes;
 
   // remember element 0 in each inner List is the open string note
-  @Getter
   List<List<Fret>> fretsByString = new ArrayList<>();
 
   // remember element 0 in the inner list is the open string notes
-  @Getter
   List<List<Fret>> fretsByFret = new ArrayList<>();
 
   @Getter
@@ -50,6 +49,28 @@ public abstract class FrettedInstrument {
   @Getter
   private InstrumentType instrumentType;
 
+  public List<List<Fret>> getFretsByFret(boolean lefty) {
+    List<List<Fret>> fretList = new ArrayList<>();
+    for (List<Fret> frets : fretsByFret) {
+      List<Fret> newFretList = new ArrayList<>(frets);
+      if (lefty) {
+        Collections.reverse(newFretList);
+      }
+      fretList.add(newFretList);
+    }
+    return fretList;
+  }
+
+  public List<List<Fret>> getFretsByString(boolean lefty) {
+    List<List<Fret>> fretList = new ArrayList<>();
+    for (List<Fret> frets : fretsByString) {
+      fretList.add(new ArrayList<>(frets));
+    }
+    if (lefty) {
+      Collections.reverse(fretList);
+    }
+    return fretList;
+  }
 
   public FrettedInstrument(InstrumentType instrumentType, int frets, Note[] strings) {
     this.instrumentType = instrumentType;

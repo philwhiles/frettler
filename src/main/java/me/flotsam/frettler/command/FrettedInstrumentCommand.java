@@ -74,8 +74,12 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       description = "overrides the default 12 frets displayed")
   Integer frets = 12;
 
-  @Option(names = {"-l", "--list"},
-      description = "List chord definitions for the root (and interval pattern if provided)")
+  @Option(names = {"-l", "--lefty"},
+      description = "Display strings for a left handed player")
+  boolean lefty;
+  
+  @Option(names = {"-e", "--explain"},
+      description = "Explain chord definitions for the root (and interval pattern if provided)")
   boolean list;
 
   @Option(names = {"-v", "--verbose"},
@@ -86,7 +90,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   boolean reverse = false;
 
   @Option(names = {"-z", "--zero"},
-      description = "generate sequences using open strings (zero frets - octaves already taken!)")
+      description = "generate sequences using open strings")
   boolean zero = false;
 
   @Option(names = {"-g", "--group"}, paramLabel = "num", description = "box grouping")
@@ -167,7 +171,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       }
       VerticalView verticalView = new VerticalView(instrument);
       VerticalView.Options verticalViewOptions =
-          verticalView.new Options(intervals, !isMono(), isOctaves(), zero, position, group);
+          verticalView.new Options(intervals, !isMono(), isOctaves(), zero, position, group, lefty);
 
       verticalView.showScaleBox(scale, sequence, verticalViewOptions);
     }
@@ -203,7 +207,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     Scale scale = null;
     HorizontalView horizontalView = new HorizontalView(instrument);
     HorizontalView.Options horizontalViewOptions =
-        horizontalView.new Options(intervals, true, !isMono(), isOctaves());
+        horizontalView.new Options(intervals, true, !isMono(), isOctaves(), lefty);
 
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
@@ -235,7 +239,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     Scale scale = null;
     VerticalView verticalView = new VerticalView(instrument);
     VerticalView.Options verticalViewOptions =
-        verticalView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
+        verticalView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0, lefty);
 
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
@@ -266,7 +270,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     Chord chord = null;
     VerticalView findView = new VerticalView(instrument);
     VerticalView.Options findViewOptions =
-        findView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
+        findView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0, lefty);
     if (notes != null) {
       Optional<Chord> foundChordOpt = Chord.findChord(notes);
       if (foundChordOpt.isPresent()) {
@@ -313,7 +317,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       instrument = FrettedInstrument.getBiggerInstrument(instrument);
       VerticalView chordView = new VerticalView(instrument);
       VerticalView.Options chordViewOptions =
-          chordView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
+          chordView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0, lefty);
 
       Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
           FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
@@ -361,7 +365,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     instrument = FrettedInstrument.getBiggerInstrument(instrument);
     VerticalView chordView = new VerticalView(instrument);
     VerticalView.Options chordViewOptions =
-        chordView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0);
+        chordView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0, lefty);
 
     Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
         FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
@@ -424,7 +428,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     }
     VerticalView finderView = new VerticalView(instrument);
     VerticalView.Options finderViewOptions =
-        finderView.new Options(false, !isMono(), isOctaves(), zero, 0, 0);
+        finderView.new Options(false, !isMono(), isOctaves(), zero, 0, 0, lefty);
     Scale arbitraryScale = new Scale(
         Arrays.asList(notes).stream().map(n -> n.getPitch()).collect(Collectors.toList()));
     out.println();
