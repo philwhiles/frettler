@@ -47,9 +47,10 @@ Frettler performs most of its scale and chord calculations using first principle
 **UPDATE** Left handed support! That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
 needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
 chord chart views, and for the latter, has logic to work out un played strings and barring, and has grown rather tangled.
-Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--left` argument to see the horizontal or vertical views from their perspective.
+Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--lefty` argument to see the horizontal or vertical views from their perspective.
 I would love to hear from the lefties who try Frettler - did I get it right? are there some subtle bugs in there?
-By using `--left` for this I have had to change the previous chord command option `--list` to `--which` instead.
+By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
+Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
 
 Frettler can display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
@@ -65,7 +66,7 @@ Chord definitions have been added for some of the other Frettler instruments as 
 
 | Instrument              | Chord Definitions |
 | ----------------------- |-------------------|
-| GUITAR                  | 1023              |
+| GUITAR                  | 1022              |
 | BASSGUITAR              | 96                |
 | UKELELE                 | 165               |
 | MANDOLIN                | 129               |
@@ -233,14 +234,52 @@ The patterns Frettler understands at the time of writing are:
 To see the patterns Frettler currently understands use the [Patterns Command](#Patterns-Command)
 
 #### Optional Arguments 
-- `-s` or `--strings` followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use `-s D,A,D,G,B,E`.
-(If you regularly want to use a non default string setup, see below)
-- `-f` or `--frets` N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-- `-i` or `--intervals` an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
-- `-m` or `--mono` an optional flag which will make Frettler display its diagrams without colour.
+Frettler arguments follow the command/subcommands, and customise it's behaviour and output. Which arguments can be used with which commands depends on the command being used,
+so the table below explains what each argument does and which command(s) it can be used with:
+
+
+
+argument | (instrument) vertical | (instrument) horizontal | (instrument) chord | (instrument) box | (instrument) display | (instrument) progression | (instrument) find | patterns | lookup | fifths | menu
+--------  |  -------------------  |  ---------------------  |  ----------------  |  --------------  |  ------------------  |  ----------------------  |  ---------------  |  --------  |  ------  |  ------  |  ----
+--added | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA
+--box | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA
+--chords | optional | optional | NA | NA | NA | NA | NA | NA | NA | NA | NA
+--digits | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA | NA
+--easy | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA
+--frets | optional | optional | NA | NA | optional | NA | NA | NA | NA | NA | NA
+--group | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA
+--intervals | optional | optional | NA | optional | optional | NA | optional with --notes | NA | NA | NA | NA
+--lefty | optional | optional | optional | optional | optional | optional | optional | NA | NA | NA | NA
+--mono | optional | optional | optional | optional | optional | optional | optional | NA | optional | NA | NA
+--notes | NA | NA | NA | NA | **mandatory** | NA | optional | NA | **mandatory** | NA | NA
+--octaves | optional | optional | optional | optional | optional | optional | optional with --notes | NA | NA | NA | NA
+--progression | NA | NA | NA | NA | NA | **mandatory** | NA | NA | NA | NA | NA
+--strings | optional | optional | NA | optional but YMMV | optional | NA | optional with --notes | NA | NA | NA | NA
+--type | NA | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA
+--verbose | optional | optional | NA | NA | NA | NA | optional with --digits | NA | NA | NA | NA
+--which | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA
+--zero | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA
+
+
+- `a`' or `--added`
+- `b` or `--box`
 - `-c` or `--chords` will calculate and list the diatonic chords in the scale (Chord name and notes).
-- `-v` or `--verbose` will print out some explanatory info about Frettlers decision making, see below.
+- `-d` or `--digits`
+- `-e` or `--easy`
+- `-f` or `--frets` N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
+- `-g` or `--group`
+- `-i` or `--intervals` an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
+- `-l` or `--lefty`
+- `-m` or `--mono` an optional flag which will make Frettler display its diagrams without colour.
+- `-n` or `--notes`
 - `-o` or `--octaves` will colourize the notes or intervals according to the relative octave (**)
+- `-p` or `--progression`
+- `-s` or `--strings` followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use `-s D,A,D,G,B,E`.
+- `-t` or `--type`
+(If you regularly want to use a non default string setup, see below)
+- `-v` or `--verbose` will print out some explanatory info about Frettlers decision making, see below.
+- `-w` or `--which`
+- `-z` or `--zero`
 
 (*) The interval labels use the following convention :
 - P1 - perfect unison/root
@@ -277,7 +316,7 @@ Produces (truncated output here) :
 The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, and gives a summary below
 the chart aligned with the strings, showing their notes and intervals.
 While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
-formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 1000).
+formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 1000 for guitar, in addition to many for other instruments).
 ie to get frettler to show the fingering for 'Am':
 
 ```
@@ -307,7 +346,7 @@ etc
 etc
 ```
 
-If you want to see what chord definitions Frettler has for a specific chord type, add the interval pattern name as well :
+If you want to see which chord definitions Frettler has for a specific chord type, add the interval pattern name as well :
 
 ```
 ./frettler guitar chord d chord_dim --which
@@ -340,6 +379,10 @@ known chords, and in time I will add an optional argument and the wherewithall t
 
 ##### Added notes
 With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the optional `-added' argument followed by the added note.
+
+##### Easy mode
+With the `chord` mode, Frettler may have multiple fingerings for each chord, and will display them one after the other.
+In its database, the most common 'cowboy chords' tend to be the first listed. If you only want it to display the first ie easy chord use the optional `-easy' argument.
 
 #### Progression Subcommand 
 When using the `horizontal` or `vertical` subcommands for an instrument to display a scale, you can use the `--chords` option to get Frettler to print out the chords in that scale, but the `progression`
@@ -428,17 +471,16 @@ It is perhaps better described as a Line Of Fifths, due to its somewhat flat str
 will print this out for you if your curious or want to refer to it.
 
 #### Lookup Command
-Frettler also has a chord reverse `lookup` command. 
+Frettler also has a simple chord reverse `lookup` command. 
 The simplest takes the form :
 
 
 ```
-./frettler lookup As,D,F
+./frettler lookup --notes As,D,F
 A#maj (A# maj) [A#,D,F]
 ```
 
-- It expects it to be followed by a series of notes, (using its notation for sharps or flats)
-- The notes in this simple form follow the `chord` keyword immediately.
+- It expects the `--notes` argument, followed by the notes (using its notation for sharps or flats)
 - The output is simply the printing of the chord found as shown above.
 
 The chord matching can follow one of three rules, using the `--rules [strict,relaxed,loose]` optional param :
@@ -448,7 +490,7 @@ This is the default rule, in which the first note is assumed to be the tonic, an
 If you are wondering about the significance of the tonic, consider Cm7b5 (C m7b5) [C,D#,F#,A#] and D#min6 (D# min6) [D#,F#,A#,C].
 
 ```
-> ./frettler lookup c,e,g
+> ./frettler lookup --notes c,e,g
 Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
 ```
 
@@ -456,7 +498,7 @@ Cmaj   (c chord_maj)   [C(P1), E(M3), G(P5)]
 The first note is again considered to be the tonic, the listed chords will contain all the provided notes, but not exclusively ie the chords may include other notes.
 
 ```
-> ./frettler lookup c,g -r relaxed
+> ./frettler lookup --notes c,g -r relaxed
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
 Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
   etc
@@ -469,7 +511,7 @@ None of the notes is considered the sole tonic, and all chords, with any tonic, 
 all you provide is one note.
 
 ```
-> ./frettler lookup c,g -r loose
+> ./frettler lookup --notes c,g -r loose
 Cmin11   (c chord_min11)   [C(P1), D#(m3), G(P5), A#(m7), D(M9), F#(M11)]
 Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
   etc

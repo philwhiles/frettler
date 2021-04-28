@@ -36,7 +36,7 @@ import picocli.CommandLine.Parameters;
 public class LookupCommand implements Runnable {
 
 
-  @Parameters(index = "0", description = "The chord notes to analyse", split = ",")
+  @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
   Note[] notes = new Note[] {};
 
   @Option(names = {"-r", "--rule"}, defaultValue="STRICT", description = "Chord lookup can be strict, relaxed or loose")
