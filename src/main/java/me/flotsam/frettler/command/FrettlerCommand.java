@@ -42,9 +42,6 @@ public class FrettlerCommand {
       description = "The interval pattern to use")
   IntervalPattern intervalPattern;
 
-//  @Parameters(index = "3", defaultValue = "NONE",
-//      description = "The scale sequence to use")
-  Sequence sequence = Sequence.NONE;
 
   @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
   @Getter

@@ -44,10 +44,12 @@ of the out of box instruments, take a look at the [Custom Instrument](#Custom-In
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
-**UPDATE** Chord progressions now added
-
-**UPDATE** Box and Tab subcommands have been added which display a vertical and a tabsheet view of an isolated scale sequence.
-
+**UPDATE** Left handed support! That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
+needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
+chord chart views, and for the latter, has logic to work out un played strings and barring, and has grown rather tangled.
+Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--left` argument to see the horizontal or vertical views from their perspective.
+I would love to hear from the lefties who try Frettler - did I get it right? are there some subtle bugs in there?
+By using `--left` for this I have had to change the previous chord command option `--list` to `--which` instead.
 
 Frettler can display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
@@ -69,7 +71,7 @@ Chord definitions have been added for some of the other Frettler instruments as 
 | MANDOLIN                | 129               |
 
 
-For posterity there is a change log [here]
+For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
 Here is an example of its output :
 
@@ -174,7 +176,7 @@ just use any instrument other than banjo with `--strings A,B,C,etc`.
 
 #### Custom Instrument
 The `custom` instrument differs from the others, in that Frettler has no hard wired understanding of how many strings it has or what their tunings are.
-There is text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
+There is a text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
 by default. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
 The 'name' property will be used in Frettlers titling of scales and chords.
 
@@ -198,7 +200,7 @@ You will get :
 
 
 #### Required Arguments 
-When you want Frettler to display a scale or chord on a fretboard, in this order:
+When you want Frettler to display a scale or chord on a fretboard, required arguments need to be provided in this order:
 
 1. Instrument - `custom`, `guitar`, `banjo`, `mandolin`, `bassguitar` or `ukelele`
 1. SubCommand - see subcommands such as `horizontal`, `chord`, `progression` in the sub sections below
@@ -295,7 +297,7 @@ The `chord` mode also allows use of the `--octaves` and `--mono` arguments.
 If you would like to see which chords frettler can show you for a given root, ie for A, use :
 
 ```
-./frettler guitar chord a --list
+./frettler guitar chord a --which
 Asus2   (a chord_sus2)    [A(P1), B(M2), E(P5)] 
 Asus4/B   (a chord_sus4/B)    [A(P1), D(P4), E(P5)] 
 Asus4/C   (a chord_sus4/C)    [A(P1), D(P4), E(P5)] 
@@ -308,7 +310,7 @@ etc
 If you want to see what chord definitions Frettler has for a specific chord type, add the interval pattern name as well :
 
 ```
-./frettler guitar chord d chord_dim --list
+./frettler guitar chord d chord_dim --which
 Ddim/C   (d chord_dim/C)    [D(P1), F(m3), G#(d5)] 
 Ddim/B   (d chord_dim/B)    [D(P1), F(m3), G#(d5)] 
 Ddim   (d chord_dim)    [D(P1), F(m3), G#(d5)] 

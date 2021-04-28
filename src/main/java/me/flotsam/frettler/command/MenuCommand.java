@@ -74,7 +74,7 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
 
   @Override
   public void run() {
-    oneMode = true;
+    easyMode = true;
     boolean exit = false;
     System.out.println("In menu mode:");
     System.out.println(" - arrow keys move between fields");

@@ -23,14 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBank;
 import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Progression;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.engine.Sequence;
@@ -41,7 +39,6 @@ import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
 import me.flotsam.frettler.view.TabView;
 import me.flotsam.frettler.view.VerticalView;
-import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 /**
@@ -64,7 +61,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
 
-  boolean oneMode = false;
+  @Option(names = {"-e", "--easy"}, description = "Just display the default (easy) chord fingering")
+  boolean easyMode = false;
 
   @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
       description = "comma separated list of string tunings ie E,A,D,G,B,E")
@@ -74,23 +72,22 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       description = "overrides the default 12 frets displayed")
   Integer frets = 12;
 
-  @Option(names = {"-l", "--lefty"},
-      description = "Display strings for a left handed player")
+  @Option(names = {"-l", "--lefty"}, description = "Display strings for a left handed player")
   boolean lefty;
-  
-  @Option(names = {"-e", "--explain"},
-      description = "Explain chord definitions for the root (and interval pattern if provided)")
-  boolean list;
+
+  @Option(names = {"-w", "--which"},
+      description = "Which chord definitions for the root (and interval pattern if provided) does Frettler have chord patterns for")
+  boolean which;
 
   @Option(names = {"-v", "--verbose"},
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
 
-  @Option(names = {"-r", "--reverse"}, description = "generate sequences from the 1st string")
+  // reverse is reserved for TabView
+  // @Option(names = {"-r", "--reverse"}, description = "generate sequences from the 1st string")
   boolean reverse = false;
 
-  @Option(names = {"-z", "--zero"},
-      description = "generate sequences using open strings")
+  @Option(names = {"-z", "--zero"}, description = "generate sequences using open strings")
   boolean zero = false;
 
   @Option(names = {"-g", "--group"}, paramLabel = "num", description = "box grouping")
@@ -99,10 +96,6 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   @Option(names = {"-b", "--box"}, paramLabel = "num", description = "box number")
   Integer position = null;
 
-  // @Option(names = {"-p", "--progression"}, paramLabel = "num", description = "progression
-  // number")
-  // Progression progression = Progression.P1;
-  //
   @Option(names = {"-p", "--progression"}, paramLabel = "num",
       description = "progression numbers ie 1,4,5", split = ",")
   int[] progressions = {};
@@ -158,8 +151,8 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       return;
     } else {
       Scale scale = new Scale(this.root, this.intervalPattern);
-      Sequence sequence = null;
       int scaleSize = scale.getScaleNotes().size();
+      Sequence sequence = null;
       if (scaleSize == 5) {
         sequence = Sequence.PENTATONIC_BOX;
         position = position == null ? 0 : (position - 1) % scaleSize;
@@ -184,6 +177,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     } else {
       Scale scale = new Scale(this.root, this.intervalPattern);
       int scaleSize = scale.getScaleNotes().size();
+      Sequence sequence = null;
       if (scaleSize == 5) {
         sequence = Sequence.PENTATONIC_BOX;
         position = position == null ? 0 : position % scaleSize;
@@ -243,7 +237,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
-      verticalView.showScale(scale, this.sequence, verticalViewOptions);
+      verticalView.showScale(scale, Sequence.NONE, verticalViewOptions);
       List<Chord> chords = new ArrayList<>();
       if (chordMode) {
         chords = scale.createScaleChords();
@@ -330,7 +324,6 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         List<Chord> chords = new ArrayList<>();
         chords = scale.createScaleChords();
         FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
-        // for (int prog : progression.getSequence()) {
         for (int prog : progressions) {
           Chord chord = chords.get(prog - 1);
 
@@ -353,9 +346,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
               out.println(chord.describe(isMono()));
             }
           }
-
         }
-
       }
     }
   }
@@ -376,7 +367,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     } else {
       FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
 
-      if (list) {
+      if (which) {
         Map<String, ChordDefinition> found = new HashMap<>();
         List<ChordDefinition> chordDefs =
             ChordBank.findChordDefinitions(instrumentDefinition, root);
@@ -413,7 +404,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           if (verbose) {
             out.println(chord.describe(isMono()));
           }
-          if (oneMode) {
+          if (easyMode) {
             break;
           }
         }
