@@ -299,13 +299,8 @@ argument |  [vertical](#Views) |  [horizontal](#Views) |  [chord](#Chord-Subcomm
 --which | NA | NA | optional | NA | NA | NA | NA | NA
 --zero | NA | NA | NA | optional | NA | NA | NA | NA
 
-The `menu`  and `fifths` commands take no additional arguments, but the `patterns` and `group` allow:
-
-argument | patterns | lookup 
--------- | --------  |  ------
---mono | NA | optional
---notes | NA | **mandatory**
---type | optional | NA
+The [menu](#Menu-Command)  and [fifths](#Fifths-Command) commands take no additional arguments, but the [patterns](#Patterns-Command) allows `--type` as an option,
+while the [lookup](#Lookup-Command) commands allows `--mono` as an option bute requires `--notes`
 
 
 Basically:
