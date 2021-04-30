@@ -305,7 +305,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
 
   private void handleProgressionCommand(FrettedInstrument instrument) {
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.SCALE) {
-      out.println("The interval pattern for the Progression command must be a scale pattern");
+      out.println("The interval pattern for the Progression view must be a scale pattern");
       return;
     } else {
       instrument = FrettedInstrument.getBiggerInstrument(instrument);

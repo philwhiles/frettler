@@ -4,22 +4,23 @@ Frettler - A flexible command line program for generating and displaying musical
 
 - [Synopsis](#Synopsis)
 - [Building](#Building)
+- [Execution](#Execution)
 - [Demo](#Demo)
 - [Tutorial](#Tutorial)
-- [View](#View)
-- [Invocation](#Invocation)
-  - [Instrument Commands](#Instrument-Commands)
-    - [Custom Instrument](#Custom-Instrument)
-    - [Required Arguments](#Required-Arguments)
-    - [Optionals](#Options)
-    - [Verbose Mode](#Verbose-Mode)
-    - [Chord Subcommand](#Chord-Subcommand)
-      - [Added Notes](#Added-Notes)
-    - [Progression Subcommand](#Progression-Subcommand)
-    - [Box Subcommand](#Box-Subcommand)
-    - [Tab Subcommand](#Tab-Subcommand)
-    - [Display Subcommand](#Display-Subcommand)
-    - [Find Subcommand](#Find-Subcommand)
+- [Views](#Views)
+- [Command Line](#Command-Line)
+  - [Instruments](#Instruments)
+    - [Custom Instrument](#Custom Instrument)
+  - [Patterns](#Patterns)
+  - [Options](#Options)
+  - [Chord Subcommand](#Chord-Subcommand)
+    - [Added Notes](#Added-Notes)
+    - [Easy Mode](#Added-Notes)
+  - [Progression Subcommand](#Progression-Subcommand)
+  - [Box Subcommand](#Box-Subcommand)
+  - [Tab Subcommand](#Tab-Subcommand)
+  - [Display Subcommand](#Display-Subcommand)
+  - [Find Subcommand](#Find-Subcommand)
   - [Menu Command](#Menu-Command)
   - [Fifths Command](#Fifths-Command)
   - [Lookup Command](#Lookup-Command)
@@ -159,8 +160,10 @@ In any view when Frettler display intervals it uses the following convention :
 - m7 - minor seventh
 - M7 - major seventh
 
-## Invocation
-Frettlers invocation takes one of the following forms:
+The arguments are the same for the `horizontal` and `vertical` views.
+
+## Command Line
+Frettlers command line invocation takes one of the following forms:
 
  - frettler  ``command``  ``options``
  - frettler  ``instrument-command``  ``sub-command``  ``options``
@@ -201,9 +204,12 @@ Where...
 
 ``pattern`` is one of:
 
-- scale``major
-- chord``minor
+- scale_major
+- chord_minor
 - see all supported patterns [here](#Patterns)
+
+(Bear in mind that some commands (`box`, `tab`, `chord`, `progression`) expect the `pattern` to be of type scale, some chord, and some either)
+
 
 ``options`` is a mixture of arguments which can vary depending on the ``instrument-command`` etc such as:
 
@@ -217,7 +223,7 @@ A fretboard is a fretboard, and frettler can handle any number of strings with a
 The instrument `banjo` will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with `--strings A,B,C,etc`.
 
-#### Custom Instrument
+### Custom Instrument
 The `custom` instrument differs from the others, in that Frettler has no hard wired understanding of how many strings it has or what their tunings are.
 There is a text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
 by default. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
@@ -272,26 +278,26 @@ Frettler arguments follow the command/subcommands, and customise it's behaviour 
 
 The optional arguments allowed vary for instrument based commands ie `guitar` depending on the subcommand used ie `vertical`:
 
-argument |  vertical |  horizontal |  chord |  box |  display |  progression |  find  |  tab
+argument |  vertical |  horizontal |  [chord](#Chord-Subcommand)|  box |  display |  progression |  find  |  tab
 --------  |  ------------  |  -------------  |  ------------  |  --------------  |  -----------  |  -----------  |  -----------  | -----------
---added | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA | ?
---box | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | ?
---chords | optional | optional | NA | NA | NA | NA | NA | NA | NA | NA | NA | ?
---digits | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA | NA | ?
---easy | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA | ?
---frets | optional | optional | NA | NA | optional | NA | NA | NA | NA | NA | NA | ?
---group | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | ?
---intervals | optional | optional | NA | optional | optional | NA | optional with --notes | NA | NA | NA | NA | ?
---lefty | optional | optional | optional | optional | optional | optional | optional | NA | NA | NA | NA | ?
---mono | optional | optional | optional | optional | optional | optional | optional | NA | optional | NA | NA | ?
---notes | NA | NA | NA | NA | **mandatory** | NA | optional | NA | **mandatory** | NA | NA | ?
---octaves | optional | optional | optional | optional | optional | optional | optional with --notes | NA | NA | NA | NA | ?
---progression | NA | NA | NA | NA | NA | **mandatory** | NA | NA | NA | NA | NA | ?
---strings | optional | optional | NA | optional but YMMV | optional | NA | optional with --notes | NA | NA | NA | NA | ?
---type | NA | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA | ?
---verbose | optional | optional | NA | NA | NA | NA | optional with --digits | NA | NA | NA | NA | ?
---which | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA | ?
---zero | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | ?
+--added | NA | NA | optional | NA | NA | NA | NA | NA
+--box | NA | NA | NA | optional | NA | NA | NA | optional
+--chords | optional | optional | NA | NA | NA | NA | NA | NA
+--digits | NA | NA | NA | NA | NA | NA | optional | NA
+--easy | NA | NA | optional | NA | NA | NA | NA | NA
+--frets | optional | optional | NA | NA | optional | NA | NA | NA
+--group | NA | NA | NA | optional | NA | NA | NA | optional
+--intervals | optional | optional | NA | optional | optional | NA | optional with --notes | NA
+--lefty | optional | optional | optional | optional | optional | optional | optional | NA
+--mono | optional | optional | optional | optional | optional | optional | optional | NA
+--notes | NA | NA | NA | NA | **mandatory** | NA | optional | NA
+--octaves | optional | optional | optional | optional | optional | optional | optional with --notes | NA
+--progression | NA | NA | NA | NA | NA | **mandatory** | NA | NA
+--strings | optional | optional | NA | optional but YMMV | optional | NA | optional with --notes | NA
+--type | NA | NA | NA | NA | NA | NA | NA | NA
+--verbose | optional | optional | NA | NA | NA | NA | optional with --digits | NA
+--which | NA | NA | optional | NA | NA | NA | NA | NA
+--zero | NA | NA | NA | optional | NA | NA | NA | NA
 
 The `menu`  and `fifths` commands take no additional arguments, but the `patterns` and `group` allow:
 
@@ -305,12 +311,12 @@ argument | patterns | lookup
 Basically:
 
 - `-a` or `--added` used by the `chord` subcommand to add an additional note to the chord
-- `-b` or `--box` used by the `box` subcommand to allow the choice of which practise box to display
+- `-b` or `--box` used by the `box` and `tab` subcommand to allow the choice of which practise box to display
 - `-c` or `--chords` will calculate and list the diatonic chords in the scale (Chord name and notes).
 - `-d` or `--digits` used by the `chord` subcommand to allow searching for a specific chord fingering
 - `-e` or `--easy` used by the `chord` subcommand to only display the default/cowboy chord
 - `-f` or `--frets` N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-- `-g` or `--group` used by the `box` subcommand to choose the number of notes on each string
+- `-g` or `--group` used by the `box` and `tab` subcommand to choose the number of notes on each string
 - `-i` or `--intervals` an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
 - `-l` or `--lefty` displays for a left handed instrument
 - `-m` or `--mono` an optional flag which will make Frettler display its diagrams without colour.
@@ -339,7 +345,7 @@ Produces (truncated output here) :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/images/verbose.png"/>
 
-#### Chord Subcommand 
+### Chord Subcommand 
 The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, Frettler can display chord 'fingerings'.
 ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
 is meant to be fingered, like a traditional chord diagram and gives a summary below the chart aligned with the strings, showing their notes and intervals.
@@ -417,14 +423,14 @@ If you would like to have additional chord fingerings added, email me with the f
 'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
 known chords, and in time I will add an optional argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
 
-##### Added notes
+#### Added Notes
 With the `chord` mode, Frettler does have _some_ definitions of standard chords with added bass notes. Use the optional `-added' argument followed by the added note.
 
-##### Easy mode
+#### Easy Mode
 With the `chord` mode, Frettler may have multiple fingerings for each chord, and will display them one after the other.
 In its database, the most common 'cowboy chords' tend to be the first listed. If you only want it to display the first ie easy chord use the optional `-easy' argument.
 
-#### Progression Subcommand 
+### Progression Subcommand 
 When using the `horizontal` or `vertical` subcommands for an instrument to display a scale, you can use the `--chords` option to get Frettler to print out the chords in that scale, but the `progression`
 subcommand takes this functionality one step further, combining it with the ability to display chord fingerings for the nominated chords in a scale.
 
@@ -436,7 +442,7 @@ Will show the default chord fingerings for each of the I, IV and V chords in the
 The chord fingerings will be the default from possibly many variations for the root and chord type, usually the simpler cowboy chord fingerings. If you want to see the other variants, use the `chord` subcommand
 above individually.
 
-#### Box Subcommand
+### Box Subcommand
 Frettler can show a 'boxed' view of a scale, centered around one part of the fretboard, for practising. This has only recently been added, and requires a few tweaks to its note selection, so pull the code
 periodically and check for updates. It looks at the scale you want boxing, and displays the notes in the scale sequence, by default starting the box sequence at the first occurence of the scales root note on
 the lowest string and then finding the following notes (2 for diatonic scales or 3 for pentatonic scales), on the same string before moving to the next highest string. This produces the typical scale boxes that 
@@ -460,22 +466,22 @@ And here is an example of a boxed diatonic chord, using `./frettler guitar box c
 The idea for the boxing came from an experiment with practice sequences, which first triggered the development of the `tab` subcommand. I tried a wide variety of practise sequences as used in the
 open source project 'Fretboard' (see credits), but the results were quite mixed. The jury is out on those sequences, but I might resurrect those later.
 
-#### Tab Subcommand
+### Tab Subcommand
 As mentioned above, the `tab` subcommand came about from experimenting with sequences, but they were parked for the time being. But I realised that the `tab` might be useful for practising the boxed scales 
-so it stayed. If you want to see a standard tab for a boxed scale, just use `./frettler guitar box c scale_major` :
+so it stayed. If you want to see a standard tab for a boxed scale, just use `./frettler guitar tab c scale_major` :
 
 <img src="https://github.com/philwhiles/frettler/blob/master/images/tab.png"/>
 
 Just like the `box` subcommand, the `--group` and `--position` options will move the tab sequence around for you.
 
-#### Display Subcommand
+### Display Subcommand
 Frettler can display all occurences of arbitrary notes on the fretboard for you with the `display` command. ie to see all occurences of the notes
 c and g, try:
 
 ```
 ./frettler guitar display --notes c,g
 ```
-#### Find Subcommand
+### Find Subcommand
 One way of getting Frettler to do a reverse chord lookup is to use `find` as the keyword immediately following your instrument. In fact there are two ways to get frettler to `find` chords:
 
 #### Find by note
@@ -505,12 +511,12 @@ reflecting your choices. It will become apparent when you start it ie `./frettle
 All the usual instrument mode optional arguments can be used when first starting Frettler in menu mode (`--intervals` `--verbose` `--chords` `--mono` `--octaves` `--strings` `--frets`). 
 The first three of those can be toggled with key presses once in menu mode, while the others will be used constantly.
 
-#### Fifths Command
+### Fifths Command
 Frettler generates dynamically a representation of the Circle Of Fifths, that it uses to determine if scales should use sharps or flats as the accidentals.
 It is perhaps better described as a Line Of Fifths, due to its somewhat flat structure, and the clockwise and anticlockwise arms don't overlap, but the `fifths` command
 will print this out for you if your curious or want to refer to it.
 
-#### Lookup Command
+### Lookup Command
 Frettler also has a simple chord reverse `lookup` command. 
 The simplest takes the form :
 
@@ -561,7 +567,7 @@ Am7b5   (a chord_min7flat5)   [A(P1), C(m3), D#(d5), G(m7)]
 A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
 ```
 
-#### Patterns Command
+### Patterns Command
 Frettler understands three types of interval patterns - scales, modes and chords. At times it will expect you to provide it one type and not the other. The framework it uses for
 parsing the various commands will help you by suggesting the possible type at times, and bash tab completion can help you a lot - if you had typed 'scale' then hit tab, it would list 
 only the possible scales you can use (that's why the patterns are prefixed with their type). But if you don't use bash and Frettlers provided tab completion, it might help you to list
@@ -577,7 +583,7 @@ Want to just see the list of Frettler understood chords?
 ```
 Or 'scale'. Or 'mode'. You get the idea.
 
-#### Tab Completion Command
+### Tab Completion Command
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :
 
 ```
