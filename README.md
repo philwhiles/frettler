@@ -276,28 +276,28 @@ To see the patterns Frettler currently understands use the [Patterns Command](#P
 ### Options
 Frettler arguments follow the command/subcommands, and customise it's behaviour and output. 
 
-The optional arguments allowed vary for instrument based commands ie `guitar` depending on the subcommand used ie `vertical`:
+The arguments, required (req) or optional (opt), vary for instrument based commands ie `guitar` depending on the subcommand used ie `vertical`:
 
 argument |  [vertical](#Views) |  [horizontal](#Views) |  [chord](#Chord-Subcommand)|  [box](#Box-Subcommand) |  [display](#Display-Subcommand) |  [progression](#Progression-Subcommand) |  [find](#Find-Subcommand)  |  [tab](#Tab-Subcommand)
---------  |  ------------  |  -------------  |  ------------  |  --------------  |  -----------  |  -----------  |  -----------  | -----------
---added | NA | NA | optional | NA | NA | NA | NA | NA
---box | NA | NA | NA | optional | NA | NA | NA | optional
---chords | optional | optional | NA | NA | NA | NA | NA | NA
---digits | NA | NA | NA | NA | NA | NA | optional | NA
---easy | NA | NA | optional | NA | NA | NA | NA | NA
---frets | optional | optional | NA | NA | optional | NA | NA | NA
---group | NA | NA | NA | optional | NA | NA | NA | optional
---intervals | optional | optional | NA | optional | optional | NA | optional with --notes | NA
---lefty | optional | optional | optional | optional | optional | optional | optional | NA
---mono | optional | optional | optional | optional | optional | optional | optional | NA
---notes | NA | NA | NA | NA | **mandatory** | NA | optional | NA
---octaves | optional | optional | optional | optional | optional | optional | optional with --notes | NA
---progression | NA | NA | NA | NA | NA | **mandatory** | NA | NA
---strings | optional | optional | NA | optional but YMMV | optional | NA | optional with --notes | NA
---type | NA | NA | NA | NA | NA | NA | NA | NA
---verbose | optional | optional | NA | NA | NA | NA | optional with --digits | NA
---which | NA | NA | optional | NA | NA | NA | NA | NA
---zero | NA | NA | NA | optional | NA | NA | NA | NA
+---  |  ---  |  ---  |  ---  |  ---  |  ---  |  ---  |  ---  | ---
+--added |    |    | opt |    |    |    |    |   
+--box |    |    |    | opt |    |    |    | opt
+--chords | opt | opt |    |    |    |    |    |   
+--digits |    |    |    |    |    |    | opt |   
+--easy |    |    | opt |    |    |    |    |   
+--frets | opt | opt |    |    | opt |    |    |   
+--group |    |    |    | opt |    |    |    | opt
+--intervals | opt | opt |    | opt | opt |    | opt |   
+--lefty | opt | opt | opt | opt | opt | opt | opt |   
+--mono | opt | opt | opt | opt | opt | opt | opt |   
+--notes |    |    |    |    | **req** |    | opt |   
+--octaves | opt | opt | opt | opt | opt | opt | opt |   
+--progression |    |    |    |    |    | **req** |    |   
+--strings | opt | opt |    | opt | opt |    | opt |   
+--type |    |    |    |    |    |    |    |   
+--verbose | opt | opt |    |    |    |    | opt |   
+--which |    |    | opt |    |    |    |    |   
+--zero |    |    |    | opt |    |    |    |   
 
 The [menu](#Menu-Command)  and [fifths](#Fifths-Command) commands take no additional arguments, but the [patterns](#Patterns-Command) allows `--type` as an option,
 while the [lookup](#Lookup-Command) commands allows `--mono` as an option bute requires `--notes`
