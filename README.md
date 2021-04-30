@@ -50,7 +50,8 @@ Frettler performs most of its scale and chord calculations using first principle
 > That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
 > needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
 > chord chart views, and for the latter, has logic to work out un played strings and barring, and has grown rather tangled.
-> Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--lefty` argument to see the horizontal or vertical views from their perspective.
+> Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--lefty` argument to see the horizontal, vertical and chord views from their perspective.
+> 
 > I would love to hear from the lefties who try Frettler - did I get it right? are there some subtle bugs in there?
 > By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
 > Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
@@ -271,26 +272,26 @@ Frettler arguments follow the command/subcommands, and customise it's behaviour 
 
 The optional arguments allowed vary for instrument based commands ie `guitar` depending on the subcommand used ie `vertical`:
 
-argument |  vertical |  horizontal |  chord |  box |  display |  progression |  find 
---------  |  -------------------  |  ---------------------  |  ----------------  |  --------------  |  ------------------  |  ----------------------  |  ---------------
---added | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA
---box | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA
---chords | optional | optional | NA | NA | NA | NA | NA | NA | NA | NA | NA
---digits | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA | NA
---easy | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA
---frets | optional | optional | NA | NA | optional | NA | NA | NA | NA | NA | NA
---group | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA
---intervals | optional | optional | NA | optional | optional | NA | optional with --notes | NA | NA | NA | NA
---lefty | optional | optional | optional | optional | optional | optional | optional | NA | NA | NA | NA
---mono | optional | optional | optional | optional | optional | optional | optional | NA | optional | NA | NA
---notes | NA | NA | NA | NA | **mandatory** | NA | optional | NA | **mandatory** | NA | NA
---octaves | optional | optional | optional | optional | optional | optional | optional with --notes | NA | NA | NA | NA
---progression | NA | NA | NA | NA | NA | **mandatory** | NA | NA | NA | NA | NA
---strings | optional | optional | NA | optional but YMMV | optional | NA | optional with --notes | NA | NA | NA | NA
---type | NA | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA
---verbose | optional | optional | NA | NA | NA | NA | optional with --digits | NA | NA | NA | NA
---which | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA
---zero | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA
+argument |  vertical |  horizontal |  chord |  box |  display |  progression |  find  |  tab
+--------  |  ------------  |  -------------  |  ------------  |  --------------  |  -----------  |  -----------  |  -----------  | -----------
+--added | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA | ?
+--box | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | ?
+--chords | optional | optional | NA | NA | NA | NA | NA | NA | NA | NA | NA | ?
+--digits | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA | NA | ?
+--easy | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA | ?
+--frets | optional | optional | NA | NA | optional | NA | NA | NA | NA | NA | NA | ?
+--group | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | ?
+--intervals | optional | optional | NA | optional | optional | NA | optional with --notes | NA | NA | NA | NA | ?
+--lefty | optional | optional | optional | optional | optional | optional | optional | NA | NA | NA | NA | ?
+--mono | optional | optional | optional | optional | optional | optional | optional | NA | optional | NA | NA | ?
+--notes | NA | NA | NA | NA | **mandatory** | NA | optional | NA | **mandatory** | NA | NA | ?
+--octaves | optional | optional | optional | optional | optional | optional | optional with --notes | NA | NA | NA | NA | ?
+--progression | NA | NA | NA | NA | NA | **mandatory** | NA | NA | NA | NA | NA | ?
+--strings | optional | optional | NA | optional but YMMV | optional | NA | optional with --notes | NA | NA | NA | NA | ?
+--type | NA | NA | NA | NA | NA | NA | NA | optional | NA | NA | NA | ?
+--verbose | optional | optional | NA | NA | NA | NA | optional with --digits | NA | NA | NA | NA | ?
+--which | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | NA | ?
+--zero | NA | NA | NA | optional | NA | NA | NA | NA | NA | NA | NA | ?
 
 The `menu`  and `fifths` commands take no additional arguments, but the `patterns` and `group` allow:
 
