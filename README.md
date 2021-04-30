@@ -223,7 +223,7 @@ A fretboard is a fretboard, and frettler can handle any number of strings with a
 The instrument `banjo` will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with `--strings A,B,C,etc`.
 
-### Custom Instrument
+#### Custom Instrument
 The `custom` instrument differs from the others, in that Frettler has no hard wired understanding of how many strings it has or what their tunings are.
 There is a text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
 by default. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
@@ -278,7 +278,7 @@ Frettler arguments follow the command/subcommands, and customise it's behaviour 
 
 The optional arguments allowed vary for instrument based commands ie `guitar` depending on the subcommand used ie `vertical`:
 
-argument |  vertical |  horizontal |  [chord](#Chord-Subcommand)|  box |  display |  progression |  find  |  tab
+argument |  [vertical](#Views) |  [horizontal](#Views) |  [chord](#Chord-Subcommand)|  [box](#Box-Subcommand) |  [display](#Display-Subcommand) |  [progression](#Progression-Subcommand) |  [find](#Find-Subcommand)  |  [tab](#Tab-Subcommand)
 --------  |  ------------  |  -------------  |  ------------  |  --------------  |  -----------  |  -----------  |  -----------  | -----------
 --added | NA | NA | optional | NA | NA | NA | NA | NA
 --box | NA | NA | NA | optional | NA | NA | NA | optional
