@@ -45,32 +45,15 @@ of the out of box instruments, take a look at the [Custom Instrument](#Custom-In
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
-**UPDATE** Left handed support! That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
-needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
-chord chart views, and for the latter, has logic to work out un played strings and barring, and has grown rather tangled.
-Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--lefty` argument to see the horizontal or vertical views from their perspective.
-I would love to hear from the lefties who try Frettler - did I get it right? are there some subtle bugs in there?
-By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
-Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
-
-Frettler can display chord 'fingerings'. ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
-is meant to be fingered, like a traditional chord diagram. Read the section below on regarding 'frettler guitar chord'.
-With the new chord display comes a change to the normal vertical view also - the vertical and chord views not have the notes/interval aligned on the string, rather than in a fret
-box, making the rendering consistent with a typical chord chart, and easy to read.
-Adding the `chord` subcommand required renaming some of the existing subcommands to make more sense - `chord` became `lookup` and `find` became `display`.
-
-The internet archive of OLGA provided the bulk of the guitar fingering definitions, which were munged, with corrections, into Frettlers own repesentation, including chords with added notes.
-The horizontal and vertical views are also capable of displaying these chords with added notes.
-
-Chord definitions have been added for some of the other Frettler instruments as well, and the chord definitions currently stand at :
-
-
-| Instrument              | Chord Definitions |
-| ----------------------- |-------------------|
-| GUITAR                  | 1022              |
-| BASSGUITAR              | 96                |
-| UKELELE                 | 165               |
-| MANDOLIN                | 129               |
+> **UPDATE** Left handed support! 
+> 
+> That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
+> needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
+> chord chart views, and for the latter, has logic to work out un played strings and barring, and has grown rather tangled.
+> Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--lefty` argument to see the horizontal or vertical views from their perspective.
+> I would love to hear from the lefties who try Frettler - did I get it right? are there some subtle bugs in there?
+> By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
+> Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
 
 
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
@@ -356,10 +339,23 @@ Produces (truncated output here) :
 <img src="https://github.com/philwhiles/frettler/blob/master/images/verbose.png"/>
 
 #### Chord Subcommand 
-The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, and gives a summary below
-the chart aligned with the strings, showing their notes and intervals.
-While the rest of frettlers calculations are all done from first principles of music theory ie scales and fully displayed chords are calculated using music theory
-formulae/logic, it can display chord fingerings using a vertical view that resembles typical chord charts, using a built in database of 'fingerings' (currently in excess of 1000 for guitar, in addition to many for other instruments).
+The `chord` mode displays a more traditional chord chart and differs from the `vertical` view in that it displays filled circles for each note, Frettler can display chord 'fingerings'.
+ie as an alternative to showing all the occurences of a chords notes on the fret board, frettler can now show a chord as it
+is meant to be fingered, like a traditional chord diagram and gives a summary below the chart aligned with the strings, showing their notes and intervals.
+
+The internet archive of OLGA provided the bulk of the guitar fingering definitions, which were munged, with corrections, into Frettlers own repesentation, including chords with added notes.
+
+Chord definitions are supported for some of the other Frettler instruments as well, and the chord definitions currently stand at :
+
+
+| Instrument              | Chord Definitions |
+| ----------------------- |-------------------|
+| GUITAR                  | 1022              |
+| BASSGUITAR              | 96                |
+| UKELELE                 | 165               |
+| MANDOLIN                | 129               |
+
+
 ie to get frettler to show the fingering for 'Am':
 
 ```
