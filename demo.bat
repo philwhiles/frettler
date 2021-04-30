@@ -31,8 +31,9 @@ SET cmds[24]=frettler bassguitar horizontal C scale_major_pentatonic --intervals
 SET cmds[25]=frettler banjo horizontal C scale_blues_major=Banjo, fretboard view of C Blues Major scale
 SET cmds[26]=frettler guitar vertical G chord_maj=Guitar, vertical view of G Major arpeggio
 SET cmds[27]=frettler ukelele progression c scale_major --p 1,4,5=Display the chords for a I,IV,V progression in C Major for a Ukelele
+SET cmds[28]=frettler guitar box c scale_major=Display the first practise box for C Major for a Guitar
 
-for /L %%i in (0 1 13) do (
+for /L %%i in (0 1 28) do (
     for /F "tokens=1,2 delims==" %%a in ("!cmds[%%i]!") do (
         echo ===================================================================================================================
         echo:
