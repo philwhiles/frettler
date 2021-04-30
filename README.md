@@ -10,7 +10,7 @@ Frettler - A flexible command line program for generating and displaying musical
 - [Views](#Views)
 - [Command Line](#Command-Line)
   - [Instruments](#Instruments)
-    - [Custom Instrument](#Custom Instrument)
+    - [Custom Instrument](#Custom-Instrument)
   - [Patterns](#Patterns)
   - [Options](#Options)
   - [Chord Subcommand](#Chord-Subcommand)
