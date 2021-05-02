@@ -75,7 +75,7 @@ public class HorizontalView implements View {
   public void showScale(Scale scale, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(scale.getTitle() + " ~ " + instrument.getLabel() + instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") +" [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
+    out.println(StringUtils.center(scale.getTitle() + " ~ " + instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") +" [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
     initColourMap(scale);
     display(scale.getScaleNotes(), options);
