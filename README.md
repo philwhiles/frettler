@@ -312,32 +312,29 @@ To see the patterns Frettler currently understands use the [Patterns Command](#P
 ### Options
 Frettler arguments follow the command/subcommands, and customise it's behaviour and output. 
 
+#### Instrument Command Options
 The arguments, required (req) or optional (opt), vary for instrument based commands ie `guitar` depending on the subcommand used ie `vertical`:
 
 argument |  [vertical](#Views) |  [horizontal](#Views) |  [chord](#Chord-Subcommand)|  [box](#Box-Subcommand) |  [display](#Display-Subcommand) |  [progression](#Progression-Subcommand) |  [find](#Find-Subcommand)  |  [tab](#Tab-Subcommand)
 ---  |  ---  |  ---  |  ---  |  ---  |  ---  |  ---  |  ---  | ---
---added |    |    | opt |    |    |    |    |   
---box |    |    |    | opt |    |    |    | opt
---chords | opt | opt |    |    |    |    |    |   
---digits |    |    |    |    |    |    | opt |   
---easy |    |    | opt |    |    |    |    |   
---frets | opt | opt |    |    | opt |    |    |   
---group |    |    |    | opt |    |    |    | opt
---intervals | opt | opt |    | opt | opt |    | opt |   
---lefty | opt | opt | opt | opt | opt | opt | opt |   
---mono | opt | opt | opt | opt | opt | opt | opt |   
---notes |    |    |    |    | **req** |    | opt |   
---octaves | opt | opt | opt | opt | opt | opt | opt |   
---progression |    |    |    |    |    | **req** |    |   
---strings | opt | opt |    | opt | opt |    | opt |   
---type |    |    |    |    |    |    |    |   
---verbose | opt | opt |    |    |    |    | opt |   
---which |    |    | opt |    |    |    |    |   
---zero |    |    |    | opt |    |    |    |   
-
-The [menu](#Menu-Command)  and [fifths](#Fifths-Command) commands take no additional arguments, but the [patterns](#Patterns-Command) allows `--type` as an option,
-while the [lookup](#Lookup-Command) commands allows `--mono` as an option bute requires `--notes`
-
+--added       |     |     | opt |     |     |     |     |   
+--box         |     |     |     | opt |     |     |     | opt
+--chords      | opt | opt |     |     |     |     |     |   
+--digits      |     |     |     |     |     |     | opt |   
+--easy        |     |     | opt |     |     |     |     |   
+--frets       | opt | opt |     |     | opt |     |     |   
+--group       |     |     |     | opt |     |     |     | opt
+--intervals   | opt | opt |     | opt | opt |     | opt |   
+--lefty       | opt | opt | opt | opt | opt | opt | opt |   
+--mono        | opt | opt | opt | opt | opt | opt | opt | opt  
+--notes       |     |     |     |     | req |     | opt |   
+--octaves     | opt | opt | opt | opt | opt | opt | opt |   
+--progression |     |     |     |     |     | req |     |   
+--strings     | opt | opt |     | opt | opt |     | opt | opt  
+--tuning      | opt | opt |     | opt |     |     | opt | opt  
+--verbose     | opt | opt |     |     |     |     | opt |   
+--which       |     |     | opt |     |     |     |     |   
+--zero        |     |     |     | opt |     |     |     |   
 
 Basically:
 
@@ -359,6 +356,14 @@ Basically:
 - `-v` or `--verbose` will print out some explanatory info about Frettlers decision making, see below.
 - `-w` or `--which` instructs the `chord` subcommand to list the chords it has for the instrument and root in its chord bank
 - `-z` or `--zero` instructs the `box` subcommand to consider open strings ie fret 0
+
+#### Non Instrument Command Options
+
+The [menu](#Menu-Command)  and [fifths](#Fifths-Command) commands take no additional arguments, but :
+
+- [patterns](#Patterns-Command) allows `--type` as an option
+- [tunings](#Tunings-Command) allows `--instrument` as an option
+- [lookup](#Lookup-Command) commands allows `--mono` as an option but always requires `--notes`
 
 
 #### Verbose Mode
