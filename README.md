@@ -10,6 +10,9 @@ Frettler - A flexible command line program for generating and displaying musical
 - [Views](#Views)
 - [Command Line](#Command-Line)
   - [Instruments](#Instruments)
+    - [Strings](#Strings)
+    - [Tunings](#Tunings)
+    - [Banjo](#Banjo)
     - [Custom Instrument](#Custom-Instrument)
   - [Patterns](#Patterns)
   - [Options](#Options)
@@ -24,6 +27,7 @@ Frettler - A flexible command line program for generating and displaying musical
   - [Menu Command](#Menu-Command)
   - [Fifths Command](#Fifths-Command)
   - [Lookup Command](#Lookup-Command)
+  - [Tunings Command](#Tunings-Command)
   - [Patterns Command](#Pattern-Command)
   - [Tab Completion Command](#Tab-Completion-Command)
 - [Customising Frettler Startup](#Customising-Frettler-Startup)
@@ -46,7 +50,7 @@ of the out of box instruments, take a look at the [Custom Instrument](#Custom-In
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
-> **UPDATE** Left handed support! 
+> **UPDATE** Left handed support
 > 
 > That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
 > needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
@@ -57,6 +61,12 @@ Frettler performs most of its scale and chord calculations using first principle
 > By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
 > Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
 
+
+> **UPDATE** Preset tunings
+> 
+> Frettler has been able to support custom tunings from the get go, using the `--strings` option, and more recently, by setting the custom.properties of the `custom` instrument.
+> But now, Frettler supports a range of preset tunings, accessed using the `--tuning` option.
+>
 
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
@@ -218,15 +228,40 @@ Where...
 - see all supported options [here](#Options)
 
 ### Instruments
-A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
 
+#### Strings
+A fretboard is a fretboard, and frettler can handle any number of strings with any tuning. For each instrument mentioned it has a default number of strings and their standard tunings.
+If you want Frettler to display chords and scales for a seven string guitar, or a six string guitar with drop D tuning, you can use the `--strings` option, and the number of strings you
+choose, and their tuning, will override which ever instrument you have told Frettler to use. The instrument argument to Frettler is just a default of `--strings` really.
+ie
+
+```
+./frettler guitar horizontal c scale_major --strings d,a,d,g,b,e
+./frettler guitar horizontal c scale_major --strings b,e,a,d,g,b,e
+./frettler guitar horizontal c scale_major --strings a,d
+```
+
+How many people play a two stringed guitar, I know, but you get the point.
+
+#### Tunings
+If you regularly want to use Frettler with different tunings, switching the tuning with the `-strings` can be tedious and error prone, so instead you can
+use the `-t` or `--tuning` option flag followed by the name of the tuning you want Frettler to use. When you do this the `--strings` option is ignored.
+ie
+
+```
+./frettler guitar horizontal c scale_major --tuning guitar_drop_d
+```
+
+To find out what preset tunings Frettler has to offer, use the [Tunings Command](#Tunings-Command).
+
+#### Banjo
 The instrument `banjo` will assume the fifth string starts at the fifth fret - if you want the display for a banjo having all strings full length,
 just use any instrument other than banjo with `--strings A,B,C,etc`.
 
 #### Custom Instrument
 The `custom` instrument differs from the others, in that Frettler has no hard wired understanding of how many strings it has or what their tunings are.
 There is a text file called 'custom.properties' in the root folder of Frettler, which defines the name of the custom instrument, its strings/tunings and the number of frets you want displayed 
-by default. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
+by default, and if it is right or left handed. If you utilise the `custom` instrument, the `--strings` and `--frets` optional arguments will be ignored.
 The 'name' property will be used in Frettlers titling of scales and chords.
 
 So with the example 'custom.properties' provided :
@@ -235,6 +270,7 @@ So with the example 'custom.properties' provided :
 name=Irish Bouzouki
 strings=G,D,A,D
 frets=12
+lefty=false
 ```
 
 With :
@@ -561,6 +597,23 @@ Cdom11   (c chord_dom11)   [C(P1), E(M3), G(P5), A#(m7), D(M9), F#(M11)]
 Am7b5   (a chord_min7flat5)   [A(P1), C(m3), D#(d5), G(m7)]
 A#maj6/9   (as chord_maj69)   [A#(P1), D(M3), F(P5), G(M6), C(M9)]
 ```
+
+### Tunings Command
+Currently, Frettler contains a set of out of the box tunings for `guitar` only, that you can use with the `--tuning` option.
+The tab completion does not work with that option currently, and the only way to know what tunings are available is to either read the code, or use the `tunings` command:
+
+```
+./frettler tunings
+GUITAR_STANDARD [E, A, D, G, B, E]
+GUITAR_DOBRO [G, B, D, G, B, D]
+GUITAR_AUS4 [E, A, D, E, A, E]
+etc
+etc
+```
+
+Frettler will then list out the names of **all** the tuning presets it contains, and the tuning for each. You can also use the optional `--instrument` argument to specify the name of the instrument you are interested in.
+Currently Frettler only has tunings for `--instrument guitar` anyway, but when it is extended further, this will allow you to display only the tunings for your chosen instrument.
+
 
 ### Patterns Command
 Frettler understands three types of interval patterns - scales, modes and chords. At times it will expect you to provide it one type and not the other. The framework it uses for

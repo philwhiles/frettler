@@ -20,7 +20,6 @@ package me.flotsam.frettler.command;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Sequence;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 

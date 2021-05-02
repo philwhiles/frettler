@@ -30,7 +30,9 @@ public class CustomCommand extends FrettedInstrumentCommand implements Runnable 
 
   @Override
   public void run() {
-   exec(new CustomInstrument(strings, frets));
+   CustomInstrument customInstrument = new CustomInstrument(strings, tuning, frets, lefty);
+   lefty = customInstrument.isLefty();
+   exec(customInstrument);
   }
   
 }

@@ -24,4 +24,5 @@ public class CustomProperties {
   private String name;
   private Note[] strings;
   private int frets;
+  private boolean lefty;
 }

@@ -17,6 +17,8 @@
 
 package me.flotsam.frettler.command;
 
+import static java.lang.System.err;
+import me.flotsam.frettler.instrument.FrettedInstrument.InstrumentType;
 import me.flotsam.frettler.instrument.Mandolin;
 import picocli.CommandLine.Command;
 
@@ -30,6 +32,6 @@ public class MandolinCommand extends FrettedInstrumentCommand implements Runnabl
   
   @Override
   public void run() {
-   exec(new Mandolin(strings, frets));
+   exec(new Mandolin(strings, tuning, frets));
   }
 }

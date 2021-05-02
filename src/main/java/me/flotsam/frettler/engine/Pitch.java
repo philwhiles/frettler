@@ -17,7 +17,6 @@
 
 package me.flotsam.frettler.engine;
 
-import java.util.Arrays;
 import lombok.Getter;
 
 public enum Pitch {

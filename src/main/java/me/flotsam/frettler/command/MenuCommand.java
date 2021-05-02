@@ -16,7 +16,6 @@
 package me.flotsam.frettler.command;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.jline.terminal.TerminalBuilder;
@@ -48,10 +47,6 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
       .collect(Collectors.toList()).toArray(new String[] {});
 
   private static String[] allPatternArgs =
-      Arrays.stream(IntervalPattern.values()).filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
-          .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
-
-  private static String[] chordPatternArgs =
       Arrays.stream(IntervalPattern.values()).filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
           .map(ip -> ip.name()).sorted().collect(Collectors.toList()).toArray(new String[] {});
 
@@ -108,7 +103,6 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
         enterDisabled = view == View.CHORD
             && intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD ? true
                 : false;
-
 
         switch (key) {
           case KEY_ESC:
@@ -178,19 +172,19 @@ public class MenuCommand extends FrettedInstrumentCommand implements Runnable {
   private void display(String instrument) {
     switch (instrument) {
       case "GUITAR":
-        exec(new Guitar(strings, frets));
+        exec(new Guitar(strings, null, frets));
         break;
       case "BASSGUITAR":
-        exec(new BassGuitar(strings, frets));
+        exec(new BassGuitar(strings, null, frets));
         break;
       case "BANJO":
-        exec(new Banjo(strings, frets));
+        exec(new Banjo(strings, null, frets));
         break;
       case "MANDOLIN":
-        exec(new Mandolin(strings, frets));
+        exec(new Mandolin(strings, null, frets));
         break;
       case "UKELELE":
-        exec(new Ukelele(strings, frets));
+        exec(new Ukelele(strings, null, frets));
         break;
       case "CUSTOM":
         exec(new CustomInstrument());

@@ -1,3 +1,6 @@
+# 2nd May 2021
+- Added out of the box `--tuning` support
+
 # 28th April 2021
 - Added left handed instrument support
 

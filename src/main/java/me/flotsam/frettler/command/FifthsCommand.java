@@ -36,8 +36,6 @@ public class FifthsCommand implements Runnable {
   @Override
   public void run() {
     LinkedHashMap<Note, LineEntry> majorLine = LineOfFifths.getMajorLine();
-    LinkedHashMap<Note, LineEntry> minorLine = LineOfFifths.getMinorLine();
-    LinkedHashMap<Note, LineEntry> dimLine = LineOfFifths.getDimLine();
     List<Note> majorLineNotes = LineOfFifths.getMajorLine().keySet().stream().collect(Collectors.toList());
     
     for (Note majorNote : majorLineNotes) {

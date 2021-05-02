@@ -34,12 +34,15 @@ import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.engine.Sequence;
 import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.FrettedInstrument;
+import me.flotsam.frettler.instrument.Tuning;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
 import me.flotsam.frettler.view.TabView;
 import me.flotsam.frettler.view.VerticalView;
+import picocli.CommandLine;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.ParseResult;
 
 /**
  * Base class that handles the initial instrument command param
@@ -83,7 +86,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
       description = "use if you want some background to Frettlers application of music theory")
   boolean verbose = false;
 
-  // reverse is reserved for TabView
+  // reverse is reserved for TabView for a planned change
   // @Option(names = {"-r", "--reverse"}, description = "generate sequences from the 1st string")
   boolean reverse = false;
 
@@ -96,6 +99,9 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   @Option(names = {"-b", "--box"}, paramLabel = "num", description = "box number")
   Integer position = null;
 
+  @Option(names = {"-t", "--tuning"}, description = "predetermined tuning")
+  Tuning tuning = null;
+
   @Option(names = {"-p", "--progression"}, paramLabel = "num",
       description = "progression numbers ie 1,4,5", split = ",")
   int[] progressions = {};
@@ -106,7 +112,6 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           "Sorry - haven't worked out how to handle that 5th string in octave calculation - yet");
       return;
     }
-
     switch (this.view.getType()) {
       case TAB:
         handleScaleTabView(instrument);
@@ -282,7 +287,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
               instrument.getStringNotes());
       if (optInstrument.isEmpty()) {
-        out.println("The current instrument is not currently defined for chords");
+        out.println("The current instrument and tuning is not currently defined for chords");
         return;
       } else {
         FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
@@ -317,7 +322,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
           FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
               instrument.getStringNotes());
       if (optInstrument.isEmpty()) {
-        out.println("The current instrument is not currently defined for chords");
+        out.println("The current instrument and tuning is not currently defined for chords");
         return;
       } else {
         Scale scale = new Scale(this.root, this.intervalPattern);
@@ -362,7 +367,7 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
             instrument.getStringNotes());
     if (optInstrument.isEmpty()) {
-      out.println("The current instrument is not currently defined for chords");
+      out.println("The current instrument and tuning is not currently defined for chords");
       return;
     } else {
       FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();

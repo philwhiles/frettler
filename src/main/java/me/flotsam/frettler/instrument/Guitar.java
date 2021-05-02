@@ -24,10 +24,10 @@ public class Guitar extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G, Note.B, Note.E};
 
   public Guitar() {
-    this(DEFAULT_STRINGS, DEFAULT_FRETS);
+    this(DEFAULT_STRINGS, null, DEFAULT_FRETS);
   }
 
-  public Guitar(Note[] strings, Integer frets) {
-    super(FrettedInstrument.InstrumentType.GUITAR, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public Guitar(Note[] strings, Tuning tuning, Integer frets) {
+    super(FrettedInstrument.InstrumentType.GUITAR, frets, strings.length > 0 ? strings : DEFAULT_STRINGS, tuning);
   }
 }

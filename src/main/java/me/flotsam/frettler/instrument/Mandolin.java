@@ -24,10 +24,10 @@ public class Mandolin extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.D, Note.A, Note.E};
 
   public Mandolin() {
-    this(DEFAULT_STRINGS, DEFAULT_FRETS);
+    this(DEFAULT_STRINGS, null, DEFAULT_FRETS);
   }
 
-  public Mandolin(Note[] strings, Integer frets) {
-    super(FrettedInstrument.InstrumentType.MANDOLIN, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public Mandolin(Note[] strings, Tuning tuning, Integer frets) {
+    super(FrettedInstrument.InstrumentType.MANDOLIN, frets, strings.length > 0 ? strings : DEFAULT_STRINGS, tuning);
   }
 }

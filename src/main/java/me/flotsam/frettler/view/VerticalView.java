@@ -165,7 +165,7 @@ public class VerticalView implements View {
 
     out.println();
     out.println(StringUtils.center(scale.getTitle(), TITLE_CENTER));
-    out.println(StringUtils.center(instrument.getLabel() + " ["
+    out.println(StringUtils.center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
         + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
         + "]", TITLE_CENTER));
     out.println();

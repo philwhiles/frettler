@@ -21,10 +21,8 @@ import java.util.Optional;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Pitch;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 
 /**
  * Handles the chord analysis of a set of provided notes
