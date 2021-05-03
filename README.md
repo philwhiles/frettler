@@ -343,24 +343,24 @@ argument |  [vertical](#Views) |  [horizontal](#Views) |  [chord](#Chord-Subcomm
 
 Basically:
 
-- `-a` or `--added` used by the `chord` subcommand to add an additional note to the chord
+- `-a` or `--added` used by the `chord` [subcommand](#Chord-Subcommand) to add an additional note to the chord
 - `-b` or `--box` used by the `box` and `tab` subcommand to allow the choice of which practise box to display
 - `-c` or `--chords` will calculate and list the diatonic chords in the scale (Chord name and notes).
-- `-d` or `--digits` used by the `chord` subcommand to allow searching for a specific chord fingering
-- `-e` or `--easy` used by the `chord` subcommand to only display the default/cowboy chord
+- `-d` or `--digits` used by the `chord` [subcommand](#Chord-Subcommand) to allow searching for a specific chord fingering
+- `-e` or `--easy` used by the `chord` [subcommand](#Chord-Subcommand) to only display the default/cowboy chord
 - `-f` or `--frets` N will display either horizontal or vertical views with N frets instead of the default 12 for each instrument.
-- `-g` or `--group` used by the `box` and `tab` subcommand to choose the number of notes on each string
+- `-g` or `--group` used by the `box` and `tab` subcommands to choose the number of notes on each string
 - `-i` or `--intervals` an optional flag which makes Frettler display the note intervals(*) instead of the default note name.
 - `-l` or `--lefty` displays for a left handed instrument
 - `-m` or `--mono` an optional flag which will make Frettler display its diagrams without colour.
 - `-n` or `--notes` allows a comma separated list of notes to be specified
 - `-o` or `--octaves` will colourize the notes or intervals according to the relative octave (**)
-- `-p` or `--progression` used by the `progression` subcommand to choose the chord progression to display
-- `-s` or `--strings` followed by your preferred tuning to override the instruments default tuning. Need to use drop D tuning? just use `-s D,A,D,G,B,E`. (If you regularly want to use a non default string setup, see below)
-- `-t` or `--type` used by the `patterns` command to allow choice of scale, chord or mode patterns
+- `-p` or `--progression` used by the `progression` [subcommand](#Progression-Subcommand) to choose the chord progression to display
+- `-s` or `--strings` followed by your preferred [string](#Strings) tuning to override the instruments default tuning. Need to use drop D tuning? just use `-s D,A,D,G,B,E`. (If you regularly want to use a non default string setup, see below)
+- `-t` or `--tuning` overrides the `--strings` if used and the instruments default tuning with the [tuning](#Tunings-Command) type provided
 - `-v` or `--verbose` will print out some explanatory info about Frettlers decision making, see below.
-- `-w` or `--which` instructs the `chord` subcommand to list the chords it has for the instrument and root in its chord bank
-- `-z` or `--zero` instructs the `box` subcommand to consider open strings ie fret 0
+- `-w` or `--which` instructs the `chord` [subcommand](#Chord-Subcommand) to list the chords it has for the instrument and root in its chord bank
+- `-z` or `--zero` instructs the `box` [subcommand](#Box-Subcommand) to consider open strings ie fret 0
 
 #### Non Instrument Command Options
 
