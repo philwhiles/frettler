@@ -16,6 +16,8 @@ Frettler - A flexible command line program for generating and displaying musical
     - [Custom Instrument](#Custom-Instrument)
   - [Patterns](#Patterns)
   - [Options](#Options)
+    - [Instrument Command Options](#Instrument-Command-Options)
+    - [Non Instrument Command Options](#Non-Instrument-Command-Options)
   - [Chord Subcommand](#Chord-Subcommand)
     - [Added Notes](#Added-Notes)
     - [Easy Mode](#Added-Notes)
@@ -30,7 +32,6 @@ Frettler - A flexible command line program for generating and displaying musical
   - [Tunings Command](#Tunings-Command)
   - [Patterns Command](#Pattern-Command)
   - [Tab Completion Command](#Tab-Completion-Command)
-- [Customising Frettler Startup](#Customising-Frettler-Startup)
 - [Caveats](#Caveats)
 - [Tips](#Tips)
 - [Todo](#Todo)
@@ -677,54 +678,7 @@ instead of :
 frettler guitar chord c chord_maj
 ```
 
-If you use Frettler for a while, once you have learned its command line verbs, using shortcuts comes more naturall.
-
-## Customising Frettler Startup
-If the [custom instrument](#Custom-Instrument) doesn't do it for you, you can customise Frettler by writing a wrapper script.
-If you find yourself regularly using Frettler with the same old optional arguments, say the `--strings` you can make your life easier by creating your own script wrapping the 
-frettler script/command. Say you want to use drop D tuning all the time :
-
-Create a file in the top frettler directory, and call it 'dropd', with the following content:
-
-### Linux/macOS customisation
-```bash
-#!/bin/bash
-./frettler $@ --strings D,A,D,G,B,E
-```
-
-Save your dropd file, then back at your terminal prompt, execute :
-
-```bash
-chmod +x dropd
-```
-
-### Windows customisation
-```Batchfile
-@echo off
-frettler.bat %%\* --strings D,A,D,G,B,E
-```
-
-
-Then use 'dropd' as an alternative to 'frettler', just drop(pun!) the strings argument you got so tired of typing!
-
-
-And if you prefer menu mode and want to use a custom tuning, number of frets etc:
-### Linux/macOS
-```bash
-#!/bin/bash
-./frettler menu $@ --strings D,A,D,G,B,E
-```
-
-There is also a small bash script provided that will iterate through a set of notes and collect frettlers output for all their scales  
-To run it simply provide the scale type you want :
-```bash
-#!/bin/bash
-./scales scale_major
-```
-
-The output will be written to 'scale_major.out'. I wrote this as I wanted to print out some scale sheets for practising. The output is by default coloured, so if printing that does not work,
-add the `--mono' option to the frettler command in the 'scales' script. I have some local tricks to convert it to html which I then open in safari and print, but those tricks are peculiar to the
-editor I use - Vim. If you use Vim, try the plugin [AnsiEsc](http://www.drchip.org/astronaut/vim/#ANSIESC) and then use ":TOhtml".
+If you use Frettler for a while, once you have learned its command line verbs, using shortcuts comes more natural.
 
 ## Caveats
 This is a work in progress, pretty much like the authors understanding of music theory.
