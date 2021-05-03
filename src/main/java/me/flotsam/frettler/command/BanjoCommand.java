@@ -30,6 +30,6 @@ public class BanjoCommand extends FrettedInstrumentCommand implements Runnable {
 
   @Override
   public void run() {
-   exec(new Banjo(strings, frets));
+   exec(new Banjo(strings, tuning, frets));
   }
 }

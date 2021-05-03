@@ -12,18 +12,21 @@ example() {
 
 declare -a cmds=(
 "./frettler guitar horizontal C scale_major=Standard guitar, horizontal fretboard view of C Major scale"
+"./frettler guitar horizontal C scale_major --lefty=Standard guitar, horizontal fretboard view of C Major scale, for a left handed guitar"
+"./frettler guitar horizontal C scale_major --lefty --tuning guitar_drop_d=Standard guitar, horizontal fretboard view of C Major scale, for a left handed guitar using drop D tuning"
 "./frettler guitar horizontal C scale_major --intervals=Standard guitar, horizontal fretboard view of C Major scale, intervals instead of notes"
 "./frettler guitar vertical D scale_minor=Standard guitar, vertical fretboard view of D Minor scale"
 "./frettler guitar chord a chord_min=Standard guitar, chord chart of Am"
+"./frettler guitar chord a chord_min --lefty --easy=Standard guitar, cowboy/default chord chart of Am for a left handed player"
 "./frettler guitar chord a chord_min -i=Standard guitar, chord chart of Am, intervals instead of notes"
 "./frettler guitar horizontal C scale_major --octaves=Standard guitar, fretboard view of C Major scale, colourizing the fretboard relative octaves"
 "./frettler guitar horizontal C scale_major --verbose=Standard guitar, fretboard view of C Major scale, verbose mode"
 "./frettler guitar horizontal C scale_major --chords --verbose=Standard guitar, fretboard view of C Major scale, derive diatonic chords, verbose mode"
 "./frettler guitar display --notes c=Standard guitar, just show all occurences of note 'C'"
 "./frettler fifths=Display the Line Of Fifths generated and used internally by Frettler"
-"./frettler lookup c,e,g=No instrument, just exact reverse chord lookup"
-"./frettler lookup c,e --rule relaxed=No instrument, just relaxed reverse chord lookup"
-"./frettler lookup c,e --rule loose=No instrument, just loose reverse chord lookup"
+"./frettler lookup --notes c,e,g=No instrument, just exact reverse chord lookup"
+"./frettler lookup --notes c,e --rule relaxed=No instrument, just relaxed reverse chord lookup"
+"./frettler lookup --notes c,e --rule loose=No instrument, just loose reverse chord lookup"
 "./frettler guitar find -n c,e,g =Standard guitar, lookup chord and display vertically"
 "./frettler guitar vertical A scale_minor --chords=Standard guitar, vertical view of A Minor chord, with diatonic chords"
 "./frettler guitar vertical C chord_maj=Standard guitar, vertical view of C Major arpeggio "
@@ -38,6 +41,11 @@ declare -a cmds=(
 "./frettler bassguitar horizontal C scale_major_pentatonic --intervals --frets 17=Bass guitar, fretboard view to 17th fret of C Major Pentatonic Scale, with intervals"
 "./frettler banjo horizontal C scale_blues_major=Banjo, fretboard view of C Blues Major scale"
 "./frettler guitar vertical G chord_maj=Guitar, vertical view of G Major arpeggio"
+"./frettler ukelele progression c scale_major --p 1,4,5=Display the chords for a I,IV,V progression in C Major for a Ukelele"
+"./frettler guitar box c scale_major=Display the first practise box for C Major for a Guitar"
+"./frettler patterns -t scale=Display the names of the scales that Frettler supports"
+"./frettler patterns -t chord=Display the names of the chords that Frettler supports"
+"./frettler tunings=Display the names of the tunings that Frettler supports"
 )
 
 let n=1

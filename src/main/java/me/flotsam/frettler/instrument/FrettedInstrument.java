@@ -17,6 +17,7 @@ package me.flotsam.frettler.instrument;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,18 +31,18 @@ import me.flotsam.frettler.engine.ScaleNote;
 public abstract class FrettedInstrument {
 
   static final int DEFAULT_FRETS = 12;
-
+  @Getter
+  boolean lefty;
+  
   @Getter
   List<Fret> allFrets = new ArrayList<>();
   @Getter
   List<Note> stringNotes;
 
   // remember element 0 in each inner List is the open string note
-  @Getter
   List<List<Fret>> fretsByString = new ArrayList<>();
 
   // remember element 0 in the inner list is the open string notes
-  @Getter
   List<List<Fret>> fretsByFret = new ArrayList<>();
 
   @Getter
@@ -50,11 +51,46 @@ public abstract class FrettedInstrument {
   @Getter
   private InstrumentType instrumentType;
 
+  public List<List<Fret>> getFretsByFret(boolean lefty) {
+    List<List<Fret>> fretList = new ArrayList<>();
+    for (List<Fret> frets : fretsByFret) {
+      List<Fret> newFretList = new ArrayList<>(frets);
+      if (lefty) {
+        Collections.reverse(newFretList);
+      }
+      fretList.add(newFretList);
+    }
+    return fretList;
+  }
 
-  public FrettedInstrument(InstrumentType instrumentType, int frets, Note[] strings) {
+  public List<List<Fret>> getFretsByString(boolean lefty) {
+    List<List<Fret>> fretList = new ArrayList<>();
+    for (List<Fret> frets : fretsByString) {
+      fretList.add(new ArrayList<>(frets));
+    }
+    if (lefty) {
+      Collections.reverse(fretList);
+    }
+    return fretList;
+  }
+
+  public FrettedInstrument(InstrumentType instrumentType, int frets, Note[] strings, Tuning tuning) {
+    this(instrumentType, frets, strings, tuning, false);
+  }
+  public FrettedInstrument(InstrumentType instrumentType, int frets, Note[] strings, Tuning tuning, boolean lefty) {
     this.instrumentType = instrumentType;
     this.frets = frets;
+
+    if (tuning != null) {
+      if (tuning.getInstrumentType() != instrumentType) {
+        System.err.println("Tuning incompatible with instrument type");
+        System.exit(-1);
+      } else {
+        strings = tuning.getNotes();
+      }
+    }
     this.stringNotes = Arrays.asList(strings);
+    this.lefty = lefty;
 
     Scale chromaticScale = Scale.CHROMATIC_SCALE;
     Scale referenceScale = new Scale(strings[0], IntervalPattern.SCALE_CHROMATIC);
@@ -125,23 +161,23 @@ public abstract class FrettedInstrument {
     FrettedInstrument biggerInstrument = null;
     switch (instrument.getInstrumentType()) {
       case GUITAR:
-        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        biggerInstrument = new Guitar(instrument.getStringNotes().toArray(new Note[] {}), null, 23);
         break;
       case BASSGUITAR:
-        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        biggerInstrument = new BassGuitar(instrument.getStringNotes().toArray(new Note[] {}), null, 23);
         break;
       case UKELELE:
-        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        biggerInstrument = new Ukelele(instrument.getStringNotes().toArray(new Note[] {}), null, 23);
         break;
       case MANDOLIN:
-        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        biggerInstrument = new Mandolin(instrument.getStringNotes().toArray(new Note[] {}), null, 23);
         break;
       case BANJO:
-        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), 23);
+        biggerInstrument = new Banjo(instrument.getStringNotes().toArray(new Note[] {}), null, 23);
         break;
       case CUSTOM:
         biggerInstrument =
-            new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), 23);
+            new CustomInstrument(instrument.getStringNotes().toArray(new Note[] {}), null, 23, instrument.lefty);
         break;
     }
     return biggerInstrument;

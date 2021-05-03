@@ -29,6 +29,7 @@ import me.flotsam.frettler.command.LookupCommand;
 import me.flotsam.frettler.command.MandolinCommand;
 import me.flotsam.frettler.command.MenuCommand;
 import me.flotsam.frettler.command.PatternsCommand;
+import me.flotsam.frettler.command.TuningsCommand;
 import me.flotsam.frettler.command.UkeleleCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -37,7 +38,7 @@ import picocli.CommandLine.HelpCommand;
 @Command(name = "frettler",
     description = "Generates scales/arpeggios, chords and arpeggios for fretted instruments",
     mixinStandardHelpOptions = true,
-    subcommands = {MenuCommand.class, FifthsCommand.class, HelpCommand.class, PatternsCommand.class, CompletionsCommand.class, LookupCommand.class, GuitarCommand.class,
+    subcommands = {TuningsCommand.class, MenuCommand.class, FifthsCommand.class, HelpCommand.class, PatternsCommand.class, CompletionsCommand.class, LookupCommand.class, GuitarCommand.class,
         BassGuitarCommand.class, BanjoCommand.class, MandolinCommand.class, UkeleleCommand.class, CustomCommand.class})
 public class Main implements Callable<Integer> {
 

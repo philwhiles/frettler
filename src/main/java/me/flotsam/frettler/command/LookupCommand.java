@@ -21,10 +21,8 @@ import java.util.Optional;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Pitch;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.Parameters;
 
 /**
  * Handles the chord analysis of a set of provided notes
@@ -36,16 +34,8 @@ import picocli.CommandLine.Parameters;
 public class LookupCommand implements Runnable {
 
 
-  @Parameters(index = "0", description = "The chord notes to analyse", split = ",")
+  @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
   Note[] notes = new Note[] {};
-
-  @Option(names = {"-v", "--verbose"},
-      description = "if you want some background to Frettlers application of music theory")
-  boolean verbose = false;
-
-  @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
-  @Getter
-  protected boolean mono;
 
   @Option(names = {"-r", "--rule"}, defaultValue="STRICT", description = "Chord lookup can be strict, relaxed or loose")
   @Getter

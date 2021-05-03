@@ -44,7 +44,7 @@ public class HorizontalView implements View {
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
 
   private FrettedInstrument instrument;
-  private Options defaultOptions = new Options(false, true, true, false);
+  private Options defaultOptions = new Options(false, true, true, false, false);
 
   public HorizontalView(FrettedInstrument instrument) {
     this.instrument = instrument;
@@ -57,7 +57,7 @@ public class HorizontalView implements View {
   public void showChord(Chord chord, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(chord.getTitle() + "  " + chord.getDetails() + " ~ " + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
+    out.println(StringUtils.center(chord.getTitle() + "  " + chord.getDetails() + " ~ " + instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "[" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
 
     initColourMap(chord);
@@ -75,7 +75,7 @@ public class HorizontalView implements View {
   public void showScale(Scale scale, Options options) {
     out.println();
     out.print("    ");
-    out.println(StringUtils.center(scale.getTitle() + " ~ " + instrument.getLabel() + " [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
+    out.println(StringUtils.center(scale.getTitle() + " ~ " + instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") +" [" + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]" , 84));
     out.println();
     initColourMap(scale);
     display(scale.getScaleNotes(), options);
@@ -86,8 +86,9 @@ public class HorizontalView implements View {
 
     int octave = 0; 
     boolean octaveToggle = false;
-    for (int i = instrument.getFretsByString().size() - 1; i >= 0; i--) {
-      List<Fret> tonesInString = instrument.getFretsByString().get(i);
+
+    for (int i : getOrderedStrings(instrument, options.isLefty())) {
+      List<Fret> tonesInString = instrument.getFretsByString(false).get(i);
       StringBuilder stringBuilder = new StringBuilder();
       for (Fret fret : tonesInString) {
         Optional<ScaleNote> note = Optional.empty();
@@ -170,6 +171,7 @@ public class HorizontalView implements View {
     private boolean inlays;
     private boolean colour;
     private boolean octaves;
+    private boolean lefty;
   }
 }
 

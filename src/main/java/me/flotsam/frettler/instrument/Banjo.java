@@ -24,11 +24,11 @@ public class Banjo extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.G, Note.D, Note.G, Note.B, Note.D};
 
   public Banjo() {
-    this(DEFAULT_STRINGS, DEFAULT_FRETS);
+    this(DEFAULT_STRINGS, null, DEFAULT_FRETS);
   }
 
-  public Banjo(Note[] strings, Integer frets) {
-    super(FrettedInstrument.InstrumentType.BANJO, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public Banjo(Note[] strings, Tuning tuning, Integer frets) {
+    super(FrettedInstrument.InstrumentType.BANJO, frets, strings.length > 0 ? strings : DEFAULT_STRINGS, tuning);
   }
   
   public boolean isBanjo() {

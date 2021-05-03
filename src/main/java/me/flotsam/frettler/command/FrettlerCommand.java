@@ -20,7 +20,6 @@ package me.flotsam.frettler.command;
 import lombok.Getter;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Sequence;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
@@ -42,9 +41,6 @@ public class FrettlerCommand {
       description = "The interval pattern to use")
   IntervalPattern intervalPattern;
 
-//  @Parameters(index = "3", defaultValue = "NONE",
-//      description = "The scale sequence to use")
-  Sequence sequence = Sequence.NONE;
 
   @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
   @Getter
