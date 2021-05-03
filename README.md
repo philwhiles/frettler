@@ -50,6 +50,8 @@ of the out of box instruments, take a look at the [Custom Instrument](#Custom-In
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
+---
+
 > **UPDATE** Left handed support
 > 
 > That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
@@ -61,12 +63,15 @@ Frettler performs most of its scale and chord calculations using first principle
 > By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
 > Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
 
+---
 
 > **UPDATE** Preset tunings
 > 
 > Frettler has been able to support custom tunings from the get go, using the `--strings` option, and more recently, by setting the custom.properties of the `custom` instrument.
 > But now, Frettler supports a range of preset tunings, accessed using the `--tuning` option.
 >
+
+---
 
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
