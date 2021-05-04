@@ -58,16 +58,16 @@ public class ChordBankTest {
         FrettedInstrument thisInstrument = null;
         switch (instrumentDef.getInstrumentType()) {
           case GUITAR:
-            thisInstrument = new Guitar(instrumentDef.getTuning().toArray(new Note[] {}), 30);
+            thisInstrument = new Guitar(instrumentDef.getTuning().toArray(new Note[] {}), null, 30);
             break;
           case UKELELE:
-            thisInstrument = new Ukelele(instrumentDef.getTuning().toArray(new Note[] {}), 30);
+            thisInstrument = new Ukelele(instrumentDef.getTuning().toArray(new Note[] {}), null, 30);
             break;
           case BASSGUITAR:
-            thisInstrument = new BassGuitar(instrumentDef.getTuning().toArray(new Note[] {}), 30);
+            thisInstrument = new BassGuitar(instrumentDef.getTuning().toArray(new Note[] {}), null, 30);
             break;
           case MANDOLIN:
-            thisInstrument = new Mandolin(instrumentDef.getTuning().toArray(new Note[] {}), 30);
+            thisInstrument = new Mandolin(instrumentDef.getTuning().toArray(new Note[] {}), null, 30);
             break;
           default:
             break;
@@ -81,7 +81,7 @@ public class ChordBankTest {
             continue;
           }
           int fretNum = Integer.parseInt(str);
-          Note fretNote = thisInstrument.getFretsByString().get(stringNum).get(fretNum).getNote();
+          Note fretNote = thisInstrument.getFretsByString(false).get(stringNum).get(fretNum).getNote();
           if (!chord.containsNotes(fretNote)) {
             fail("\n" + instrument.getInstrumentType() + " Actual chord contains " + chord.getChordNotes() + "\nChordDef "
                 + chordDef.getChordRoot() + " " + chordDef.getChordPattern().getLabel()

@@ -36,6 +36,7 @@ public class CustomInstrument extends FrettedInstrument {
       customProperties.setStrings(stringNotes);
       customProperties.setFrets(Integer.parseInt(prop.getProperty("frets")));
       customProperties.setName(prop.getProperty("name"));
+      customProperties.setLefty(Boolean.parseBoolean(prop.getProperty("lefty")));
     } catch (IOException ex) {
       System.out.println("There was a problem loading the custom.properties");
       System.exit(-1);
@@ -43,11 +44,11 @@ public class CustomInstrument extends FrettedInstrument {
   }
 
   public CustomInstrument() {
-    this(customProperties.getStrings(), customProperties.getFrets());
+    this(customProperties.getStrings(), null, customProperties.getFrets(), customProperties.isLefty());
   }
 
-  public CustomInstrument(Note[] strings, Integer frets) {
-    super(FrettedInstrument.InstrumentType.CUSTOM, customProperties.getFrets(), customProperties.getStrings());
+  public CustomInstrument(Note[] strings, Tuning tuning, Integer frets, boolean lefty) {
+    super(FrettedInstrument.InstrumentType.CUSTOM, customProperties.getFrets(), customProperties.getStrings(), tuning, customProperties.isLefty());
   }
   
   public String getLabel() {

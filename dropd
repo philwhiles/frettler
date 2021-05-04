@@ -1,3 +1,0 @@
-#!/bin/bash
-./frettler $@ --strings D,A,D,G,B,E
-

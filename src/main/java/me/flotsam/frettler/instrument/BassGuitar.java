@@ -24,10 +24,10 @@ public class BassGuitar extends FrettedInstrument {
   private static final Note[] DEFAULT_STRINGS = new Note[] {Note.E, Note.A, Note.D, Note.G};
 
   public BassGuitar() {
-    this(DEFAULT_STRINGS, DEFAULT_FRETS);
+    this(DEFAULT_STRINGS, null, DEFAULT_FRETS);
   }
 
-  public BassGuitar(Note[] strings, Integer frets) {
-    super(FrettedInstrument.InstrumentType.BASSGUITAR, frets, strings.length > 0 ? strings : DEFAULT_STRINGS);
+  public BassGuitar(Note[] strings, Tuning tuning, Integer frets) {
+    super(FrettedInstrument.InstrumentType.BASSGUITAR, frets, strings.length > 0 ? strings : DEFAULT_STRINGS, tuning);
   }
 }
