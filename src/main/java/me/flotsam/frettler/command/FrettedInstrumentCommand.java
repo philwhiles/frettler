@@ -23,25 +23,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBank;
 import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
-import me.flotsam.frettler.engine.Progression;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.engine.Sequence;
 import me.flotsam.frettler.instrument.Banjo;
 import me.flotsam.frettler.instrument.FrettedInstrument;
+import me.flotsam.frettler.view.ArpeggioView;
 import me.flotsam.frettler.view.Colour;
 import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
 import me.flotsam.frettler.view.TabView;
 import me.flotsam.frettler.view.VerticalView;
-import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
 /**
@@ -111,6 +109,10 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     }
 
     switch (this.view.getType()) {
+      case ARPEGGIO:
+        handleChordTabView(instrument);
+        break;
+
       case TAB:
         handleScaleTabView(instrument);
         break;
@@ -198,6 +200,23 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
     }
   }
 
+  private void handleChordTabView(FrettedInstrument instrument) {
+    if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
+      out.println("The interval pattern for the Arpeggio view must be a chord pattern");
+      return;
+    } else {
+      Chord chord = new Chord(this.root, this.intervalPattern, addedNote);
+        sequence = Sequence.DIATONIC_BOX;
+        position = position == null ? 0 : position % chord.getChordNotes().size();
+        group = group == null ? 3 : group;
+      instrument = FrettedInstrument.getBiggerInstrument(instrument);
+      ArpeggioView tabView = new ArpeggioView(instrument);
+      ArpeggioView.Options tabViewOptions =
+          tabView.new Options(!isMono(), reverse, zero, position, group);
+
+      tabView.showChord(chord, sequence, tabViewOptions);
+    }
+  }
   private void handleHorizontalView(FrettedInstrument instrument) {
     Chord chord = null;
     Scale scale = null;
@@ -326,7 +345,6 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
         List<Chord> chords = new ArrayList<>();
         chords = scale.createScaleChords();
         FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
-        // for (int prog : progression.getSequence()) {
         for (int prog : progressions) {
           Chord chord = chords.get(prog - 1);
 
