@@ -44,7 +44,7 @@ Frettler - A flexible command line program for generating and displaying musical
 
 
 ## Synopsis
-This is a CLI program, written in Java 11, that calculates scales, modes and chords and displays them on fretboard representations.
+This is a CLI program, written in Java 16, that calculates scales, modes and chords and displays them on fretboard representations.
 It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukelele and banjo, but through use
 of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine. If your instrument or its tuning is not one
 of the out of box instruments, take a look at the [Custom Instrument](#Custom-Instrument)
@@ -76,9 +76,13 @@ Frettler performs most of its scale and chord calculations using first principle
 
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
-Here is an example of its output :
+Here is an example of its output (right handed guitar):
 
-<img src="https://github.com/philwhiles/frettler/blob/master/images/example.png"/>
+<img src="https://github.com/philwhiles/frettler/blob/master/images/example-right.png"/>
+
+and again (left handed guitar):
+
+<img src="https://github.com/philwhiles/frettler/blob/master/images/example-left.png"/>
 
 ## Building
 Easily build Frettler from the command line, but there are caveats:

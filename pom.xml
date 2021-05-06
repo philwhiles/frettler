@@ -10,6 +10,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <lombok.version>1.18.20</lombok.version>
+    <picocli.version>4.6.1</picocli.version>
 	</properties>
 
 	<dependencies>
@@ -17,7 +19,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
+      <version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -31,7 +33,7 @@
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli</artifactId>
-			<version>4.4.0</version>
+      <version>${picocli.version}</version>
 		</dependency>
 
 		<dependency>
@@ -65,19 +67,19 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.8.0</version>
 					<configuration>
-						<source>11</source>
-						<target>11</target>
+						<source>16</source>
+						<target>16</target>
 						<encoding>${project.build.sourceEncoding}</encoding>
 						<annotationProcessorPaths>
 							<path>
 								<groupId>info.picocli</groupId>
 								<artifactId>picocli-codegen</artifactId>
-								<version>4.4.0</version>
+                <version>${picocli.version}</version>
 							</path>
 							<path>
 								<groupId>org.projectlombok</groupId>
 								<artifactId>lombok</artifactId>
-								<version>1.18.12</version>
+                <version>${lombok.version}</version>
 							</path>
 						</annotationProcessorPaths>
 						<compilerArgs>
