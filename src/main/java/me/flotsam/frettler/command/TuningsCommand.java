@@ -41,7 +41,7 @@ public class TuningsCommand implements Runnable {
   public void run() {
     for (Tuning tuning : Tuning.values()) {
       if (instrumentType == null || tuning.getInstrumentType() == instrumentType) {
-        out.println(tuning.name() + " " + Arrays.toString(tuning.getNotes()));
+        out.println(tuning.name().toLowerCase() + " " + Arrays.toString(tuning.getNotes()));
       }
     }
   }

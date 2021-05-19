@@ -15,10 +15,9 @@
 
 package me.flotsam.frettler.command;
 
-import static java.lang.System.err;
-import me.flotsam.frettler.instrument.FrettedInstrument.InstrumentType;
 import me.flotsam.frettler.instrument.Guitar;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.ScopeType;
 
 /**
  * Handles the initial GUITAR command/param

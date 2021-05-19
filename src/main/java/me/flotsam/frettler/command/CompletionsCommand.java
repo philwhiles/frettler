@@ -15,14 +15,28 @@
 
 package me.flotsam.frettler.command;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateExceptionHandler;
+import freemarker.template.Version;
 import me.flotsam.frettler.engine.IntervalPattern;
-import me.flotsam.frettler.engine.Pitch;
-import me.flotsam.frettler.engine.Sequence;
+import me.flotsam.frettler.engine.Note;
 import me.flotsam.frettler.instrument.Tuning;
 import picocli.CommandLine.Command;
 
 /**
- * Handles the initial BANJO command/param
+ * Uses Freemarker to parse the template in src/main/resources/templates and generate the bash
+ * completions script for frettler, sent to console. Picocli provides generation of completions, but
+ * it has a problem with positional args and basically does not work, hence this solution
  * 
  * @author philwhiles
  *
@@ -34,64 +48,36 @@ public class CompletionsCommand implements Runnable {
 
   @Override
   public void run() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("#/usr/bin/env bash\n");
-    sb.append("_frettler_completions()\n");
-    sb.append("{\n");
-    sb.append("    local instr_opts\n");
-    sb.append("    instr_opts=\"tunings menu lookup patterns fifths custom guitar bassguitar ukelele mandolin banjo\"\n");
+    Configuration cfg = new Configuration(Configuration.VERSION_2_3_29);
+    try {
 
-    sb.append("    local view_opts\n");
-    sb.append("    view_opts=\"horizontal vertical chord progression find display box tab find\"\n");
+      cfg.setClassForTemplateLoading(CompletionsCommand.class, "/templates");
 
-    sb.append("    local note_opts\n");
-    sb.append("    note_opts=\"");
-    for (Pitch note : Pitch.values()) {
-      sb.append(note.name()).append(" ");
+      cfg.setIncompatibleImprovements(new Version(2, 3, 20));
+      cfg.setDefaultEncoding("UTF-8");
+      cfg.setLocale(Locale.US);
+      cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+      cfg.setLogTemplateExceptions(false);
+      cfg.setWrapUncheckedExceptions(true);
+      cfg.setFallbackOnNullLoopVariable(false);
+
+      Map<String, Object> input = new HashMap<String, Object>();
+      input.put("noteOpts", Arrays.asList(Note.values()).stream().map(n -> n.toString())
+          .collect(Collectors.joining(" ")));
+      input.put("patternOpts",
+          Arrays.asList(IntervalPattern.values()).stream()
+              .filter(ip -> ip != IntervalPattern.SCALE_CHROMATIC)
+              .map(ip -> ip.toString().toLowerCase()).collect(Collectors.joining(" ")));
+      input.put("tuningOpts", Arrays.asList(Tuning.values()).stream()
+          .map(ip -> ip.toString().toLowerCase()).collect(Collectors.joining(" ")));
+
+      Template template = cfg.getTemplate("frettler_completions.ftl");
+
+      Writer out = new OutputStreamWriter(System.out);
+      template.process(input, out);
+    } catch (Exception e) {
+      System.err.println("Failed to process completions " + e);
+      System.exit(-1);
     }
-    sb.replace(sb.length() - 1, sb.length(), "");
-    sb.append("\"\n");
-
-    sb.append("    local pattern_opts\n");
-    sb.append("    pattern_opts=\"");
-    for (IntervalPattern pattern : IntervalPattern.values()) {
-      if (pattern != IntervalPattern.SCALE_CHROMATIC) {
-        sb.append(pattern.name().toLowerCase()).append(" ");
-      }
-    }
-    sb.replace(sb.length() - 1, sb.length(), "");
-    sb.append("\"\n");
-
-    //@formatter:off
-    sb.append("    case $COMP_CWORD in\n");
-    sb.append("        1)\n");
-    sb.append( "            COMPREPLY=( $(compgen -W \"${instr_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
-    sb.append("            ;;\n");
-    sb.append("        2)\n");
-    sb.append("            if [ ${COMP_WORDS[1]} == \"chord\" ]; then\n");
-    sb.append("                COMPREPLY=( $(compgen -W \"${note_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
-    sb.append("              elif [ ${COMP_WORDS[1]} == \"patterns\" ]; then\n");
-    sb.append("                return 0\n");
-    sb.append("              elif [ ${COMP_WORDS[1]} == \"fifths\" ]; then\n");
-    sb.append("                return 0\n");
-    sb.append("              elif [ ${COMP_WORDS[1]} == \"lookup\" ]; then\n");
-    sb.append("                return 0\n");
-    sb.append("              else\n");
-    sb.append("                COMPREPLY=( $(compgen -W \"${view_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
-    sb.append("              fi\n");
-    sb.append("            ;;\n");
-    sb.append("        3)\n");
-    sb.append( "            COMPREPLY=( $(compgen -W \"${note_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
-    sb.append("            ;;\n");
-    sb.append("        4)\n");
-    sb.append( "            COMPREPLY=( $(compgen -W \"${pattern_opts}\" -- \"${COMP_WORDS[COMP_CWORD]}\") )\n");
-    sb.append("            ;;\n");
-    sb.append("    esac\n");
-    sb.append("    return 0\n");
-
-    sb.append("}\n");
-    sb.append("complete -F _frettler_completions frettler\n");
-    //@formatter:on
-    System.out.println(sb);
   }
 }

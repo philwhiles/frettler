@@ -52,7 +52,7 @@ public class ScaleNote {
   }
 
   public String toString() {
-    return note.getLabel() + " " + interval.toString();
+    return note.getLabel() + "(" + interval.get().toString() + ")";
   }
 
   public boolean equalsTonally(ScaleNote other) {

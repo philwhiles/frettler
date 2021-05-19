@@ -23,12 +23,12 @@ import me.flotsam.frettler.command.BassGuitarCommand;
 import me.flotsam.frettler.command.CompletionsCommand;
 import me.flotsam.frettler.command.CustomCommand;
 import me.flotsam.frettler.command.FifthsCommand;
-import me.flotsam.frettler.command.FrettlerCommand;
 import me.flotsam.frettler.command.GuitarCommand;
 import me.flotsam.frettler.command.LookupCommand;
 import me.flotsam.frettler.command.MandolinCommand;
 import me.flotsam.frettler.command.MenuCommand;
 import me.flotsam.frettler.command.PatternsCommand;
+import me.flotsam.frettler.command.PrintCommand;
 import me.flotsam.frettler.command.TuningsCommand;
 import me.flotsam.frettler.command.UkeleleCommand;
 import picocli.CommandLine;
@@ -38,18 +38,18 @@ import picocli.CommandLine.HelpCommand;
 @Command(name = "frettler",
     description = "Generates scales/arpeggios, chords and arpeggios for fretted instruments",
     mixinStandardHelpOptions = true,
-    subcommands = {TuningsCommand.class, MenuCommand.class, FifthsCommand.class, HelpCommand.class, PatternsCommand.class, CompletionsCommand.class, LookupCommand.class, GuitarCommand.class,
+    subcommands = {PrintCommand.class, TuningsCommand.class, MenuCommand.class, FifthsCommand.class, HelpCommand.class, PatternsCommand.class, CompletionsCommand.class, LookupCommand.class, GuitarCommand.class,
         BassGuitarCommand.class, BanjoCommand.class, MandolinCommand.class, UkeleleCommand.class, CustomCommand.class})
 public class Main implements Callable<Integer> {
 
   public static void main(String... args) throws Exception {
-    new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true)
-        .setAbbreviatedOptionsAllowed(true).setAbbreviatedSubcommandsAllowed(true).execute(args);
+    new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true).setCommandName("frettler").setOptionsCaseInsensitive(true).setSubcommandsCaseInsensitive(true)
+    .setAbbreviatedOptionsAllowed(true).setAbbreviatedSubcommandsAllowed(true).execute(args);
   }
 
   @Override
   public Integer call() throws Exception {
-    CommandLine.usage(new FrettlerCommand(), System.out);
+    CommandLine.usage(new Main(), System.out);
     return 0;
   }
 }

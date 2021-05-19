@@ -43,6 +43,7 @@ public class HorizontalView implements View {
 
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
 
+  private static final String STRING_CHAR = "┈";
   private FrettedInstrument instrument;
   private Options defaultOptions = new Options(false, true, true, false, false);
 
@@ -112,7 +113,6 @@ public class HorizontalView implements View {
           octave = fret.getOctave();
           octaveToggle = !octaveToggle;
         }
-        String stringChar = "┈";
 
         if (note.isPresent()) {
           String fretStr = null;
@@ -123,86 +123,18 @@ public class HorizontalView implements View {
           } else {
             fretStr = note.get().getNote().getLabel();
           }
-          Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
-              : ColourMap.get(note.get().getNote().getPitch());
-
           if (options.isLefty()) {
-            if (options.isColour()) {
-              if (fret.getFretNum() == firstFret) {
-                stringBuilder.append("    ┃");
-                fretStr = String.format("%s╴%s%s%s╶%s┃", stringChar, col, fretStr, Colour.RESET,
-                    StringUtils.repeat(stringChar, 3 - fretStr.length()));
-                stringBuilder.append(fretStr);
-              } else if (fret.getFretNum() == 0) {
-                fretStr = String.format("┃%s%s%s", col, fretStr, Colour.RESET);
-                stringBuilder.append(fretStr);
-              } else {
-                fretStr = String.format("%s╴%s%s%s╶%s┃", stringChar, col, fretStr, Colour.RESET,
-                    StringUtils.repeat(stringChar, 3 - fretStr.length()));
-                stringBuilder.append(fretStr);
-              }
-            } else {
-              if (fret.getFretNum() == 0) {
-                stringBuilder.append(String.format("%3s", fretStr)).append("┃┃");
-              } else {
-                fretStr =
-                    fretStr.length() == 2 ? fretStr : String.format("%s%s", fretStr, stringChar);
-                stringBuilder.append(StringUtils.repeat(stringChar, 2)).append(fretStr)
-                    .append(StringUtils.repeat(stringChar, 2)).append("┃");
-              }
-            }
+            renderFretPresentLeft(firstFret, stringBuilder, fretStr, options, fret);
           } else { // isRighty
-            if (options.isColour()) {
-              if (fret.getFretNum() == 0) {
-                stringBuilder.append(col).append(String.format("%3s", fretStr)).append(Colour.RESET)
-                    .append("┃┃");
-              } else {
-                fretStr = String.format("%s╴%s%s%s╶%s┃", stringChar, col, fretStr, Colour.RESET,
-                    StringUtils.repeat(stringChar, 3 - fretStr.length()));
-                stringBuilder.append(fretStr);
-              }
-            } else {
-              if (fret.getFretNum() == 0) {
-                stringBuilder.append(String.format("%3s", fretStr)).append("┃┃");
-              } else {
-                fretStr =
-                    fretStr.length() == 2 ? fretStr : String.format("%s%s", fretStr, stringChar);
-                stringBuilder.append(StringUtils.repeat(stringChar, 2)).append(fretStr)
-                    .append(StringUtils.repeat(stringChar, 2)).append("┃");
-              }
-            }
+            renderFretPresentRight(firstFret, stringBuilder, fretStr, options, fret);
           }
         } else { // not note.isPresent
           if (options.isLefty()) {
-            if (fret.getFretNum() == firstFret) {
-              stringBuilder.append("   ").append(" ┃");
-              stringBuilder.append(StringUtils.repeat(stringChar, 6)).append("┃");
-            } else {
-              if (instrument.isBanjo() && (fret.getFretNum() > 0 && fret.getFretNum() < 6)
-                  && fret.getStringNum() == 0) {
-                stringBuilder.append("      ┃");
-              } else {
-                if (fret.getFretNum() == 0) {
-                  stringBuilder.append("┃");
-                } else {
-                  stringBuilder.append(StringUtils.repeat(stringChar, 6)).append("┃");
-                }
-              }
-            }
+            renderFretNotPresentLeft(firstFret, stringBuilder, fret);
           } else { // isRighty
-            if (fret.getFretNum() == 0) {
-              stringBuilder.append("   ").append("┃┃");
-            } else {
-              if (instrument.isBanjo() && (fret.getFretNum() > 0 && fret.getFretNum() < 6)
-                  && fret.getStringNum() == 0) {
-                stringBuilder.append("      ┃");
-              } else {
-                stringBuilder.append(StringUtils.repeat(stringChar, 6)).append("┃");
-              }
-            }
+            renderFretNotPresentRight(firstFret, stringBuilder, fret);
           }
         }
-
       }
       out.println(stringBuilder.toString());
     }
@@ -210,6 +142,92 @@ public class HorizontalView implements View {
     out.println(createFretboardSide(false, options));
     out.println();
     out.println();
+  }
+
+  private void renderFretNotPresentLeft(int firstFret, StringBuilder stringBuilder, Fret fret) {
+    if (fret.getFretNum() == firstFret) {
+      stringBuilder.append("   ").append(" ┃");
+      stringBuilder.append(StringUtils.repeat(STRING_CHAR, 6)).append("┃");
+    } else {
+      if (instrument.isBanjo() && (fret.getFretNum() > 0 && fret.getFretNum() < 6)
+          && fret.getStringNum() == 0) {
+        stringBuilder.append("      ┃");
+      } else {
+        if (fret.getFretNum() == 0) {
+          stringBuilder.append("┃");
+        } else {
+          stringBuilder.append(StringUtils.repeat(STRING_CHAR, 6)).append("┃");
+        }
+      }
+    }
+  }
+
+  private void renderFretNotPresentRight(int firstFret, StringBuilder stringBuilder, Fret fret) {
+    if (fret.getFretNum() == 0) {
+      stringBuilder.append("   ").append("┃┃");
+    } else {
+      if (instrument.isBanjo() && (fret.getFretNum() > 0 && fret.getFretNum() < 6)
+          && fret.getStringNum() == 0) {
+        stringBuilder.append("      ┃");
+      } else {
+        stringBuilder.append(StringUtils.repeat(STRING_CHAR, 6)).append("┃");
+      }
+    }
+  }
+
+  private void renderFretPresentRight(int firstFret, StringBuilder stringBuilder, String fretStr,
+      Options options, Fret fret) {
+    Note note = fret.getNote();
+    if (options.isColour()) {
+      Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
+          : ColourMap.get(note.getPitch());
+      if (fret.getFretNum() == 0) {
+        stringBuilder.append(col).append(String.format("%3s", fretStr)).append(Colour.RESET)
+            .append("┃┃");
+      } else {
+        fretStr = String.format("%s╴%s%s%s╶%s┃", STRING_CHAR, col, fretStr, Colour.RESET,
+            StringUtils.repeat(STRING_CHAR, 3 - fretStr.length()));
+        stringBuilder.append(fretStr);
+      }
+    } else {
+      if (fret.getFretNum() == 0) {
+        stringBuilder.append(String.format("%3s", fretStr)).append("┃┃");
+      } else {
+        fretStr = fretStr.length() == 2 ? fretStr : String.format("%s%s", fretStr, STRING_CHAR);
+        stringBuilder.append(StringUtils.repeat(STRING_CHAR, 2)).append(fretStr)
+            .append(StringUtils.repeat(STRING_CHAR, 2)).append("┃");
+      }
+    }
+  }
+
+  private void renderFretPresentLeft(int firstFret, StringBuilder stringBuilder, String fretStr,
+      Options options, Fret fret) {
+    Note note = fret.getNote();
+    if (options.isColour()) {
+      Colour col = options.isOctaves() ? ColourMap.get((Integer) fret.getOctave())
+          : ColourMap.get(note.getPitch());
+      if (fret.getFretNum() == firstFret) {
+        stringBuilder.append("    ┃");
+        fretStr = String.format("%s╴%s%s%s╶%s┃", STRING_CHAR, col, fretStr, Colour.RESET,
+            StringUtils.repeat(STRING_CHAR, 3 - fretStr.length()));
+        stringBuilder.append(fretStr);
+      } else if (fret.getFretNum() == 0) {
+        fretStr = String.format("┃%s%s%s", col, fretStr, Colour.RESET);
+        stringBuilder.append(fretStr);
+      } else {
+        fretStr = String.format("%s╴%s%s%s╶%s┃", STRING_CHAR, col, fretStr, Colour.RESET,
+            StringUtils.repeat(STRING_CHAR, 3 - fretStr.length()));
+        stringBuilder.append(fretStr);
+      }
+    } else {
+      if (fret.getFretNum() == 0) {
+        stringBuilder.append(String.format("%3s", fretStr)).append("┃┃");
+      } else {
+        fretStr = fretStr.length() == 2 ? fretStr : String.format("%s%s", fretStr, STRING_CHAR);
+        stringBuilder.append(StringUtils.repeat(STRING_CHAR, 2)).append(fretStr)
+            .append(StringUtils.repeat(STRING_CHAR, 2)).append("┃");
+      }
+    }
   }
 
   private String createFretboardSide(boolean upper, Options options) {

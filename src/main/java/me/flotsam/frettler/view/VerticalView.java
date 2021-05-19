@@ -63,9 +63,10 @@ public class VerticalView implements View {
     out.println();
     out.println(StringUtils.center(chord.getTitle(), TITLE_CENTER));
     out.println(StringUtils.center(chord.getDetails(), TITLE_CENTER));
-    out.println(StringUtils.center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
-        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "]", TITLE_CENTER));
+    out.println(StringUtils
+        .center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
+            + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
+            + "]", TITLE_CENTER));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret(false);
@@ -118,9 +119,10 @@ public class VerticalView implements View {
     out.println();
     out.println(StringUtils.center(chord.getTitle(), TITLE_CENTER));
     out.println(StringUtils.center(chord.getDetails(), TITLE_CENTER));
-    out.println(StringUtils.center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
-        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "]", TITLE_CENTER));
+    out.println(StringUtils
+        .center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
+            + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
+            + "]", TITLE_CENTER));
     out.println();
 
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret(options.isLefty());
@@ -165,9 +167,10 @@ public class VerticalView implements View {
 
     out.println();
     out.println(StringUtils.center(scale.getTitle(), TITLE_CENTER));
-    out.println(StringUtils.center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
-        + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
-        + "]", TITLE_CENTER));
+    out.println(StringUtils
+        .center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
+            + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
+            + "]", TITLE_CENTER));
     out.println();
 
     List<List<SequenceFretNote>> fretSequence = null;
@@ -234,119 +237,20 @@ public class VerticalView implements View {
 
   private void display(Pitch root, List<ChordFret> chordFrets, Options options, ViewMode viewMode) {
     List<List<Fret>> fretboardFrets = instrument.getFretsByFret(options.isLefty());
-
-    List<Integer> deadStrings = new ArrayList<>();
-    for (ChordFret chordFret : chordFrets) {
-      if (chordFret.getFret().getNote() == null) {
-        int deadString =
-            options.isLefty() ? instrument.getStringCount() - 1 - chordFret.getFret().getStringNum()
-                : chordFret.getFret().getStringNum();
-        deadStrings.add(deadString);
-      }
-    }
-
+    List<Integer> deadStrings = calculateDeadStrings(chordFrets, options);
     Note noteSummary[] = new Note[instrument.getStringCount()];
     ScaleInterval intervalSummary[] = new ScaleInterval[instrument.getStringCount()];
     Integer octaveSummary[] = new Integer[instrument.getStringCount()];
 
-    int lowestFret = chordFrets.stream()
-        .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
-        .getFret().getFretNum();
-
-    int highestFret = 0;
-    Optional<ChordFret> highestFretOpt =
-        chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
-            .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
-    if (!highestFretOpt.isEmpty()) { // else a chord that is just a combo of open or muted strings
-      highestFret = highestFretOpt.get().getFret().getFretNum();
-    }
+    int lowestFret = calculateLowestFret(chordFrets);
+    int highestFret = calculateHighestFret(chordFrets);
 
     // if chord view calculate the barring
     if (viewMode == ViewMode.CHORD) {
       if (options.isLefty()) {
-        Collections.reverse(chordFrets);
-        // the chordfrets are in string order 0 being low E
-        // work thru strings to the right but not the last one
-        for (int cfn = chordFrets.size() - 1; cfn > 0; cfn--) {
-          ChordFret chordFret = chordFrets.get(cfn);
-          int fretNum = chordFret.getFret().getFretNum();
-
-          // an 'x' or 'o' string
-          if (chordFret.getFret().getNote() == null || fretNum == 0) {
-            continue;
-          }
-
-          // assume barred
-          boolean barred = true;
-          boolean paired = false;
-          if (fretNum == highestFret) {
-            for (int cfx = cfn - 1; cfx >= 0; cfx--) {
-              ChordFret toTheRight = chordFrets.get(cfx);
-              if (toTheRight.getFret().getFretNum() == 0
-                  || toTheRight.getFret().getNote() == null) {
-                barred = false;
-                break;
-              }
-              if (toTheRight.getFret().getFretNum() == fretNum) {
-                paired = true;
-              }
-            }
-            if (barred && paired) {
-              for (int cfx = cfn; cfx >= 0; cfx--) {
-                ChordFret cf = chordFrets.get(cfx);
-                if (cf.getFret().getFretNum() == fretNum) {
-                  cf.setBarred(true);
-                  if (cfx == cfn) {
-                    cf.setStartsBarre(true);
-                  }
-                }
-              }
-              break;
-            }
-          }
-        }
-        Collections.reverse(chordFrets);
+        calculateBarringLeft(chordFrets, highestFret);
       } else {
-        // the chordfrets are in string order 0 being low E
-        // work thru strings to the right but not the last one
-        for (int cfn = 0; cfn < chordFrets.size() - 1; cfn++) {
-          ChordFret chordFret = chordFrets.get(cfn);
-          int fretNum = chordFret.getFret().getFretNum();
-
-          // an 'x' or 'o' string
-          if (chordFret.getFret().getNote() == null || fretNum == 0) {
-            continue;
-          }
-
-          // assume barred
-          boolean barred = true;
-          boolean paired = false;
-          if (fretNum == highestFret) {
-            for (int cfx = cfn + 1; cfx < chordFrets.size(); cfx++) {
-              ChordFret toTheRight = chordFrets.get(cfx);
-              if (toTheRight.getFret().getFretNum() == 0
-                  || toTheRight.getFret().getNote() == null) {
-                barred = false;
-                break;
-              }
-              if (toTheRight.getFret().getFretNum() == fretNum) {
-                paired = true;
-              }
-            }
-            if (barred && paired) {
-              for (int cfx = cfn; cfx < chordFrets.size(); cfx++) {
-                ChordFret cf = chordFrets.get(cfx);
-                if (cf.getFret().getFretNum() == fretNum) {
-                  cf.setBarred(true);
-                  if (cfx == cfn) {
-                    cf.setStartsBarre(true);
-                  }
-                }
-              }
-              break;
-            }
-          }
-        }
+        calculateBarringRight(chordFrets, highestFret);
       }
     }
 
@@ -467,35 +371,156 @@ public class VerticalView implements View {
 
     // print the chord summary
     if (viewMode == ViewMode.CHORD) {
-      StringBuilder noteBuilder = new StringBuilder("       ");
-      StringBuilder intervalBuilder = new StringBuilder("       ");
-      for (int n = 0; n < instrument.getStringCount(); n++) {
-        Note note = noteSummary[n];
-        if (note != null) {
-          if (options.isColour()) {
-            Colour col = options.isOctaves() ? ColourMap.get((Integer) octaveSummary[n])
-                : ColourMap.get(note.getPitch());
-            noteBuilder.append(String.format("%s%s%s", col,
-                StringUtils.center(note.getLabel(), 4, ' '), Colour.RESET));
-            intervalBuilder.append(String.format("%s%s%s", col,
-                StringUtils.center(intervalSummary[n].getLabel(), 4, ' '), Colour.RESET));
-          } else {
-            noteBuilder.append(String.format("%s", StringUtils.center(note.getLabel(), 4, ' ')));
-            intervalBuilder.append(
-                String.format("%s", StringUtils.center(intervalSummary[n].getLabel(), 4, ' ')));
-          }
-        } else {
-          noteBuilder.append("    ");
-          intervalBuilder.append("    ");
-        }
-      }
-      out.println(noteBuilder.toString());
-      out.println(intervalBuilder.toString());
-      out.print("   ");
+      printChordSummary(noteSummary, intervalSummary, octaveSummary, options);
     }
 
     out.println();
     out.println();
+  }
+
+  private void printChordSummary(Note[] noteSummary, ScaleInterval[] intervalSummary, Integer[] octaveSummary, Options options) {
+    StringBuilder noteBuilder = new StringBuilder("       ");
+    StringBuilder intervalBuilder = new StringBuilder("       ");
+    for (int n = 0; n < instrument.getStringCount(); n++) {
+      Note note = noteSummary[n];
+      if (note != null) {
+        if (options.isColour()) {
+          Colour col = options.isOctaves() ? ColourMap.get((Integer) octaveSummary[n])
+              : ColourMap.get(note.getPitch());
+          noteBuilder.append(String.format("%s%s%s", col,
+              StringUtils.center(note.getLabel(), 4, ' '), Colour.RESET));
+          intervalBuilder.append(String.format("%s%s%s", col,
+              StringUtils.center(intervalSummary[n].getLabel(), 4, ' '), Colour.RESET));
+        } else {
+          noteBuilder.append(String.format("%s", StringUtils.center(note.getLabel(), 4, ' ')));
+          intervalBuilder.append(
+              String.format("%s", StringUtils.center(intervalSummary[n].getLabel(), 4, ' ')));
+        }
+      } else {
+        noteBuilder.append("    ");
+        intervalBuilder.append("    ");
+      }
+    }
+    out.println(noteBuilder.toString());
+    out.println(intervalBuilder.toString());
+    out.print("   ");
+  }
+
+  private int calculateLowestFret(List<ChordFret> chordFrets) {
+    int lowestFret = chordFrets.stream()
+        .max(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum()))).get()
+        .getFret().getFretNum();
+    return lowestFret;
+  }
+
+  private int calculateHighestFret(List<ChordFret> chordFrets) {
+    int highestFret = 0;
+    Optional<ChordFret> highestFretOpt =
+        chordFrets.stream().filter(cf -> cf.getFret().getFretNum() > 0)
+            .min(Comparator.comparingInt(ct -> Integer.valueOf(ct.getFret().getFretNum())));
+    if (!highestFretOpt.isEmpty()) { // else a chord that is just a combo of open or muted strings
+      highestFret = highestFretOpt.get().getFret().getFretNum();
+    }
+    return highestFret;
+  }
+
+  private List<Integer> calculateDeadStrings(List<ChordFret> chordFrets, Options options) {
+    List<Integer> deadStrings = new ArrayList<>();
+    for (ChordFret chordFret : chordFrets) {
+      if (chordFret.getFret().getNote() == null) {
+        int deadString =
+            options.isLefty() ? instrument.getStringCount() - 1 - chordFret.getFret().getStringNum()
+                : chordFret.getFret().getStringNum();
+        deadStrings.add(deadString);
+      }
+    }
+    return deadStrings;
+  }
+
+  private void calculateBarringRight(List<ChordFret> chordFrets, int highestFret) {
+    // the chordfrets are in string order 0 being low E
+    // work thru strings to the right but not the last one
+    for (int cfn = 0; cfn < chordFrets.size() - 1; cfn++) {
+      ChordFret chordFret = chordFrets.get(cfn);
+      int fretNum = chordFret.getFret().getFretNum();
+
+      // an 'x' or 'o' string
+      if (chordFret.getFret().getNote() == null || fretNum == 0) {
+        continue;
+      }
+
+      // assume barred
+      boolean barred = true;
+      boolean paired = false;
+      if (fretNum == highestFret) {
+        for (int cfx = cfn + 1; cfx < chordFrets.size(); cfx++) {
+          ChordFret toTheRight = chordFrets.get(cfx);
+          if (toTheRight.getFret().getFretNum() == 0 || toTheRight.getFret().getNote() == null) {
+            barred = false;
+            break;
+          }
+          if (toTheRight.getFret().getFretNum() == fretNum) {
+            paired = true;
+          }
+        }
+        if (barred && paired) {
+          for (int cfx = cfn; cfx < chordFrets.size(); cfx++) {
+            ChordFret cf = chordFrets.get(cfx);
+            if (cf.getFret().getFretNum() == fretNum) {
+              cf.setBarred(true);
+              if (cfx == cfn) {
+                cf.setStartsBarre(true);
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+
+  private void calculateBarringLeft(List<ChordFret> chordFrets, int highestFret) {
+    Collections.reverse(chordFrets);
+    // the chordfrets are in string order 0 being low E
+    // work thru strings to the right but not the last one
+    for (int cfn = chordFrets.size() - 1; cfn > 0; cfn--) {
+      ChordFret chordFret = chordFrets.get(cfn);
+      int fretNum = chordFret.getFret().getFretNum();
+
+      // an 'x' or 'o' string
+      if (chordFret.getFret().getNote() == null || fretNum == 0) {
+        continue;
+      }
+
+      // assume barred
+      boolean barred = true;
+      boolean paired = false;
+      if (fretNum == highestFret) {
+        for (int cfx = cfn - 1; cfx >= 0; cfx--) {
+          ChordFret toTheRight = chordFrets.get(cfx);
+          if (toTheRight.getFret().getFretNum() == 0 || toTheRight.getFret().getNote() == null) {
+            barred = false;
+            break;
+          }
+          if (toTheRight.getFret().getFretNum() == fretNum) {
+            paired = true;
+          }
+        }
+        if (barred && paired) {
+          for (int cfx = cfn; cfx >= 0; cfx--) {
+            ChordFret cf = chordFrets.get(cfx);
+            if (cf.getFret().getFretNum() == fretNum) {
+              cf.setBarred(true);
+              if (cfx == cfn) {
+                cf.setStartsBarre(true);
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+    Collections.reverse(chordFrets);
   }
 
   private String createFretLine(String begin, String mid, String end) {

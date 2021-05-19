@@ -1,3 +1,7 @@
+# 13th May 2021
+- Print command added
+- Completions changed to use Freemarker for generation and completion of -- options added
+
 # 6th May 2021
 - Build updated - now Java 16
 

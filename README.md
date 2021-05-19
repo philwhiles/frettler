@@ -31,6 +31,7 @@ Frettler - A flexible command line program for generating and displaying musical
   - [Lookup Command](#Lookup-Command)
   - [Tunings Command](#Tunings-Command)
   - [Patterns Command](#Pattern-Command)
+  - [Print Command](#Print-Command)
   - [Tab Completion Command](#Tab-Completion-Command)
 - [Caveats](#Caveats)
 - [Tips](#Tips)
@@ -50,6 +51,12 @@ of the optional arguments, can display its full scales and chords for any frette
 of the out of box instruments, take a look at the [Custom Instrument](#Custom-Instrument)
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
+
+---
+
+> **UPDATE** Print command
+> A new command, `print`, simply prints out the notes (with interval), for the requested chord or scale.
+> 
 
 ---
 
@@ -88,7 +95,7 @@ and again (left handed guitar):
 Easily build Frettler from the command line, but there are caveats:
 - regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
 - if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
-- you will need the [Java11 JDK](https://adoptopenjdk.net/index.html) installed and in your PATH environment variable
+- you will need the [Java16 JDK](https://adoptopenjdk.net/index.html) installed and in your PATH environment variable
 
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
@@ -645,6 +652,26 @@ Want to just see the list of Frettler understood chords?
 ./frettler patterns -type chord
 ```
 Or 'scale'. Or 'mode'. You get the idea.
+
+### Print Command
+The `print` command is just that - it print out the notes in scale or chord (with their intervals), no instrument, no fretboard, just that.
+So:
+```
+./frettler print e scale_minor
+```
+prints:
+```
+E(P1), F#(M2), G(m3), A(P4), B(P5), C(m6), D(m7)
+```
+And:
+```
+./frettler print d chord_maj
+```
+prints:
+```
+D(P1), F#(M3), A(P5)
+```
+
 
 ### Tab Completion Command
 If you use bash as your shell, frettler can output a tab completion script to use. Just use the following :

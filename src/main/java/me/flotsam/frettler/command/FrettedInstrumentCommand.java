@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBank;
 import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
@@ -40,9 +41,10 @@ import me.flotsam.frettler.view.ColourMap;
 import me.flotsam.frettler.view.HorizontalView;
 import me.flotsam.frettler.view.TabView;
 import me.flotsam.frettler.view.VerticalView;
-import picocli.CommandLine;
+import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.ParseResult;
+import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ScopeType;
 
 /**
  * Base class that handles the initial instrument command param
@@ -50,7 +52,34 @@ import picocli.CommandLine.ParseResult;
  * @author philwhiles
  *
  */
-public abstract class FrettedInstrumentCommand extends FrettlerCommand implements Runnable {
+@Command(synopsisHeading      = "%nUsage:%n%n",
+descriptionHeading   = "%nDescription:%n%n",
+parameterListHeading = "%nParameters:%n%n",
+optionListHeading    = "%nOptions:%n%n",
+commandListHeading   = "%nCommands:%n%n",
+scope = ScopeType.INHERIT)
+public abstract class FrettedInstrumentCommand {
+  @Parameters(index = "0", defaultValue = "HORIZONTAL", description = "The view to use", scope = ScopeType.INHERIT)
+  View view;
+
+  @Parameters(index = "1", defaultValue = "C", description = "The root/tonic of the chord or scale", scope = ScopeType.INHERIT)
+  Note root;
+
+  @Parameters(index = "2", defaultValue = "SCALE_MAJOR",
+      description = "The interval pattern to use", scope = ScopeType.INHERIT)
+  IntervalPattern intervalPattern;
+
+  @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
+  @Getter
+  boolean mono;
+
+  @Option(names = {"-o", "--octaves"}, description = "Colourize octaves instead of notes/intervals")
+  @Getter
+  boolean octaves;
+
+  @Option(names = {"-i", "--intervals"}, description = "Show interval labels instead of notes")
+  @Getter
+  boolean intervals;
 
   @Option(names = {"-a", "--added"}, description = "The note to add")
   Note addedNote;
@@ -475,5 +504,18 @@ public abstract class FrettedInstrumentCommand extends FrettlerCommand implement
   private String colourNote(Note note) {
     return "" + (isMono() ? "" : ColourMap.get(note.getPitch())) + note.getLabel()
         + (isMono() ? "" : Colour.RESET);
+  }
+  
+  public enum View {
+    HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), DISPLAY, D(DISPLAY), FIND, F(FIND), CHORD, C(CHORD), BOX, B(BOX), TAB, T(TAB), PROGRESSION, P(PROGRESSION);
+    @Getter
+    private View type;
+
+    View(View alias) {
+      this.type = alias;
+    }
+    View() {
+      type = this;
+    }
   }
 }

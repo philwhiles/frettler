@@ -15,33 +15,24 @@
 
 package me.flotsam.frettler.instrument;
 
-import static me.flotsam.frettler.instrument.FrettedInstrument.InstrumentType.GUITAR;
-import static me.flotsam.frettler.engine.Note.C;
-import static me.flotsam.frettler.engine.Note.D;
-import static me.flotsam.frettler.engine.Note.E;
-import static me.flotsam.frettler.engine.Note.F;
-import static me.flotsam.frettler.engine.Note.G;
 import static me.flotsam.frettler.engine.Note.A;
-import static me.flotsam.frettler.engine.Note.B;
-
-import static me.flotsam.frettler.engine.Note.Cs;
-import static me.flotsam.frettler.engine.Note.Ds;
-import static me.flotsam.frettler.engine.Note.Es;
-import static me.flotsam.frettler.engine.Note.Fs;
-import static me.flotsam.frettler.engine.Note.Gs;
-import static me.flotsam.frettler.engine.Note.As;
-import static me.flotsam.frettler.engine.Note.Bs;
-
-import static me.flotsam.frettler.engine.Note.Cb;
-import static me.flotsam.frettler.engine.Note.Db;
-import static me.flotsam.frettler.engine.Note.Eb;
-import static me.flotsam.frettler.engine.Note.Fb;
-import static me.flotsam.frettler.engine.Note.Gb;
 import static me.flotsam.frettler.engine.Note.Ab;
+import static me.flotsam.frettler.engine.Note.As;
+import static me.flotsam.frettler.engine.Note.B;
 import static me.flotsam.frettler.engine.Note.Bb;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import static me.flotsam.frettler.engine.Note.C;
+import static me.flotsam.frettler.engine.Note.Cs;
+import static me.flotsam.frettler.engine.Note.D;
+import static me.flotsam.frettler.engine.Note.Db;
+import static me.flotsam.frettler.engine.Note.Ds;
+import static me.flotsam.frettler.engine.Note.E;
+import static me.flotsam.frettler.engine.Note.Eb;
+import static me.flotsam.frettler.engine.Note.F;
+import static me.flotsam.frettler.engine.Note.Fs;
+import static me.flotsam.frettler.engine.Note.G;
+import static me.flotsam.frettler.engine.Note.Gb;
+import static me.flotsam.frettler.engine.Note.Gs;
+import static me.flotsam.frettler.instrument.FrettedInstrument.InstrumentType.GUITAR;
 import lombok.Getter;
 import me.flotsam.frettler.engine.Note;
 
