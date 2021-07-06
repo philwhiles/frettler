@@ -1,0 +1,8 @@
+#!/bin/bash
+
+source .functions
+chooseInstrument
+cp ../custom.properties .
+
+echo "The helpers in this folder that use an instrument will now default to using $instrument"
+echo "Run ./init again at any time to switch instrument"

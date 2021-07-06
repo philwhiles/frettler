@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source .functions
+instrument=`cat .instrument`
+
+echo "Display all occurences of given notes on a fretboard"
+echo "----------------------------------------------------"
+
+echo -n "Enter the notes to display, comma separated : "
+read notes
+
+cmd="../frettler $instrument display --notes $notes"
+execute "$cmd"

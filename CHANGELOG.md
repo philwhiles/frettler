@@ -1,3 +1,7 @@
+# 6th July 2021
+- Added Dockerfile and instructions
+- Added a suite of convenience scripts
+
 # 13th May 2021
 - Print command added
 - Completions changed to use Freemarker for generation and completion of -- options added

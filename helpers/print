@@ -1,0 +1,17 @@
+
+#!/bin/bash
+
+source .functions
+
+
+echo "Simply print the notes for a given scale or chord"
+echo "-------------------------------------------------"
+
+choosePattern
+
+echo -n "Enter the root note : "
+read root
+
+cmd="../frettler print $root $pattern"
+execute "$cmd"
+

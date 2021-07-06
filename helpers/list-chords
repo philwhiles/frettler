@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source .functions
+echo "List Frettlers supported chord types"
+echo "------------------------------------"
+cmd="../frettler patterns -t chord"
+execute "$cmd"

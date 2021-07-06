@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source .functions
+instrument=`cat .instrument`
+
+echo "Lookup a chord by its notes and display it"
+echo "------------------------------------------"
+
+echo -n "Enter the notes to lookup, comma separated : "
+read notes
+
+cmd="../frettler $instrument find --notes $notes"
+execute "$cmd"

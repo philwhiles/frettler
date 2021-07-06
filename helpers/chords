@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source .functions
+
+
+echo "Display chord fingerings for a given chord"
+echo "------------------------------------------"
+
+instrument=`cat .instrument`
+
+chooseChord
+
+echo -n "Enter the root note : "
+read root
+
+cmd="../frettler $instrument chord $root $chord"
+execute "$cmd"
+

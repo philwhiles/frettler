@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source .functions
+
+
+echo "Display a horizontal fretboard"
+echo "------------------------------"
+
+instrument=`cat .instrument`
+
+choosePattern
+
+echo -n "Enter the root note : "
+read root
+
+cmd="../frettler $instrument horizontal $root $pattern"
+execute "$cmd"
+

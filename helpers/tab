@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source .functions
+
+
+echo "Display a tabbed scale"
+echo "----------------------"
+
+instrument=`cat .instrument`
+
+chooseScale
+
+echo -n "Enter the root note : "
+read root
+
+cmd="../frettler $instrument tab $root $pattern"
+execute "$cmd"
+

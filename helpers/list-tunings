@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source .functions
+echo "List Frettlers supported tunings"
+echo "--------------------------------"
+cmd="../frettler tunings"
+execute "$cmd"

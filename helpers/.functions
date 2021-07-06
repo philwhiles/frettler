@@ -1,0 +1,73 @@
+execute() {
+  echo
+  echo $1
+  echo
+  eval $1
+}
+
+chooseInstrument() {
+  instruments=( guitar bassguitar banjo ukelele mandolin custom )
+  echo
+  n=0
+  for instrument in "${instruments[@]}"; do
+    echo "$n : $instrument"
+    n=`expr $n + 1`
+  done
+  echo
+
+  echo -n "Enter the instrument number : "
+  read instrumentnum
+  instrument="${instruments[$instrumentnum]}"
+  echo $instrument > .instrument
+}
+
+chooseScale() {
+  allscales=`../frettler patterns -t scale | sed 's/ .*//' | sed 's/.*blues.*//'`
+  read -r -d ' ' -a scales <<< "$allscales"
+  echo
+  n=0
+  for scale in "${scales[@]}"; do
+    echo "$n : $scale"
+    n=`expr $n + 1`
+  done
+  echo
+
+  echo -n "Enter the scale number : "
+  read scalenum
+  scale="${scales[$scalenum]}"
+}
+
+chooseChord() {
+  allchords=`../frettler patterns -t chord | sed 's/ .*//'`
+  read -r -d ' ' -a chords <<< "$allchords"
+  echo
+  n=0
+  for chord in "${chords[@]}"; do
+    echo "$n : $chord"
+    n=`expr $n + 1`
+  done
+  echo
+
+  echo -n "Enter the chord number : "
+  read chordnum
+  chord="${chords[$chordnum]}"
+}
+
+choosePattern() {
+  allscales=`../frettler patterns -t scale | sed 's/ .*//' | sed 's/.*blues.*//'`
+  read -r -d ' ' -a scales <<< "$allscales"
+  allchords=`../frettler patterns -t chord | sed 's/ .*//'`
+  read -r -d ' ' -a chords <<< "$allchords"
+  patterns=( "${scales[@]}" "${chords[@]}" )
+  echo
+  n=0
+  for pattern in "${patterns[@]}"; do
+    echo "$n : $pattern"
+    n=`expr $n + 1`
+  done
+  echo
+
+  echo -n "Enter the scale/chord number : "
+  read patternnum
+  pattern="${patterns[$patternnum]}"
+}

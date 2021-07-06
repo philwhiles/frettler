@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source .functions
+echo "List Frettlers supported scale types"
+echo "------------------------------------"
+cmd="../frettler patterns -t scale"
+execute "$cmd"

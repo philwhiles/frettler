@@ -6,6 +6,7 @@ Frettler - A flexible command line program for generating and displaying musical
 - [Building](#Building)
 - [Execution](#Execution)
 - [Demo](#Demo)
+- [Helpers](#Helpers)
 - [Tutorial](#Tutorial)
 - [Views](#Views)
 - [Command Line](#Command-Line)
@@ -52,35 +53,6 @@ of the out of box instruments, take a look at the [Custom Instrument](#Custom-In
 
 Frettler performs most of its scale and chord calculations using first principles, only the `chord` subcommand resorts to a database of predetermined fingerings.
 
----
-
-> **UPDATE** Print command
-> A new command, `print`, simply prints out the notes (with interval), for the requested chord or scale.
-> 
-
----
-
-> **UPDATE** Left handed support
-> 
-> That took some doing I can tell you. No where near as easy as I had hoped, and it has made me realise that the view related code
-> needs some tidying and refactoring, with some possible re-design thrown in. The vertical view code is multi purpose, displaying both full vertical fretboard and the isolated
-> chord chart views, and for the latter, has logic to work out un played strings and barring, and has grown rather tangled.
-> Anyway, Left handed guitar (or mandolin, or etc) players, can now throw in the `-l` or `--lefty` argument to see the horizontal, vertical and chord views from their perspective.
-> 
-> I would love to hear from the lefties who try Frettler - did I get it right? are there some subtle bugs in there?
-> By using `--lefty` for this I have had to change the previous chord command option `--list` to `--which` instead.
-> Currently the `--lefty` option works with the `horizontal`, `vertical` and `chord` subcommands.
-
----
-
-> **UPDATE** Preset tunings
-> 
-> Frettler has been able to support custom tunings from the get go, using the `--strings` option, and more recently, by setting the custom.properties of the `custom` instrument.
-> But now, Frettler supports a range of preset tunings, accessed using the `--tuning` option.
->
-
----
-
 For posterity there is a change log [here](https://github.com/philwhiles/frettler/blob/master/CHANGELOG.md)
 
 Here is an example of its output (right handed guitar):
@@ -91,8 +63,10 @@ and again (left handed guitar):
 
 <img src="https://github.com/philwhiles/frettler/blob/master/images/example-left.png"/>
 
+I would love to hear from any lefties who try Frettler to get their feedback!
+
 ## Building
-There are two approaches you can take to building and running Frettler. YMMV.
+There are two approaches you can take to building and running Frettler. One requires installing the right Java JDK, the other requires installing Docker. As they say, YMMV.
 
 ### Maven and Java JDK
 Easily build Frettler from the command line, but there are caveats:
@@ -100,16 +74,23 @@ Easily build Frettler from the command line, but there are caveats:
 - if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
 - you will need the [Java16 JDK](https://adoptopenjdk.net/index.html) installed and in your PATH environment variable
 
+You can check to see if you have the right version of the JDK in your path before installing it, by executing:
+
+```
+javac -version
+```
+
+which should print out 'javac 16'.
+
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
 
 ```
 git clone https://github.com/philwhiles/frettler.git
+./build
 ```
 
-And then go to the build section below!
-
-The advantage to installing and using git is that you can periodically go back to the folder where you keep your copy of the git code, and auto pull the latest updates then repeat the build to stay up to date
+The advantage to installing and using git is that you can periodically go back to the folder where you first git cloned the code, and auto pull the latest updates then repeat the build, to stay up to date
 with new features and fixes, using :
 
 ```
@@ -123,9 +104,9 @@ Linux/macOS/UNIX.
 
 The application is built using maven, but you don't need to have maven pre-installed. Just run `./build`, which will:
 - download its own maven
-- compile the code
-- build an executable fat jar
-- create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy frettler to your favourite bin directory
+- compile the code using that maven
+- build an executable 'fat jar'
+- create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy that 'frettler' to your favourite bin directory
 
 #### MS Windows
 The windows 'build.bat' will run the maven build, the only prerequisite, as for Linux/macOS, is to have Java 11 installed.
@@ -135,11 +116,18 @@ so has been disabled in the generated Windows bat file. If you install an ANSI c
 color support.
 
 ### Docker
-An alternative way of building and then running Frettler is to use Docker. Docker is a containerisation/virtualisation technology widely used in the IT industry. Using Docker to create an image for Frettler, and then being able
-to run a transient Frettler container from the command line to execute Frettler, means you don't have to download and install the Java 16 JDK, but it does mean having to download and install Docker itself first. You may already have
-Docker installed, so this may be a route you want to take. The Dockerfile and the instructions below are courtesy of [Neos21](https://github.com/Neos21).
+An alternative way of building and then running Frettler is to use Docker. Docker is a virtualisation technology widely used in the IT industry, utilising off the shelf images for things such as Maven and the Java JDK. Docker downloads
+what it needs to build and run things for you basically.
+Using Docker to create an image for Frettler, and then being able to run a transient Frettler container from the command line to execute Frettler, means you don't have to download and install the Java 16 JDK, but it does mean having to download and install Docker itself first. You may already have
+Docker installed, so this may be a route you want to take. 
+The Dockerfile and the instructions below are courtesy of [Neos21](https://github.com/Neos21).
 
-#### Install Docker
+#### Docker Caveats
+If you use the Docker approach to build and run Frettler, be advised that the `custom` instrument will not work, nor will the demo, tutorial or helper scripts. 
+
+Also if you take the Docker approach to build and execute Frettler this way, be aware that the function shown below will take precedence over a Frettler binary you may have built previously or subsequently using the Maven/JDK approach. 
+
+#### Docker Installation
 Download and install Docker for [MacOS](https://docs.docker.com/docker-for-mac/install/) or [Windows](https://docs.docker.com/docker-for-windows/install/)
 
 #### Docker Build
@@ -149,7 +137,7 @@ Create the Frettler Docker image:
 docker build -t frettler:latest .
 ```
 
-#### Execute Frettler
+#### Dockerised Frettler Execution
 Run a transient Frettler container by creating a bash shell function :
 
 ```
@@ -157,8 +145,6 @@ function frettler() { docker run -it --rm frettler:latest "$@" ; }
 ```
 
 And then just run 'frettler' instead of './frettler' (the binary built using the Maven/JDK approach).
-
-If you take the Docker approach to build and execute Frettler this way, be aware that the function above will take precedence over a Frettler binary you may have built previously or subsequently using the Maven/JDK approach. 
 
 
 ## IDE
@@ -182,7 +168,7 @@ Run Frettler using the built executable shell command.
 frettler.bat guitar horizontal c scale_major
 
 ```
-The default windows command terminal does not support ANSI colour encoding, so Frettler defaults to use the `--mono` output instead. If you want the colourised output, you will have
+The default windows command terminal does not support ANSI colour encoding, so the frettler.bat built defaults to use the `--mono` output instead. If you want the colourised output, you will have
 to install an alternative terminal program such as [ConEmu](https://conemu.github.io) or [Cmder](https://cmder.net/). If you install an ANSI capable console, edit the build.bat and remove
 the `--mono`, then rebuild Frettler.
 
@@ -190,6 +176,57 @@ the `--mono`, then rebuild Frettler.
 Do read the details below to get an understanding of how to drive Frettler, but perhaps first, after building it, try one of the provided demo scripts ('demo' for linux/macOS, 'demo.bat' for windows).
 The demos will run Frettler with a variety of arguments, exercising it fully, and displaying the command used to generate each step demonstrated.
 The output of the demo command can be seen [Here](https://htmlpreview.github.io/?https://github.com/philwhiles/frettler/blob/master/demo.html)
+
+## Helpers
+The command line for frettler is fairly rigid, requiring the right combination of 'instrument', 'command', 'subcommand' etc, and yet quite flexible in that its behaviour can be tweaked with optional arguments, which
+differ depending on the command/subcommand used. I have tried to set out in this readme, which can be used with which, and explain each in what I hope is adequate detail. I also hope that the demo script shows a good number of
+the possible command combinations to help get you started.
+
+To further help get started with Frettler and hopefully work out the right commands to use when, there are some helper scripts in the `helpers` folder. 
+These helpers are written for use in a GNU environment (such as Linux or macOS) having the bash shell.
+None of the helper scripts handle additional arguments - they will each prompt for what they need to know.
+
+Before using any of the helpers, use the `init` helper to set the default instrument to be used by the helpers that need to use a specific instrument.
+
+```
+cd helpers
+./init
+```
+
+Before using say :
+
+```
+./horizontal
+```
+
+All the helpers require you to 'cd helpers' first as they will not expect to find frettler on your path (as that is up to you to do or not), but will instead execute the frettler 'binary' in the top level folder above them.
+
+You can use `init` again any time to switch the default to a different instrument.
+The helpers scripts are as follows:
+
+
+| Helper            | Instrument Based | Description       |
+| ----------------- | ---------------- |-------------------|
+| box               | Y | Display a boxed scale
+| chord             | Y | Display the chord fingering for a given chord
+| chords            | Y | Display chord fingerings for a given chord
+| digits            | Y | Lookup a chord by its fingering and display it
+| display           | Y | Display all occurences of given notes on a fretboard
+| fifths            |   | Display the circle of fifths that Frettler uses
+| horizontal        | Y | Display a horizontal fretboard
+| init              |   | Reset the default instrument to be used for helpers that use an instrument
+| list-chords       |   | List Frettlers supported chord types
+| list-scales       |   | List Frettlers supported scale types
+| list-tunings      |   | List Frettlers supported tunings
+| lookup            |   | Lookup a chord
+| notes             | Y | Lookup a chord by its notes and display it
+| print             |   | Simply print the notes for a given scale or chord
+| progression       | Y | Derive a chord progression in a given scale
+| tab               | Y | Display a tabbed scale
+| vertical          | Y | Display a vertical fretboard
+
+
+The helpers all expect to use the Frettler command built using the Maven/JDK approach, and do not work with the Docker approach currently.
 
 ## Tutorial
 Similar to the demo, but interactive, try the `tutorial` script. It will execute a number of frettler invocations, pausing after each with the last invocation it ran ready for you to edit and experiment with.
@@ -503,7 +540,7 @@ If you would like to have additional chord fingerings added, email me with the f
 - Frets: x,0,2,2,1,0
 - Fingering: x,x,2,3,1,x
 
-'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
+'Frets' is... the frets to be pressed (where 0 is open string), while 'Fingering' is, well you get it. Currently frettler does not use the fingering data, but it exists in the database for the currently
 known chords, and in time I will add an optional argument and the wherewithall to display finger numbers in the chart instead of the note or interval.
 
 #### Added Notes
@@ -742,15 +779,27 @@ frettler guitar chord c chord_maj
 If you use Frettler for a while, once you have learned its command line verbs, using shortcuts comes more natural.
 
 ## Caveats
-This is a work in progress, pretty much like the authors understanding of music theory.
+This is a work in progress, pretty much like the authors understanding of music theory. And his guitar playing come to think of it, which would be a lot better by now if he hadn't spent so much
+of his spare time writing Frettler!
 Contributions and advice are welcomed. Frettler was initially created as an exercise in learning music theory and the author still has a long way to go.
 
 ## Tips
 Left to the end to avoid confusion and detracting from the understanding of the arguments required.
 
 #### Abbreviations
-The Instrument argument can be abbreviated, as long as the abbreviation is unique within the set of instruments. ie you can use `g`, but you must use `ban` or `bas`.
-The View argument can only be abbreviated to `h` or `v`.
+The Instrument command can be abbreviated, as long as the abbreviation is unique within the set of instruments. ie you can use `g` instead of `guitar`, but you must use `ban` or `bas`.
+The Instrument sub command can only be abbreviated to a single letter ie `h`, `v`, `b`.
+So :
+
+```
+./frettler g h c scale_major
+```
+
+would do the same as :
+
+```
+./frettler guitar horizontal c scale_major
+```
 
 #### Defaults
 All the arguments except for the instrument, have default values. This means you can incrementally drop the arguments from right to left, but cannot drop one in the middle.
@@ -760,10 +809,11 @@ And './frettler g v', would do the same as './frettler guitar vertical C scale_m
 ## Todo
 - change the ANSI colour encoding used to be cross platform using [jansi](https://github.com/fusesource/jansi). If I hear of enough Windows users wanting this...
 - blues scale does not support chord generation...
+- Use the chord defintions fingering data in the rendering to show the finger numbers to use
 
 ## Credits
 - The chord fingerings in the ChordBank class were initially seeded from a dataset within [fusionproggy/Fretboard](https://github.com/fusionprogguy/Fretboard)
-- The chord fingerings were given a huge boost by a transformation of the data found in the web archive of [OLGA](https://web.archive.org/web/20060610121532/http://www.olga.net/)
+- The chord fingerings were then given a huge boost by a transformation of the data found in the web archive of [OLGA](https://web.archive.org/web/20060610121532/http://www.olga.net/)
 
 ## License
 This work is provided as is, with no warranties or guarantees, and is subject to the [GNU Affero General Public License v3.0](https://github.com/philwhiles/frettler/blob/master/LICENSE)

@@ -6,8 +6,7 @@ source .functions
 echo "Derive a chord progression in a given scale"
 echo "-------------------------------------------"
 
-echo -n "Enter the instrument ie guitar : "
-read instrument
+instrument=`cat .instrument`
 
 chooseScale
 

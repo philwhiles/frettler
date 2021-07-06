@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source .functions
+echo "Display the circle of fifths that Frettler uses"
+echo "-----------------------------------------------"
+cmd="../frettler fifths"
+execute "$cmd"
