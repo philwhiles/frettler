@@ -46,6 +46,7 @@ declare -a cmds=(
 "./frettler patterns -t scale=Display the names of the scales that Frettler supports"
 "./frettler patterns -t chord=Display the names of the chords that Frettler supports"
 "./frettler tunings=Display the names of the tunings that Frettler supports"
+"./frettler guitar progression a scale_major -p 1,4,5=Display the I,IV,V chord progression in the A Major scale"
 )
 
 let n=1

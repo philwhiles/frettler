@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source .functions
+
+
+echo "Derive a chord progression in a given scale"
+echo "-------------------------------------------"
+
+echo -n "Enter the instrument ie guitar : "
+read instrument
+
+chooseScale
+
+echo -n "Enter the root note : "
+read root
+
+echo -n "Enter the progression ie 1,4,5 : "
+read progression
+
+
+cmd="../frettler $instrument progression $root $scale --progression $progression"
+execute "$cmd"
+

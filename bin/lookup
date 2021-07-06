@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Lookup a chord"
+echo "--------------"
+
+echo -n "Enter the notes to lookup, comma separated : "
+read notes
+
+../frettler lookup --notes $notes

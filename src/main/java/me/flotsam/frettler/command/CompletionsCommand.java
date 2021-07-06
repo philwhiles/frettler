@@ -15,8 +15,6 @@
 
 package me.flotsam.frettler.command;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.Arrays;

@@ -92,6 +92,9 @@ and again (left handed guitar):
 <img src="https://github.com/philwhiles/frettler/blob/master/images/example-left.png"/>
 
 ## Building
+There are two approaches you can take to building and running Frettler. YMMV.
+
+### Maven and Java JDK
 Easily build Frettler from the command line, but there are caveats:
 - regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
 - if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
@@ -114,7 +117,7 @@ git pull
 ./build
 ```
 
-### Linux/macOS
+#### Linux/macOS
 Frettlers build script is a bash script, and the trickery it perfoms after the maven build to create a single executable, will only work on
 Linux/macOS/UNIX.
 
@@ -124,14 +127,41 @@ The application is built using maven, but you don't need to have maven pre-insta
 - build an executable fat jar
 - create an executable shell command, 'frettler', which is a single relocatable binary that has the jar file embedded within it ie you can copy frettler to your favourite bin directory
 
-### MS Windows
+#### MS Windows
 The windows 'build.bat' will run the maven build, the only prerequisite, as for Linux/macOS, is to have Java 11 installed.
 Once Frettler has built the build.bat creates the wrapper cmd file to launch Frettler, 'frettler.cmd'.
 The rendering uses Unicode boxing characters and ANSI colour coding, the latter of which does not work in a standard Windows command prompt,
 so has been disabled in the generated Windows bat file. If you install an ANSI capable console in Windows (see below), edit the build.bat to re-enable
 color support.
 
-### IDE
+### Docker
+An alternative way of building and then running Frettler is to use Docker. Docker is a containerisation/virtualisation technology widely used in the IT industry. Using Docker to create an image for Frettler, and then being able
+to run a transient Frettler container from the command line to execute Frettler, means you don't have to download and install the Java 16 JDK, but it does mean having to download and install Docker itself first. You may already have
+Docker installed, so this may be a route you want to take. The Dockerfile and the instructions below are courtesy of [Neos21](https://github.com/Neos21).
+
+#### Install Docker
+Download and install Docker for [MacOS](https://docs.docker.com/docker-for-mac/install/) or [Windows](https://docs.docker.com/docker-for-windows/install/)
+
+#### Docker Build
+Create the Frettler Docker image:
+
+```
+docker build -t frettler:latest .
+```
+
+#### Execute Frettler
+Run a transient Frettler container by creating a bash shell function :
+
+```
+function frettler() { docker run -it --rm frettler:latest "$@" ; }
+```
+
+And then just run 'frettler' instead of './frettler' (the binary built using the Maven/JDK approach).
+
+If you take the Docker approach to build and execute Frettler this way, be aware that the function above will take precedence over a Frettler binary you may have built previously or subsequently using the Maven/JDK approach. 
+
+
+## IDE
 If you want to edit and build Frettler in your IDE, you will need to install the Lombok plugin for your IDE from [Lombok](https://projectlombok.org)
 
 ## Execution
@@ -491,7 +521,7 @@ subcommand takes this functionality one step further, combining it with the abil
 ./frettler guitar progression a scale_major -p 1,4,5
 ```
 
-Will show the default chord fingerings for each of the I, IV and V chords in the scale of A Minor
+Will show the default chord fingerings for each of the I, IV and V chords in the scale of A Major
 The chord fingerings will be the default from possibly many variations for the root and chord type, usually the simpler cowboy chord fingerings. If you want to see the other variants, use the `chord` subcommand
 above individually.
 
