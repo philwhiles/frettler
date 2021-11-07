@@ -16,6 +16,7 @@
 package me.flotsam.frettler.command;
 
 import static java.lang.System.out;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import lombok.Getter;
 import me.flotsam.frettler.engine.Chord;
 import me.flotsam.frettler.engine.ChordBank;
@@ -30,6 +32,7 @@ import me.flotsam.frettler.engine.ChordBank.ChordDefinition;
 import me.flotsam.frettler.engine.ChordBankInstance;
 import me.flotsam.frettler.engine.IntervalPattern;
 import me.flotsam.frettler.engine.Note;
+import me.flotsam.frettler.engine.Pitch;
 import me.flotsam.frettler.engine.Scale;
 import me.flotsam.frettler.engine.ScaleNote;
 import me.flotsam.frettler.engine.Sequence;
@@ -172,6 +175,10 @@ public abstract class FrettedInstrumentCommand {
 
       case PROGRESSION:
         handleProgressionCommand(instrument);
+        break;
+        
+      case RANDOM:
+        handleRandomCommand(instrument);
         break;
 
       default:
@@ -385,6 +392,28 @@ public abstract class FrettedInstrumentCommand {
     }
   }
 
+  private void handleRandomCommand(FrettedInstrument instrument) {
+    instrument = FrettedInstrument.getBiggerInstrument(instrument);
+    VerticalView chordView = new VerticalView(instrument);
+    VerticalView.Options chordViewOptions =
+        chordView.new Options(intervals, !isMono(), isOctaves(), zero, 0, 0, lefty);
+
+    Optional<FrettedInstrument.InstrumentDefinition> optInstrument =
+        FrettedInstrument.InstrumentDefinition.findInstrument(instrument.getInstrumentType(),
+            instrument.getStringNotes());
+    if (optInstrument.isEmpty()) {
+      out.println("The current instrument and tuning is not currently defined for chords");
+      return;
+    } else {
+      FrettedInstrument.InstrumentDefinition instrumentDefinition = optInstrument.get();
+      List<ChordDefinition> chords = ChordBank.findChordDefinitions(instrumentDefinition);
+      ChordDefinition chordDef = chords.get((int) (Math.random() * chords.size()));
+      Chord chord = new Chord(chordDef.getChordRoot(), chordDef.getChordPattern(), chordDef.getAddedNote());
+      ChordBankInstance chordBankInstance = new ChordBankInstance(chord, chordDef);
+      chordView.showChord(chordBankInstance, chordViewOptions);
+    }
+  }
+
   private void handleChordCommand(FrettedInstrument instrument) {
     Chord chord = null;
     instrument = FrettedInstrument.getBiggerInstrument(instrument);
@@ -507,7 +536,7 @@ public abstract class FrettedInstrumentCommand {
   }
   
   public enum View {
-    HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), DISPLAY, D(DISPLAY), FIND, F(FIND), CHORD, C(CHORD), BOX, B(BOX), TAB, T(TAB), PROGRESSION, P(PROGRESSION);
+    HORIZONTAL, H(HORIZONTAL), VERTICAL, V(VERTICAL), DISPLAY, D(DISPLAY), RANDOM, R(RANDOM), FIND, F(FIND), CHORD, C(CHORD), BOX, B(BOX), TAB, T(TAB), PROGRESSION, P(PROGRESSION);
     @Getter
     private View type;
 

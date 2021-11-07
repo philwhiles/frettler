@@ -3,11 +3,22 @@
 source .functions
 instrument=`cat .instrument`
 
-echo "Lookup a chord by its notes and display it"
+echo "Lookup a chord and display it"
 echo "------------------------------------------"
 
-echo -n "Enter the notes to lookup, comma separated : "
-read notes
+echo "1: lookup by notes"
+echo "2: lookup by fingering"
+read choice
+if [[ $choice == 1 ]]
+then
+    echo -n "Enter the notes to lookup, comma separated : "
+    read notes
+    cmd="../frettler $instrument find --notes $notes"
+    execute "$cmd"
+else
+    echo -n "Enter the fingering to lookup, comma separated : "
+    read digits
+    cmd="../frettler $instrument find --digits $digits"
+    execute "$cmd"
+fi
 
-cmd="../frettler $instrument find --notes $notes"
-execute "$cmd"

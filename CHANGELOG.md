@@ -1,3 +1,6 @@
+# 8th November 2021
+- Added the Random subcommand to display ... random chords
+
 # 6th July 2021
 - Added Dockerfile and instructions
 - Added a suite of convenience scripts

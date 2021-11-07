@@ -22,6 +22,7 @@ Frettler - A flexible command line program for generating and displaying musical
   - [Chord Subcommand](#Chord-Subcommand)
     - [Added Notes](#Added-Notes)
     - [Easy Mode](#Added-Notes)
+  - [Random Command](#Random-Command)
   - [Progression Subcommand](#Progression-Subcommand)
   - [Box Subcommand](#Box-Subcommand)
   - [Tab Subcommand](#Tab-Subcommand)
@@ -32,6 +33,7 @@ Frettler - A flexible command line program for generating and displaying musical
   - [Lookup Command](#Lookup-Command)
   - [Tunings Command](#Tunings-Command)
   - [Patterns Command](#Pattern-Command)
+  - [Random Command](#Random-Command)
   - [Print Command](#Print-Command)
   - [Tab Completion Command](#Tab-Completion-Command)
 - [Caveats](#Caveats)
@@ -549,6 +551,13 @@ With the `chord` mode, Frettler does have _some_ definitions of standard chords 
 #### Easy Mode
 With the `chord` mode, Frettler may have multiple fingerings for each chord, and will display them one after the other.
 In its database, the most common 'cowboy chords' tend to be the first listed. If you only want it to display the first ie easy chord use the optional `-easy' argument.
+
+### Random Subcommand 
+This is a lucky dip from the chord bank for the chosen instrument. Literally. Each time you run this, you will get a single random chord shape, picked from the set of known shapes.
+So even if the same chord is selected a second time, you be presented with one of that chords alternate positions.
+```
+./frettler guitar random
+```
 
 ### Progression Subcommand 
 When using the `horizontal` or `vertical` subcommands for an instrument to display a scale, you can use the `--chords` option to get Frettler to print out the chords in that scale, but the `progression`
