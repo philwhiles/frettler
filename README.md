@@ -48,7 +48,7 @@ Frettler - A flexible command line program for generating and displaying musical
 
 
 ## Synopsis
-This is a CLI program, written in Java 16, that calculates scales, modes and chords and displays them on fretboard representations.
+This is a CLI program, written in Java 17, that calculates scales, modes and chords and displays them on fretboard representations.
 It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukelele and banjo, but through use
 of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine. If your instrument or its tuning is not one
 of the out of box instruments, take a look at the [Custom Instrument](#Custom-Instrument)
@@ -74,7 +74,7 @@ There are two approaches you can take to building and running Frettler. One requ
 Easily build Frettler from the command line, but there are caveats:
 - regardless of the platform you are using your mileage may vary depending on the font your terminal uses. That is out of Frettlers control. I use [GoMono for Poweline](https://github.com/powerline/fonts/blob/master/GoMono/Go%20Mono%20for%20Powerline.ttf)
 - if you use windows, by default color support is disabled, but it can be re-enabled. See [below](#Windows).
-- you will need the [Java16 JDK](https://adoptopenjdk.net/index.html) installed and in your PATH environment variable
+- you will need the [Java17 JDK](https://adoptium.net) installed and in your PATH environment variable
 
 You can check to see if you have the right version of the JDK in your path before installing it, by executing:
 
@@ -82,7 +82,7 @@ You can check to see if you have the right version of the JDK in your path befor
 javac -version
 ```
 
-which should print out 'javac 16'.
+which should print out 'javac 17'.
 
 If you are new to git you can either skip using git to download Frettler, and simply click the green 'Code' button, top right, and select the Zip download, unpack the download, then go to 'Building' below
 or if you feeling adventurous, you can install [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), then :
@@ -120,7 +120,7 @@ color support.
 ### Docker
 An alternative way of building and then running Frettler is to use Docker. Docker is a virtualisation technology widely used in the IT industry, utilising off the shelf images for things such as Maven and the Java JDK. Docker downloads
 what it needs to build and run things for you basically.
-Using Docker to create an image for Frettler, and then being able to run a transient Frettler container from the command line to execute Frettler, means you don't have to download and install the Java 16 JDK, but it does mean having to download and install Docker itself first. You may already have
+Using Docker to create an image for Frettler, and then being able to run a transient Frettler container from the command line to execute Frettler, means you don't have to download and install the Java 17 JDK, but it does mean having to download and install Docker itself first. You may already have
 Docker installed, so this may be a route you want to take. 
 The Dockerfile and the instructions below are courtesy of [Neos21](https://github.com/Neos21).
 

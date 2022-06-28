@@ -1017,6 +1017,7 @@ public class ChordBank {
         //------------------------------------------------------------------------------------------------
 
         
+        new ChordDefinition(D, CHORD_5, "x,x,0,2,3,x"), // (D  A): root and 5th (power chord)
         new ChordDefinition(D, CHORD_5, "5,5,7,7,x,5"), // (D  A): root and 5th (power chord)
         new ChordDefinition(D, CHORD_5, "x,0,0,2,3,5"), // (D  A): root and 5th (power chord)
         new ChordDefinition(D, CHORD_5, "x,5,7,7,x,x", new String[] {"x,x,1,2,3,x"}),
@@ -1099,8 +1100,8 @@ public class ChordBank {
         new ChordDefinition(D, CHORD_MAJ69, "0,0,2,4,3,2"), // (D  E  Gb A  B) : major triad plus 6th and 9th
         new ChordDefinition(D, CHORD_MAJ69, "0,2,0,2,0,2"), // (D  E  Gb A  B) : major triad plus 6th and 9th
         
-        new ChordDefinition(D, CHORD_MAJ7, "x,x,0,14,14,14"), // (Db D  Gb A) : major triad, major 7th
         new ChordDefinition(D, CHORD_MAJ7, "x,x,0,2,2,2"), // (Db D  Gb A) : major triad, major 7th
+        new ChordDefinition(D, CHORD_MAJ7, "x,x,0,14,14,14"), // (Db D  Gb A) : major triad, major 7th
         
         new ChordDefinition(D, CHORD_MIN, "x,x,0,2,3,1", new String[] {"x,x,x,2,3,1"}),
         new ChordDefinition(D, CHORD_MIN, "x,0,0,2,3,1", new String[] {"x,x,x,2,3,1"}),
