@@ -284,7 +284,7 @@ public class VerticalView implements View {
             ChordFret theChordFret = chordFret.get();
             String fretLabel = null;
             if (viewMode == ViewMode.CHORD) {
-              fretLabel = fretNum == 0 ? "◯" : "⬤";
+              fretLabel = fretNum == 0 ? "○" : "●";
               intervalSummary[stringNum] = theChordFret.getInterval();
               Note chordFretNote = theChordFret.getFret().getNote();
               noteSummary[stringNum] = chordFretNote;

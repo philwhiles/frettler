@@ -1,3 +1,6 @@
+# 12th September 2022
+- cosmetic change to the fingering characters used in chord view
+
 # 8th November 2021
 - Added the Random subcommand to display ... random chords
 
