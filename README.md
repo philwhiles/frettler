@@ -618,8 +618,8 @@ One way of getting Frettler to do a reverse chord lookup is to use `find` as the
 ./frettler guitar find --notes As,D,f
 ```
 
-With this form, frettler will display the chord found using its Vertical view on the selected instrument ().
-With this command, Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
+With this form, frettler will display the chord found using its Vertical view on the selected instrument.
+Frettler will only display the one chord that has only the provided notes, with the tonic being the first.
 
 #### Find by fingering
 Find and display the chord chart matching the provided fret numbering.
@@ -643,7 +643,7 @@ The first three of those can be toggled with key presses once in menu mode, whil
 ### Fifths Command
 Frettler generates dynamically a representation of the Circle Of Fifths, that it uses to determine if scales should use sharps or flats as the accidentals.
 It is perhaps better described as a Line Of Fifths, due to its somewhat flat structure, and the clockwise and anticlockwise arms don't overlap, but the `fifths` command
-will print this out for you if your curious or want to refer to it.
+will print this out for you if you are curious or want to refer to it.
 
 ### Lookup Command
 Frettler also has a simple chord reverse `lookup` command. 
