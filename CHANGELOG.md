@@ -1,3 +1,6 @@
+# 16th September 2022
+- improved the horizontal, vertical and chord views to show a colourized breakdown showing notes and intervals in the title section
+
 # 12th September 2022
 - cosmetic change to the fingering characters used in chord view
 

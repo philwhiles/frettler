@@ -56,16 +56,22 @@ public class HorizontalView implements View {
 	}
 
 	public void showChord(Chord chord, Options options) {
+		initColourMap(chord);
 		out.println();
 		out.print("    ");
 		out.println(StringUtils.center(
-				chord.getTitle() + "  " + chord.getDetails() + " ~ " + instrument.getLabel()
+				chord.getTitle() + " ~ " + instrument.getLabel()
 						+ (options.isLefty() ? " (Left) " : " (Right) ") + "["
 						+ instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]",
 				84));
+
+		String monoChordDetails = getChordDetails(chord, false);
+		String colourChordDetails = getChordDetails(chord, true);
+		int pad = (84 - monoChordDetails.length()) / 2;
+		out.print(StringUtils.repeat(' ', pad));
+		out.println(options.isColour() ? colourChordDetails : monoChordDetails);
 		out.println();
 
-		initColourMap(chord);
 		List<ScaleNote> chordNotes = chord.getChordNotes();
 		if (chord.getAddedNote() != null) {
 			chordNotes.add(chord.getAddedScaleNote());
@@ -78,14 +84,21 @@ public class HorizontalView implements View {
 	}
 
 	public void showScale(Scale scale, Options options) {
+		initColourMap(scale);
 		out.println();
 		out.print("    ");
 		out.println(StringUtils.center(
 				scale.getTitle() + " ~ " + instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + " ["
 						+ instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(",")) + "]",
 				84));
+
+		String monoScaleDetails = getScaleDetails(scale, false);
+		String colourScaleDetails = getScaleDetails(scale, true);
+		int pad = (90 - monoScaleDetails.length()) / 2;
+		out.print(StringUtils.repeat(' ', pad));
+		out.println(options.isColour() ? colourScaleDetails : monoScaleDetails);
 		out.println();
-		initColourMap(scale);
+
 		display(scale.getScaleNotes(), options);
 	}
 

@@ -72,71 +72,71 @@ public abstract class FrettedInstrumentCommand {
       description = "The interval pattern to use", scope = ScopeType.INHERIT)
   IntervalPattern intervalPattern;
 
-  @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
-  @Getter
-  boolean mono;
-
-  @Option(names = {"-o", "--octaves"}, description = "Colourize octaves instead of notes/intervals")
-  @Getter
-  boolean octaves;
-
-  @Option(names = {"-i", "--intervals"}, description = "Show interval labels instead of notes")
-  @Getter
-  boolean intervals;
-
   @Option(names = {"-a", "--added"}, description = "The note to add")
   Note addedNote;
 
-  @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
-  Note[] notes;
-
-  @Option(names = {"-d", "--digits"}, description = "The chord digits to find", split = ",")
-  List<String> digits;
+  @Option(names = {"-b", "--box"}, paramLabel = "num", description = "box number")
+  Integer position = null;
 
   @Option(names = {"-c", "--chords"}, description = "chord mode (view dependant)")
   boolean chordMode = false;
 
+  @Option(names = {"-d", "--digits"}, description = "The chord digits to find", split = ",")
+  List<String> digits;
+
   @Option(names = {"-e", "--easy"}, description = "Just display the default (easy) chord fingering")
   boolean easyMode = false;
-
-  @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
-      description = "comma separated list of string tunings ie E,A,D,G,B,E")
-  Note[] strings = new Note[] {};
 
   @Option(names = {"-f", "--frets"}, paramLabel = "num",
       description = "overrides the default 12 frets displayed")
   Integer frets = 12;
 
+  @Option(names = {"-g", "--group"}, paramLabel = "num", description = "box grouping")
+  Integer group = null;
+
+  @Option(names = {"-i", "--intervals"}, description = "Show interval labels instead of notes")
+  @Getter
+  boolean intervals;
+
   @Option(names = {"-l", "--lefty"}, description = "Display strings for a left handed player")
   boolean lefty;
 
-  @Option(names = {"-w", "--which"},
-      description = "Which chord definitions for the root (and interval pattern if provided) does Frettler have chord patterns for")
-  boolean which;
+  @Option(names = {"-m", "--mono"}, description = "Display in 'monochrome'")
+  @Getter
+  boolean mono;
 
-  @Option(names = {"-v", "--verbose"},
-      description = "use if you want some background to Frettlers application of music theory")
-  boolean verbose = false;
+  @Option(names = {"-n", "--notes"}, description = "The chord notes to find", split = ",")
+  Note[] notes;
+
+  @Option(names = {"-o", "--octaves"}, description = "Colourize octaves instead of notes/intervals")
+  @Getter
+  boolean octaves;
+
+  @Option(names = {"-p", "--progression"}, paramLabel = "num",
+      description = "progression numbers ie 1,4,5", split = ",")
+  int[] progressions = {};
 
   // reverse is reserved for TabView for a planned change
   // @Option(names = {"-r", "--reverse"}, description = "generate sequences from the 1st string")
   boolean reverse = false;
 
-  @Option(names = {"-z", "--zero"}, description = "generate sequences using open strings")
-  boolean zero = false;
-
-  @Option(names = {"-g", "--group"}, paramLabel = "num", description = "box grouping")
-  Integer group = null;
-
-  @Option(names = {"-b", "--box"}, paramLabel = "num", description = "box number")
-  Integer position = null;
+  @Option(names = {"-s", "--strings"}, split = ",", paramLabel = "note",
+      description = "comma separated list of string tunings ie E,A,D,G,B,E")
+  Note[] strings = new Note[] {};
 
   @Option(names = {"-t", "--tuning"}, description = "predetermined tuning")
   Tuning tuning = null;
 
-  @Option(names = {"-p", "--progression"}, paramLabel = "num",
-      description = "progression numbers ie 1,4,5", split = ",")
-  int[] progressions = {};
+  @Option(names = {"-v", "--verbose"},
+      description = "use if you want some background to Frettlers application of music theory")
+  boolean verbose = false;
+
+  @Option(names = {"-w", "--which"},
+      description = "Which chord definitions for the root (and interval pattern if provided) does Frettler have chord patterns for")
+  boolean which;
+
+  @Option(names = {"-z", "--zero"}, description = "generate sequences using open strings")
+  boolean zero = false;
 
   public void exec(FrettedInstrument instrument) {
     if (instrument instanceof Banjo && isOctaves()) {
@@ -279,6 +279,7 @@ public abstract class FrettedInstrumentCommand {
     if (intervalPattern.getPatternType() != IntervalPattern.PatternType.CHORD) {
       scale = new Scale(this.root, this.intervalPattern);
       verticalView.showScale(scale, Sequence.NONE, verticalViewOptions);
+
       List<Chord> chords = new ArrayList<>();
       if (chordMode) {
         chords = scale.createScaleChords();

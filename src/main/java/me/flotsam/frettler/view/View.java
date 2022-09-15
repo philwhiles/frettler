@@ -16,20 +16,55 @@ package me.flotsam.frettler.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import me.flotsam.frettler.engine.Chord;
-import me.flotsam.frettler.engine.Scale;
-import me.flotsam.frettler.engine.ScaleInterval;
-import me.flotsam.frettler.engine.ScaleNote;
-import me.flotsam.frettler.engine.Sequence;
+import me.flotsam.frettler.engine.*;
 import me.flotsam.frettler.instrument.Fret;
 import me.flotsam.frettler.instrument.FrettedInstrument;
 
 public interface View {
 
+  default String getChordDetails(Chord chord, boolean colour) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[");
 
+    for (ScaleNote cn:chord.getChordNotes()) {
+      Note note = cn.getNote();
+      final Note theNote = note;
+      Optional<Note> accidental =
+              chord.getAccidentals().stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
+      note = accidental.orElse(note);
+      if (colour) {
+        sb.append(ColourMap.get(note.getPitch())).append(note.getLabel()).append("(").append(cn.getInterval().get().getLabel()).append(")").append(Colour.RESET).append(", ");
+      } else {
+        sb.append(note.getLabel()).append("(").append(cn.getInterval().get().getLabel()).append("), ");
+      }
+    }
+    sb.replace(sb.length()-2, sb.length()-1, "]");
+    return sb.toString();
+  }
 
+  default String getScaleDetails(Scale scale, boolean colour) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("[");
+
+    for (ScaleNote cn:scale.getScaleNotes()) {
+      Note note = cn.getNote();
+      final Note theNote = note;
+      Optional<Note> accidental =
+              scale.getAccidentals().stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
+      note = accidental.orElse(note);
+      if (colour) {
+        sb.append(ColourMap.get(note.getPitch())).append(note.getLabel()).append("(").append(cn.getInterval().get().getLabel()).append(")").append(Colour.RESET).append(", ");
+      } else {
+        sb.append(note.getLabel()).append("(").append(cn.getInterval().get().getLabel()).append("), ");
+      }
+    }
+    sb.replace(sb.length()-2, sb.length()-1, "]");
+    return sb.toString();
+  }
   default int[] getOrderedStrings(FrettedInstrument instrument, boolean lefty) {
     int[] values = new int[instrument.getStringCount()];
     int i = 0;

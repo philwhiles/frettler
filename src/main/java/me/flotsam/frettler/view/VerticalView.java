@@ -48,7 +48,7 @@ import me.flotsam.frettler.instrument.FrettedInstrument;
  */
 public class VerticalView implements View {
 
-  private static final int TITLE_CENTER = 37;
+  private static final int TITLE_CENTER = 47;
   private static final List<Integer> inlays = Arrays.asList(1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 23);
   private FrettedInstrument instrument;
 
@@ -62,7 +62,7 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), TITLE_CENTER));
-    out.println(StringUtils.center(chord.getDetails(), TITLE_CENTER));
+    printChordTitle(chord, options);
     out.println(StringUtils
         .center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
             + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
@@ -118,7 +118,7 @@ public class VerticalView implements View {
     initColourMap(chord);
     out.println();
     out.println(StringUtils.center(chord.getTitle(), TITLE_CENTER));
-    out.println(StringUtils.center(chord.getDetails(), TITLE_CENTER));
+    printChordTitle(chord, options);
     out.println(StringUtils
         .center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
             + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
@@ -162,7 +162,6 @@ public class VerticalView implements View {
 
   private void showScale(Scale scale, Sequence sequence, Options options, ViewMode viewMode) {
     List<ChordFret> chordFrets = new ArrayList<>();
-
     initColourMap(scale);
 
     out.println();
@@ -171,7 +170,8 @@ public class VerticalView implements View {
         .center(instrument.getLabel() + (options.isLefty() ? " (Left) " : " (Right) ") + "["
             + instrument.getStringNotes().stream().map(Note::name).collect(Collectors.joining(","))
             + "]", TITLE_CENTER));
-    out.println();
+
+    printScaleTitle(scale, options);
 
     List<List<SequenceFretNote>> fretSequence = null;
     if (sequence != Sequence.NONE) {
@@ -263,7 +263,7 @@ public class VerticalView implements View {
       }
       boolean barring = false;
       fretsPrinted++;
-      out.print(inlays.contains(fretNum) ? String.format("    %2s ", fretNum) : "       ");
+      out.print(inlays.contains(fretNum) ? String.format("         %2s ", fretNum) : "            ");
       int stringNum = 0;
       for (Fret fret : frets) {
         boolean lastString = stringNum == instrument.getStringCount() - 1;
@@ -371,16 +371,32 @@ public class VerticalView implements View {
 
     // print the chord summary
     if (viewMode == ViewMode.CHORD) {
-      printChordSummary(noteSummary, intervalSummary, octaveSummary, options);
+      printChordFooter(noteSummary, intervalSummary, octaveSummary, options);
     }
 
     out.println();
     out.println();
   }
 
-  private void printChordSummary(Note[] noteSummary, ScaleInterval[] intervalSummary, Integer[] octaveSummary, Options options) {
-    StringBuilder noteBuilder = new StringBuilder("       ");
-    StringBuilder intervalBuilder = new StringBuilder("       ");
+  private void printScaleTitle(Scale scale, Options options) {
+    String monoScaleDetails = getScaleDetails(scale, false);
+    String colourScaleDetails = getScaleDetails(scale, true);
+    int pad = (TITLE_CENTER - monoScaleDetails.length()) / 2;
+    out.print(StringUtils.repeat(' ', pad));
+    out.println(options.isColour() ? colourScaleDetails : monoScaleDetails);
+    out.println();
+  }
+
+  private void printChordTitle(Chord chord, Options options) {
+    String monoChordDetails = getChordDetails(chord, false);
+    String colourChordDetails = getChordDetails(chord, true);
+    int pad = (TITLE_CENTER - monoChordDetails.length()) / 2;
+    out.print(StringUtils.repeat(' ', pad));
+    out.println(options.isColour() ? colourChordDetails : monoChordDetails);
+  }
+  private void printChordFooter(Note[] noteSummary, ScaleInterval[] intervalSummary, Integer[] octaveSummary, Options options) {
+    StringBuilder noteBuilder = new StringBuilder("            ");
+    StringBuilder intervalBuilder = new StringBuilder("            ");
     for (int n = 0; n < instrument.getStringCount(); n++) {
       Note note = noteSummary[n];
       if (note != null) {
@@ -525,7 +541,7 @@ public class VerticalView implements View {
 
   private String createFretLine(String begin, String mid, String end) {
     int strings = instrument.getStringCount();
-    StringBuilder sb = new StringBuilder("        ");
+    StringBuilder sb = new StringBuilder("             ");
     sb.append(begin);
     for (int n = 0; n < strings - 1; n++) {
       sb.append("───");
@@ -541,10 +557,10 @@ public class VerticalView implements View {
   @Data
   @AllArgsConstructor
   public class Options {
-    private final boolean intervals;
-    private final boolean colour;
-    private final boolean octaves;
-    private final boolean open;
+    private boolean intervals;
+    private boolean colour;
+    private boolean octaves;
+    private boolean open;
     private int position;
     private int group;
     private boolean lefty;
@@ -555,9 +571,9 @@ public class VerticalView implements View {
   @RequiredArgsConstructor
   class ChordFret {
     @NonNull
-    private final Fret fret;
+    private Fret fret;
     @NonNull
-    private final ScaleInterval interval;
+    private ScaleInterval interval;
     private boolean barred;
     private boolean startsBarre;
   }

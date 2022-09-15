@@ -242,21 +242,6 @@ public class Chord {
     return sb.toString();
   }
 
-  public String getDetails() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("[");
-    
-    for (ScaleNote cn:chordNotes) {
-      Note note = cn.getNote();
-      final Note theNote = note;
-      Optional<Note> accidental =
-          this.accidentals.stream().filter(n -> n.getPitch() == theNote.getPitch()).findFirst();
-      note = accidental.orElse(note);
-      sb.append(note.getLabel()).append("(").append(cn.getInterval().get().getLabel()).append("), ");
-    }
-    sb.replace(sb.length()-2, sb.length()-1, "]");
-    return sb.toString();
-  }
   public String toString() {
     return describe(false);
   }
