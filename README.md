@@ -1,7 +1,7 @@
 
 Frettler - A flexible command line program for generating and displaying musical scales and chords for guitar or any fretted instrument
 =============================
-
+Hello Ben
 - [Synopsis](#Synopsis)
 - [Building](#Building)
 - [Execution](#Execution)
