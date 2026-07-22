@@ -1,15 +1,14 @@
-
 # Frettler
 
-> **Looking for the new Frettler macOS app?**  
-> This repository contains the original open-source Java command-line version of Frettler.
-> The new graphical Frettler app for macOS is available at [frettler.app](https://frettler.app).
+> **Looking for the new Frettler for macOS?**  
+> This repository contains the original open-source Java command-line version of Frettler, first released in 2020.
+> For the modern graphical macOS application, visit [frettler.app](https://frettler.app).
 
-=============================
+---
 
 A flexible command line program for generating and displaying musical scales and chords for guitar or any fretted instrument.
 
-=============================
+---
 
 - [Synopsis](#Synopsis)
 - [Building](#Building)
@@ -53,7 +52,7 @@ A flexible command line program for generating and displaying musical scales and
 - [Contact](#Contact)
   
 
-----------------------------------
+---
 
 
 ## Synopsis
