@@ -57,7 +57,7 @@ A flexible command line program for generating and displaying musical scales and
 
 ## Synopsis
 This is a CLI program, written in Java 17, that calculates scales, modes and chords and displays them on fretboard representations.
-It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukelele and banjo, but through use
+It comes with out of the box knowledge of the standard tuning and number of strings for guitar, bass guitar, mandolin, ukulele and banjo, but through use
 of the optional arguments, can display its full scales and chords for any fretted instrument you may imagine. If your instrument or its tuning is not one
 of the out of box instruments, take a look at the [Custom Instrument](#Custom-Instrument)
 
@@ -279,7 +279,7 @@ Where...
 
 - guitar
 - bassguitar
-- ukelele
+- ukulele
 - mandolin
 - banjo
 - custom
